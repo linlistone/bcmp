@@ -2,14 +2,14 @@ package ${package}.${moduleName}.rest;
 
 import java.util.Arrays;
 import java.util.List;
-import service.common.base.BaseResouce;
-import service.common.bean.JsonRequest;
-import service.common.bean.ResultDto;
+import ${package}.base.base.BaseResouce;
+import ${package}.base.web.rest.dto.ResultDto;
 import ${QueryModel};
 import ${package}.${moduleName}.domain.${className};
 import ${package}.${moduleName}.service.${className}Service;
 import com.github.pagehelper.PageInfo;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 /**
  * ${comments}
  *
@@ -17,16 +17,13 @@ import com.github.pagehelper.PageInfo;
  * @email ${email}
  * @date ${datetime}
  */
+@RestController
+@RequestMapping("/api/${className}")
 public class ${className}Resource extends BaseResouce {
 
 
-	/**
-	 * ${comments}
-	 */
-	public ${className}Resource() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	private ${className}Service ${classname}Service;
 
 	/**
 	 * @方法名称: create
@@ -34,13 +31,12 @@ public class ${className}Resource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> create(JsonRequest request) throws Exception {
-		${className} domain = formJsonRequest(request,
-				${className}.class);
-		int result = ${className}Service.create(domain);
+	@PostMapping(value = "/create")
+	public ResultDto<Integer> create(${className} ${classname}) throws Exception {
+		int result = ${classname}Service.create(${classname});
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
-			resultDto.setMessage("添加${comments}" + domain.get${pk.attrName}()
+			resultDto.setMessage("添加${comments}" + ${classname}.get${pk.attrName}()
 					+ "创建成功！ ");
 		}
 		resultDto.setData(result);
@@ -53,9 +49,9 @@ public class ${className}Resource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<${className}> show(JsonRequest request) throws Exception {
-		String ${pk.attrname} = request.getAsString("${pk.attrname}");
-		return new ResultDto<${className}>(1, ${className}Service.show(${pk.attrname}));
+	@GetMapping(value = "/show")
+	public ResultDto<${className}> show(@RequestParam("${pk.attrname}") String ${pk.attrname}) throws Exception {
+		return new ResultDto<${className}>(1, ${classname}Service.show(${pk.attrname}));
 	}
 
 	/**
@@ -64,10 +60,10 @@ public class ${className}Resource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<${className}>> index(JsonRequest request)
+	@GetMapping(value = "/index")
+	public ResultDto<List<${className}>> index(QueryModel model)
 			throws Exception {
-		QueryModel model = toQueryModel(request);
-		List<${className}> list = ${className}Service.index(model);
+		List<${className}> list = ${classname}Service.index(model);
 		PageInfo<${className}> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<${className}>>(pageInfo.getTotal(), list);
 	}
@@ -78,13 +74,12 @@ public class ${className}Resource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> update(JsonRequest request) throws Exception {
-		${className} domain = formJsonRequest(request,
-				${className}.class);
-		int result = ${className}Service.update(domain);
+	@PostMapping(value = "/update")
+	public ResultDto<Integer> update(${className} ${classname}) throws Exception {
+		int result =  ${classname}Service.update(${classname});
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
-			resultDto.setMessage("模块" + domain.get${pk.attrName}() + "修改成功！");
+			resultDto.setMessage("模块" + ${classname}.get${pk.attrName}() + "修改成功！");
 		}
 		resultDto.setData(result);
 		return resultDto;
@@ -96,9 +91,9 @@ public class ${className}Resource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> delete(JsonRequest request) throws Exception {
-		String ${pk.attrname} = request.getAsString("${pk.attrname}");
-		int result = ${className}Service.delete(${pk.attrname});
+	@PostMapping(value = "/delete/{${pk.attrname}}")
+	public ResultDto<Integer> delete(@PathVariable("${pk.attrname}") String ${pk.attrname}) throws Exception {
+		int result = ${classname}Service.delete(${pk.attrname});
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("成功删除模块" + ${pk.attrname} + "");

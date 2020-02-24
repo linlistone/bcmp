@@ -1,29 +1,29 @@
-package ${package}.${moduleName}.service;
+package cn.com.yusys.icsp.adminsm.service;
 
-import ${package}.base.base.BaseService;
-import ${QueryModel};
-import ${package}.${moduleName}.domain.${className};
-import ${package}.${moduleName}.repository.mapper.${className}Mapper;
-import ${package}.common.exception.ICSPException;
+import cn.com.yusys.icsp.base.base.BaseService;
+import cn.com.yusys.icsp.common.mapper.QueryModel;
+import cn.com.yusys.icsp.adminsm.domain.AdminSmInstu;
+import cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmInstuMapper;
+import cn.com.yusys.icsp.common.exception.ICSPException;
 import java.util.List;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
- * ${comments}
+ * 金融机构表
  *
- * @author ${author}
- * @email ${email}
- * @date ${datetime}
+ * @author linli
+ * @email linli@yusys.com.cn
+ * @date 2020-02-25 03:09:16
  */
 @Service
 @Transactional
-public class ${className}Service extends BaseService {
+public class AdminSmInstuService extends BaseService {
 
 
 	@Autowired
-	private ${className}Mapper ${classname}Mapper;
+	private AdminSmInstuMapper adminSmInstuMapper;
 	/**
 	 * @throws Exception
 	 * @方法名称: show
@@ -31,28 +31,28 @@ public class ${className}Service extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public int create(${className} ${classname}) throws Exception {
-		${classname}.set${pk.attrName}(createUUId());
+	public int create(AdminSmInstu adminSmInstu) throws Exception {
+		adminSmInstu.setInstuId(createUUId());
 		//domain.setLastChgDt(DateUtil.getFormatDateTime());
-		return ${classname}Mapper.insert(${classname});
+		return adminSmInstuMapper.insert(adminSmInstu);
 	}
 
 	/**
 	 * @throws Exception
 	 * @方法名称: show
-	 * @方法描述: 查询信息 by ${pk.attrName}
+	 * @方法描述: 查询信息 by InstuId
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public ${className} show(String ${pk.attrname}) throws Exception {
+	public AdminSmInstu show(String instuId) throws Exception {
 		QueryModel model = new QueryModel();
-		model.addCondition("${pk.attrname}", ${pk.attrname});
-		List<${className}> list = index(model);
+		model.addCondition("instuId", instuId);
+		List<AdminSmInstu> list = index(model);
 		if (list == null || list.isEmpty()) {
-			throw new ICSPException("数据不存在" + ${pk.attrname});
+			throw new ICSPException("数据不存在" + instuId);
 		}
-		${className} ${classname} = list.get(0);
-		return  ${classname};
+		AdminSmInstu adminSmInstu = list.get(0);
+		return  adminSmInstu;
 	}
 
 	/**
@@ -61,10 +61,10 @@ public class ${className}Service extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public List<${className}> index(QueryModel model)
+	public List<AdminSmInstu> index(QueryModel model)
 			throws Exception {
 		PageHelper.startPage(model.getPage(), model.getSize());
-		List<${className}> list = ${classname}Mapper.selectByModel(model);
+		List<AdminSmInstu> list = adminSmInstuMapper.selectByModel(model);
 		PageHelper.clearPage();
 		return list;
 	}
@@ -75,9 +75,9 @@ public class ${className}Service extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public int update(${className} ${classname}) throws Exception {
+	public int update(AdminSmInstu adminSmInstu) throws Exception {
 		//domain.setLastChgDt(DateUtil.getFormatDateTime());
-		return ${classname}Mapper.updateByPrimaryKey(${classname});
+		return adminSmInstuMapper.updateByPrimaryKey(adminSmInstu);
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class ${className}Service extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public int delete(String ${pk.attrname}) throws Exception {
-		return ${classname}Mapper.deleteByPrimaryKey(${pk.attrname});
+	public int delete(String instuId) throws Exception {
+		return adminSmInstuMapper.deleteByPrimaryKey(instuId);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ${className}Service extends BaseService {
 	 * @算法描述:
 	 */
 	public int deleteByIds(String ids) throws Exception {
-		return ${classname}Mapper.deleteByIds(ids);
+		return adminSmInstuMapper.deleteByIds(ids);
 	}
 }
 

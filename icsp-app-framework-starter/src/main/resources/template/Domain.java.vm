@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 </#if>
 import java.io.Serializable;
 import java.util.Date;
-import service.common.base.BaseDomain;
+import ${package}.base.base.BaseDomain;
 
 
 /**
@@ -20,7 +20,7 @@ public class ${className} extends BaseDomain implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 <#list columns as column>
-    /**
+   /**
 	 * ${column.comments}
 		<#if (column.columnName == pk.columnName) >
 	 *	pk
@@ -31,6 +31,7 @@ public class ${className} extends BaseDomain implements Serializable {
 	
 <#list columns as column>
 	/**
+	 * ${column.comments}
 	 * @param ${column.attrname}
 	 */
 	public void set${column.attrName}(String ${column.attrname}) {
@@ -38,6 +39,7 @@ public class ${className} extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * ${column.comments}
 	 * @return ${column.attrname}
 	 */
 	public String get${column.attrName}() {
