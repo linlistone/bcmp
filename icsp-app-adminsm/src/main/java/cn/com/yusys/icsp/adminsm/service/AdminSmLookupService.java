@@ -9,6 +9,8 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.DateUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ import java.util.List;
  * @email linlistone@163.com
  * @date 2020-02-14 23:47:03
  */
+@Service
+@Transactional
 public class AdminSmLookupService extends BaseService {
 
     @Autowired

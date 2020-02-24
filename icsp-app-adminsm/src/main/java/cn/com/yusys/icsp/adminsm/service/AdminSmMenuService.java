@@ -8,9 +8,12 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.DateUtil;
 import cn.com.yusys.icsp.common.util.StringUtilEx;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Service
+@Transactional
 public class AdminSmMenuService extends BaseService {
 
 	@Autowired

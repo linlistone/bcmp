@@ -8,6 +8,8 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.DateUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.Map;
  * @email linlistone@163.com
  * @date 2020-02-10 00:05:20
  */
+@Service
+@Transactional
 public class AdminSmResContrService extends BaseService {
 
 	@Autowired

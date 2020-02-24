@@ -1,24 +1,24 @@
 package cn.com.yusys.icsp.adminsm.rest.web;
 
-import java.util.List;
-
-import service.common.base.BaseResouce;
-import service.common.bean.JsonRequest;
-import service.common.bean.ResultDto;
-import service.common.mybatis.QueryModel;
-import service.oca.domain.AdminSmFuncMod;
-import service.oca.service.AdminSmFuncModService;
+import cn.com.yusys.icsp.adminsm.domain.AdminSmFuncMod;
+import cn.com.yusys.icsp.adminsm.service.AdminSmFuncModService;
+import cn.com.yusys.icsp.base.base.BaseResouce;
+import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
+import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+@RestController
+@RequestMapping("/api/adminSmFuncMod")
 public class AdminSmFuncModResource extends BaseResouce {
 
-	/**
-	 * 
-	 */
-	public AdminSmFuncModResource() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	private AdminSmFuncModService adminSmFuncModService;
 
 	/**
 	 * @方法名称: create
@@ -26,10 +26,9 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> create(JsonRequest request) throws Exception {
-		AdminSmFuncMod adminSmFuncMod = formJsonRequest(request,
-				AdminSmFuncMod.class);
-		int result = AdminSmFuncModService.create(adminSmFuncMod);
+	@PostMapping(value = "/create")
+	public ResultDto<Integer> create(AdminSmFuncMod adminSmFuncMod) throws Exception {
+		int result = adminSmFuncModService.create(adminSmFuncMod);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("添加模块" + adminSmFuncMod.getModName()
@@ -45,9 +44,9 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<AdminSmFuncMod> show(JsonRequest request) throws Exception {
-		String modId = request.getAsString("modId");
-		return new ResultDto<AdminSmFuncMod>(1, AdminSmFuncModService.show(modId));
+	@GetMapping(value = "/show")
+	public ResultDto<AdminSmFuncMod> show(String modId) throws Exception {
+		return new ResultDto<AdminSmFuncMod>(1, adminSmFuncModService.show(modId));
 	}
 
 	/**
@@ -56,10 +55,10 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<AdminSmFuncMod>> index(JsonRequest request)
+	@GetMapping(value = "/index")
+	public ResultDto<List<AdminSmFuncMod>> index(QueryModel model)
 			throws Exception {
-		QueryModel model = toQueryModel(request);
-		List<AdminSmFuncMod> list = AdminSmFuncModService.index(model);
+		List<AdminSmFuncMod> list = adminSmFuncModService.index(model);
 		PageInfo<AdminSmFuncMod> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<AdminSmFuncMod>>(pageInfo.getTotal(), list);
 	}
@@ -70,10 +69,9 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> update(JsonRequest request) throws Exception {
-		AdminSmFuncMod adminSmFuncMod = formJsonRequest(request,
-				AdminSmFuncMod.class);
-		int result = AdminSmFuncModService.update(adminSmFuncMod);
+	@PostMapping(value = "/update")
+	public ResultDto<Integer> update(AdminSmFuncMod adminSmFuncMod) throws Exception {
+		int result = adminSmFuncModService.update(adminSmFuncMod);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("模块" + adminSmFuncMod.getModName() + "修改成功！");
@@ -88,9 +86,9 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> delete(JsonRequest request) throws Exception {
-		String modId = request.getAsString("modId");
-		int result = AdminSmFuncModService.delete(modId);
+	@GetMapping(value = "/delete")
+	public ResultDto<Integer> delete(String modId) throws Exception {
+		int result = adminSmFuncModService.delete(modId);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("成功删除模块" + modId + "");

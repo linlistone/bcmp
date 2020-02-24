@@ -17,6 +17,12 @@
     </properties>
     <dependencies>
 
+        <dependency>
+            <groupId>cn.com.yusys.icsp</groupId>
+            <artifactId>icsp-app-base</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

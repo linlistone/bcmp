@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmFuncModMapper">
+	<resultMap id="BaseResultMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmFuncMod">
+		<id column="MOD_ID" jdbcType="VARCHAR" property="modId" />
+		<result column="MOD_CDE" jdbcType="VARCHAR" property="modCde" />
+		<result column="MOD_NAME" jdbcType="VARCHAR" property="modName" />
+		<result column="MOD_DESC" jdbcType="VARCHAR" property="modDesc" />
+		<result column="IS_OUTER" jdbcType="VARCHAR" property="isOuter" />
+		<result column="IS_APP" jdbcType="VARCHAR" property="isApp" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+		<result column="USER_KEY" jdbcType="VARCHAR" property="userKey" />
+		<result column="PWD_KEY" jdbcType="VARCHAR" property="pwdKey" />
+		<result column="LAST_CHG_USR" jdbcType="VARCHAR" property="lastChgUsr" />
+		<result column="LAST_CHG_DT" jdbcType="VARCHAR" property="lastChgDt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		MOD_ID,MOD_CDE,MOD_NAME,MOD_DESC,IS_OUTER,IS_APP,USER_NAME,PASSWORD,USER_KEY,PWD_KEY,LAST_CHG_USR,LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ADMIN_SM_FUNC_MOD
+		<where>
+			<if test="condition.modId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.modId)">AND MOD_ID like #{condition.modId,jdbcType=VARCHAR }</when>
+					<otherwise>AND MOD_ID = #{condition.modId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.modCde != null and condition.modCde !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.modCde)">AND MOD_CDE like #{condition.modCde,jdbcType=VARCHAR }</when>
+					<otherwise>AND MOD_CDE = #{condition.modCde,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.modName != null and condition.modName !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.modName)">AND MOD_NAME like #{condition.modName,jdbcType=VARCHAR }</when>
+					<otherwise>AND MOD_NAME = #{condition.modName,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.modDesc != null and condition.modDesc !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.modDesc)">AND MOD_DESC like #{condition.modDesc,jdbcType=VARCHAR }</when>
+					<otherwise>AND MOD_DESC = #{condition.modDesc,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.isOuter != null and condition.isOuter !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.isOuter)">AND IS_OUTER like #{condition.isOuter,jdbcType=VARCHAR }</when>
+					<otherwise>AND IS_OUTER = #{condition.isOuter,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.isApp != null and condition.isApp !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.isApp)">AND IS_APP like #{condition.isApp,jdbcType=VARCHAR }</when>
+					<otherwise>AND IS_APP = #{condition.isApp,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userName)">AND USER_NAME like #{condition.userName,jdbcType=VARCHAR }</when>
+					<otherwise>AND USER_NAME = #{condition.userName,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.password != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.password)">AND PASSWORD like #{condition.password,jdbcType=VARCHAR }</when>
+					<otherwise>AND PASSWORD = #{condition.password,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userKey != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userKey)">AND USER_KEY like #{condition.userKey,jdbcType=VARCHAR }</when>
+					<otherwise>AND USER_KEY = #{condition.userKey,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.pwdKey != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.pwdKey)">AND PWD_KEY like #{condition.pwdKey,jdbcType=VARCHAR }</when>
+					<otherwise>AND PWD_KEY = #{condition.pwdKey,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}</when>
+					<otherwise>AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmFuncMod">
+		insert into ADMIN_SM_FUNC_MOD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="modId != null">MOD_ID,</if>
+			<if test="modCde != null">MOD_CDE,</if>
+			<if test="modName != null">MOD_NAME,</if>
+			<if test="modDesc != null">MOD_DESC,</if>
+			<if test="isOuter != null">IS_OUTER,</if>
+			<if test="isApp != null">IS_APP,</if>
+			<if test="userName != null">USER_NAME,</if>
+			<if test="password != null">PASSWORD,</if>
+			<if test="userKey != null">USER_KEY,</if>
+			<if test="pwdKey != null">PWD_KEY,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="modId != null">#{modId,jdbcType=VARCHAR},</if>
+			<if test="modCde != null">#{modCde,jdbcType=VARCHAR},</if>
+			<if test="modName != null">#{modName,jdbcType=VARCHAR},</if>
+			<if test="modDesc != null">#{modDesc,jdbcType=VARCHAR},</if>
+			<if test="isOuter != null">#{isOuter,jdbcType=VARCHAR},</if>
+			<if test="isApp != null">#{isApp,jdbcType=VARCHAR},</if>
+			<if test="userName != null">#{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">#{password,jdbcType=VARCHAR},</if>
+			<if test="userKey != null">#{userKey,jdbcType=VARCHAR},</if>
+			<if test="pwdKey != null">#{pwdKey,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmFuncMod">
+		update ADMIN_SM_FUNC_MOD
+		<set>
+			<if test="modId != null">MOD_ID = #{modId,jdbcType=VARCHAR},</if>
+			<if test="modId != null">MOD_CDE = #{modCde,jdbcType=VARCHAR},</if>
+			<if test="modName != null">MOD_NAME = #{modName,jdbcType=VARCHAR},</if>
+			<if test="modDesc != null">MOD_DESC = #{modDesc,jdbcType=VARCHAR},</if>
+			<if test="isOuter != null">IS_OUTER = #{isOuter,jdbcType=VARCHAR},</if>
+			<if test="isApp != null">IS_APP = #{isApp,jdbcType=VARCHAR},</if>
+			<if test="userName != null">USER_NAME = #{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">PASSWORD = #{password,jdbcType=VARCHAR},</if>
+			<if test="userKey != null">USER_KEY = #{userKey,jdbcType=VARCHAR},</if>
+			<if test="pwdKey != null">PWD_KEY = #{pwdKey,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where MOD_ID = #{modId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from ADMIN_SM_FUNC_MOD where MOD_ID = #{modId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from ADMIN_SM_FUNC_MOD where MOD_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="modId">#{modId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+</mapper>

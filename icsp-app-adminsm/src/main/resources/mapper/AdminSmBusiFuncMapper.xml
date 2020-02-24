@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmBusiFuncMapper">
+	<resultMap id="BaseResultMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmBusiFunc">
+		<id column="FUNC_ID" jdbcType="VARCHAR" property="funcId" />
+		<result column="MOD_ID" jdbcType="VARCHAR" property="modId" />
+		<result column="FUNC_NAME" jdbcType="VARCHAR" property="funcName" />
+		<result column="FUNC_DESC" jdbcType="VARCHAR" property="funcDesc" />
+		<result column="FUNC_URL" jdbcType="VARCHAR" property="funcUrl" />
+		<result column="FUNC_URL_JS" jdbcType="VARCHAR" property="funcUrlJs" />
+		<result column="FUNC_URL_CSS" jdbcType="VARCHAR" property="funcUrlCss" />
+		<result column="FUNC_ORDER" jdbcType="DECIMAL" property="funcOrder" />
+		<result column="FUNC_ICON" jdbcType="VARCHAR" property="funcIcon" />
+		<result column="LAST_CHG_USR" jdbcType="VARCHAR" property="lastChgUsr" />
+		<result column="LAST_CHG_DT" jdbcType="VARCHAR" property="lastChgDt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		FUNC_ID,MOD_ID,FUNC_NAME,FUNC_DESC,FUNC_URL,FUNC_URL_JS,FUNC_URL_CSS,FUNC_ORDER,FUNC_ICON,LAST_CHG_USR,LAST_CHG_DT
+	</sql>
+
+	<!-- 条件列表查询 -->
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel" resultMap="BaseResultMap">
+		select FUNC_ID,MOD_ID,FUNC_NAME,FUNC_DESC,FUNC_URL,FUNC_URL_JS,FUNC_URL_CSS,FUNC_ORDER,FUNC_ICON,LAST_CHG_USR,LAST_CHG_DT from ADMIN_SM_BUSI_FUNC
+		<where>
+			<if test="condition.funcId != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcId)">AND FUNC_ID like #{condition.funcId,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_ID = #{condition.funcId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.modId != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.modId)">AND MOD_ID like #{condition.modId,jdbcType=VARCHAR }</when>
+					<otherwise>AND MOD_ID = #{condition.modId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcName != null and condition.funcName !=''">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcName)">AND FUNC_NAME like #{condition.funcName,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_NAME = #{condition.funcName,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcDesc != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcDesc)">AND FUNC_DESC like #{condition.funcDesc,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_DESC = #{condition.funcDesc,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			 <if test="condition.funcUrl != null and condition.funcUrl !=''">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcUrl)">AND FUNC_URL like #{condition.funcUrl,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_URL = #{condition.funcUrl,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcUrlJs != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcUrlJs)">
+						AND FUNC_URL_JS like #{condition.funcUrlJs,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND FUNC_URL_JS = #{condition.funcUrlJs,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcUrlCss != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcUrlCss)">
+						AND FUNC_URL_CSS like #{condition.funcUrlCss,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND FUNC_URL_CSS = #{condition.funcUrlCss,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcOrder != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcOrder)">AND FUNC_ORDER like #{condition.funcOrder,jdbcType=DECIMAL }</when>
+					<otherwise>AND FUNC_ORDER = #{condition.funcOrder,jdbcType=DECIMAL}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcIcon != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcIcon)">AND FUNC_ICON like #{condition.funcIcon,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_ICON = #{condition.funcIcon,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmBusiFunc">
+		insert into ADMIN_SM_BUSI_FUNC
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="funcId != null">FUNC_ID,</if>
+			<if test="modId != null">MOD_ID,</if>
+			<if test="funcName != null">FUNC_NAME,</if>
+			<if test="funcDesc != null">FUNC_DESC,</if>
+			<if test="funcUrl != null">FUNC_URL,</if>
+			<if test="funcUrlJs != null">FUNC_URL_JS,</if>
+			<if test="funcUrlCss != null">FUNC_URL_CSS,</if>
+			<if test="funcOrder != null">FUNC_ORDER,</if>
+			<if test="funcIcon != null">FUNC_ICON,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="funcId != null">#{funcId,jdbcType=VARCHAR},</if>
+			<if test="modId != null">#{modId,jdbcType=VARCHAR},</if>
+			<if test="funcName != null">#{funcName,jdbcType=VARCHAR},</if>
+			<if test="funcDesc != null">#{funcDesc,jdbcType=VARCHAR},</if>
+			<if test="funcUrl != null">#{funcUrl,jdbcType=VARCHAR},</if>
+			<if test="funcUrlJs != null">#{funcUrlJs,jdbcType=VARCHAR},</if>
+			<if test="funcUrlCss != null">#{funcUrlCss,jdbcType=VARCHAR},</if>
+			<if test="funcOrder != null">#{funcOrder,jdbcType=DECIMAL},</if>
+			<if test="funcIcon != null">#{funcIcon,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmBusiFunc">
+		update ADMIN_SM_BUSI_FUNC
+		<set>
+			<if test="funcId != null">FUNC_ID = #{funcId,jdbcType=VARCHAR},</if>
+			<if test="modId != null">MOD_ID = #{modId,jdbcType=VARCHAR},</if>
+			<if test="funcName != null">FUNC_NAME = #{funcName,jdbcType=VARCHAR},</if>
+			<if test="funcDesc != null">FUNC_DESC = #{funcDesc,jdbcType=VARCHAR},</if>
+			<if test="funcUrl != null">FUNC_URL = #{funcUrl,jdbcType=VARCHAR},</if>
+			<if test="funcUrlJs != null">FUNC_URL_JS = #{funcUrlJs,jdbcType=VARCHAR},</if>
+			<if test="funcUrlCss != null">FUNC_URL_CSS = #{funcUrlCss,jdbcType=VARCHAR},</if>
+			<if test="funcOrder != null">FUNC_ORDER = #{funcOrder,jdbcType=DECIMAL},</if>
+			<if test="funcIcon != null">FUNC_ICON = #{funcIcon,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where FUNC_ID = #{funcId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from ADMIN_SM_BUSI_FUNC where FUNC_ID = #{funcId,jdbcType=VARCHAR}
+    </delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from ADMIN_SM_BUSI_FUNC where FUNC_ID in
+		<foreach collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)" open="(" close=")" separator="," item="funcId">#{funcId,jdbcType=VARCHAR}</foreach>
+	</delete>
+	
+	
+</mapper>

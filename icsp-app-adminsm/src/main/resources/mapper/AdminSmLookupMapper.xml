@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmLookupMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmLookup"
+		id="BaseResultMap">
+		<result column="LOOKUP_ID" property="lookupId"
+			jdbcType="VARCHAR" />
+		<result column="INSTU_ID" property="instuId" jdbcType="VARCHAR" />
+		<result column="LOOKUP_TYPE_ID" property="lookupTypeId"
+			jdbcType="VARCHAR" />
+		<result column="LOOKUP_CODE" property="lookupCode"
+			jdbcType="VARCHAR" />
+		<result column="LOOKUP_NAME" property="lookupName"
+			jdbcType="VARCHAR" />
+		<result column="LAST_CHG_USR" property="lastChgUsr"
+			jdbcType="VARCHAR" />
+		<result column="LAST_CHG_DT" property="lastChgDt"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		LOOKUP_ID,
+		INSTU_ID,
+		LOOKUP_TYPE_ID,
+		LOOKUP_CODE,
+		LOOKUP_NAME,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel"
+		parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_lookup
+		<where>
+			<if test="condition.lookupTypeId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lookupTypeId)">
+						AND LOOKUP_TYPE_ID like
+						#{condition.lookupTypeId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOOKUP_TYPE_ID =
+						#{condition.lookupTypeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if
+				test="condition.lookupName != null and condition.lookupName !='' ">
+				AND (LOOKUP_NAME like
+				CONCAT(CONCAT('%',#{condition.lookupName,jdbcType=VARCHAR}),'%') or
+				LOOKUP_CODE like
+				CONCAT(CONCAT('%',#{condition.lookupName,jdbcType=VARCHAR}),'%') )
+			</if>
+
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookup">
+		insert into admin_sm_lookup
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lookupId != null">LOOKUP_ID ,</if>
+			<if test="instuId != null">INSTU_ID ,</if>
+			<if test="lookupTypeId != null">LOOKUP_TYPE_ID ,</if>
+			<if test="lookupCode != null">LOOKUP_CODE ,</if>
+			<if test="lookupName != null">LOOKUP_NAME ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lookupId != null">#{lookupId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">#{instuId,jdbcType=VARCHAR},</if>
+			<if test="lookupTypeId != null">#{lookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="lookupCode != null">#{lookupCode,jdbcType=VARCHAR},</if>
+			<if test="lookupName != null">#{lookupName,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookup">
+		update admin_sm_lookup
+		<set>
+			<if test="lookupId != null">LOOKUP_ID = #{lookupId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">INSTU_ID = #{instuId,jdbcType=VARCHAR},</if>
+			<if test="lookupTypeId != null">LOOKUP_TYPE_ID = #{lookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="lookupCode != null">LOOKUP_CODE = #{lookupCode,jdbcType=VARCHAR},</if>
+			<if test="lookupName != null">LOOKUP_NAME = #{lookupName,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where LOOKUP_ID = #{lookupId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		admin_sm_lookup where LOOKUP_ID = #{lookupId,jdbcType=VARCHAR}
+	</delete>
+	
+		<!-- 根据主键删除 -->
+	<delete id="deleteBylookupTypes" parameterType="java.lang.String">
+		delete from
+		admin_sm_lookup where LOOKUP_TYPE_ID in 
+			<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="lookupId">#{lookupId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_lookup where LOOKUP_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="lookupId">#{lookupId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

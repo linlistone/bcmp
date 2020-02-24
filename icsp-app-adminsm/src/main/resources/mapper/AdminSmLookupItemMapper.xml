@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmLookupItemMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem"
+		id="BaseResultMap">
+		<result property="lookupItemId" column="LOOKUP_ITEM_ID"
+			jdbcType="VARCHAR" />
+		<result property="lookupCode" column="LOOKUP_CODE"
+			jdbcType="VARCHAR" />
+		<result property="upLookupItemId" column="UP_LOOKUP_ITEM_ID"
+			jdbcType="VARCHAR" />
+		<result property="lookupItemCode" column="LOOKUP_ITEM_CODE"
+			jdbcType="VARCHAR" />
+		<result property="lookupItemName" column="LOOKUP_ITEM_NAME"
+			jdbcType="VARCHAR" />
+		<result property="lookupItemComment"
+			column="LOOKUP_ITEM_COMMENT" jdbcType="VARCHAR" />
+		<result property="lastChgUsr" column="LAST_CHG_USR"
+			jdbcType="VARCHAR" />
+		<result property="lastChgDt" column="LAST_CHG_DT"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		LOOKUP_ITEM_ID,LOOKUP_CODE,UP_LOOKUP_ITEM_ID,LOOKUP_ITEM_CODE,LOOKUP_ITEM_NAME,LOOKUP_ITEM_COMMENT,LAST_CHG_USR,LAST_CHG_DT
+	</sql>
+	<select id="selectByModel"
+		parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ADMIN_SM_LOOKUP_ITEM
+		<where>
+
+			<if test="condition.lookupCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lookupCode)">
+						AND LOOKUP_CODE like #{condition.lookupCode,jdbcType=VARCHAR
+						}
+					</when>
+					<otherwise>AND LOOKUP_CODE =
+						#{condition.lookupCode,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if
+				test="condition.lookupItemName != null and condition.lookupItemName !='' ">
+				AND (LOOKUP_ITEM_NAME like
+				CONCAT(CONCAT('%',#{condition.lookupItemName,jdbcType=VARCHAR}),'%') or
+				LOOKUP_ITEM_CODE like
+				CONCAT(CONCAT('%',#{condition.lookupItemName,jdbcType=VARCHAR}),'%') )
+			</if>
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem">
+		insert into ADMIN_SM_LOOKUP_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lookupItemId != null">LOOKUP_ITEM_ID,</if>
+			<if test="lookupCode != null">LOOKUP_CODE,</if>
+			<if test="upLookupItemId != null">UP_LOOKUP_ITEM_ID,</if>
+			<if test="lookupItemCode != null">LOOKUP_ITEM_CODE,</if>
+			<if test="lookupItemName != null">LOOKUP_ITEM_NAME,</if>
+			<if test="lookupItemComment != null">LOOKUP_ITEM_COMMENT,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lookupItemId != null">#{lookupItemId,jdbcType=VARCHAR},</if>
+			<if test="lookupCode != null">#{lookupCode,jdbcType=VARCHAR},</if>
+			<if test="upLookupItemId != null">#{upLookupItemId,jdbcType=VARCHAR},</if>
+			<if test="lookupItemCode != null">#{lookupItemCode,jdbcType=VARCHAR},</if>
+			<if test="lookupItemName != null">#{lookupItemName,jdbcType=VARCHAR},</if>
+			<if test="lookupItemComment != null">#{lookupItemComment,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem">
+		update ADMIN_SM_LOOKUP_ITEM
+		<set>
+			<if test="lookupCode != null">LOOKUP_CODE = #{lookupCode,jdbcType=VARCHAR},</if>
+			<if test="upLookupItemId != null">UP_LOOKUP_ITEM_ID = #{upLookupItemId,jdbcType=VARCHAR},</if>
+			<if test="lookupItemCode != null">LOOKUP_ITEM_CODE = #{lookupItemCode,jdbcType=VARCHAR},</if>
+			<if test="lookupItemName != null">LOOKUP_ITEM_NAME = #{lookupItemName,jdbcType=VARCHAR},</if>
+			<if test="lookupItemComment != null">LOOKUP_ITEM_COMMENT =
+				#{lookupItemComment,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where LOOKUP_ITEM_ID = #{lookupItemId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		ADMIN_SM_LOOKUP_ITEM where LOOKUP_ITEM_ID =
+		#{lookupItemId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据lookupCode删除 -->
+	<delete id="deleteByLookupCode" parameterType="java.lang.String">
+		delete from
+		ADMIN_SM_LOOKUP_ITEM where LOOKUP_CODE =
+		#{lookupCode,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from ADMIN_SM_LOOKUP_ITEM where LOOKUP_ITEM_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="lookupItemId">#{lookupItemId,jdbcType=VARCHAR}</foreach>
+	</delete>
+	
+			<!-- 根据主键删除 -->
+	<delete id="deleteBylookupTypes" parameterType="java.lang.String">
+		delete from admin_sm_lookup_item where lookup_code in (
+		select lookup_code from admin_sm_lookup where LOOKUP_TYPE_ID in 
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="lookupId">#{lookupId,jdbcType=VARCHAR}</foreach>
+		)
+	</delete>
+
+	<select id="getLookupCodeListByLookUpCodes"
+		parameterType="java.util.List" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ADMIN_SM_LOOKUP_ITEM t0
+		<where>
+			and t0.LOOKUP_CODE IN
+			<foreach item="item" index="index" collection="list" open="("
+				separator="," close=")">#{item}</foreach>
+		</where>
+	</select>
+
+
+</mapper>

@@ -8,6 +8,8 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.DateUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +26,8 @@ import java.util.Map;
  * @修改日期 修改人员 修改原因 -------- -------- ----------------------------------------
  * @Copyright (c) 2017宇信科技-版权所有
  */
+@Service
+@Transactional
 public class AdminSmLookupItemService extends BaseService {
 
 	@Autowired

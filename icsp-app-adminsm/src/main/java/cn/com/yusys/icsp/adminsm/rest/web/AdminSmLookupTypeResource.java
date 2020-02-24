@@ -1,16 +1,18 @@
 package cn.com.yusys.icsp.adminsm.rest.web;
 
-import java.util.List;
-
+import cn.com.yusys.icsp.adminsm.domain.AdminSmLookupType;
+import cn.com.yusys.icsp.adminsm.service.AdminSmLookupTypeService;
+import cn.com.yusys.icsp.base.base.BaseResouce;
+import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
+import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import service.common.base.BaseResouce;
-import service.common.bean.JsonRequest;
-import service.common.bean.ResultDto;
-import service.common.mybatis.QueryModel;
-import service.oca.domain.AdminSmLookupType;
-import service.oca.domain.AdminSmMenu;
-import service.oca.service.AdminSmLookupTypeService;
+import java.util.List;
 
 /**
  * 字典分类别
@@ -19,15 +21,13 @@ import service.oca.service.AdminSmLookupTypeService;
  * @email linlistone@163.com
  * @date 2020-02-14 23:30:35
  */
+@RestController
+@RequestMapping("/api/adminSmLookupType")
 public class AdminSmLookupTypeResource extends BaseResouce {
 
-	/**
-	 * 字典分类别
-	 */
-	public AdminSmLookupTypeResource() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	private AdminSmLookupTypeService adminSmLookupTypeService;
+
 
 	/**
 	 * @方法名称: create
@@ -35,9 +35,9 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> create(JsonRequest request) throws Exception {
-		AdminSmLookupType domain = formJsonRequest(request, AdminSmLookupType.class);
-		int result = AdminSmLookupTypeService.create(domain);
+	@PostMapping(value = "/create")
+	public ResultDto<Integer> create(AdminSmLookupType domain) throws Exception {
+		int result = adminSmLookupTypeService.create(domain);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("添加字典分类别" + domain.getLookupTypeId() + "创建成功！ ");
@@ -52,9 +52,9 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<AdminSmLookupType> show(JsonRequest request) throws Exception {
-		String lookupTypeId = request.getAsString("lookupTypeId");
-		return new ResultDto<AdminSmLookupType>(1, AdminSmLookupTypeService.show(lookupTypeId));
+	@GetMapping(value = "/show")
+	public ResultDto<AdminSmLookupType> show(String lookupTypeId) throws Exception {
+		return new ResultDto<AdminSmLookupType>(1, adminSmLookupTypeService.show(lookupTypeId));
 	}
 
 	/**
@@ -63,9 +63,9 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<AdminSmLookupType>> index(JsonRequest request) throws Exception {
-		QueryModel model = toQueryModel(request);
-		List<AdminSmLookupType> list = AdminSmLookupTypeService.index(model);
+	@GetMapping(value = "/index")
+	public ResultDto<List<AdminSmLookupType>> index(QueryModel model) throws Exception {
+		List<AdminSmLookupType> list = adminSmLookupTypeService.index(model);
 		PageInfo<AdminSmLookupType> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<AdminSmLookupType>>(pageInfo.getTotal(), list);
 	}
@@ -76,9 +76,9 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> update(JsonRequest request) throws Exception {
-		AdminSmLookupType domain = formJsonRequest(request, AdminSmLookupType.class);
-		int result = AdminSmLookupTypeService.update(domain);
+	@PostMapping(value = "/update")
+	public ResultDto<Integer> update(AdminSmLookupType domain) throws Exception {
+		int result = adminSmLookupTypeService.update(domain);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("模块" + domain.getLookupTypeId() + "修改成功！");
@@ -93,9 +93,9 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> delete(JsonRequest request) throws Exception {
-		String data = request.getAsString("data");
-		int result = AdminSmLookupTypeService.delete(data);
+	@GetMapping(value = "/delete")
+	public ResultDto<Integer> delete(String data) throws Exception {
+		int result = adminSmLookupTypeService.delete(data);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("成功删除模块" + data + "");
@@ -110,13 +110,12 @@ public class AdminSmLookupTypeResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<AdminSmLookupType>> tree(JsonRequest request) throws Exception {
-		String instuId = request.getAsString("instuId");
+	public ResultDto<List<AdminSmLookupType>> tree(String instuId) throws Exception {
 		QueryModel model = new QueryModel();
 		if (instuId != null)
 			model.addCondition("instuId", instuId);
 		model.setSize(9999);// 最多显示9999个
-		List<AdminSmLookupType> list = AdminSmLookupTypeService.index(model);
+		List<AdminSmLookupType> list = adminSmLookupTypeService.index(model);
 		PageInfo<AdminSmLookupType> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<AdminSmLookupType>>(pageInfo.getTotal(), list);
 	}

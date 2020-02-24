@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmMenuMapper">
+	<resultMap id="BaseResultMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmMenu">
+		<id column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+		<result column="SYS_ID" jdbcType="VARCHAR" property="sysId" />
+		<result column="FUNC_ID" jdbcType="VARCHAR" property="funcId" />
+		<result column="MOD_ID" jdbcType="VARCHAR" property="modId" />
+		<result column="UP_MENU_ID" jdbcType="VARCHAR" property="upMenuId" />
+		<result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+		<result column="MENU_CDE" jdbcType="VARCHAR" property="menuCde" />
+		<result column="MENU_ORDER" jdbcType="DECIMAL" property="menuOrder" />
+		<result column="MENU_ICON" jdbcType="VARCHAR" property="menuIcon" />
+		<result column="MENU_TIP" jdbcType="VARCHAR" property="menuTip" />
+		<result column="LAST_CHG_USR" jdbcType="VARCHAR" property="lastChgUsr" />
+		<result column="LAST_CHG_DT" jdbcType="VARCHAR" property="lastChgDt" />
+	</resultMap>
+	<resultMap id="MenuBeanMap" type="cn.com.yusys.icsp.adminsm.domain.MenuBean">
+		<result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+		<result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+		<result column="MENU_CDE" jdbcType="VARCHAR" property="menuCde" />
+		<result column="UP_MENU_ID" property="upMenuId" jdbcType="VARCHAR" />
+		<result column="UP_MENU_NAME" property="upMenuName" jdbcType="VARCHAR" />
+		<result column="MENU_ORDER" property="menuOrder" jdbcType="VARCHAR" />
+		<result column="MENU_ICON" property="menuIcon" jdbcType="VARCHAR" />
+		<result column="FUNC_NAME" property="funcName" jdbcType="VARCHAR" />
+		<result column="FUNC_ID" property="funcId" jdbcType="VARCHAR" />
+		<result column="SYS_ID" property="sysId" jdbcType="VARCHAR" />
+		<result column="MOD_ID" property="modId" jdbcType="VARCHAR" />
+		<result column="MOD_NAME" property="modName" jdbcType="VARCHAR" />
+		<result column="LAST_CHG_USR" jdbcType="VARCHAR" property="lastChgUsr" />
+		<result column="LAST_CHG_DT" jdbcType="VARCHAR" property="lastChgDt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		MENU_ID,SYS_ID,FUNC_ID,MOD_ID,UP_MENU_ID,MENU_NAME,MENU_ORDER,MENU_ICON,MENU_TIP,LAST_CHG_USR,LAST_CHG_DT
+	</sql>
+
+	<!-- 条件列表查询 -->
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		MENU_ID,SYS_ID,FUNC_ID,UP_MENU_ID,MENU_NAME,MENU_CDE,MENU_ORDER,MENU_ICON,MENU_TIP,LAST_CHG_USR,LAST_CHG_DT
+		from ADMIN_SM_MENU
+		<where>
+			<if test="condition.menuId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuId)">AND MENU_ID like #{condition.menuId,jdbcType=VARCHAR }</when>
+					<otherwise>AND MENU_ID = #{condition.menuId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.sysId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.sysId)">AND SYS_ID like #{condition.sysId,jdbcType=VARCHAR }</when>
+					<otherwise>AND SYS_ID = #{condition.sysId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcId)">AND FUNC_ID like #{condition.funcId,jdbcType=VARCHAR }</when>
+					<otherwise>AND FUNC_ID = #{condition.funcId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.upMenuId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.upMenuId)">AND UP_MENU_ID like #{condition.upMenuId,jdbcType=VARCHAR }</when>
+					<otherwise>AND UP_MENU_ID = #{condition.upMenuId,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.menuName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuName)">AND MENU_NAME like #{condition.menuName,jdbcType=VARCHAR }</when>
+					<otherwise>AND MENU_NAME = #{condition.menuName,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.menuCde != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuCde)">AND MENU_CDE like #{condition.menuCde,jdbcType=VARCHAR }</when>
+					<otherwise>AND MENU_CDE = #{condition.menuCde,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.menuOrder != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuOrder)">AND MENU_ORDER like #{condition.menuOrder,jdbcType=DECIMAL }</when>
+					<otherwise>AND MENU_ORDER = #{condition.menuOrder,jdbcType=DECIMAL}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.menuIcon != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuIcon)">AND MENU_ICON like #{condition.menuIcon,jdbcType=VARCHAR }</when>
+					<otherwise>AND MENU_ICON = #{condition.menuIcon,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.menuTip != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.menuTip)">AND MENU_TIP like #{condition.menuTip,jdbcType=VARCHAR }</when>
+					<otherwise>AND MENU_TIP = #{condition.menuTip,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR }
+					</when>
+					<otherwise>AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}</when>
+					<otherwise>AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmMenu">
+		insert into admin_sm_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="menuId != null">MENU_ID,</if>
+			<if test="sysId != null">SYS_ID,</if>
+			<if test="funcId != null">FUNC_ID,</if>
+			<if test="modId != null">MOD_ID,</if>
+			<if test="upMenuId != null">UP_MENU_ID,</if>
+			<if test="menuName != null">MENU_NAME,</if>
+			<if test="menuCde != null">MENU_CDE,</if>
+			<if test="menuOrder != null">MENU_ORDER,</if>
+			<if test="menuIcon != null">MENU_ICON,</if>
+			<if test="menuTip != null">MENU_TIP,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="menuId != null">#{menuId,jdbcType=VARCHAR},</if>
+			<if test="sysId != null">#{sysId,jdbcType=VARCHAR},</if>
+			<if test="funcId != null">#{funcId,jdbcType=VARCHAR},</if>
+			<if test="modId != null">#{modId,jdbcType=VARCHAR},</if>
+			<if test="upMenuId != null">#{upMenuId,jdbcType=VARCHAR},</if>
+			<if test="menuName != null">#{menuName,jdbcType=VARCHAR},</if>
+			<if test="menuCde != null">#{menuCde,jdbcType=VARCHAR},</if>
+			<if test="menuOrder != null">#{menuOrder,jdbcType=DECIMAL},</if>
+			<if test="menuIcon != null">#{menuIcon,jdbcType=VARCHAR},</if>
+			<if test="menuTip != null">#{menuTip,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmMenu">
+		update admin_sm_menu
+		<set>
+			<if test="menuId != null">MENU_ID = #{menuId,jdbcType=VARCHAR},</if>
+			<if test="sysId != null">SYS_ID = #{sysId,jdbcType=VARCHAR},</if>
+			<if test="funcId != null">FUNC_ID = #{funcId,jdbcType=VARCHAR},</if>
+			<if test="modId != null">MOD_ID = #{modId,jdbcType=VARCHAR},</if>
+			<if test="upMenuId != null">UP_MENU_ID = #{upMenuId,jdbcType=VARCHAR},</if>
+			<if test="menuName != null">MENU_NAME = #{menuName,jdbcType=VARCHAR},</if>
+			<if test="menuCde != null">MENU_CDE = #{menuCde,jdbcType=VARCHAR},</if>
+			<if test="menuOrder != null">MENU_ORDER = #{menuOrder,jdbcType=DECIMAL},</if>
+			<if test="menuIcon != null">MENU_ICON = #{menuIcon,jdbcType=VARCHAR},</if>
+			<if test="menuTip != null">MENU_TIP = #{menuTip,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where MENU_ID = #{menuId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_menu where MENU_ID = #{menuId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_menu where MENU_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="menuId">#{menuId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+	<!--根据节点查询菜单,功能名称，模块等信息 -->
+	<select id="getMenuBean" parameterType="String" resultMap="MenuBeanMap">
+		SELECT
+		M.*,
+		F.FUNC_NAME,
+		CM.MOD_NAME,
+		( SELECT M1.MENU_NAME FROM ADMIN_SM_MENU M1 WHERE M1.MENU_ID = M.UP_MENU_ID ) AS UP_MENU_NAME 
+		FROM
+		ADMIN_SM_MENU M
+		LEFT JOIN ADMIN_SM_BUSI_FUNC F ON ( M.FUNC_ID = F.FUNC_ID )
+		LEFT JOIN admin_sm_func_mod CM ON ( CM.MOD_ID = M.MOD_ID ) 
+		WHERE
+		M.MENU_ID = #{menuId}
+	</select>
+
+	<!-- 删除时查询是否有一级、二级...n级子节点菜单，获取选中菜单menuId及相应的子节点菜单menuId -->
+	<select id="getDeleteMenuIds" parameterType="String" resultType="String">
+		SELECT menu_id FROM sys_menu_view WHERE unit_MENU_ID LIKE CONCAT(CONCAT('%',#{menuId,jdbcType=VARCHAR}),'%')
+	</select>
+
+</mapper>

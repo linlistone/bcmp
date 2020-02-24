@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmResContrMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmResContr"
+		id="BaseResultMap">
+		<result column="CONTR_ID" property="contrId" jdbcType="VARCHAR" />
+		<result column="FUNC_ID" property="funcId" jdbcType="VARCHAR" />
+		<result column="CONTR_CODE" property="contrCode"
+			jdbcType="VARCHAR" />
+		<result column="CONTR_NAME" property="contrName"
+			jdbcType="VARCHAR" />
+		<result column="CONTR_URL" property="contrUrl"
+			jdbcType="VARCHAR" />
+		<result column="METHOD_TYPE" property="methodType"
+			jdbcType="VARCHAR" />
+		<result column="CONTR_REMARK" property="contrRemark"
+			jdbcType="VARCHAR" />
+		<result column="LAST_CHG_USR" property="lastChgUsr"
+			jdbcType="VARCHAR" />
+		<result column="LAST_CHG_DT" property="lastChgDt"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CONTR_ID,
+		FUNC_ID,
+		CONTR_CODE,
+		CONTR_NAME,
+		CONTR_URL,
+		METHOD_TYPE,
+		CONTR_REMARK,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel"
+		parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_res_contr
+		<where>
+			<if test="condition.contrId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contrId)">
+						AND CONTR_ID like #{condition.contrId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONTR_ID = #{condition.contrId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.funcId != null">
+				<choose>
+					<when test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.funcId)">
+						AND FUNC_ID like
+						#{condition.funcId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FUNC_ID = #{condition.funcId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contrCode != null and condition.contrCode != ''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contrCode)">
+						AND CONTR_CODE like #{condition.contrCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONTR_CODE = #{condition.contrCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contrName != null and condition.contrName != ''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contrName)">
+						AND CONTR_NAME like #{condition.contrName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONTR_NAME = #{condition.contrName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contrUrl != null and condition.contrUrl != ''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contrUrl)">
+						AND CONTR_URL like #{condition.contrUrl,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONTR_URL = #{condition.contrUrl,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.methodType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.methodType)">
+						AND METHOD_TYPE like #{condition.methodType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND METHOD_TYPE =
+						#{condition.methodType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contrRemark != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contrRemark)">
+						AND CONTR_REMARK like
+						#{condition.contrRemark,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONTR_REMARK =
+						#{condition.contrRemark,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like
+						#{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR =
+						#{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT =
+						#{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmResContr">
+		insert into admin_sm_res_contr
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="contrId != null">CONTR_ID ,</if>
+			<if test="funcId != null">FUNC_ID ,</if>
+			<if test="contrCode != null">CONTR_CODE ,</if>
+			<if test="contrName != null">CONTR_NAME ,</if>
+			<if test="contrUrl != null">CONTR_URL ,</if>
+			<if test="methodType != null">METHOD_TYPE ,</if>
+			<if test="contrRemark != null">CONTR_REMARK ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="contrId != null">#{contrId,jdbcType=VARCHAR},</if>
+			<if test="funcId != null">#{funcId,jdbcType=VARCHAR},</if>
+			<if test="contrCode != null">#{contrCode,jdbcType=VARCHAR},</if>
+			<if test="contrName != null">#{contrName,jdbcType=VARCHAR},</if>
+			<if test="contrUrl != null">#{contrUrl,jdbcType=VARCHAR},</if>
+			<if test="methodType != null">#{methodType,jdbcType=VARCHAR},</if>
+			<if test="contrRemark != null">#{contrRemark,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimary"
+		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmResContr">
+		update admin_sm_res_contr
+		<set>
+			<if test="contrId != null">CONTR_ID = #{contrId,jdbcType=VARCHAR},</if>
+			<if test="funcId != null">FUNC_ID = #{funcId,jdbcType=VARCHAR},</if>
+			<if test="contrCode != null">CONTR_CODE = #{contrCode,jdbcType=VARCHAR},</if>
+			<if test="contrName != null">CONTR_NAME = #{contrName,jdbcType=VARCHAR},</if>
+			<if test="contrUrl != null">CONTR_URL = #{contrUrl,jdbcType=VARCHAR},</if>
+			<if test="methodType != null">METHOD_TYPE = #{methodType,jdbcType=VARCHAR},</if>
+			<if test="contrRemark != null">CONTR_REMARK = #{contrRemark,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where CONTR_ID = #{contrId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		admin_sm_res_contr where CONTR_ID = #{contrId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_res_contr where CONTR_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="contrId">#{contrId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+	<!--初始化左侧树,层级为模块、业务功能管理 -->
+	<select id="getFuncTree"
+		parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultType="java.util.Map">
+		select '0' as up_tree_id ,m.mod_id as node_id ,m.mod_name
+		as node_name,'M' as node_type from admin_sm_func_mod m
+		union
+		select mod_id as up_tree_id ,func_id as node_id,func_name as node_name,'F'
+		as node_type from admin_sm_busi_func
+	</select>
+
+	<!--保存控制点信息前，查询业务功能是否已关联相同控制操作代码的控制点 -->
+	<select id="ifCodeRepeat" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		select c.contr_id from admin_sm_res_contr c where c.contr_code =
+		#{contrCode} and c.func_id = #{funcId}
+		<if test=" contrId != null and contrId !='' ">
+			and c.contr_id &lt;&gt; #{contrId}
+		</if>
+	</select>
+</mapper>

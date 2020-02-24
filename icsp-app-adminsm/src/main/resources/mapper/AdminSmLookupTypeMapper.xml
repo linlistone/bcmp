@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmLookupTypeMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupType" id="BaseResultMap">
+        <result column="LOOKUP_TYPE_ID"  property="lookupTypeId" jdbcType="VARCHAR" />
+        <result column="LOOKUP_TYPE_NAME"  property="lookupTypeName" jdbcType="VARCHAR" />
+        <result column="UP_LOOKUP_TYPE_ID"  property="upLookupTypeId" jdbcType="VARCHAR" />
+        <result column="INSTU_ID"  property="instuId" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		LOOKUP_TYPE_ID,
+		LOOKUP_TYPE_NAME,
+		UP_LOOKUP_TYPE_ID,
+		INSTU_ID,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_lookup_type
+		<where>
+			<if test="condition.lookupTypeId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lookupTypeId)">
+						AND LOOKUP_TYPE_ID like #{condition.lookupTypeId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOOKUP_TYPE_ID = #{condition.lookupTypeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lookupTypeName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lookupTypeName)">
+						AND LOOKUP_TYPE_NAME like #{condition.lookupTypeName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOOKUP_TYPE_NAME = #{condition.lookupTypeName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.upLookupTypeId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.upLookupTypeId)">
+						AND UP_LOOKUP_TYPE_ID like #{condition.upLookupTypeId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UP_LOOKUP_TYPE_ID = #{condition.upLookupTypeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuId)">
+						AND INSTU_ID like #{condition.instuId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_ID = #{condition.instuId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupType">
+		insert into admin_sm_lookup_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lookupTypeId != null">LOOKUP_TYPE_ID ,</if>
+			<if test="lookupTypeName != null">LOOKUP_TYPE_NAME ,</if>
+			<if test="upLookupTypeId != null">UP_LOOKUP_TYPE_ID ,</if>
+			<if test="instuId != null">INSTU_ID ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lookupTypeId != null">#{lookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="lookupTypeName != null">#{lookupTypeName,jdbcType=VARCHAR},</if>
+			<if test="upLookupTypeId != null">#{upLookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">#{instuId,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupType">
+		update admin_sm_lookup_type
+		<set>
+			<if test="lookupTypeId != null">LOOKUP_TYPE_ID = #{lookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="lookupTypeName != null">LOOKUP_TYPE_NAME = #{lookupTypeName,jdbcType=VARCHAR},</if>
+			<if test="upLookupTypeId != null">UP_LOOKUP_TYPE_ID = #{upLookupTypeId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">INSTU_ID = #{instuId,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where LOOKUP_TYPE_ID = #{lookupTypeId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_lookup_type where  LOOKUP_TYPE_ID = #{lookupTypeId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_lookup_type where LOOKUP_TYPE_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="lookupTypeId">#{lookupTypeId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

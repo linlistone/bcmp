@@ -1,27 +1,25 @@
 package cn.com.yusys.icsp.adminsm.rest.web;
 
-import java.util.List;
-
+import cn.com.yusys.icsp.adminsm.domain.AdminSmMenu;
+import cn.com.yusys.icsp.adminsm.domain.MenuBean;
+import cn.com.yusys.icsp.adminsm.service.AdminSmMenuService;
 import cn.com.yusys.icsp.base.base.BaseResouce;
-import service.common.base.BaseResouce;
-import service.common.bean.JsonRequest;
-import service.common.bean.ResultDto;
-import service.common.mybatis.QueryModel;
-import service.oca.domain.AdminSmMenu;
-import service.oca.domain.MenuBean;
-import service.oca.service.AdminSmMenuService;
-
+import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
+import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+@RestController
+@RequestMapping("/api/adminSmMenu")
 public class AdminSmMenuResource extends BaseResouce {
 
-	/**
-	 * 
-	 */
-	public AdminSmMenuResource() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	private AdminSmMenuService adminSmMenuService;
 
 	/**
 	 * @方法名称: create
@@ -29,9 +27,9 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> create(JsonRequest request) throws Exception {
-		AdminSmMenu adminSmMenu = formJsonRequest(request, AdminSmMenu.class);
-		int result = AdminSmMenuService.create(adminSmMenu);
+	@PostMapping(value = "/create")
+	public ResultDto<Integer> create(AdminSmMenu adminSmMenu) throws Exception {
+		int result = adminSmMenuService.create(adminSmMenu);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("添加菜单" + adminSmMenu.getMenuName() + "创建成功！ ");
@@ -46,9 +44,9 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<MenuBean> show(JsonRequest request) throws Exception {
-		String menuId = request.getAsString("menuId");
-		return new ResultDto<MenuBean>(1, AdminSmMenuService.show(menuId));
+	@GetMapping(value = "/show")
+	public ResultDto<MenuBean> show(	String menuId) throws Exception {
+		return new ResultDto<MenuBean>(1, adminSmMenuService.show(menuId));
 	}
 
 	/**
@@ -57,10 +55,10 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<AdminSmMenu>> index(JsonRequest request)
+	@GetMapping(value = "/index")
+	public ResultDto<List<AdminSmMenu>> index(QueryModel model )
 			throws Exception {
-		QueryModel model = toQueryModel(request);
-		List<AdminSmMenu> list = AdminSmMenuService.index(model);
+		List<AdminSmMenu> list = adminSmMenuService.index(model);
 		PageInfo<AdminSmMenu> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<AdminSmMenu>>(pageInfo.getTotal(), list);
 	}
@@ -71,9 +69,9 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> update(JsonRequest request) throws Exception {
-		AdminSmMenu adminSmMenu = formJsonRequest(request, AdminSmMenu.class);
-		int result = AdminSmMenuService.update(adminSmMenu);
+	@PostMapping(value = "/update")
+	public ResultDto<Integer> update(AdminSmMenu adminSmMenu) throws Exception {
+		int result = adminSmMenuService.update(adminSmMenu);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("菜单" + adminSmMenu.getMenuName() + "修改成功！");
@@ -88,9 +86,9 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<Integer> delete(JsonRequest request) throws Exception {
-		String menuId = request.getAsString("menuId");
-		int result = AdminSmMenuService.delete(menuId);
+	@GetMapping(value = "/delete")
+	public ResultDto<Integer> delete(String menuId ) throws Exception {
+		int result = adminSmMenuService.delete(menuId);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
 			resultDto.setMessage("成功删除菜单" + menuId + "");
@@ -105,13 +103,12 @@ public class AdminSmMenuResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public ResultDto<List<AdminSmMenu>> tree(JsonRequest request)
+	public ResultDto<List<AdminSmMenu>> tree(String sysId )
 			throws Exception {
-		String sysId = request.getAsString("sysId");
 		QueryModel model = new QueryModel();
-		model.addCondition("sysId", sysId);
+		model.addCondition("sysId", SYSID);
 		model.setSize(9999);//最多显示9999个
-		List<AdminSmMenu> list = AdminSmMenuService.index(model);
+		List<AdminSmMenu> list = adminSmMenuService.index(model);
 		PageInfo<AdminSmMenu> pageInfo = new PageInfo<>(list);
 		return new ResultDto<List<AdminSmMenu>>(pageInfo.getTotal(), list);
 	}
