@@ -43,6 +43,7 @@
         <mapper-spring-boot-starter.version>2.0.4</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.7</pagehelper-spring-boot-starter.version>
         <spring-security-oauth.version>2.3.2.RELEASE</spring-security-oauth.version>
+        <commons.configuration.version>1.0</commons.configuration.version>
     </properties>
 
     <dependencies>
@@ -151,6 +152,11 @@
         </dependency>
         <!--commons下的常用框架-->
         <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>${commons.configuration.version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons.lang.version}</version>
@@ -193,6 +199,13 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
         </dependency>
+        <!-- freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package}.${moduleName}.mapper.${className}Mapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="${package}.${moduleName}.domain.${className}" id="BaseResultMap">
+<#list columns as column>
+        <result column="${column.columnName}"  property="${column.attrname}" jdbcType="${column.dataType}" />
+</#list>
+    </resultMap>
+
+	<sql id="Base_Column_List">
+	<#list columns as column>
+		${column.columnName}<#if column_has_next>,</#if>
+	</#list>
+	</sql>
+	<select id="selectByModel" parameterType="${QueryModel}"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ${tableName}
+		<where>
+		<#list columns as column>
+			<if test="condition.${column.attrname} != null">
+				<choose>
+					<when
+						test="@both.common.util.OGNLUtil@like(condition.${column.attrname})">
+						AND ${column.columnName} like ${r"#"}{condition.${column.attrname},jdbcType=${column.dataType}}
+					</when>
+					<otherwise>
+						AND ${column.columnName} = ${r"#"}{condition.${column.attrname},jdbcType=${column.dataType}}
+					</otherwise>
+				</choose>
+			</if>
+		</#list>
+			${r"$"}{dataAuth}
+		</where>
+		<if test="sort != null">order by ${r"$"}{sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="${package}.${moduleName}.domain.${className}">
+		insert into ${tableName}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		<#list columns as column>
+			<if test="${column.attrname} != null">${column.columnName} <#if column_has_next>,</#if></if>
+		</#list>	
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<#list columns as column>
+			<if test="${column.attrname} != null">${r"#"}{${column.attrname},jdbcType=${column.dataType}}<#if column_has_next>,</#if></if>
+		</#list>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.domain.${className}">
+		update ${tableName}
+		<set>
+			<#list columns as column>
+			<if test="${column.attrname} != null">${column.columnName} = ${r"#"}{${column.attrname},jdbcType=${column.dataType}}<#if column_has_next>,</#if></if>
+			</#list>
+		</set>
+		where ${pk.columnName} = ${r"#"}{${pk.attrname},jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from ${tableName} where  ${pk.columnName} = ${r"#"}{${pk.attrname},jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from ${tableName} where ${pk.columnName} in
+		<foreach
+			collection="@both.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="${pk.attrname}">${r"#"}{${pk.attrname},jdbcType=${pk.dataType}}</foreach>
+	</delete>
+
+
+</mapper>

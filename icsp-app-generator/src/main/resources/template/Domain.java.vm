@@ -1,0 +1,56 @@
+package ${package}.${moduleName}.domain;
+
+<#if hasBigDecimal>
+import java.math.BigDecimal;
+</#if>
+import java.io.Serializable;
+import java.util.Date;
+import service.common.base.BaseDomain;
+
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+//TableName("${tableName}")
+public class ${className} extends BaseDomain implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+<#list columns as column>
+    /**
+	 * ${column.comments}
+		<#if (column.columnName == pk.columnName) >
+	 *	pk
+		</#if>
+	 */
+	private ${column.attrType} ${column.attrname};
+</#list>
+	
+<#list columns as column>
+	/**
+	 * @param ${column.attrname}
+	 */
+	public void set${column.attrName}(String ${column.attrname}) {
+		this.${column.attrname} = ${column.attrname};
+	}
+
+	/**
+	 * @return ${column.attrname}
+	 */
+	public String get${column.attrName}() {
+		return this.${column.attrname};
+	}
+</#list>		
+	public String toString(){
+		StringBuffer strBuf=new StringBuffer();
+		strBuf.append("${className}[");
+	<#list columns as column>
+		strBuf.append("${column.attrname}=").append(${column.attrname})<#if column_has_next>.append(",")</#if>;
+	</#list>
+		strBuf.append("]");
+		return strBuf.toString();
+	}
+}

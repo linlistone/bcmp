@@ -1,0 +1,109 @@
+package ${package}.${moduleName}.rest;
+
+import java.util.Arrays;
+import java.util.List;
+import service.common.base.BaseResouce;
+import service.common.bean.JsonRequest;
+import service.common.bean.ResultDto;
+import ${QueryModel};
+import ${package}.${moduleName}.domain.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import com.github.pagehelper.PageInfo;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public class ${className}Resource extends BaseResouce {
+
+
+	/**
+	 * ${comments}
+	 */
+	public ${className}Resource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @方法名称: create
+	 * @方法描述: 新增${comments}
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public ResultDto<Integer> create(JsonRequest request) throws Exception {
+		${className} domain = formJsonRequest(request,
+				${className}.class);
+		int result = ${className}Service.create(domain);
+		ResultDto<Integer> resultDto = new ResultDto<>();
+		if (result >= 1) {
+			resultDto.setMessage("添加${comments}" + domain.get${pk.attrName}()
+					+ "创建成功！ ");
+		}
+		resultDto.setData(result);
+		return resultDto;
+	}
+
+	/**
+	 * @方法名称:show
+	 * @方法描述:${comments}信息查询
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public ResultDto<${className}> show(JsonRequest request) throws Exception {
+		String ${pk.attrname} = request.getAsString("${pk.attrname}");
+		return new ResultDto<${className}>(1, ${className}Service.show(${pk.attrname}));
+	}
+
+	/**
+	 * @方法名称:index
+	 * @方法描述:${comments}查询
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public ResultDto<List<${className}>> index(JsonRequest request)
+			throws Exception {
+		QueryModel model = toQueryModel(request);
+		List<${className}> list = ${className}Service.index(model);
+		PageInfo<${className}> pageInfo = new PageInfo<>(list);
+		return new ResultDto<List<${className}>>(pageInfo.getTotal(), list);
+	}
+
+	/**
+	 * @方法名称: update
+	 * @方法描述: 修改${comments}
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public ResultDto<Integer> update(JsonRequest request) throws Exception {
+		${className} domain = formJsonRequest(request,
+				${className}.class);
+		int result = ${className}Service.update(domain);
+		ResultDto<Integer> resultDto = new ResultDto<>();
+		if (result >= 1) {
+			resultDto.setMessage("模块" + domain.get${pk.attrName}() + "修改成功！");
+		}
+		resultDto.setData(result);
+		return resultDto;
+	}
+
+	/**
+	 * @方法名称: delete
+	 * @方法描述: 删除${comments}
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public ResultDto<Integer> delete(JsonRequest request) throws Exception {
+		String ${pk.attrname} = request.getAsString("${pk.attrname}");
+		int result = ${className}Service.delete(${pk.attrname});
+		ResultDto<Integer> resultDto = new ResultDto<>();
+		if (result >= 1) {
+			resultDto.setMessage("成功删除模块" + ${pk.attrname} + "");
+		}
+		resultDto.setData(result);
+		return resultDto;
+	}
+}

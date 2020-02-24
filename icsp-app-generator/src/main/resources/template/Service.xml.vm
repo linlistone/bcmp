@@ -1,0 +1,24 @@
+<!--模块 -->
+<package name="adminsm" namespace="rescontr" extends="filter-base.xml,filter-verify.xml">
+	
+	<!-- 新增加模块信息 -->
+	<service name="create" class="service.${moduleName}.rest.${className}Resource"
+			method="create">
+	</service>
+	<!-- 查询模块信息 -->
+	<service name="show" class="service.${moduleName}.rest.${className}Resource"
+			method="query">
+	</service>
+	<!-- 查询模块列表 -->
+	<service name="index" class="service.${moduleName}.rest.${className}Resource"
+			method="index">
+	</service>
+	<!-- 修改模块信息 -->
+	<service name="update" class="service.${moduleName}.rest.${className}Resource"
+			method="update">
+	</service>
+	<!-- 删除模块信息 -->
+	<service name="delete" class="service.${moduleName}.rest.${className}Resource"
+			method="delete">
+	</service>
+</package>
