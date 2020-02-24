@@ -7,10 +7,7 @@ import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +27,7 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/create")
-    public ResultDto<Integer> create(AdminSmLookupItem adminSmLookupItem) throws Exception {
+    public ResultDto<Integer> create(@RequestBody AdminSmLookupItem adminSmLookupItem) throws Exception {
         int result = adminSmLookupItemService.create(adminSmLookupItem);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
@@ -48,10 +45,10 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @算法描述:
      */
     @GetMapping(value = "/show")
-    public ResultDto<AdminSmLookupItem> show(String menuId)
+    public ResultDto<AdminSmLookupItem> show(@RequestParam("lookupItemId") String lookupItemId)
             throws Exception {
         return new ResultDto<AdminSmLookupItem>(1,
-                adminSmLookupItemService.show(menuId));
+                adminSmLookupItemService.show(lookupItemId));
     }
 
     /**
@@ -75,7 +72,7 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/update")
-    public ResultDto<Integer> update(AdminSmLookupItem adminSmLookupItem) throws Exception {
+    public ResultDto<Integer> update(@RequestBody AdminSmLookupItem adminSmLookupItem) throws Exception {
 
         int result = adminSmLookupItemService.update(adminSmLookupItem);
         ResultDto<Integer> resultDto = new ResultDto<>();
@@ -93,8 +90,8 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @参数与返回说明:
      * @算法描述:
      */
-    @GetMapping(value = "/delete")
-    public ResultDto<Integer> delete(String lookupItemId) throws Exception {
+    @PostMapping(value = "/delete/{lookupItemId}")
+    public ResultDto<Integer> delete(@RequestParam("lookupItemId") String lookupItemId) throws Exception {
         int result = adminSmLookupItemService.delete(lookupItemId);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
@@ -110,8 +107,9 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @参数与返回说明:
      * @算法描述:
      */
+    @GetMapping(value = "/weblist")
     public ResultDto<Map<String, List<Map<String, String>>>> weblist(
-            String lookupCodes) throws Exception {
+            @RequestParam("lookupCodes") String lookupCodes) throws Exception {
         Map<String, List<Map<String, String>>> object = new HashMap<String, List<Map<String, String>>>();
         if (lookupCodes.contains(",")) {
             String[] idstr = lookupCodes.split(",");
@@ -127,15 +125,4 @@ public class AdminSmLookupItemResource extends BaseResouce {
                 object.size(), object);
 
     }
-
-    // /**
-    // * @方法名称: getLookupCode
-    // * @方法描述: 前台WEB加载字典（需要在此封装逻辑，不然service层无法用到原子REDIS查询）
-    // * @参数与返回说明:
-    // * @算法描述:
-    // */
-    // public ResultDto<Map<String, List<Map<String, String>>>> getLookupCode(
-    // String lookupCodes) {
-    //
-    // }
 }

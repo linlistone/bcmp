@@ -47,12 +47,12 @@ public class AdminSmLookupItemService extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public  AdminSmLookupItem show(String lookupId) throws Exception {
+	public  AdminSmLookupItem show(String lookupItemId) throws Exception {
 		QueryModel model = new QueryModel();
-		model.addCondition("lookupId", lookupId);
+		model.addCondition("lookupItemId", lookupItemId);
 		List<AdminSmLookupItem> list = index(model);
 		if (list == null || list.isEmpty()) {
-			throw new ICSPException("数据不存在" + lookupId);
+			throw new ICSPException("数据不存在" + lookupItemId);
 		}
 		AdminSmLookupItem smMenu = list.get(0);
 		return smMenu;

@@ -7,10 +7,7 @@ import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +20,7 @@ import java.util.Map;
  * @date 2020-02-10 00:05:20
  */
 @RestController
-@RequestMapping("/api/asdminSmResContr")
+@RequestMapping("/api/adminSmResContr")
 public class AdminSmResContrResource extends BaseResouce {
     @Autowired
     private AdminSmResContrService adminSmResContrService;
@@ -35,7 +32,7 @@ public class AdminSmResContrResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/create")
-    public ResultDto<Integer> create(AdminSmResContr adminSmResContr) throws Exception {
+    public ResultDto<Integer> create(@RequestBody AdminSmResContr adminSmResContr) throws Exception {
         int result = adminSmResContrService.create(adminSmResContr);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
@@ -52,7 +49,7 @@ public class AdminSmResContrResource extends BaseResouce {
      * @算法描述:
      */
     @GetMapping(value = "/show")
-    public ResultDto<AdminSmResContr> show(String contrId) throws Exception {
+    public ResultDto<AdminSmResContr> show(@RequestParam("contrId") String contrId) throws Exception {
         return new ResultDto<AdminSmResContr>(1, adminSmResContrService.show(contrId));
     }
 
@@ -76,11 +73,11 @@ public class AdminSmResContrResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/update")
-    public ResultDto<Integer> update(AdminSmResContr domain) throws Exception {
-        int result = adminSmResContrService.update(domain);
+    public ResultDto<Integer> update(@RequestBody AdminSmResContr adminSmResContr) throws Exception {
+        int result = adminSmResContrService.update(adminSmResContr);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
-            resultDto.setMessage("模块" + domain.getContrId() + "修改成功！");
+            resultDto.setMessage("模块" + adminSmResContr.getContrId() + "修改成功！");
         }
         resultDto.setData(result);
         return resultDto;
@@ -92,8 +89,8 @@ public class AdminSmResContrResource extends BaseResouce {
      * @参数与返回说明:
      * @算法描述:
      */
-    @GetMapping(value = "/delete")
-    public ResultDto<Integer> delete(String contrId) throws Exception {
+    @PostMapping(value = "/delete/{contrId}")
+    public ResultDto<Integer> delete(@PathVariable("contrId") String contrId) throws Exception {
         int result = adminSmResContrService.delete(contrId);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {

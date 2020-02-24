@@ -179,7 +179,7 @@
 	</insert>
 
 	<!-- 根据主键更新-只更新非空字段 -->
-	<update id="updateByPrimary"
+	<update id="updateByPrimaryKey"
 		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmResContr">
 		update admin_sm_res_contr
 		<set>

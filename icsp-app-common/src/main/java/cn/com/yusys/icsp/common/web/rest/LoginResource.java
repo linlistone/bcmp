@@ -32,7 +32,7 @@ public class LoginResource extends BaseResouce {
         try {
             //提交登录
             Map<String, Object> map = new HashMap<>();
-          //  UserBean userBean = loginService.getUserInfo(username, "");
+            //  UserBean userBean = loginService.getUserInfo(username, "");
             map.put("sessionId", username);
             resultDto.setData(map);
         } catch (Exception e) {

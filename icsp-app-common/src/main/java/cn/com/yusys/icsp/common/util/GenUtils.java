@@ -5,28 +5,28 @@ import java.util.List;
 
 /**
  * 代码生成器 工具类
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年12月19日 下午11:40:24
  */
 public class GenUtils {
 
-	public static List<String> getTemplates() {
-		List<String> templates = new ArrayList<String>();
-		templates.add("Domain.java.vm");
-		templates.add("Mapper.java.vm");
-		templates.add("Mapper.xml.vm");
-		templates.add("Service.java.vm");
+    public static List<String> getTemplates() {
+        List<String> templates = new ArrayList<String>();
+        templates.add("Domain.java.vm");
+        templates.add("Mapper.java.vm");
+        templates.add("Mapper.xml.vm");
+        templates.add("Service.java.vm");
 //		templates.add("ServiceImpl.java.vm");
-		templates.add("Resource.java.vm");
+        templates.add("Resource.java.vm");
 //		templates.add("menu.sql.vm");
-		templates.add("index.html.vm");
-		templates.add("index.js.vm");
-		templates.add("Service.xml.vm");
-		
-		return templates;
-	}
+        templates.add("index.html.vm");
+        templates.add("index.js.vm");
+        templates.add("Service.xml.vm");
+
+        return templates;
+    }
 
 //	/**
 //	 * 生成代码

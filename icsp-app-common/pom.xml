@@ -3,26 +3,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.com.yusys.icsp</groupId>
-        <artifactId>icsp-app-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.com.yusys.icsp</groupId>
     <artifactId>icsp-app-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>icsp-app-common</name>
-    <description>公共服务</description>
-    <properties>
+    <description>公共工具</description>
 
-    </properties>
+
     <dependencies>
 
-        <dependency>
-            <groupId>cn.com.yusys.icsp</groupId>
-            <artifactId>icsp-app-base</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
+
 
 </project>

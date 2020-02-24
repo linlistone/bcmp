@@ -7,12 +7,10 @@ import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据字典表
@@ -35,7 +33,7 @@ public class AdminSmLookupResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/create")
-    public ResultDto<Integer> create(AdminSmLookup domain) throws Exception {
+    public ResultDto<Integer> create(@RequestBody AdminSmLookup domain) throws Exception {
         int result = adminSmLookupService.create(domain);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
@@ -52,7 +50,7 @@ public class AdminSmLookupResource extends BaseResouce {
      * @算法描述:
      */
     @GetMapping(value = "/show")
-    public ResultDto<AdminSmLookup> show(String lookupId) throws Exception {
+    public ResultDto<AdminSmLookup> show(@RequestParam("lookupId") String lookupId) throws Exception {
         return new ResultDto<AdminSmLookup>(1, adminSmLookupService.show(lookupId));
     }
 
@@ -76,7 +74,7 @@ public class AdminSmLookupResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/update")
-    public ResultDto<Integer> update(AdminSmLookup domain) throws Exception {
+    public ResultDto<Integer> update(@RequestBody AdminSmLookup domain) throws Exception {
         int result = adminSmLookupService.update(domain);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {
@@ -92,8 +90,10 @@ public class AdminSmLookupResource extends BaseResouce {
      * @参数与返回说明:
      * @算法描述:
      */
-    @GetMapping(value = "/delete")
-    public ResultDto<Integer> delete(String lookupId, String lookupCode) throws Exception {
+    @PostMapping(value = "/delete")
+    public ResultDto<Integer> delete(@RequestBody Map<String, Object> data) throws Exception {
+        String lookupId = (String) data.get("lookupId");
+        String lookupCode = (String) data.get("lookupCode");
         int result = adminSmLookupService.delete(lookupId, lookupCode);
         ResultDto<Integer> resultDto = new ResultDto<>();
         if (result >= 1) {

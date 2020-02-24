@@ -25,12 +25,12 @@ public class CorsFilter implements Filter {
         //响应类型
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
 
-        httpServletResponse.addHeader("Access-Control-Allow-Credentials","true");
+        httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
 
-        httpServletResponse.addHeader("Access-Control-Expose-Headers","Fox-Session");
+        httpServletResponse.addHeader("Access-Control-Expose-Headers", "Fox-Session");
 
         httpServletResponse.addHeader(
-                "Access-Control-Allow-Headers","Origin, No-Cache, X-Requested-With, " +
+                "Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, " +
                         "If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, " +
                         "Content-Type, X-E4M-With, Cookie, Fox-Id, Fox-Trace, Fox-Token, Fox-Passport," +
                         " Fox-Passport-Reset, Fox-Encrypt, Fox-Session,Authorization");
@@ -40,7 +40,7 @@ public class CorsFilter implements Filter {
 
         if ("OPTIONS".equals(httpServletRequest.getMethod())) {
             httpServletResponse.setStatus(200);
-        }else{
+        } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }

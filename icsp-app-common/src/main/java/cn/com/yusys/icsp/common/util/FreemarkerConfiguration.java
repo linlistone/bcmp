@@ -3,11 +3,11 @@ package cn.com.yusys.icsp.common.util;
 public class FreemarkerConfiguration {
 //	private static Configuration config = null;
 
-	/**
-	 * Static initialization.
-	 * 
-	 * Initialize the configuration of Freemarker.
-	 */
+    /**
+     * Static initialization.
+     *
+     * Initialize the configuration of Freemarker.
+     */
 //	static {
 //
 //		config = new Configuration();

@@ -12,9 +12,7 @@ import java.io.Serializable;
  * @email linlistone@163.com
  * @date 2020-02-10 00:05:20
  */
-//TableName("admin_sm_res_contr")
-public class AdminSmResContr extends BaseDomain implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class AdminSmResContr extends BaseDomain  {
 
     /**
 	 * 记录编号

@@ -7,10 +7,7 @@ import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -27,7 +24,7 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/create")
-	public ResultDto<Integer> create(AdminSmFuncMod adminSmFuncMod) throws Exception {
+	public ResultDto<Integer> create(@RequestBody AdminSmFuncMod adminSmFuncMod) throws Exception {
 		int result = adminSmFuncModService.create(adminSmFuncMod);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
@@ -45,7 +42,7 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@GetMapping(value = "/show")
-	public ResultDto<AdminSmFuncMod> show(String modId) throws Exception {
+	public ResultDto<AdminSmFuncMod> show(@RequestParam("modId") String modId) throws Exception {
 		return new ResultDto<AdminSmFuncMod>(1, adminSmFuncModService.show(modId));
 	}
 
@@ -70,7 +67,7 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/update")
-	public ResultDto<Integer> update(AdminSmFuncMod adminSmFuncMod) throws Exception {
+	public ResultDto<Integer> update(@RequestBody AdminSmFuncMod adminSmFuncMod) throws Exception {
 		int result = adminSmFuncModService.update(adminSmFuncMod);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
@@ -86,8 +83,8 @@ public class AdminSmFuncModResource extends BaseResouce {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	@GetMapping(value = "/delete")
-	public ResultDto<Integer> delete(String modId) throws Exception {
+	@PostMapping(value = "/delete/{modId}")
+	public ResultDto<Integer> delete(@PathVariable("modId")String modId) throws Exception {
 		int result = adminSmFuncModService.delete(modId);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
