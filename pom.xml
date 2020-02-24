@@ -20,6 +20,7 @@
         <module>icsp-app-bcmp</module>
         <module>icsp-app-common</module>
         <module>icsp-app-framework-starter</module>
+        <module>icsp-app-generator</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
