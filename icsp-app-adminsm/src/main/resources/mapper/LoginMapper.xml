@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.LoginMapper">
+    <resultMap id="MenuBeanMap" type="cn.com.yusys.icsp.adminsm.domain.MenuBean">
+        <result column="MENU_ID" property="menuId" jdbcType="VARCHAR"/>
+        <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
+        <result column="UP_MENU_ID" property="upMenuId" jdbcType="VARCHAR"/>
+        <result column="MENU_ORDER" property="menuOrder" jdbcType="VARCHAR"/>
+        <result column="MENU_ICON" property="menuIcon" jdbcType="VARCHAR"/>
+        <result column="FUNC_URL" property="funcUrl" jdbcType="VARCHAR"/>
+        <result column="FUNC_URL_JS" property="funcUrlJs" jdbcType="VARCHAR"/>
+        <result column="FUNC_URL_CSS" property="funcUrlCss" jdbcType="VARCHAR"/>
+        <result column="FUNC_ID" property="funcId" jdbcType="VARCHAR"/>
+        <result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
+        <result column="MOD_ID" property="modId" jdbcType="VARCHAR"/>
+        <result column="MOD_CDE" property="modCde" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="RoleMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+        <!--  记录编号  -->
+        <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+        <!--  角色代码  -->
+        <result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR"/>
+        <!--  角色名称  -->
+        <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+        <!--  角色层级  -->
+        <result column="ROLE_LEVEL" property="roleLevel" jdbcType="VARCHAR"/>
+        <!--  状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效  -->
+        <result column="ROLE_STS" property="roleSts" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="LogicSysMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmLogicSys">
+        <!--  记录编号  -->
+        <result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
+        <!--  认证类型  -->
+        <result column="AUTH_ID" property="authId" jdbcType="VARCHAR"/>
+        <!--  版本号  -->
+        <result column="SYS_VERSION" property="sysVersion" jdbcType="VARCHAR"/>
+        <!--  逻辑系统名称   -->
+        <result column="SYS_NAME" property="sysName" jdbcType="VARCHAR"/>
+        <!--  逻辑系统描述 -->
+        <result column="SYS_DESC" property="sysDesc" jdbcType="VARCHAR"/>
+        <!--  逻辑系统状态 -->
+        <result column="SYS_STS" property="sysSts" jdbcType="VARCHAR"/>
+        <!--  是否单点登录 -->
+        <result column="IS_SSO" property="isSso" jdbcType="VARCHAR"/>
+        <!--  系统简称 -->
+        <result column="SYS_CODE" property="sysCode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--对一根据id查询个人信息：级联查询的第二种方法（嵌套结果，执行一个SQL语句）-->
+    <resultMap id="UserBeanMap" type="cn.com.yusys.icsp.adminsm.domain.UserBean">
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+        <result column="CERT_NO" property="certNo" jdbcType="VARCHAR"/>
+        <result column="CERT_TYPE" property="certType" jdbcType="VARCHAR"/>
+        <result column="DEADLINE" property="deadline" jdbcType="VARCHAR"/>
+        <result column="DPT_ID" property="dptId" jdbcType="VARCHAR"/>
+        <result column="ENTRANTS_DATE" property="entrantsDate" jdbcType="VARCHAR"/>
+        <result column="FINANCIAL_JOB_TIME" property="financialJobTime" jdbcType="VARCHAR"/>
+        <result column="LAST_EDIT_PASS_TIME" property="lastEditPassTime" jdbcType="VARCHAR"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="VARCHAR"/>
+        <result column="LOGIN_CODE" property="loginCode" jdbcType="VARCHAR"/>
+        <result column="OFFEN_IP" property="offenIp" jdbcType="VARCHAR"/>
+        <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
+        <result column="POSITION_DEGREE" property="positionDegree" jdbcType="VARCHAR"/>
+        <result column="POSITION_TIME" property="positionTime" jdbcType="VARCHAR"/>
+        <result column="USER_AVATAR" property="userAvatar" jdbcType="VARCHAR"/>
+        <result column="USER_BIRTHDAY" property="userBirthday" jdbcType="VARCHAR"/>
+        <result column="USER_CERTIFICATE" property="userCertificate" jdbcType="VARCHAR"/>
+        <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
+        <result column="USER_EDUCATION" property="userEducation" jdbcType="VARCHAR"/>
+        <result column="USER_EMAIL" property="userEmail" jdbcType="VARCHAR"/>
+        <result column="USER_MOBILEPHONE" property="userMobilephone" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="USER_OFFICETEL" property="userOfficetel" jdbcType="VARCHAR"/>
+        <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR"/>
+        <result column="USER_PASSWORD_MD5" property="userPasswordMd5" jdbcType="VARCHAR"/>
+        <result column="USER_SEX" property="userSex" jdbcType="VARCHAR"/>
+        <result column="USER_STS" property="userSts" jdbcType="VARCHAR"/>
+        <result column="IS_BUSINESS" property="isBusiness" jdbcType="VARCHAR"/>
+        <!-- 一对一级联金融机构查询-->
+        <association property="instu" javaType="cn.com.yusys.icsp.adminsm.domain.AdminSmInstu">
+            <result column="INSTU_ID" property="instuId" jdbcType="VARCHAR"/>
+            <result column="CONT_TEL" property="contTel" jdbcType="VARCHAR"/>
+            <result column="CONT_USR" property="contUsr" jdbcType="VARCHAR"/>
+            <result column="INSTU_ADDR" property="instuAddr" jdbcType="VARCHAR"/>
+            <result column="INSTU_CDE" property="instuCde" jdbcType="VARCHAR"/>
+            <result column="INSTU_NAME" property="instuName" jdbcType="VARCHAR"/>
+            <result column="INSTU_STS" property="instuSts" jdbcType="VARCHAR"/>
+            <result column="JOIN_DT" property="joinDt" jdbcType="VARCHAR"/>
+            <result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
+            <result column="ZIP_CDE" property="zipCde" jdbcType="VARCHAR"/>
+        </association>
+        <!-- 一对一级联机构查询-->
+        <association property="org" javaType="cn.com.yusys.icsp.adminsm.domain.AdminSmOrgInfo">
+            <!-- 内部机构号 -->
+            <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
+            <!-- 金融机构编号 -->
+            <result column="INSTU_ID" property="instuId" jdbcType="VARCHAR"/>
+            <!-- 机构号 -->
+            <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+            <!-- 机构中文简称 -->
+            <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR"/>
+            <!-- 机构中文全称 -->
+            <result column="ORG_FULL_NAME" property="orgFullName" jdbcType="VARCHAR"/>
+            <!-- 核算机构 -->
+            <result column="CHECK_ORG_ID" property="checkOrgId" jdbcType="VARCHAR"/>
+            <!-- 上级机构记录编号 -->
+            <result column="UPORG_ID" property="upOrgId" jdbcType="VARCHAR"/>
+            <!-- HR机构主键 -->
+            <result column="ORGHR_ID" property="orgHrId" jdbcType="VARCHAR"/>
+            <!-- 内部机构号 -->
+            <result column="ORGIN_CODE" property="orgInCode" jdbcType="VARCHAR"/>
+            <!-- ORG_GRADE -->
+            <result column="ORG_GRADE" property="orgGrade" jdbcType="VARCHAR"/>
+            <!-- 机构类型：0：总行1：支行 -->
+            <result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR"/>
+            <!-- 机构类别0-核算机构1-网点机构2-虚拟机构 -->
+            <result column="ORG_CATEGORY" property="orgCategory" jdbcType="VARCHAR"/>
+            <!-- 地址 -->
+            <result column="ORG_ADDR" property="orgAddr" jdbcType="VARCHAR"/>
+            <!-- 邮编 -->
+            <result column="ZIP_CDE" property="zipCde" jdbcType="VARCHAR"/>
+            <!-- 银行机构代码 -->
+            <result column="BANK_ORG_ID" property="bankOrgId" jdbcType="VARCHAR"/>
+            <!-- 金融许可证号 -->
+            <result column="FINANCIAL_LICENSE" property="financialLicense" jdbcType="VARCHAR"/>
+            <!-- 营业执照号 -->
+            <result column="BUSINESS_LICENSE" property="businessLicense" jdbcType="VARCHAR"/>
+            <!-- 联系人 -->
+            <result column="CONT_USR" property="contUsr" jdbcType="VARCHAR"/>
+            <!-- 负责人职务 -->
+            <result column="CONT_DUTY" property="contDuty" jdbcType="VARCHAR"/>
+            <!-- 联系电话 -->
+            <result column="CONT_TEL" property="contTel" jdbcType="VARCHAR"/>
+            <!-- 区域 -->
+            <result column="AREA" property="area" jdbcType="VARCHAR"/>
+            <!-- 状态：对应字典项=NORM_STSA：生效I：失效W：待生效 -->
+            <result column="OR_GSTS" property="orgSts" jdbcType="VARCHAR"/>
+            <!-- 成立时间 -->
+            <result column="ESTABLISH_TIME" property="establishTime" jdbcType="VARCHAR"/>
+            <!-- 机构工作开始时间 -->
+            <result column="WORKSTART_TIME" property="workStartTime" jdbcType="VARCHAR"/>
+            <!-- 机构工作终止时间 -->
+            <result column="WORKEND_TIME" property="workEndTime" jdbcType="VARCHAR"/>
+            <!-- 所有父机构 -->
+            <result column="ORG_PARENTS" property="orgParents" jdbcType="VARCHAR"/>
+        </association>
+        <!-- 一对一级联金融机构查询-->
+        <association property="dpt" javaType="cn.com.yusys.icsp.adminsm.domain.AdminsmDpt">
+            <!--  记录编号  -->
+            <result column="DPT_ID" property="dptId" jdbcType="VARCHAR"/>
+            <!--  部门代码  -->
+            <result column="DPT_CDE" property="dptCde" jdbcType="VARCHAR"/>
+            <!--  部门名称  -->
+            <result column="DPT_NAME" property="dptName" jdbcType="VARCHAR"/>
+            <!--  所属机构编号  -->
+            <result column="BELONG_ORG_ID" property="belongOrgId" jdbcType="VARCHAR"/>
+            <!--  上级部门记录编号  -->
+            <result column="UP_DPT_ID" property="upDptId" jdbcType="VARCHAR"/>
+            <!--  状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效  -->
+            <result column="DPT_STS" property="dptSts" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!--查询用户信息 -->
+    <select id="selectUserInfo" parameterType="String" resultMap="UserBeanMap">
+		SELECT
+        T_USER.*,
+        T_INS.*,
+        T_ORG.*,
+        T_DPT.DPT_CDE,
+        T_DPT.DPT_NAME,
+        T_DPT.BELONG_ORG_ID,
+        T_DPT.UP_DPT_ID,
+        T_DPT.DPT_STS
+        FROM
+        ADMIN_SM_USER T_USER
+        LEFT JOIN ADMIN_SM_ORG T_ORG ON
+        T_USER.ORG_ID=T_ORG.ORG_ID
+        LEFT JOIN ADMIN_SM_DPT T_DPT ON
+        T_USER.DPT_ID=T_DPT.DPT_ID
+        LEFT JOIN ADMIN_SM_INSTU T_INS ON
+        T_ORG.INSTU_ID = T_INS.INSTU_ID
+        WHERE T_USER.USER_ID=#{userId}
+	</select>
+
+    <!--查询用户角色列表信息 -->
+    <select id="selectUserRoles" parameterType="String" resultMap="RoleMap">
+		SELECT
+        T_ROLE.ROLE_ID,
+        T_ROLE.ROLE_CODE,
+        T_ROLE.ROLE_NAME,
+        T_ROLE.ROLE_LEVEL,
+        T_ROLE.ROLE_STS
+        FROM
+        ADMIN_SM_ROLE T_ROLE,ADMIN_SM_USER_ROLE_REL T_REL
+        WHERE T_ROLE.ROLE_ID=T_REL.ROLE_ID
+        and T_REL.USER_ID=#{userId} and T_REL.ORG_ID=#{orgId}
+	</select>
+
+    <!--查询用户角色列表信息 -->
+    <select id="selectLogicSys" parameterType="String" resultMap="LogicSysMap">
+		SELECT
+        T_SYS.SYS_ID,
+        T_SYS.AUTH_ID,
+        T_SYS.SYS_VERSION,
+        T_SYS.SYS_NAME,
+        T_SYS.SYS_DESC,
+        T_SYS.SYS_STS,
+        T_SYS.IS_SSO,
+        T_SYS.SYS_CODE
+        FROM
+        ADMIN_SM_LOGIC_SYS  T_SYS where T_SYS.SYS_ID=#{sysId}
+	</select>
+
+    <!--
+    <select id="selectAllContr" resultMap="ContrBeanMap">
+        SELECT DISTINCT CONTR_URL,METHOD_TYPE FROM ADMIN_SM_RES_CONTR WHERE CONTR_URL is not null
+    </select>
+    -->
+    <select id="selectAllMenu" parameterType="String" resultMap="MenuBeanMap">
+		SELECT DISTINCT
+        T_MENU.MENU_ID,
+        T_MENU.MENU_NAME,
+        T_MENU.UP_MENU_ID,
+        T_MENU.MENU_ORDER,
+        T_MENU.MENU_ICON,
+        T_MENU.MOD_ID,
+        T_FUNC_MOD.MOD_CDE,
+        T_MENU.FUNC_ID,
+        T_FUNC.FUNC_URL,
+        T_FUNC.FUNC_URL_JS,
+        T_FUNC.FUNC_URL_CSS,
+        T_MENU.SYS_ID
+        FROM
+        ADMIN_SM_MENU T_MENU
+        LEFT JOIN ADMIN_SM_BUSI_FUNC T_FUNC ON (
+        T_MENU.FUNC_ID = T_FUNC.FUNC_ID
+        )
+        LEFT JOIN ADMIN_SM_FUNC_MOD T_FUNC_MOD ON (
+        T_FUNC_MOD.MOD_ID = T_MENU.MOD_ID
+        )
+        AND T_MENU.SYS_ID = #{sysId}
+        ORDER BY
+        T_MENU.UP_MENU_ID,
+        T_MENU.MENU_ORDER ASC
+	</select>
+</mapper>

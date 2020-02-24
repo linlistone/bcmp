@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.common.repository.mapper.CommonMapper">
+        <!--对一根据id查询个人信息：级联查询的第二种方法（嵌套结果，执行一个SQL语句）-->
+    <resultMap id="UserBeanMap" type="cn.com.yusys.icsp.base.bean.UserBean">
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+        <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
+        <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR"/>
+        <result column="USER_STS" property="userSts" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询用户信息 -->
+    <select id="selectUserInfo" parameterType="String" resultMap="UserBeanMap">
+		SELECT
+        T_USER.USER_ID, T_USER.ORG_ID, T_USER.USER_CODE, T_USER.USER_NAME, T_USER.USER_PASSWORD, T_USER.USER_STS
+        FROM
+        ADMIN_SM_USER T_USER
+        WHERE T_USER.USER_ID=#{userId}
+	</select>
+
+</mapper>

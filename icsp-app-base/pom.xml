@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <dependencies>
+        <dependency>
+            <groupId>cn.com.yusys.icsp</groupId>
+            <artifactId>icsp-app-common</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <parent>
+        <groupId>cn.com.yusys.icsp</groupId>
+        <artifactId>icsp-app-framework</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>cn.com.yusys.icsp</groupId>
+    <artifactId>icsp-app-base</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>icsp-app-base</name>
+    <description>服务端基础包</description>
+    <packaging>jar</packaging>
+
+</project>

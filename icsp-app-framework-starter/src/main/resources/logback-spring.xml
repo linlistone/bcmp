@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 启用每隔60s读取该文件，刷新配置信息 -->
+<configuration scan="true" scanPeriod="60000">
+	<!-- 导入SpringBoot默认的logback配置 -->
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<!-- 通过spring上下文获取对应的配置信息 -->
+	<!-- 获取日志文件的路径（取自bootstrap.yml/bootstrap.properties文件） -->
+	<springProperty scope="context" name="logPath" source="logging.path" defaultValue="../logs"></springProperty>
+	<!-- 获取日志文件的名称（取自bootstrap.yml/bootstrap.properties文件） -->
+	<springProperty scope="context" name="logFile" source="logging.file" defaultValue="application.log"></springProperty>
+	<!-- 获取当前启动的应用名称 （取自bootstrap.yml/bootstrap.properties文件）-->
+	<springProperty scope="context" name="applicationName" source="spring.application.name"></springProperty>
+	<!-- 获取当前启动应用的日志级别（取自bootstrap.yml/bootstrap.properties文件） -->
+	<springProperty scope="context" name="logLevel" source="logging.level.root" defaultValue="INFO"></springProperty>
+	<!-- logback上下文属性配置 -->
+	<!-- 日志文件输出格式定义（如不定义，默认取defaults.xml中配置） -->
+	<property name="FILE_LOG_PATTERN" value="[${applicationName}, ${ip}] %-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}] %c.%M:%L - %m%n)"/>
+	<!-- 控制台日志格式输出定义（如不定义，默认取defaults.xml中配置） -->
+	<property name="CONSOLE_LOG_PATTERN" value="%black([${applicationName}, ${ip}])  %highlight(%-5p) %red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green([%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}]) %boldMagenta(%c.%M:%L) - %cyan(%m%n)"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	
+	<!-- 默认的日志文件输出 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+		<file>${logPath}/${logFile}</file>
+		<!-- 日志生成策略，按日备份，最大保留30天，每128M切分一个日志文件 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${logPath}/%d{yyyy-MM-dd}/${logFile}.%i.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+			<maxFileSize>128MB</maxFileSize>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- 日志输出控制 -->
+	<root level="${logLevel}">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+</configuration>
+

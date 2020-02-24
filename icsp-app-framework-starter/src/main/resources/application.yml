@@ -1,0 +1,65 @@
+server:
+  port: 9100 #应用启动端口
+#通用配置
+  tomcat:
+    additional-tld-skip-patterns: jaxb-api.jar,jaxb-core.jar
+# 数据库配置，不使用数据库时请删除以下配置
+spring:
+  application:
+    name: icsp-app-framework  #应用名称
+    # 数据库配置，不使用数据库时请删除以下配置
+      #jackson配置
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true # jackson格式化输出
+  # 数据库配置，
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver  # 数据库驱动类
+    type: com.zaxxer.hikari.HikariDataSource            # datasource使用的连接池类型
+    validation-query: SELECT 1 FROM DUAL                # datasource连接验证的查询语句
+    url: jdbc:mysql://139.196.162.66:3306/bcmp?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false        # 数据库连接的url
+    username: root # 数据库连接的用户名
+    password: admin # 数据库连接的密码
+    hikari:
+      minimum-idle: 2                 # 空闲时最小连接数
+      maximum-pool-size: 2            # 连接池大小
+      data-source-properties:
+        cachePrepStmts: true        # 是否启用Prep缓存
+        prepStmtCacheSize: 250      # Prep缓存大小
+        prepStmtCacheSqlLimit: 2048 # Prep缓存sql限制大小
+        useServerPrepStmts: true    # 是否用服务缓存Prep
+  # 数据库配置，不使用数据库时请删除以上配置
+  # 如不使用redis，请将以下配置删除
+  redis:
+    database: 0         # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
+    host: 106.12.191.34 # Redis的地址
+    port: 6379          # Redis的端口
+    password: Redis@123456 # Redis的密码
+    timeout: 60000      # 连接超时时间（毫秒）
+  cache:
+      type: redis #spring cache类型
+# 如不使用redis，请将以上配置删除
+#########################
+# mybatis  配置
+#########################
+mybatis:
+  mapperLocations: classpath*:mapper/**/*.xml # mybatis对应的xml文件路径
+  configuration:
+    map-underscore-to-camel-case: true      # 是否开启驼峰命名
+
+# 分页配置
+pagehelper:
+  helperDialect: mysql # 分页使用的数据库方言
+  reasonable: true      # 最后一页时是否总返回最后一页数据
+
+# 日志相关
+logging:
+  path: ../logs #日志文件路径
+  file: ${spring.application.name}_${server.port}.log #日志文件名称
+  level:
+    root: DEBUG
+    springfox.documentation.spring.web.readers.operation: OFF  #springfox日志关闭输出
+    org.springframework.boot.autoconfigure: ERROR
+
+
+
