@@ -2,6 +2,7 @@ package cn.com.yusys.icsp.adminsm.repository.mapper;
 
 import cn.com.yusys.icsp.adminsm.domain.AdminSmLookupType;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @email linlistone@163.com
  * @date 2020-02-14 23:30:35
  */
-//@Mapper
+@Mapper
 public interface AdminSmLookupTypeMapper {
 	/**
 	 * @方法名称: insert

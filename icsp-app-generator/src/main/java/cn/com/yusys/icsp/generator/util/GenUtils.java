@@ -13,6 +13,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -171,7 +173,8 @@ public class GenUtils {
      */
     public static Configuration getConfig() {
         try {
-            return new PropertiesConfiguration("generator.properties");
+            Resource resource =new ClassPathResource("generator.properties");
+            return new PropertiesConfiguration(((ClassPathResource) resource).getPath());
         } catch (ConfigurationException e) {
             throw new ICSPException("获取配置文件失败，", e);
         }
@@ -192,7 +195,7 @@ public class GenUtils {
                     + ".java";
         }
         if (template.contains("Mapper.java.vm")) {
-            return packagePath + "mapper" + File.separator + className
+            return packagePath +"repository"+ File.separator +"mapper" + File.separator + className
                     + "Mapper.java";
         }
         if (template.contains("Service.java.vm")) {
@@ -204,7 +207,7 @@ public class GenUtils {
         // + File.separator + className + "ServiceImpl.java";
         // }
         if (template.contains("Resource.java.vm")) {
-            return packagePath + "rest" + File.separator + className
+            return packagePath + "rest" + File.separator +"web"+File.separator+ className
                     + "Resource.java";
         }
         if (template.contains("Mapper.xml.vm")) {

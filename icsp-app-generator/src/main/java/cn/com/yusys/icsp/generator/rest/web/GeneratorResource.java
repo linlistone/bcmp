@@ -9,8 +9,10 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +57,11 @@ public class GeneratorResource extends BaseResouce {
      * 生成代码
      */
     @RequestMapping("/code")
-    public void code(String tables, HttpServletResponse response) throws Exception {
-        byte[] data = generatorService.generatorCode(tables.split(","), "");
+    @ResponseBody
+    public void code(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String tables=request.getParameter("tableName");
+        String moduleName=request.getParameter("moduleName");
+        byte[] data = generatorService.generatorCode(tables.split(","), moduleName);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");
         response.addHeader("Content-Length", "" + data.length);

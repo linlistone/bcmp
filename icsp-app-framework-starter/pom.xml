@@ -35,6 +35,11 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>cn.com.yusys.icsp</groupId>
+            <artifactId>icsp-app-generator</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>

@@ -21,8 +21,8 @@ spring:
     username: root # 数据库连接的用户名
     password: admin # 数据库连接的密码
     hikari:
-      minimum-idle: 2                 # 空闲时最小连接数
-      maximum-pool-size: 2            # 连接池大小
+      minimum-idle: 5                 # 空闲时最小连接数
+      maximum-pool-size: 5            # 连接池大小
       data-source-properties:
         cachePrepStmts: true        # 是否启用Prep缓存
         prepStmtCacheSize: 250      # Prep缓存大小
