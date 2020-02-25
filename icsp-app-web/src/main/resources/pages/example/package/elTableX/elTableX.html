@@ -1,0 +1,14 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="el_table_x_demo">
+  <div class="yu-toolBar">
+    <el-button-group>
+      <el-button icon="plus" @click="createFn">新增</el-button>
+      <el-button icon="edit" @click="editFn">修改</el-button>
+      <el-button icon="yx-bin" @click="deleteFn">删除</el-button>
+    </el-button-group>
+  </div>
+  <el-table-x ref="mytable" :checkbox="checkbox" :max-height="height" :table-filters="tableFilters" :data-url="dataUrl" :data-params="dataParams"
+    :table-columns="tableColumns" :hide-column="hideColumn" @custom-row-click="customRowClick" @custom-row-op="customRowOp"
+    @change="change">
+  </el-table-x>
+</div>

@@ -1,0 +1,20 @@
+<!--
+  @created by helin3 2018-01-07
+  @updated by
+  @description 演示打开菜单页签或自定义页签
+-->
+<div>
+  <h1>演示打开菜单页签或自定义页签</h1>
+  <el-row>
+    这里演示打开“空白模板”菜单，若“空白模板”菜单已打开，则自动获得焦点并刷新
+    <el-button @click="clickFn(1)">打开指定菜单页签</el-button>
+  </el-row>
+  <el-row>
+    这里演示打开自定义路由“exampleQuery”页签，尽管“普通查询”菜单也是使用同样的路由，但两者的页签不会冲突
+    <el-button @click="clickFn(2)">打开自定义页签</el-button>
+  </el-row>
+  <el-row>
+    这里演示打开多次自定义路由“elformx”页签
+    <el-button @click="clickFn(3)">打开自定义页签</el-button>
+  </el-row>
+</div>

@@ -1,0 +1,190 @@
+<!--
+	  @create by helin3 2018-05-18
+	  @update by 
+	  @description 模拟真实功能-性能验证页面
+-->
+<div>
+  <el-row :gutter="10">
+    <el-col :span="16">
+      <el-tabs value="1">
+        <el-tab-pane label="申请信息" name="1">
+          <div style="overflow:auto;">
+            <div :style="{height: (height-60)+'px'}">
+              <el-collapse :value="['1','2','3','4','5']">
+                <el-collapse-item title="贷款信息" name="1">
+                  <el-form-x :group-fields="dkxxFields" label-width="80px"></el-form-x>
+                </el-collapse-item>
+                <el-collapse-item title="多方支付" name="2">
+                  <el-lazy>
+                    <el-table :data="dfzfTableData" border>
+                      <el-table-column prop="lsh" label="流水号" width="100"></el-table-column>
+                      <el-table-column prop="cpmc" label="产品名称" width="100"></el-table-column>
+                      <el-table-column prop="spje" label="审批金额" width="100"></el-table-column>
+                      <el-table-column prop="zxll" label="执行利率" width="100"></el-table-column>
+                      <el-table-column prop="spqx" label="审批期限" width="100"></el-table-column>
+                      <el-table-column prop="dkcs" label="贷款成数" width="100"></el-table-column>
+                      <el-table-column prop="ztmc" label="展厅名称" width="100"></el-table-column>
+                      <el-table-column prop="zt" label="状态" width="100"></el-table-column>
+                      <el-table-column prop="dkzt" label="放款状态" width="100"></el-table-column>
+                    </el-table>
+                  </el-lazy>
+                </el-collapse-item>
+                <el-collapse-item title="车辆信息" name="3">
+                  <el-lazy>
+                    <el-form-x :group-fields="clxxFields" label-width="80px"></el-form-x>
+                  </el-lazy>
+                </el-collapse-item>
+                <el-collapse-item title="销售渠道信息" name="4">
+                  <el-lazy>
+                    <el-form-x :group-fields="xsqdFields" label-width="80px"></el-form-x>
+                  </el-lazy>
+                </el-collapse-item>
+                <el-collapse-item title="其它信息" name="5">
+                  <el-lazy>
+                    <el-form-x :group-fields="qtFields" label-width="80px"></el-form-x>
+                  </el-lazy>
+                </el-collapse-item>
+              </el-collapse>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="信息核查" name="2">
+          信息核查
+        </el-tab-pane>
+        <el-tab-pane label="客户信息" name="3">
+          客户信息
+        </el-tab-pane>
+        <el-tab-pane label="拨打款电话" name="4">
+          拨打款电话
+        </el-tab-pane>
+        <el-tab-pane label="资料清单" name="5">
+          资料清单
+        </el-tab-pane>
+        <el-tab-pane label="风险提示" name="6">
+          风险提示
+        </el-tab-pane>
+        <el-tab-pane label="渠道及客户" name="7">
+          渠道及客户
+        </el-tab-pane>
+        <el-tab-pane label="审批轨迹" name="8">
+          审批轨迹
+        </el-tab-pane>
+      </el-tabs>
+    </el-col>
+    <el-col :span="8">
+      <!-- 此次el-tabs及el-tabs仅作一个title作用，实际项目中请自行实现一个title栏即可，没有必要要我这里这样 -->
+      <el-tabs>
+        <el-tab-pane label="审核信息"></el-tab-pane>
+      </el-tabs>
+      <div style="overflow:auto;">
+        <div :style="{width:'600px',height: (height-60)+'px'}">
+          <el-form ref="spxx" label-width="100px">
+            <el-row>
+              <el-button @click="$message('提交成功')">提交</el-button>
+              <el-button @click="$message('保存成功')">保存</el-button>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="申请编号" prop="sqbh">
+                  <el-input v-model="spxx.sqbh"></el-input>
+                </el-form-item>
+                <el-form-item label="所属分部" prop="ssfb">
+                  <el-input v-model="spxx.ssfb"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="主贷人姓名" prop="zdrxm">
+                  <el-input v-model="spxx.zdrxm"></el-input>
+                </el-form-item>
+                <el-form-item label="申请日期" prop="sqrq">
+                  <el-date-picker v-model="spxx.sqrq"></el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <el-collapse :value="['1','2']">
+            <el-collapse-item title="审批结果" name="1">
+              <el-form ref="spjg" label-width="100px">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="主子贷款总金额" prop="zzdkzje">
+                      <el-input v-model="spjg.zzdkzje"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="主子贷款总成数" prop="zzdkzcs">
+                      <el-input v-model="spjg.zzdkzcs"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="16">
+                    <el-form-item label="主贷款产品" prop="zdkcp">
+                      <el-input v-model="spjg.zdkcp"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="审批金额（元）" prop="zdkspje">
+                      <el-input v-model="spjg.zdkspje"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="审批期限" prop="zdkspqx">
+                      <el-input v-model="spjg.zdkspqx"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="执行利率" prop="zdksplx">
+                      <el-input v-model="spjg.zdksplx"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="主贷款成数" prop="zdkcs">
+                      <el-input v-model="spjg.zdkcs"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="16">
+                    <el-form-item label="子贷款产品" prop="sdkcp">
+                      <el-input v-model="spjg.sdkcp"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="审批金额（元）" prop="sdkspje">
+                      <el-input v-model="spjg.sdkspje"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="审批期限" prop="sdkspqx">
+                      <el-input v-model="spjg.sdkspqx"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="执行利率" prop="sdksplx">
+                      <el-input v-model="spjg.sdksplx"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="子贷款成数" prop="sdkcs">
+                      <el-input v-model="spjg.sdkcs"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-collapse-item>
+            <el-collapse-item title="审核详情" name="2">
+              <el-lazy>
+                <el-form-x :group-fields="shxqFields" :disabled="false" label-width="80px"></el-form-x>
+              </el-lazy>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </div>
+    </el-col>
+  </el-row>
+</div>

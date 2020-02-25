@@ -1,0 +1,40 @@
+<div id="treedemo">
+  <el-row :gutter="10">
+    <el-col :span="5">
+      <el-tree ref="mytree" :style="styleObj" highlight-current :data="mytree.data" @node-click="nodeClickFn"></el-tree>
+    </el-col>
+    <el-col :span="19">
+      <div class="yu-search">
+        <el-form ref="queryForm" :inline="true">
+          <el-form-item>
+            <el-input @keyup.enter.native="queryMainGridFn" v-model="mainGrid.query.title" placeholder="标题" style="width: 200px;"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker type="date" format="yyyy-MM-dd" v-model="mainGrid.query.createAt" placeholder="时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="search" @click="queryMainGridFn">搜索</el-button>
+            <el-button type="primary" icon="information" @click="resetQueryCondFn">重置</el-button>
+            <el-button type="danger" icon="edit">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <el-table ref="mytable" :data="mainGrid.data" v-loading="mainGrid.loading" @selection-change="selectionChangeFn" :max-height="height"
+        stripe border fit highlight-current-row element-loading-text="加载中...">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="index" label="序号" width="65"></el-table-column>
+        <el-table-column prop="id" label="ID" width="75"></el-table-column>
+        <el-table-column prop="title" label="标题" width="260"></el-table-column>
+        <el-table-column prop="createAt" label="时间" width="110"></el-table-column>
+        <el-table-column prop="author" label="作者" width="90"></el-table-column>
+        <el-table-column prop="pageviews" label="阅读数"></el-table-column>
+      </el-table>
+      <div v-show="!mainGrid.loading" class="pagination-container">
+        <el-pagination :total="mainGrid.total" :current-page.sync="mainGrid.paging.start" :page-size="mainGrid.paging.limit" @size-change="limitChangeFn"
+          @current-change="startChangeFn" layout="total, sizes, prev, pager, next, jumper">
+        </el-pagination>
+      </div>
+    </el-col>
+  </el-row>
+</div>

@@ -1,0 +1,57 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="el_tree_x_demo">
+  <el-row :gutter="20">
+
+    <!-- 此部分树如何使用 -->
+    <el-col :span="8">
+      <el-tree-x ref="mytree" @node-click="nodeClickFn" :show-checkbox="true" :height="height" :root-visible="true" data-url="/trade/example/asynctree"
+        data-id="UNITID" data-label="UNITNAME" :lazy="true" data-pid="SUPERUNITID" data-root="0000"></el-tree-x>
+    </el-col>
+
+    <!-- 下述部分是文档介绍部分，与使用树无关 -->
+    <el-col :span="16">
+      <div :style="{height: height+'px',overflow: 'auto'}">
+        <div>
+          <h4>实例演示</h4>
+          <div>
+            当前点击的节点是：{{ currClickNode }}
+            <el-button @click="getCheckedNodes">通过 node 获取</el-button>
+            <el-button @click="getCheckedKeys">通过 key 获取</el-button>
+            <el-button @click="setCheckedKeys">通过 key 设置</el-button>
+            <el-button @click="resetChecked">清空</el-button>
+          </div>
+        </div>
+
+        <div>
+          =======================================
+          <h4>属性</h4>
+          <el-table :data="grid.data1">
+            <el-table-column prop="name" label="参数名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="type" label="类型" width="100"></el-table-column>
+            <el-table-column prop="option" label="可选值" width="100"></el-table-column>
+            <el-table-column prop="default" label="默认值"></el-table-column>
+          </el-table>
+        </div>
+
+        <div>
+          <h4>方法</h4>
+          <el-table :data="grid.data2">
+            <el-table-column prop="name" label="方法名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="param" label="参数"></el-table-column>
+          </el-table>
+        </div>
+
+        <div>
+          <h4>事件</h4>
+          <el-table :data="grid.data3">
+            <el-table-column prop="name" label="事件名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="param" label="回调参数"></el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </el-col>
+  </el-row>
+</div>

@@ -1,0 +1,34 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="WfiWorkflowOrgGroup">
+	<el-form-q form="query" :field-data="queryFileds" search-table="WfiWorkflowOrgList" ></el-form-q>
+	<div class="yu-toolBar">
+		<el-button-group>
+			<el-button icon="add" @click="openCreateFn" >新增</el-button>
+			<el-button  icon="edit" @click="openEditFn" >修改</el-button>
+			<el-button  icon="delete"  @click="deleteFn" >删除</el-button>
+			<el-button icon="edit" @click="openDetailFn" >查看</el-button>
+		</el-button-group>
+	</div>
+	<el-table-x-u ref="WfiWorkflowOrgList"  :max-height="height" :table-filters="tableFilters" :u-key-pref="uKeyPref" :u-key-field="uKeyField"
+				:data-url="urls.dataUrl"  :trace-server-name="TraceServerName" :base-params="dataParams" :table-columns="tableColumns" :checkbox="true" >
+	</el-table-x-u>
+
+	<el-dialog-x :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible"  height="370px" width="700px" @close="beforeClose">
+		<el-form-x-u ref="WfiWorkflowOrgForm"  :trace-server-name="TraceServerName" :group-fields="updateFields" :disabled="formDisabled" label-width="110px" :u-pk-value="uPkValue" @aftersaveu="aftersaveu"></el-form-x-u>
+		<div slot="footer" align="center">
+			<el-button type="primary" @click="dialogFormVisible = false">关闭</el-button>
+			<el-button v-if="dialogStatus=='creat'" type="primary" @click="saveCreateFn()">确 定</el-button>
+			<el-button v-if="dialogStatus=='update'" type="primary" @click="saveEditFn()">确 定</el-button>
+		</div>
+	</el-dialog-x>
+
+	<!--修改痕迹历史列表-->
+	<el-dialog-x :title="mTrace" :visible.sync="dialogVisible_mTrace" height="360px" width="700px">
+		<el-table-x ref="mTraceList" :data-url="urls.mTraceListUrl" :base-params="mTraceParams" :default-load="false" :table-columns="mTraceTableColumns" >
+		</el-table-x>
+		<div slot="footer" align="center">
+			<el-button type="primary" @click="dialogVisible_mTrace=false">关闭</el-button>
+		</div>
+	</el-dialog-x>
+
+</div>

@@ -1,0 +1,29 @@
+<!--
+  @created by taoting1 on 2018-10-23 11:24:58
+  @updated by
+  @description 简易思维导图
+-->
+<div class="mindmap">
+  <div class="mindmap-main">
+    <div class="function-bar" :class="{'disabled': topbarDisabled}">
+      <div class="toolbar">
+        <button class="toolbar-btn btn btn-default btn-sm btn-success node-plus-left" @click="addNodeFn(-1)">向左侧添加节点</button>
+        <button class="toolbar-btn btn btn-default btn-sm btn-success node-plus-right" @click="addNodeFn(1)">向右侧添加节点</button>
+        <button class="toolbar-btn btn btn-default btn-sm btn-danger node-cancel" @click="removeNodeFn">删除节点</button>
+      </div>
+      <div class="tip-box">
+        <div class="tip-wrapper">
+          <div class="tip-triangle"></div>
+          <div class="tip-label"></div>
+        </div>
+      </div>
+      <div class="label-group">
+        <input type="text" class="form-control" v-model="nodeText">
+        <button class="btn btn-default btn-sm" @click="editNodeTextFn">确定</button>
+      </div>
+    </div>
+
+    <div id="mindmapCanvas"></div>
+    
+  </div>
+</div>

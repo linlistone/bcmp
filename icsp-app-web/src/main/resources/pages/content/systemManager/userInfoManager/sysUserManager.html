@@ -1,0 +1,290 @@
+<!-- 用户管理页面 -->
+<div id="userInfo">
+    <el-row :gutter="10">
+        <!--左侧机构树-->
+        <el-col :span="5">
+            <yu-xtree ref="refTree" :height="m_orgTree.orgHeight - 200" @node-click="nodeClickFn"
+                :data-url="m_orgTree.orgTreeUrl" data-id="orgCode" data-label="orgName" data-pid="upOrgId"
+                :data-async="m_orgTree.orgAsync" :data-params="m_orgTree.orgTreeParam" :data-root="m_orgTree.superOrgId"
+                style="margin:0 10px 0 0;">
+            </yu-xtree>
+        </el-col>
+        <!-- 表格主体部分 -->
+        <el-col :span="19">
+            <!--查询区域-->
+            <yu-xform related-table-name="refTable" form-type="search" v-model="m_userTable.searchform">
+                <yu-xform-group :column="3">
+                    <yu-xform-item placeholder="机构ID" ctype="input" name="orgId" :hidden="true"></yu-xform-item>
+                    <yu-xform-item placeholder="机构名称" ctype="input" name="orgName" :hidden="true"></yu-xform-item>
+                    <yu-xform-item placeholder="有效期" ctype="datepicker" name="deadline" :hidden="true"></yu-xform-item>
+                    <yu-xform-item placeholder="登录代码/姓名/员工号" ctype="input" name="userInfo"></yu-xform-item>
+                    <yu-xform-item placeholder="状态" ctype="select" name="userSts" data-code="DATA_STS"></yu-xform-item>
+                </yu-xform-group>
+            </yu-xform>
+            <!--按钮区域-->
+            <div class="fox-toolBar">
+                <el-button-group>
+                    <el-button icon="plus" @click="addFn" v-if="m_btn.createButton">添加</el-button>
+                    <el-button icon="edit" @click="modifyFn" v-if="m_btn.editButton">编辑</el-button>
+                    <!-- <el-button icon="delete" @click="deletefunc" v-if="m_btn.deleteButton">删除</el-button> -->
+                    <el-button icon="yx-unlocked" @click="useBatchFn" v-if="m_btn.useButton">启用</el-button>
+                    <el-button icon="yx-lock" @click="unUseBatchFn" v-if="m_btn.unuseButton">停用</el-button>
+                    <el-button icon="link" @click="openRoleFn" v-if="m_btn.userRelButton">用户关联信息</el-button>
+                    <el-button icon="refresh-left" @click="resetPassword" v-if="m_btn.resetPwsButton">重置密码
+                    </el-button>
+                </el-button-group>
+            </div>
+            <!--表格区域-->
+            <yu-xtable ref="refTable" row-number :data-url="m_userTable.userDataUrl" reserve-selection
+                selection-type="checkbox" row-key="id" style="width: 100%">
+                <yu-xtable-column prop="userName" label="用户名称" type="slot">
+                    <template slot-scope='scope'>
+                        <el-button @click="infoFn(scope.row)" type="text"> {{scope.row.userName}} </el-button>
+                    </template>
+                </yu-xtable-column>
+                <yu-xtable-column prop="loginCode" label="登录代码" width="100">
+                </yu-xtable-column>
+                <yu-xtable-column prop="orgId" label="所属机构" width="120"></yu-xtable-column>
+                <yu-xtable-column prop="dptName" label="所属部门" width="120"></yu-xtable-column>
+                <yu-xtable-column prop="userSts" label="状态" width="100" data-code="DATA_STS"></yu-xtable-column>
+                <yu-xtable-column prop="userSex" label="性别" width="100" data-code="SEX_TYPE"></yu-xtable-column>
+                <yu-xtable-column prop="userCode" label="员工号" width="160"></yu-xtable-column>
+                <yu-xtable-column prop="deadline" label="有效期" width="160"></yu-xtable-column>
+                <yu-xtable-column prop="lastChgName" label="最新变更用户" width="160"></yu-xtable-column>
+                <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="160"></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+    </el-row>
+    <!--用户信息功能图层-->
+    <yu-xdialog :title="m_user.viewTitle[m_user.viewType]" :visible.sync="m_user.dialogVisible" width="801px">
+        <yu-collapse v-model="m_user.activeNames">
+            <yu-collapse-item title="关键信息" name="1">
+                <yu-row :gutter="0">
+                    <yu-col :span="12">
+                        <yu-xform ref="userForm" label-width="100px" v-model="m_user.userForm"
+                            :disabled="m_user.formDisabled">
+                            <yu-xform-item label="姓名" ctype="input" name="userName" :colspan="12"
+                                :rules="m_rules['userName']" :disabled="m_user.viewType!='ADD'">
+                            </yu-xform-item>
+                            <yu-xform-item label="登录代码" ctype="input" name="loginCode" :colspan="12"
+                                :rules="m_rules['loginCode']">
+                            </yu-xform-item>
+                            <yu-xform-item label="有效期" ctype="datepicker" name="deadline" :colspan="12" rules="required"
+                                :picker-options="pickerOptions0">
+                            </yu-xform-item>
+                            <yu-xform-item label="状态" prop="userSts" ctype="select" name="userSts" :colspan="12"
+                                data-code="DATA_STS" :disabled="true">
+                            </yu-xform-item>
+                        </yu-xform>
+                    </yu-col>
+                    <yu-col :span="12">
+                        <yu-upload class="avatar-uploader" :action="m_user.uploadAction" :show-file-list="false"
+                            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                            <img v-if="m_user.userForm.userAvatar" :src="m_user.imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </yu-upload>
+                    </yu-col>
+                </yu-row>
+                <yu-row :gutter="0">
+                    <el-form ref="userTreeInfo" label-width="100px">
+                        <yu-col :span="12">
+                            <el-form-item label="所属机构" prop="userOrgTree">
+                                <fox-org-tree ref="userOrgTree" label="所属机构" :params="{needCheckbox: false}"
+                                    @select-fn="selectFn" v-model="m_user.orgId" :colspan="12"
+                                    :disabled="m_user.formDisabled">
+                                </fox-org-tree>
+                            </el-form-item>
+                        </yu-col>
+                        <yu-col :span="12">
+                            <el-form-item label="所属部门" prop="dptTree">
+                                <fox-dpt-tree ref="dptTree" label="所属部门" v-model="m_user.dptId" :colspan="12"
+                                    :disabled="m_user.formDisabled">
+                                </fox-dpt-tree>
+                            </el-form-item>
+                        </yu-col>
+                    </el-form>
+                </yu-row>
+                <yu-row :gutter="0">
+                    <yu-xform ref="userInfo" label-width="100px" v-model="m_user.userInfo"
+                        :disabled="m_user.formDisabled">
+                        <yu-xform-group>
+                            <yu-xform-item label="密码" ctype="input" name="userPassword"
+                                :rules="m_rules['userPassword']">
+                            </yu-xform-item>
+                            <yu-xform-item label="确认密码" ctype="input" name="userPassword1"
+                                :rules="m_rules['userPassword']">
+                            </yu-xform-item>
+                        </yu-xform-group>
+                    </yu-xform>
+                </yu-row>
+            </yu-collapse-item>
+            <yu-collapse-item title="扩展信息" name="2">
+                <yu-xform ref="userOtherInfo" label-width="100px" v-model="m_user.userOtherInfo"
+                    :disabled="m_user.formDisabled">
+                    <yu-xform-group>
+                        <!-- <yu-xform-item label=" 性别" ctype="select" name="userSex" data-code="SEX_TYPE">
+                        </yu-xform-item> -->
+                        <yu-xform-item label="生日" ctype="datepicker" name="userBirthday"></yu-xform-item>
+                        <yu-xform-item label="证件类型" ctype="select" name="certType" data-code="IDENT_TYPE">
+                        </yu-xform-item>
+                        <yu-xform-item label="证件号码" ctype="input" name="certNo" :rules="m_rules['certNo']">
+                        </yu-xform-item>
+                        <yu-xform-item label="员工号" ctype="input" name="userCode" :rules="m_rules['contTel']">
+                        </yu-xform-item>
+                        <yu-xform-item label="邮箱" ctype="input" name="userEmail">
+                        </yu-xform-item>
+                        <yu-xform-item label="移动电话" ctype="input" name="userMobilephone">
+                        </yu-xform-item>
+                        <yu-xform-item label="办公电话" ctype="input" name="userOfficetel">
+                        </yu-xform-item>
+                        <yu-xform-item label="最高学历" ctype="select" name="userEducation" data-code="HIGHEST_EDU">
+                        </yu-xform-item>
+                        <yu-xform-item label="职级" ctype="select" name="positionDegree" data-code="RANK_LEVEL">
+                        </yu-xform-item>
+                        <yu-xform-item label="资格证书" ctype="input" name="userCertificate">
+                        </yu-xform-item>
+                        <yu-xform-item label="入职时间" ctype="input" name="entrantsDate">
+                        </yu-xform-item>
+                        <yu-xform-item label="从业时间" ctype="input" name="financialJobTime">
+                        </yu-xform-item>
+                        <yu-xform-item label="任职时间" ctype="input" name="positionTime">
+                        </yu-xform-item>
+                        <yu-xform-item label="常用IP" ctype="input" name="offenIp">
+                        </yu-xform-item>
+                    </yu-xform-group>
+                </yu-xform>
+            </yu-collapse-item>
+        </yu-collapse>
+        <div class="yu-grpButton">
+            <yu-button v-show="m_user.saveBtnShow" icon="check" type="primary" @click="submitFn">保存
+            </yu-button>
+            <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+        </div>
+    </yu-xdialog>
+    <!-- 用户关联信息弹出框 -->
+    <yu-xdialog title="用户关联信息" :visible.sync="m_role.dialogVisible" height="400px" width="800px">
+        <yu-tabs v-model="m_role.activeName" @tab-click="handleClick">
+            <yu-tab-pane label="用户角色信息" name="role">
+                <!-- <el-input name=""> -->
+                <div class="fox-toolBar">
+                    <el-row style="margin-top: 10px;">
+                        <el-col :span='9'>
+                            <el-input v-model="roleOrg" placeholder="请输入机构号"></el-input>
+                        </el-col>
+                        <el-col :span='15'>
+                            <el-button-group>
+                                <el-button icon="plus" @click="addOrg()" v-if="m_btn.createButton">添加</el-button>
+                                <el-button icon="delete" @click="delOrg()" v-if="m_btn.deleteButton">删除</el-button>
+                            </el-button-group>
+                        </el-col>
+                    </el-row>
+                </div>
+                <el-row>
+                    <!--机构信息-->
+                    <el-col :span="12">
+                        <yu-xtable ref="refOrgRoleTable" :data="orgTableData" border @row-click="queryRoleByOrg"
+                            style="margin:10px 10px 10px 10px;">
+                            <yu-xtable-column prop="orgId" label="机构代码" width="80"></yu-xtable-column>
+                            <yu-xtable-column prop="orgName" label="机构名称"></yu-xtable-column>
+                        </yu-xtable>
+                    </el-col>
+                    <!--角色信息-->
+                    <el-col :span="12">
+                        <yu-xtable ref="refRoleTable" :data="m_table.roleTableData" reserve-selection
+                            selection-type="checkbox" row-key="id" :pageable="false" width="100%"
+                            style="margin:10px 10px 10px 10px;">
+                            <yu-xtable-column prop="roleCode" label="角色代码" width="80"></yu-xtable-column>
+                            <yu-xtable-column prop="roleName" label="角色名称"></yu-xtable-column>
+                        </yu-xtable>
+                        <!-- <yu-table ref="refRoleTable" :data="m_table.roleTableData" reserve-selection
+                            row-key="id" :pageable="false" width="100%"
+                            style="margin:10px 10px 10px 10px;">
+                            <yu-table-column type="selection" width="55"></yu-table-column>
+                            <yu-table-column prop="roleCode" label="角色代码" width="80"></yu-table-column>
+                            <yu-table-column prop="roleName" label="角色名称"></yu-table-column>
+                        </yu-table> -->
+                    </el-col>
+                </el-row>
+                <!-- <div class="yu-grpButton">
+                            <yu-button icon="check" type="primary" @click="submitFn">保存
+                            </yu-button>
+                            <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+                        </div> -->
+                <div align="center">
+                    <yu-button icon="check" type="primary" @click="saveRoleFn">保存</yu-button>
+                </div>
+            </yu-tab-pane>
+            <yu-tab-pane label="用户岗位信息" name="duty">
+                <yu-xtable ref="refDutyTable" :data="m_table.dutyTableData" reserve-selection selection-type="checkbox"
+                    row-key="id" :pageable="false" width="100%" style="margin:10px 10px 10px 10px;">
+                    <yu-xtable-column prop="dutyCde" label="岗位代码" width="240"></yu-xtable-column>
+                    <yu-xtable-column prop="dutyName" label="岗位名称" width="454"></yu-xtable-column>
+                </yu-xtable>
+                <div align="center">
+                    <yu-button icon="check" type="primary" @click="saveDutyFn">保存(岗位)
+                    </yu-button>
+                </div>
+            </yu-tab-pane>
+            <yu-tab-pane label="授权机构信息" name="auth">
+                <yu-xtree ref="refAuthTree" :height="300" :show-checkbox="true" @node-click="authTreeNodeClickFn"
+                    :data-url="m_orgTree.orgTreeUrl" data-id="orgCode" data-label="orgName" data-pid="upOrgId"
+                    :data-async="m_orgTree.orgAsync" :data-root="m_orgTree.superOrgId"
+                    style="margin:10px 10px 10px 10px;">
+                </yu-xtree>
+                <div align="center">
+                    <yu-button icon="check" type="primary" @click="saveOrgFn">保存(机构)
+                    </yu-button>
+                </div>
+            </yu-tab-pane>
+        </yu-tabs>
+    </yu-xdialog>
+    <!-- 弹出框 重置密码  -->
+    <el-dialog :title="'重置密码'" :visible.sync="m_pwd.dialogVisible" height="200px" width="400px">
+        <el-form :inline="true" :model="funcForm" :rules="m_dialog.rules" ref="funcForm" class="demo-form-inline"
+            label-position="right" label-width="5rem">
+            <el-form-item label="密码" prop="password">
+                <el-input type="password" v-model="m_pwd.password"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="confirmPwd">
+                <el-input type="password" v-model="m_pwd.confirmPwd"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" align="center">
+            <el-button type="primary" @click="resetPwd" icon="check">确定</el-button>
+            <el-button type="primary" @click="cancelPwd" icon="close">取 消
+            </el-button>
+        </div>
+    </el-dialog>
+
+</div>
+<!-- -->
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        left: 50%;
+        margin-left: -80px;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #20a0ff;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+</style>

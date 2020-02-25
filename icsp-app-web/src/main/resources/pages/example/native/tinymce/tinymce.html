@@ -1,0 +1,25 @@
+<div id="template_tinymce">
+  <h2>富文本Tinymce</h2>
+  <el-tinymce-x ref="tinymce" v-model="content" :id="id" :height="height" :action="action" :bus-no="busNo"></el-tinymce-x>
+  <div class="btn">
+    <el-button type="primary" @click='saveFn'>保存</el-button>
+    <el-button type="primary" @click='setFn'>设定</el-button>
+  </div>
+  <textarea v-model='content' disabled></textarea>
+</div>
+
+<style>
+  #template_tinymce .btn {
+    margin: 10px 0;
+  }
+
+  #template_tinymce img {
+    float: none;
+  }
+
+  #template_tinymce textarea {
+    width: 100%;
+    height: 200px;
+    background: #fff;
+  }
+</style>

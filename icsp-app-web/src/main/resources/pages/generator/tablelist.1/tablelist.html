@@ -1,0 +1,57 @@
+<!-- 管理页面 -->
+<div>
+    <!--查询区域-->
+    <el-row style="margin-top: 10px;">
+        <!--左侧模块管理-->
+        <el-col :span="10">
+            <h2 class="yu-formTitle" style="margin-bottom: 10px;">数据表</h2>
+            <yu-xform ref="refQueryForm" v-model="queryForm" >
+                <yu-row :gutter="20">
+                    <el-col :span="12">
+                        <yu-xform-item placeholder="表名" ctype="input" name="tableName"></yu-xform-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-button-group>
+                            <yu-button icon="yx-search" type="success" @click="queryFn">查询</yu-button>
+                            <yu-button icon="yx-blog" type="danger" @click="codeFn">生成代码</yu-button>
+                        </el-button-group>
+                    </el-col>
+                </yu-row>
+            </yu-xform>
+            <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection selection-type="checkbox" row-key="id" style="width: 100%;"
+                @row-click="tableSelect">
+                <yu-xtable-column prop="tableName" label="表名" width="170" sortable></yu-xtable-column>
+                <yu-xtable-column prop="tableComment" label="表备注" width="165"></yu-xtable-column>
+                <yu-xtable-column prop="engine" label="engine" width="70"></yu-xtable-column>
+                <yu-xtable-column prop="createTime" label="创建时间" width="160"></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+        <!--右侧业务功能管理-->
+        <el-col :span="14" style="padding-left:10px">
+            <h2 class="yu-formTitle" style="margin-bottom: 10px;">字段列表-{{cutTableName}}</h2>
+            <yu-xtable ref="refColumnTable" :default-load="columnload" :data-url="columnDataUrl" reserve-selection row-key="id" style="width: 100%">
+                <yu-xtable-column prop="columnName" label="字段名称" sortable></yu-xtable-column>
+                <yu-xtable-column prop="columnType" label="数据类型"  width="120"></yu-xtable-column>
+                <yu-xtable-column prop="columnComment" label="字段备注" width="210"></yu-xtable-column>
+                <yu-xtable-column prop="columnKey" label="字段类型" width="80"></yu-xtable-column>
+                <yu-xtable-column prop="extra" label="extra" width="80"></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+    </el-row>
+    <!-- 弹出框 代码生成维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata">
+            <yu-xform-group>
+                <yu-xform-item label="包名" ctype="input" name="instuCde" ></yu-xform-item>
+                <yu-xform-item label="状态" ctype="select" name="instuSts" data-code="DATA_STS" rules="required">
+                </yu-xform-item>
+                <yu-xform-item label="金额机构名称" ctype="input" name="instuName" :rules="rules['instuName']" :rows="1" :colspan="24"></yu-xform-item>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">保存</yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+    
+</div>

@@ -1,0 +1,13 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="example_security">
+  <div class="filter-container">
+    <el-button @click="sendUnloginFn">发起未登录请求</el-button>
+    <el-button @click="sendForbiddenFn">发起无权限请求</el-button>
+    <el-button @click="sendNotFoundFn">发起404请求</el-button>
+
+    <el-button @click="addFn">新增交易</el-button>
+    <el-button @click="deleteFn">删除交易</el-button>
+  </div>
+  <el-table-x ref="mytable" :checkbox="checkbox" :max-height="height" :data-url="dataUrl" :data-params="dataParams" :table-columns="tableColumns">
+  </el-table-x>
+</div>

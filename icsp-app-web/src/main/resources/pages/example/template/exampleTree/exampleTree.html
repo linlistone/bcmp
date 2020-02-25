@@ -1,0 +1,28 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——树+查询
+-->
+<div>
+  <el-row>
+    <el-col :span="5">
+      <el-tree-x ref="orgTree" :height="height - 20" @node-click="nodeClickFn" data-url="/trade/example/tree" data-id="UNITID"
+        data-label="UNITNAME" data-pid="SUPERUNITID" :data-async="async" :data-params="param" data-root="500" style="margin:10px 10px 0 0;">
+      </el-tree-x>
+    </el-col>
+    <el-col :span="19">
+      <el-form-q :field-data="queryFields" search-table="mytable"></el-form-q>
+      <div class="yu-toolBar">
+        <el-button-group>
+          <el-button icon="plus" @click="addFn">新增</el-button>
+          <el-button icon="edit" @click="modifyFn">修改</el-button>
+          <el-button icon="document" @click="infoFn">详情</el-button>
+        </el-button-group>
+      </div>
+      <el-table-x ref="tableInstance" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+      <el-dialog :title="viewTitle[viewType]" :visible.sync="dialogVisible">
+        <el-form-x ref="formRef" :group-fields="updateFields" :buttons="updateButtons" :disabled="formDisabled" label-width="80px"></el-form-x>
+      </el-dialog>
+    </el-col>
+  </el-row>
+</div>

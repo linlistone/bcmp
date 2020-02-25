@@ -1,0 +1,135 @@
+/**
+ * @created by taoting1 on 2018-10-23 11:24:58
+ * @updated by
+ * @description 简易思维导图
+ */
+.mindmap {
+	margin-top: 2px;
+	text-align: center;
+	
+}
+
+.mindmap .mindmap-main {
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	text-align: left;
+	width: 85%;
+	height: 500px;
+	border: 1px solid #ccc;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+}
+
+.mindmap #mindmapCanvas {
+	height: calc(100% - 37px);
+	border: 1px solid #eee;
+	background-color: #f2f2f2
+}
+
+.mindmap .form-control {
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 14px;
+	color: #555;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px
+}
+
+.mindmap .btn {
+	position: relative;
+	top: -1px;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	user-select: none;
+	border: 1px solid transparent
+}
+
+.mindmap .btn:focus {
+	outline: none
+}
+
+.mindmap .btn-default {
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc
+}
+
+.mindmap .btn-sm {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 18px;
+	border-radius: 3px
+}
+
+.mindmap .btn-success {
+	color: #fff;
+	background-color: #28a745;
+	border-color: #28a745
+}
+
+.mindmap .btn-danger {
+	color: #fff;
+	background-color: #dc3545;
+	border-color: #dc3545
+}
+
+.mindmap .function-bar {
+	height: 37px;
+	position: relative;
+	background-color: #aaa
+}
+
+.mindmap .function-bar.disabled {
+	opacity: .5;
+}
+
+.mindmap .function-bar .toolbar {
+	float: left;
+	padding-top: 4px;
+	margin-left: 10px
+}
+
+.mindmap .function-bar .tip-box {
+	position: absolute;
+	top: 50px;
+	display: none;
+	z-index: 150;
+	border-color: #aaa87b
+}
+
+.mindmap .function-bar .tip-box .tip-wrapepr .tip-triangle {
+	position: absolute;
+	top: -25px;
+	width: 0;
+	height: 0;
+	border: 10px dashed transparent;
+	border-bottom: 10px solid #303030
+}
+
+.mindmap .function-bar .tip-box .tip-wrapepr .tip-label {
+	color: #fff;
+	background-color: #303030;
+	padding: 7px 9px;
+	border-radius: 3px
+}
+
+.mindmap .function-bar .label-group {
+	float: left;
+	margin-left: 32px;
+}
+
+.mindmap .function-bar .label-group input {
+	display: inline-block;
+	width: 100px;
+	height: 18px
+}
+
+.mindmap .function-bar .label-group input:focus {
+	outline: none
+}

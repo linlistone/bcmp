@@ -1,0 +1,69 @@
+<div id="example_editor_grid">
+  <div class="yu-search">
+    <el-form ref="queryForm" :inline="true">
+      <el-form-item>
+        <el-input @keyup.enter.native="queryMainGridFn" v-model="mainGrid.query.title" placeholder="标题" style="width: 200px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker type="date" format="yyyy-MM-dd" v-model="mainGrid.query.createAt" placeholder="时间"></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-select clearable v-model="mainGrid.query.type" placeholder="类型">
+          <el-option v-for="item in typeOptions" :key="item.key" :value="item.key" :label="item.value+'('+item.key+')'"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="search" @click="queryMainGridFn">搜索</el-button>
+        <el-button type="primary" icon="information" @click="resetQueryCondFn">重置</el-button>
+        <el-button type="danger" icon="edit" @click="saveFn">保存</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <el-table ref="mytable" :data="mainGrid.data" v-loading="mainGrid.loading" @row-click="rowClickFn" :max-height="height" stripe
+    border fit highlight-current-row element-loading-text="加载中...">
+    <el-table-column label="ID" width="100">
+      <template scope="scope">
+        <el-input v-show="scope.row.edit" size="small" v-model="scope.row.id"></el-input>
+        <span v-show="!scope.row.edit">{{ scope.row.id }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="标题" width="260">
+      <template scope="scope">
+        <el-input v-show="scope.row.edit" size="small" v-model="scope.row.title"></el-input>
+        <span v-show="!scope.row.edit">{{ scope.row.title }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="时间" width="155">
+      <template scope="scope">
+        <el-date-picker v-show="scope.row.edit" v-model="scope.row.createAt" type="date" size="small" style="width:120px;" :editable="false"></el-date-picker>
+        <span v-show="!scope.row.edit">{{ scope.row.createAt | dateFilter}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="类型" width="110">
+      <template scope="scope">
+        <el-select v-show="scope.row.edit" v-model="scope.row.type" clearable size="small">
+          <el-option v-for="item in typeOptions" :key="item.key" :value="item.key" :label="item.value+'('+item.key+')'"></el-option>
+        </el-select>
+        <span v-show="!scope.row.edit">{{scope.row.type | typeFilter}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="作者" width="90">
+      <template scope="scope">
+        <el-input v-show="scope.row.edit" size="small" v-model="scope.row.author"></el-input>
+        <span v-show="!scope.row.edit">{{ scope.row.author }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="描述">
+      <template scope="scope">
+        <el-input type="textarea" v-show="scope.row.edit" size="small" v-model="scope.row.remark"></el-input>
+        <span v-show="!scope.row.edit">{{ scope.row.remark }}</span>
+      </template>
+    </el-table-column>
+  </el-table>
+  <div v-show="!mainGrid.loading" class="pagination-container">
+    <el-pagination :total="mainGrid.total" :current-page.sync="mainGrid.paging.start" :page-size="mainGrid.paging.size" @size-change="sizeChangeFn"
+      @current-change="startChangeFn" layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——表单+列表
+-->
+<div>
+  <el-collapse v-model="expandCollapseName">
+    <el-collapse-item title="基本信息" name="base">
+      <el-form-x ref="baseRef" :group-fields="baseFields" label-width="80px"></el-form-x>
+    </el-collapse-item>
+    <el-collapse-item title="列表信息" name="2">
+      <el-table-x ref="tableRef" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+    </el-collapse-item>
+  </el-collapse>
+  <div class="yu-grpButton">
+    <el-button type="primary" icon="yx-undo2">返回</el-button>
+  </div>
+</div>

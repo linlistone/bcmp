@@ -1,0 +1,30 @@
+<!--
+  @created by wy 2018-01-18
+  @updated by
+  @description 图标Icons查询
+-->
+<div id="icons">
+  <el-row :gutter="10" style="margin-top: 10px;">
+    <el-col :span="8">
+      <el-input placeholder="关键字" v-model="keywords"></el-input>
+    </el-col>
+    <el-col :span="8">
+      <el-button type="primary" icon="search" @click="search">搜索</el-button>
+      <el-button type="primary" icon="yx-loop2" @click="reset">重置</el-button>
+    </el-col>
+    <el-col :span="8">
+      <span class="yu-iconSum">找到
+        <b>{{sum}}</b>条记录</span>
+    </el-col>
+  </el-row>
+  <div class="yu-iconList">
+    <div v-for="(o,i) in iconData">
+      <i :class="o.id" :title="o.id"></i>
+      <p>
+        <b :title="o.id">{{o.id}}</b>
+        <span :title="o.tag">tags：{{o.tag}}</span>
+      </p>
+      <span @click="copy(o.id)" title="copy">copy</span>
+    </div>
+  </div>
+</div>

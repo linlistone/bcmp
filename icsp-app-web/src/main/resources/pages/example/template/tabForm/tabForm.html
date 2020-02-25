@@ -1,0 +1,19 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——Tab页签表单
+-->
+<div>
+  <el-tabs v-model="tabName">
+    <el-tab-pane label="基本信息" name="base">
+      <el-form-x ref="baseRef" :group-fields="baseFields" label-width="80px"></el-form-x>
+      <div class="yu-grpButton">
+        <el-button type="primary" icon="check">保存</el-button>
+        <el-button type="primary" icon="yx-loop2">重置</el-button>
+      </div>
+    </el-tab-pane>
+    <el-tab-pane label="资产信息" name="asset">
+      <el-table-x ref="tableRef" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+    </el-tab-pane>
+  </el-tabs>
+</div>

@@ -1,0 +1,108 @@
+<div id="example_gridcrud">
+  <div class="yu-search">
+    <el-form :inline="true">
+      <el-form-item>
+        <el-input @keyup.enter.native="queryMainGridFn" v-model="mainGrid.query.title" placeholder="标题" style="width: 200px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker type="date" format="yyyy-MM-dd" v-model="mainGrid.query.createAt" placeholder="时间"></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-select clearable v-model="mainGrid.query.type" placeholder="类型">
+          <el-option v-for="item in typeOptions" :key="item.key" :value="item.key" :label="item.value+'('+item.key+')'"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="search" @click="queryMainGridFn">搜索</el-button>
+        <el-button type="primary" icon="information" @click="resetQueryCondFn">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+  <div class="yu-toolBar">
+    <el-button-group>
+      <el-button icon="edit" @click="openCreateFn">新增</el-button>
+      <el-button icon="edit" @click="openEditFn">修改</el-button>
+      <el-button icon="edit" @click="openDetailFn">详情</el-button>
+    </el-button-group>
+  </div>
+  <el-table ref="mytable" :data="mainGrid.data" v-loading="mainGrid.loading" @row-click="rowClickFn" :max-height="height" stripe
+    border fit highlight-current-row element-loading-text="加载中...">
+    <el-table-column type="index" label="序号" width="65"></el-table-column>
+    <el-table-column prop="id" label="ID" width="75"></el-table-column>
+    <el-table-column prop="title" label="标题" sortable width="260"></el-table-column>
+    <el-table-column prop="createAt" label="时间" sortable width="120"></el-table-column>
+    <el-table-column prop="type" label="类型" width="110">
+      <template scope="scope">
+        {{scope.row.type | typeFilter}}
+      </template>
+    </el-table-column>
+    <el-table-column prop="author" label="作者" width="90"></el-table-column>
+    <el-table-column label="审核人" width="90">
+      <template scope="scope">
+        <span style='color:red;'>{{scope.row.auditor}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column prop="importance" label="重要性" width="80">
+    </el-table-column>
+    <el-table-column prop="pageviews" label="阅读数" width="90"></el-table-column>
+    <el-table-column label="状态" width="110">
+      <template scope="scope">
+        <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="操作" width="150">
+      <template scope="scope">
+        <el-button v-if="scope.row.status!='published'" size="small" type="success" @click="handleModifyStatus(scope.row,'published')">发布
+        </el-button>
+        <el-button v-if="scope.row.status!='draft'" size="small" @click="handleModifyStatus(scope.row,'draft')">草稿
+        </el-button>
+        <el-button v-if="scope.row.status!='deleted'" size="small" type="danger" @click="handleModifyStatus(scope.row,'deleted')">删除
+        </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+  <div v-show="!mainGrid.loading" class="pagination-container">
+    <el-pagination :total="mainGrid.total" :current-page.sync="mainGrid.paging.start" :page-size="mainGrid.paging.size" @size-change="sizeChangeFn"
+      @current-change="startChangeFn" layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+  </div>
+
+  <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-form class="small-space" :model="temp" label-position="left" label-width="70px" style='width: 400px;height:350px; margin-left:50px;'>
+      <el-form-item label="标题">
+        <el-input :disabled="dialogDisabled" v-model="temp.title"></el-input>
+      </el-form-item>
+      <el-form-item label="时间">
+        <el-date-picker :disabled="dialogDisabled" v-model="temp.createAt" type="date" placeholder="选择日期时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="类型">
+        <el-select :disabled="dialogDisabled" class="filter-item" v-model="temp.type" placeholder="请选择">
+          <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-select :disabled="dialogDisabled" clearable class="filter-item" v-model="temp.status" placeholder="请选择">
+          <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="重要性">
+        <el-rate :disabled="dialogDisabled" style="margin-top:8px;" v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"></el-rate>
+      </el-form-item>
+      <el-form-item label="点评">
+        <el-input :disabled="dialogDisabled" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.remark">
+        </el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      
+      <el-button v-if="dialogStatus=='create'" type="primary" @click="saveCreateFn">确 定</el-button>
+      <el-button v-else-if="dialogStatus=='update'" type="primary" @click="saveEditFn">确 定</el-button>
+      <el-button v-if="dialogStatus!='detail'" @click="dialogFormVisible = false">取 消</el-button>
+      <el-button v-else @click="dialogFormVisible = false">关闭</el-button>
+    </div>
+  </el-dialog>
+</div>

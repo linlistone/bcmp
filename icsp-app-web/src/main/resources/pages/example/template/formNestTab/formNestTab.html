@@ -1,0 +1,20 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——表单内嵌套Tabs
+-->
+<div>
+  <el-form-x ref="baseRef" :group-fields="baseFields" label-width="80px"></el-form-x>
+  <el-tabs v-model="tabName">
+    <el-tab-pane label="基本信息" name="base">
+      <h1>HELLO WORD</h1>
+    </el-tab-pane>
+    <el-tab-pane label="资产信息" name="asset">
+      <el-table-x ref="tableInstance" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+    </el-tab-pane>
+  </el-tabs>
+  <div class="yu-grpButton">
+    <el-button type="primary" icon="check">保存</el-button>
+    <el-button type="primary" icon="yx-loop2">重置</el-button>
+  </div>
+</div>

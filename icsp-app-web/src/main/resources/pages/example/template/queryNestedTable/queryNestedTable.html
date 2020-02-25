@@ -1,0 +1,18 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——查询嵌套表格
+-->
+<div>
+  <el-form-q form="query" :field-data="queryFields" search-table="tableRef"></el-form-q>
+  <div class="yu-toolBar">
+    <el-button-group>
+      <el-button icon="plus" @click="createFn">新增</el-button>
+      <el-button icon="edit" @click="editFn">修改</el-button>
+      <el-button icon="document" @click="detailFn">详情</el-button>
+      <el-button icon="yx-bin" @click="deleteFn">删除</el-button>
+    </el-button-group>
+  </div>
+  <el-table-x ref="tableRef" :data-url="dataUrl" :table-columns="tableColumns" @custom-row-click="customRowClick" @custom-row-op="customRowOp">
+  </el-table-x>
+</div>

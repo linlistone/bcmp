@@ -1,0 +1,66 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @updated by luoshun 2018-10-11 更新组件内容及标签
+  @description 模板示例——普通查询
+-->
+<div>
+  <link rel="stylesheet" href="./pages/example/package/yufpView/yufpView.css"/>
+  <yu-xform related-table-name="refTable" form-type="search" class="yu-queryMargin">
+    <yu-xform-group :column="4">
+      <yu-xform-item placeholder="标题" ctype="input" name="title"></yu-xform-item>
+      <yu-xform-item placeholder="时间" ctype="datepicker" name="createAt"></yu-xform-item>
+      <yu-xform-item placeholder="类型" ctype="select" name="type" data-code="NATIONALITY"></yu-xform-item>
+    </yu-xform-group>
+  </yu-xform>
+  <div class="yu-toolBar">
+    <yu-button-group>
+      <yu-button icon="plus" @click="addFn">新增</yu-button>
+      <yu-button icon="edit" @click="modifyFn">修改</yu-button>
+      <yu-button icon="document" @click="infoFn">详情</yu-button>
+      <yu-button icon="yx-bin" @click="deleteFn">删除</yu-button>
+      <yu-button icon="yx-file-excel" @click="exportFn">导出</yu-button>
+    </yu-button-group>
+  </div>
+  <yu-xtable ref="refTable" index :data-url="dataUrl" selection-type="radio">
+    <yu-xtable-column label="编码" prop="id" width="110">
+    </yu-xtable-column>
+    <yu-xtable-column label="名称" prop="title" width="200" sortable>
+    </yu-xtable-column>
+    <yu-xtable-column label="类型" prop="type" width="110" data-code="NATIONALITY">
+    </yu-xtable-column>
+    <yu-xtable-column label="参与人" align="center">
+      <yu-xtable-column label="作者" prop="author" width="110">
+      </yu-xtable-column>
+      <yu-xtable-column label="审核人" prop="auditor" width="110">
+      </yu-xtable-column>
+    </yu-xtable-column>
+    <yu-xtable-column label="阅读数" prop="pageviews" width="100">
+    </yu-xtable-column>
+    <yu-xtable-column label="状态" prop="status" width="120" data-code="PUBLISH_STATUS">
+    </yu-xtable-column>
+    <yu-xtable-column label="时间" prop="createAt">
+    </yu-xtable-column>
+  </yu-xtable>
+  <!-- 说明dialog可配置宽高属性，若不配置则宽度默认为屏幕50%，高度自适应
+     width="650px" height="380px" -->
+  <yu-xview ref="refView" :title="viewTitle[viewType]" layout="sidebar" :visible.sync="dialogVisible" width="650px">
+    <yu-xform ref="refForm" label-width="80px" v-model="formdata" :disabled="formDisabled">
+      <yu-xform-group :column="2">
+        <yu-xform-item label="名称" :rules="rule[0]" ctype="input" name="title"></yu-xform-item>
+        <yu-xform-item label="时间" ctype="datepicker" name="createAt"></yu-xform-item>
+        <yu-xform-item label="作者" ctype="input" name="author"></yu-xform-item>
+        <yu-xform-item label="审核人" ctype="input" name="auditor"></yu-xform-item>
+        <yu-xform-item label="类型" ctype="select" name="type" data-code="NATIONALITY"></yu-xform-item>
+        <yu-xform-item label="状态" ctype="select" data-code="PUBLISH_STATUS" name="status"></yu-xform-item>
+        <yu-xform-item label="阅读数" ctype="input" name="pageviews" :rules="rule[1]"></yu-xform-item>
+        <yu-xform-item label="自定义" ctype="yufp-demo-selector" name="yourField"></yu-xform-item>
+        <yu-xform-item label="点评" :rows="3" :colspan="24" name="remark" ctype="textarea" placeholder="2000个字符以内"></yu-xform-item>
+      </yu-xform-group>
+      <div class="yu-grpButton">
+        <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="saveFn">保存</yu-button>
+        <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+      </div>
+    </yu-xform>
+  </yu-xview>
+</div>

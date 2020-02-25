@@ -1,0 +1,113 @@
+<div @click="seenFn">
+    <link href="pages/common/dashboard/dashboard.css" rel="stylesheet" type="text/css">
+    <el-row :gutter="10">
+        <el-col :span="18">
+            <div id="nodeChart" style="width:100%;height:420px;position:relative">
+                <div class="nodeChartTools">
+                    <!--<span class="el-icon-yx-pencil" title="编辑"></span>
+                    <span class="el-icon-yx-checkmark" @click="saveNodeFn" title="保存"></span>-->
+                    <span class="el-icon-yx-clock" @mouseover="mouseoverFn" title="时间选择"></span>
+                    <ul id="yu-sysList">
+                        <li v-for="item in timeList" @click="timePickFn(item.key)">{{item.value}}</li>
+                    </ul>
+                </div>
+                <!-- 
+                <div id="nodeCharts" style="width:100%;height:420px;position:relative">
+                </div>
+                -->
+                <div class="map">
+
+                    <div class="map4" id="china-map"></div>
+                </div>
+            </div>
+        </el-col>
+        <el-col :span="6">
+            <div id="rightLabel" style="height:420px;">
+                <el-row>
+                    <div v-for="item in nodeDataList" :key="item.title">
+                        <h4 class="rightLabelTitle">{{item.title}}</h4>
+                        <div class="progressContainer">
+                            <div class="indexProgress" :style="{width:item.criticalPer,backgroundColor:'#ff4949'}"></div>
+                            <div class="indexProgress" :style="{width:item.warningPer,backgroundColor:'#f7ba2a'}"></div>
+                            <div class="indexProgress" :style="{width:item.normalPer,backgroundColor:'#13ce66'}"></div>
+                        </div>
+                        <span style="margin-left: 10px;margin-top: 10px;display:inline-block;">{{item.criticalNum}} critical, {{item.warningNum}} warning, {{item.normalNum}} normal</span>
+                        <hr style="height:1px;border:none;border-top:1px solid #dfe6ec;" />
+                    </div>
+                    <h4 class="rightLabelTitle">请求分析</h4>
+                    <el-table ref="scoreTable" :data="scoreData" :show-header="false">
+                        <el-table-column prop="status" width="50"></el-table-column>
+                        <el-table-column prop="percentage" align="right" :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="num" align="right" :show-overflow-tooltip="true"></el-table-column>
+                    </el-table>
+                    <hr style="height:1px;border:none;border-top:1px solid #dfe6ec;" />
+                    <h4 class="rightLabelTitle">服务访问排行</h4>
+                    <el-table ref="scoreTable" :data="rankData" :show-header="false">
+                        <el-table-column prop="rank" width="30"></el-table-column>
+                        <el-table-column prop="service" align="left" :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="count" align="right" width="80" :show-overflow-tooltip="true"></el-table-column>
+                    </el-table>
+                </el-row>
+            </div>
+        </el-col>
+    </el-row>
+    <el-row :gutter="10">
+        <el-col :span="8">
+            <div class="bottomChart" style="margin-bottom: 10px">
+                <div style="height:20px">
+                    <h4 style="margin-top:10px;margin-left:10px;margin-right:50px;display:inline-block;">请求数（次数）</h4>
+                    <!--<span style="margin-right:5px;color:#666;font-size:16px">{{loadNum}}</span>-->
+                    <!--<span style="margin-right:50px;color:#666;font-size:14px">calls</span>-->
+                    <!-- <span style="margin-right:5px;color:#006fcc;font-size:16px">{{loadNumAvg}}</span>
+                    <span style="color:#666;font-size:14px">calls/{{timeUnit}}</span> -->
+                </div>
+                <div id="loadChart" style="width:100%;height:165px"></div>
+            </div>
+        </el-col>
+        <el-col :span="8">
+            <div class="bottomChart" style="margin-bottom: 10px">
+                <div style="height:20px">
+                    <h4 style="margin-top:10px;margin-left:10px;margin-right:50px;display:inline-block;">响应时间（毫秒）</h4>
+                    <!-- <span style="margin-right:5px;color:#006fcc;font-size:16px">{{resTimeAvg}}</span>
+                    <span style="color:#666;font-size:14px">ms average</span> -->
+                </div>
+                <div id="resTimeChart" style="width:100%;height:165px"></div>
+            </div>
+        </el-col>
+        <el-col :span="8">
+            <div class="bottomChart" style="margin-bottom: 10px">
+                <div style="height:20px">
+                    <h4 style="margin-top:10px;margin-left:10px;margin-right:50px;display:inline-block;">交易笔数</h4>
+                    <!-- <span style="margin-right:5px;color:#006fcc;font-size:16px">{{errorsNum}}</span>
+                    <span style="color:#666;font-size:14px">errors</span> -->
+                    <!--<span style="margin-right:50px;color:#666;font-size:14px">errors</span>-->
+                    <!--<span style="margin-right:5px;color:#006fcc;font-size:16px">{{errorNumAvg}}</span>-->
+                    <!--<span style="color:#666;font-size:14px">errors/{{timeUnit}}</span>-->
+                </div>
+                <div id="errorsChart" style="width:100%;height:165px"></div>
+            </div>
+        </el-col>
+    </el-row>
+
+    <!--<el-dialog-x :visible.sync="dialogVisible">-->
+    <!--<el-form-x ref="timeForm" :group-Fields="time.timeRange" :buttons="time.buttons"-->
+    <!--label-width="80px">-->
+    <!--</el-form-x>-->
+    <!--</el-dialog-x>-->
+</div>
+<style>
+    .map {
+        position: relative;
+        height: 100%;
+        z-index: 9;
+    }
+    .map4 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        left: 1%;
+        top: 1%;
+        margin-top: 0;
+        z-index: 5;
+    }
+</style>

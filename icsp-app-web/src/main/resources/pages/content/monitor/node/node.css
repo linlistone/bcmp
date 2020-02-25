@@ -1,0 +1,19 @@
+.canvas_monitor_bg {
+    background-image: url(../../../themes/common/images/monitor_bg.jpg);
+}
+#el_servercluster_nodeinfo .box-card{
+    height: 40px;
+    border-top: none;
+    /* padding-top: 12px; */
+}
+#el_servercluster_nodeinfo .box-card .el-row{
+    padding-top: 12px;
+}
+#el_servercluster_nodeinfo .box-card .el-row a{
+    cursor:pointer
+}
+.el-dialog--small{
+    height: 600px;
+    width: 90%;
+    overflow-y: auto;
+}

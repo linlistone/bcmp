@@ -1,0 +1,170 @@
+#nodeChart, #rightLabel, .bottomChart {
+    margin-top: 10px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    background-color: #fff !important;
+}
+
+.rightLabelTitle {
+    color: #006fcc;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: block;
+}
+
+div.progressContainer {
+    height: 6px;
+    width: 95%;
+    border-radius: 10px;
+    background-color: #e4e8f1;
+    margin-left: 10px;
+}
+
+div.indexProgress {
+    background-color: #20a0ff;
+    height: 6px;
+    line-height: 20px;
+}
+
+div.indexProgress {
+    float: left;
+}
+
+div.indexProgress > b {
+    position: relative;
+}
+
+div.indexProgress:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+div.indexProgress:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+.op-noder {
+    display: block;
+    position: absolute;
+    width:50px;
+    height:50px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.labelClass{
+    font-size:12px;
+    color:#bbb;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.labelClass:hover {
+    color: #666;
+}
+
+.nodeChartBox{
+    height: 50px;
+    width: 50px;
+}
+
+.op-noder > span {
+    display: block;
+    clear: left;
+    line-height: 15px;
+    position: absolute;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    bottom: -20px;
+    left: 50%;
+    color: #20a0ff;
+    font-weight: bold;
+}
+
+.op-noder > i {
+    font-size: 32px;
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin: 9px;
+    text-align: center;
+    line-height: 32px;
+}
+
+.op-noder >i + span {
+    bottom: -10px;
+}
+
+.op-noder > i.el-icon-yx-stack,
+.op-noder > i.el-icon-yx-stack + span {
+    color: #7052d2;
+}
+
+.op-noder > i.el-icon-yx-database,
+.op-noder > i.el-icon-yx-database + span {
+    color: #e2a412;
+}
+
+.op-noder > p {
+    display: block;
+    line-height: 15px;
+    position: absolute;
+    white-space: nowrap;
+    transform: translate(100%,-50%);
+    right: -5px;
+    top: 50%;
+    color: #bbb;
+}
+
+#rightLabel .el-table{
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+#rightLabel .el-table td{
+    border-bottom: none;
+    white-space: nowrap;
+}
+
+#rightLabel .el-table td>div{
+    white-space: nowrap;
+}
+
+#rightLabel .el-table:before, #rightLabel .el-table:after{
+    display: none;
+}
+
+.nodeChartTools{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+}
+.nodeChartTools>span{
+    float: left;
+    font-size: 12px;
+    color: #999;
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 22px;
+    background-color: #f5f5f5;
+    margin-left:5px;
+    cursor: pointer;
+    transition: .2s;
+}
+.nodeChartTools>span:hover{
+    color: #fff;
+    background-color: #20a0ff;
+}
+.nodeChartTools>span:active{
+    color: #fff;
+    background-color: #0095e0;
+}
+.nodeChartTools>span+ul{display:none;border-radius: 3px; position: absolute;top:28px;right: 0; width: auto;line-height: 29px;z-index: 10;background-color: #fff;border: 1px solid #d1dbe5 ;height: auto; box-shadow:0 2px 4px rgba(0,0,0,.2);}
+.nodeChartTools>span+ul>li{display: block;clear: left;cursor:pointer; position:relative; padding: 0 15px; text-align: left;height: 29px;line-height:29px;border-bottom:0px solid #bfdaee;font-size: 12px;color: #666; transition: .2s;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;}
+.nodeChartTools>span+ul>li:hover{color: #20a0ff;background-color: #e4e8f1;}
+
+
+
+

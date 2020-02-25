@@ -1,0 +1,31 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——查询+表格（主从表）
+-->
+<div>
+  <el-form-q title="角色查询" :field-data="queryFields" search-table="roleTable"></el-form-q>
+  <el-row :gutter="10">
+    <el-col :span="12">
+      <div class="yu-toolBar">
+        <h2>角色列表</h2>
+        <el-button-group>
+          <el-button icon="plus">新增</el-button>
+          <el-button icon="edit">修改</el-button>
+          <el-button icon="yx-bin">删除</el-button>
+        </el-button-group>
+      </div>
+      <el-table-x ref="roleTable" data-url="/example/template/msform" :table-columns="tableColumnsR" @row-click="search" :height="height"></el-table-x>
+    </el-col>
+    <el-col :span="12">
+      <div class="yu-toolBar">
+        <h2>权限列表</h2>
+        <el-button-group>
+          <el-button icon="plus">新增</el-button>
+          <el-button icon="yx-bin">删除</el-button>
+        </el-button-group>
+      </div>
+      <el-table-x ref="powerTable" data-url="/example/template/subtable" :table-columns="tableColumnsP" :height="height"></el-table-x>
+    </el-col>
+  </el-row>
+</div>

@@ -1,0 +1,19 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="fx_lookup">
+  <div>
+    <h1>公共字典管理器文档</h1>
+    <ul>
+      <li>1、页面加载完成（ready）方法首行注册：
+        <br>
+        <font color="red">yufp.lookup.reg("CUST_TYPE,IDENT_TYPE,NATIONALITY");</font>
+      </li>
+      <li>
+        2、绑定字典数据到某个指定对象上：
+        <br>
+        <font color="red">
+          var _this = this; yufp.lookup.bind("NATIONALITY", function (lookup) { _this.typeOptions = lookup; });
+        </font>
+      </li>
+    </ul>
+  </div>
+</div>

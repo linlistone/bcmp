@@ -1,0 +1,74 @@
+<!--
+  @created by
+  @updated by kongqf 2018-10-18 图片裁剪
+  @description 图片裁剪示例
+-->
+<div>
+	<link rel="stylesheet" href="./pages/example/package/yufpCropper/yufpCropper.css" />
+	<div class="wrapper">
+		<yu-cropper ref="refCropper" :img="option.img" :output-size="option.size" :output-type="option.outputType" :info="true" :full="option.full"
+		 :can-move="option.canMove" :can-move-box="option.canMoveBox" :fixed-box="option.fixedBox" :auto-crop="option.autoCrop"
+		 :auto-crop-width="option.autoCropWidth" :is-mock="isMock" :auto-crop-height="option.autoCropHeight" :fixed="option.fixed" :fixed-number="option.fixedNumber"
+		 :original="option.original" @realTime="realTime"></yu-cropper>
+	</div>
+	<!-- <div class="show-preview">
+				<img :src="previews.url" v-loading="true">
+		</div> -->
+	<div class="cropper-btns test-button">
+		<!-- <button @click="changeImg" class="btn">changeImg</button> -->
+		<label class="btn" for="uploads">upload</label>
+		<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg"
+		 @change="uploadImg($event, 1)">
+		<button @click="startCrop" v-if="!crap" class="btn">start</button>
+		<button @click="stopCrop" v-else class="btn">stop</button>
+		<button @click="clearCrop" class="btn">clear</button>
+		<button @click="refreshCrop" class="btn">refresh</button>
+		<button @click="changeScale(1)" class="btn">+</button>
+		<button @click="changeScale(-1)" class="btn">-</button>
+		<yu-button @click="rotateLeft" class="btn">rotateLeft</yu-button>
+		<yu-button @click="rotateRight" class="btn" icon="yx-spinner11"></yu-button>
+		<!-- <button @click="finish('base64')" class="btn">preview(base64)</button>
+			<button @click="finish('blob')" class="btn">preview(blob)</button> -->
+		<a @click="down('base64')" class="btn">download(base64)</a>
+		<a @click="down('blob')" class="btn">download(blob)</a>
+		<a @click="down('compress')" class="btn">download(compress)</a>
+		<yu-button @click="uploadToServer" icon="yx-cloud-upload" class="btn">upload(toserver)</yu-button>
+		<a :href="downImg" :download="outputFileName" ref="downloadDom"></a>
+
+		<yu-upload ref="refUpload" :before-upload="handleBeforeUpload" class="upload-demo" 
+			action="http://172.16.20.127:3000/upload" 
+			:on-preview="handlePreview" 
+			:on-remove="handleRemove"
+			:on-start="handleStart"
+			:file-list="fileList" :on-progress="handleProgress" 
+			:on-success="handleSuccess" :auto-upload="true" 
+			:on-change="handleChange">
+			<yu-button size="small" type="success">点击上传</yu-button>
+			<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+		</yu-upload>
+
+		<div class="el-row options-settings" style="display:block; width: 100%;">
+			<el-col :span="24" class="c-item">
+				<yu-checkbox v-model="option.original">上传图片是否显示原始宽高 (针对大图 可以铺满)</yu-checkbox>
+			</el-col>
+			<el-col :span="6" class="c-item">
+				<yu-checkbox v-model="option.canMove">能否拖动图片</yu-checkbox>
+			</el-col>
+			<el-col :span="6" class="c-item">
+				<yu-checkbox v-model="option.canMoveBox">能否拖动截图框</yu-checkbox>
+			</el-col>
+			<el-col :span="6" class="c-item">
+				<yu-checkbox v-model="option.fixedBox">截图固定大小</yu-checkbox>
+			</el-col>
+			<el-col :span="6" class="c-item">
+				<yu-checkbox v-model="option.full">是否输出原图比例的截图</yu-checkbox>
+			</el-col>
+			<el-col :span="24" class="c-item">
+				<span>输出图片格式</span>
+				<yu-radio class="radio" v-model="option.outputType" label="jpeg">jpg</yu-radio>
+				<yu-radio class="radio" v-model="option.outputType" label="png">png</yu-radio>
+				<yu-radio class="radio" v-model="option.outputType" label="webp">webp</yu-radio>
+			</el-col>
+		</div>
+	</div>
+</div>

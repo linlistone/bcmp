@@ -1,0 +1,55 @@
+<!-- 
+@created by  taoting1 2018-08-22
+@description yu-echarts组件使用示例
+ -->
+<div class="yuEcharts_demo">
+  <link rel="stylesheet" href="./pages/example/package/demoEcharts/demoEcharts.css">
+  <div class="yu-Con" style="width: calc(50% - 10px)">
+    <div class="yu-box">
+      <h1>
+        <b>存款结构分析</b>
+        <span>2016-9</span>
+      </h1>
+      <div class="yu-content" style="height:300px;">
+        <yu-echarts :option="option1" height="80%"></yu-echarts>
+        <el-button type="primary" class="change-btn" @click="changeFn">修改数据</el-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="yu-Con" style="width: calc(50% - 10px)">
+    <div class="yu-box">
+      <h1>
+        <b>存款趋势</b>
+        <span>2016-9</span>
+      </h1>
+      <div class="yu-content" style="height:300px;">
+        <yu-echarts ref="echarts" :option="option2"></yu-echarts>
+      </div>
+    </div>
+  </div>
+
+  <div class="yu-Con" style="width: calc(50% - 10px)">
+    <div class="yu-box">
+      <h1>
+        <b>不良贷款</b>
+        <span>2016-9</span>
+      </h1>
+      <div class="yu-content" style="height:300px;">
+        <yu-echarts :option="option3"></yu-echarts>
+      </div>
+    </div>
+  </div>
+
+  <div class="yu-Con" style="width: calc(50% - 10px)">
+    <div class="yu-box">
+      <h1>
+        <b>资金充足率</b>
+        <span>2016-9</span>
+      </h1>
+      <div class="yu-content" style="height:300px;">
+        <yu-echarts :option="option4"></yu-echarts>
+      </div>
+    </div>
+  </div>
+</div>

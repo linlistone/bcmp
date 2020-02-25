@@ -1,0 +1,132 @@
+<!-- 数据字典配置 -->
+<div>
+    <el-row :gutter="10">
+        <!--左侧机构树-->
+        <el-col :span="6">
+            <div class="fox-toolBar" >
+                <el-button-group style="margin-top: 10px;">
+                    <yu-button icon="plus" @click="createLkTypeFn" v-if="createLookuptypeButton">添加</yu-button>
+                    <yu-button icon="edit" @click="updateLkTypeFn" v-if="editLookuptypeButton">编辑</yu-button>
+                    <yu-button icon="delete" @click="deleteLkTypeFn" v-if="deleteLookuptypeButton">删除</yu-button>
+                </el-button-group>
+            </div>
+            <yufp-ext-tree ref="lookuptypetree" @node-click="nodeClickFn" :height="treeHeight"
+                          :data-url="typeUrl" data-id="lookupTypeId" data-label="lookupTypeName" data-pid="upLookupTypeId"
+                          :expand-level='2' :highlight-current="true">
+            </yufp-ext-tree>
+        </el-col>
+        <!--中间列表部分-->
+        <el-col :span="9">
+            <h2 class="yu-formTitle" style="margin-top: 10px;margin-bottom: 0px">字典类别</h2>
+            <yu-xform related-table-name="filterTable" form-type="search" v-model="filterQueryform">
+                <yu-xform-group :column="2">
+                    <yu-xform-item placeholder="类别别名或名称" ctype="input" name="lookupName">
+                    </yu-xform-item>
+                </yu-xform-group>
+            </yu-xform>
+            <div class="fox-toolBar">
+                <el-button-group>
+                    <el-button icon="plus" @click="createFilterFn" v-if="createFilterButton">添加</el-button>
+                    <el-button icon="edit" @click="updateFilterFn" v-if="editFilterButton">编辑</el-button>
+                    <el-button icon="delete" @click="deleteFilterFn" v-if="deleteFilterButton">删除</el-button>
+                </el-button-group>
+            </div>
+            <yu-xtable ref="filterTable" :data-url="lookupUrl" reserve-selection @row-click="filterSelect"
+                       row-key="id" style="width: 100%" :default-load="false">
+                <yu-xtable-column label="字典类别英文别名" prop="lookupCode" width="140"></yu-xtable-column>
+                <yu-xtable-column label="字典类别名称" prop="lookupName"></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+        <!--右侧列表部分-->
+        <el-col :span="9">
+            <h2 class="yu-formTitle" style="margin-top: 10px;margin-bottom: 0px;">字典代码和名称</h2>
+            <yu-xform related-table-name="itemTable" form-type="search" v-model="itemQueryform">
+                <yu-xform-group :column="2">
+                    <yu-xform-item placeholder="字典代码或字典内容" ctype="input" name="lookupItemName">
+                    </yu-xform-item>
+                </yu-xform-group>
+            </yu-xform>
+            <div class="fox-toolBar">
+                <el-button-group>
+                    <el-button icon="plus" @click="createItemFn" v-if="createLkItemButton">添加</el-button>
+                    <el-button icon="edit" @click="updateItemFn" v-if="editLkItemButton">编辑</el-button>
+                    <el-button icon="delete" @click="deleteItemFn" v-if="deleteLkItemButton">删除</el-button>
+                </el-button-group>
+            </div>
+            <yu-xtable ref="itemTable" :data-url="lookupitemUrl" reserve-selection row-key="id" style="width: 100%"
+                       :default-load="false">
+                <yu-xtable-column label="字典代码" prop="lookupItemCode" width="140"></yu-xtable-column>
+                <yu-xtable-column label="字典名称" prop="lookupItemName"></yu-xtable-column>
+                <yu-xtable-column label="字典备注说明" prop="lookupItemComment"></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+    </el-row>
+
+    <!-- 弹出框 字典目录维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="lkTypeDialogVisible"
+                width="600px" :disabled="lkTypeDialogDisabled">
+        <yu-xform ref="lookupTypeForm" label-width="160px" v-model="lookuptypeFormdata">
+            <yu-xform-item label="目录名称" ctype="input" name="lookupTypeName"
+                           :rules="lkTypeRules['lookupTypeName']">
+            </yu-xform-item>
+            <yu-xform-item label="上级目录" ctype="input" name="upLookupTypeName" :disabled="lkTypeDialogDisabled">
+            </yu-xform-item>
+            <div class="yu-grpButton">
+                <yu-button v-show="lkTypeDialogSaveBtnShow" icon="check" type="primary"
+                           @click="lkTypeSubmitFn">保存
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="lkTypeDialogVisible=false">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+
+
+    <!-- 弹出框 字典维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="lookuptypeVisible" width="600px"
+                :disabled="lookuptypeDisabled">
+        <yu-xform ref="datafilterForm" label-width="160px" v-model="filterFormdata">
+            <yu-xform-item label="类别英文别名" ctype="input" name="lookupCode"
+                           :rules="lookuptypeRules['lookupCode']" :readonly="viewType=='EDIT'">
+            </yu-xform-item>
+            <yu-xform-item label="字典类别名称" ctype="input" name="lookupName"
+                           :rules="lookuptypeRules['lookupName']">
+            </yu-xform-item>
+            <div class="yu-grpButton">
+                <yu-button v-show="lookuptypeSaveBtnShow" icon="check" type="primary"
+                           @click="lookuptypeSubmitFn">保存
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="lookuptypeVisible=false">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+
+    <!-- 弹出框 字典维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="lookupItemVisible" width="600px"
+                :disabled="lookupItemDisabled">
+        <yu-xform ref="lookupItemForm" label-width="160px" v-model="lookupItemFormdata">
+                <yu-xform-item label="类别英文别名" ctype="input" name="lookupCode"
+                :rules="lookupItemRules['lookupCode']" :disabled="lookupItemDisabled">
+                </yu-xform-item>
+            <yu-xform-item label="字典代码" ctype="input" name="lookupItemCode"
+                           :rules="lookupItemRules['lookupItemCode']">
+            </yu-xform-item>
+            <yu-xform-item label="字典名称" ctype="input" name="lookupItemName"
+                           :rules="lookupItemRules['lookupItemName']">
+            </yu-xform-item>
+           
+            <yu-xform-item label="字典备注说明" ctype="input" name="lookupItemComment"
+                           :rules="lookupItemRules['lookupItemComment']">
+            </yu-xform-item>
+            <yu-xform-item label="字典排序号" ctype="input" name="lookupItemOrder"
+                           :rules="lookupItemRules['lookupItemOrder']">
+            </yu-xform-item>
+            <div class="yu-grpButton">
+                <yu-button v-show="lookupItemSaveBtnShow" icon="check" type="primary"
+                           @click="lookupItemSubmitFn">保存
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="lookupItemVisible=false">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+
+</div>

@@ -1,0 +1,17 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——Steps步骤表单
+-->
+<div id="exampleSteps1">
+    <el-steps :active="active" finish-status="success" :align-center="true" :center="true">
+        <el-step title="基本信息"></el-step>
+        <el-step title="家庭信息"></el-step>
+        <el-step title="其他信息"></el-step>
+    </el-steps>
+    <div class="yu-steps">
+        <el-form-x ref="baseMsgForm" :group-fields="editFields" :buttons="buttons" label-width="100px" v-show="step"></el-form-x>
+        <el-form-x ref="famMsgform" :group-fields="editFields1" :buttons="buttons1" label-width="100px" v-show="step1"></el-form-x>
+        <el-form-x ref="otherMsgform" :group-fields="editFields2" :buttons="buttons2" label-width="100px" v-show="step2"></el-form-x>
+    </div>
+</div>

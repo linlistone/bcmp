@@ -1,0 +1,62 @@
+<!-- 管理页面 -->
+<div >
+    <!--查询区域-->
+    <yu-xform related-table-name="refTable" form-type="search">
+        <yu-xform-group :column="4">
+            <yu-xform-item placeholder="金融机构代码" ctype="input" name="instuCde"></yu-xform-item>
+            <yu-xform-item placeholder="金融机构名称" ctype="input" name="instuName"></yu-xform-item>
+            <yu-xform-item placeholder="状态" ctype="select" name="instuSts" data-code="DATA_STS"></yu-xform-item>
+        </yu-xform-group>
+    </yu-xform>
+    <!--按钮区域-->
+    <div class="fox-toolBar">
+        <el-button-group>
+            <el-button icon="plus" @click="addFn" v-if="m_btn.createButton">添加</el-button>
+            <el-button icon="edit" @click="modifyFn" v-if="m_btn.editButton">编辑</el-button>
+            <el-button icon="delete" @click="deleteFn" v-if="m_btn.deleteButton">删除</el-button>
+            <el-button icon="yx-unlocked" @click="useDataFn" v-if="m_btn.useButton">启用</el-button>
+            <el-button icon="yx-lock" @click="unuseDataFn" v-if="m_btn.unuseButton">停用</el-button>
+        </el-button-group>
+    </div>
+    <yu-xtable ref="refTable" :data-url="m_table.dataUrl" reserve-selection selection-type="checkbox" row-key="id"
+        style="width: 100%">
+        <yu-xtable-column label="金融机构代码" prop="instuCde" width="110"></yu-xtable-column>
+        <yu-xtable-column label="金融机构名称" prop="instuName" sortable>
+            <template scope="scope" type="text">
+                <el-button @click="infoFn(scope.row)" type="text">
+                    {{ scope.row.instuName }}</el-button>
+            </template>';
+        </yu-xtable-column>
+        <yu-xtable-column label="状态" prop="instuSts" data-code="DATA_STS" width="200"></yu-xtable-column>
+        <yu-xtable-column prop="joinDt" label="进入日期" width="120"></yu-xtable-column>
+        <yu-xtable-column prop="userName" label="最新变更用户" width="160"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="160"></yu-xtable-column>
+    </yu-xtable>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
+            <yu-xform-group>
+                <yu-xform-item label="金额机构代码" ctype="input" name="instuCde" :rules="rules['instuCde']"
+                    :disabled="viewType!='ADD' "></yu-xform-item>
+                <yu-xform-item label="状态" ctype="select" name="instuSts" data-code="DATA_STS" rules="required">
+                </yu-xform-item>
+                <yu-xform-item label="金额机构名称" ctype="input" name="instuName" :rules="rules['instuName']" :rows="1"
+                    :colspan="24"></yu-xform-item>
+            </yu-xform-group>
+            <yu-xform-group>
+                <yu-xform-item label="进入日期" ctype="datepicker" name="joinDt"></yu-xform-item>
+                <yu-xform-item label="邮编" ctype="input" name="zipCde" :rules="rules['zipCde']"></yu-xform-item>
+                <yu-xform-item label="联系人" ctype="input" name="contUsr" :rules="rules['contUsr']"></yu-xform-item>
+                <yu-xform-item label="联系电话" ctype="input" name="contTel" :rules="rules['contTel']"></yu-xform-item>
+                <yu-xform-item label="最新变更用户" ctype="input" name="userName" :hidden="hiddenItem"></yu-xform-item>
+                <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :hidden="hiddenItem"></yu-xform-item>
+                <yu-xform-item label="联系地址" ctype="input" name="instuAddr" :rules="rules['instuAddr']" :rows="1"
+                    :colspan="24" placeholder="100个字符以内"></yu-xform-item>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">保存</yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+</div>

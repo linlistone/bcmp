@@ -1,0 +1,78 @@
+<!-- 菜单配置 -->
+<div>
+    <el-row>
+        <!--左侧模块管理-->
+        <el-col :span="5">
+            <h2 class="yu-formTitle" style="margin-top: 10px;">菜单树</h2>
+            <div class="fox-toolBar">
+                <el-button-group>
+                    <el-button icon="plus" @click="createFn" v-if="createButton">添加</el-button>
+                    <el-button icon="edit" @click="deleteFn" v-if="editButton">删除</el-button>
+                </el-button-group>
+            </div>
+            <yufp-ext-tree ref="menuTree" :show-checkbox="false" :height="treeHeight" :data-url="treeUrl" data-id="menuId" data-label="menuName"
+                @node-click="nodeClickFn" data-pid="upMenuId" :data-root="{id:'0',label:'主菜单'}" :expand-level='2' :highlight-current="true">
+            </yufp-ext-tree>
+        </el-col>
+        <!--中间模块管理-->
+        <el-col :span="7" style="padding-left:20px" class="pad_funcDialogroleManage">
+            <h2 class="yu-formTitle" style="margin-top: 10px;">子节点维护</h2>
+            <!-- 创建查询表单 -->
+            <yu-xform ref="menuForm" label-width="100px">
+                <yu-xform-item label="菜单名称" ctype="input" name="menuName" :rules="rules['menuName']"></yu-xform-item>
+                <yu-xform-item label="菜单代码" ctype="input" name="menuCde" :rules="rules['menuCde']"></yu-xform-item>
+                <yu-xform-item label="业务功能" @click="clickFuncNameFn" @focus="focusFuncNameFn" ctype="input" name="funcName" placeholder="请从业务功能列表选择"
+                    readonly></yu-xform-item>
+                <yu-xform-item label="模块名称" ctype="input" name="modName" readonly></yu-xform-item>
+                <yu-xform-item label="排序" ctype="input" name="menuOrder" :rules="rules['menuOrder']"></yu-xform-item>
+                <yu-xform-item label="图标" @click="clickMenuIconFn" @focus="focusMenuIconFn" ctype="input" name="menuIcon"></yu-xform-item>
+                <yu-xform-item label="上级节点" @focus="focusUpMenuNameFn" ctype="input" name="upMenuName" rules="required" readonly></yu-xform-item>
+                <yu-xform-item label="说明" ctype="textarea" name="menuTip" :rules="rules['menuTip']"></yu-xform-item>
+                <div class="yu-grpButton">
+                    <yu-button icon="check" type="primary" @click="saveFn">保存</yu-button>
+                    <yu-button icon="yx-undo2" type="primary" @click="resetFn">重置</yu-button>
+                </div>
+            </yu-xform>
+        </el-col>
+        <!--右侧业务功能管理-->
+        <el-col :span="12" style="padding-left:20px">
+            <!-- 折叠面板 -->
+            <el-collapse v-model="expandCollapseName" accordion>
+                <!-- 业务功能列表  默认展示-->
+                <el-collapse-item title="业务功能列表" name="funcList">
+                    <el-col>
+                        <yu-xform related-table-name="refTable" form-type="search">
+                            <yu-xform-group :column="4">
+                                <yu-xform-item placeholder="业务模块" ctype="select" name="modId" :options="modOptions">
+                                </yu-xform-item>
+                                <yu-xform-item placeholder="关键字" ctype="input" name="queryKey">
+                                </yu-xform-item>
+                            </yu-xform-group>
+                        </yu-xform>
+                        <yu-xtable ref="refTable" :data-url="funcdataUrl" reserve-selection @row-click="funcSelect" row-key="id" style="width: 100%">
+                            <yu-xtable-column label="功能名称" prop="funcName" width="160">
+                            </yu-xtable-column>
+                            <yu-xtable-column label="URL链接" prop="funcUrl"></yu-xtable-column>
+                        </yu-xtable>
+                    </el-col>
+                </el-collapse-item>
+                <!--  上层菜单 折叠面板  默认隐藏-->
+                <el-collapse-item title="上层菜单" name="upMenu">
+                    <el-col>
+                        <yufp-ext-tree ref="upMenuTree" :show-checkbox="false" :height="treeHeight-40" :data-url="treeUrl" data-id="menuId" data-label="menuName"
+                            @node-click="upMenuClickFn" data-pid="upMenuId" :data-root="{id:'0',label:'主菜单'}" :expand-level='2'
+                            :highlight-current="true" :filter-node-method="filterFn">
+                        </yufp-ext-tree>
+                    </el-col>
+                </el-collapse-item>
+            </el-collapse>
+        </el-col>
+    </el-row>
+    <!-- 弹出框 图标选择 -->
+    <el-dialog-x title="图标选择" :visible.sync="iconDialogVisible" height="400px" width="800px">
+        <div class="yu-icons">
+            <a v-for="icon in icons" href="javascript:void(0)" :class="icon.id" :title="icon.tag" @click="iconSelect">
+            </a>
+        </div>
+    </el-dialog-x>
+</div>

@@ -1,0 +1,250 @@
+.yu-xview-x {
+  position: absolute;
+  left: 50%;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  box-sizing: border-box
+}
+
+.yu-xview-x--tiny {
+  width: 30%
+}
+
+.yu-xview-x--small {
+  width: 50%
+}
+
+.yu-xview-x--move {
+  box-shadow: 0 2px 20px rgba(0,0,0,.5);
+  opacity: .95
+}
+
+.yu-xview-x--large {
+  width: 90%
+}
+
+.yu-xview-x--full {
+  width: 100%;
+  top: 0;
+  margin-bottom: 0;
+  height: 100%;
+  overflow: auto
+}
+
+
+.yu-xview-x__wrapper {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  overflow: auto;
+  -ms-overflow-x: hidden;
+  margin: 0
+}
+
+.yu-xview-x__header {
+  padding: 20px 20px 0
+}
+
+.yu-xview-x__header:after,.yu-xview-x__header:before {
+  display: table;
+  content: ""
+}
+
+.yu-xview-x__headerbtn {
+  float: right;
+  background: 0 0;
+  border: none;
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+  font-size: 16px
+}
+
+.yu-xview-x__headerbtn .yu-xview__close {
+  color: #bfcbd9
+}
+
+.yu-xview-x__headerbtn:focus .yu-xview__close,.yu-xview-x__headerbtn:hover .yu-xview__close {
+  color: #20a0ff
+}
+
+.yu-xview-x__title {
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2d3d
+}
+
+.yu-xview-x__body {
+  padding: 15px;
+  color: #48576a;
+  font-size: 14px
+}
+
+.yu-xview-x__footer {
+  padding: 10px 20px 15px;
+  text-align: center;
+  box-sizing: border-box
+}
+
+
+.yu-xview.yu-xview-x__wrapper{
+  z-index: 2001;
+}
+.yu-xview.yu-xview-x-sidebar,.yu-xview.yu-xview-x-cover{
+  left:0;
+  top:0;
+}
+.yu-xview.yu-xview-x-cover .yu-xview-x--full{
+  left: 0;
+  border-radius:0;
+  -webkit-border-radius:0;
+  -moz-border-radius:0;
+  -ms-border-radius:0;
+  -o-border-radius:0;
+}
+.yu-xview .v-mask-model{
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .5;
+  background: #000;
+  z-index: 2002;
+}
+.yu-xview .yu-xview-x{
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  box-sizing: border-box;
+  z-index: 2003;
+}
+
+.yu-xview .yu-xview-x--x {
+  width: 100%;
+  border-radius: 0;
+}
+
+/* 区域遮罩样式 开始 */
+.xview-sidebar-enter-active,.xview-cover-nomodal-enter-active {
+  animation: dialog-sidebar-in .5s;
+  -webkit-animation: dialog-sidebar-in .5s;
+}
+.xview-sidebar-enter-active .yu-xview-x,.xview-cover-nomodal-enter-active .yu-xview-x{
+  animation: dialog-sidebar-in-dialogx .5s;
+  -webkit-animation: dialog-sidebar-in-dialogx .5s;
+}
+.xview-sidebar-leave-active,.xview-cover-nomodal-leave-active {
+  animation: dialog-sidebar-out .5s;
+  -webkit-animation: dialog-sidebar-out .5s;
+}
+.xview-sidebar-leave-active .yu-xview-x,.xview-cover-nomodal-leave-active .yu-xview-x{
+  animation: dialog-sidebar-out-dialogx .5s;
+  -webkit-animation: dialog-sidebar-out-dialogx .5s;
+}
+/* 区域遮罩样式 结束 */
+/* 区域非遮罩样式 开始 */
+.xview-sidebar-nomodal-enter-active {
+  animation: dialog-sidebar-in-dialogx .5s;
+  -webkit-animation: dialog-sidebar-in-dialogx .5s;
+}
+.xview-sidebar-nomodal-enter-active .yu-xview-x{
+  animation: dialog-sidebar-in-dialogx .5s;
+  -webkit-animation: dialog-sidebar-in-dialogx .5s;
+}
+.xview-sidebar-nomodal-leave-active {
+  animation: dialog-sidebar-out-dialogx .5s;
+  -webkit-animation: dialog-sidebar-out-dialogx .5s;
+}
+.xview-sidebar-nomodal-leave-active .yu-xview-x{
+  animation: dialog-sidebar-out-dialogx .5s;
+  -webkit-animation: dialog-sidebar-out-dialogx .5s;
+}
+/* 区域非遮罩样式 结束 */
+.xview-dialog-enter-active {
+  animation: dialog-dialog-in .5s;
+  -webkit-animation: dialog-dialog-in .5s;
+}
+
+.xview-dialog-leave-active {
+  animation: dialog-dialog-out .5s;
+  -webkit-animation: dialog-dialog-out .5s;
+}
+.xview-dialog-nomodal-enter-active {
+  animation: dialog-dialog-in .5s;
+  -webkit-animation: dialog-dialog-in .5s;
+}
+
+.xview-dialog-nomodal-leave-active {
+  animation: dialog-dialog-out .5s;
+  -webkit-animation: dialog-dialog-out .5s;
+}
+
+@keyframes dialog-sidebar-in {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+    left:100%;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    left:0%;
+  }
+}
+@keyframes dialog-sidebar-in-dialogx {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    width:0%;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes dialog-sidebar-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    left:0%;
+  }
+  100% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+    left:100%;
+  }
+}
+@keyframes dialog-sidebar-out-dialogx {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -20px, 0);
+    width:0%;
+  }
+}
+
+@keyframes dialog-dialog-in {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-dialog-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+  }
+}

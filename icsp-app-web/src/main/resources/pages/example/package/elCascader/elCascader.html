@@ -1,0 +1,68 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="el_cascader_x_demo">
+  <el-row :gutter="20">
+
+    <!-- 此部分树如何使用 -->
+    <el-col :span="5">
+      <!--<el-cascader-x-->
+      <!--ref="myCascader"-->
+      <!--cmptype="LOOKURL"-->
+      <!--code-url="trade/example/cascader"-->
+      <!--@change="handleChange"-->
+      <!--&gt;</el-cascader-x>-->
+      <el-cascader-x ref="myCascader" v-model="cascader" :options="options" @change="handleChange"></el-cascader-x>
+    </el-col>
+
+    <!-- 下述部分是文档介绍部分，与使用树无关 -->
+    <el-col :span="19">
+      <div :style="{height: height+'px',overflow: 'auto'}">
+        <div>
+          <h4>实例演示</h4>
+          <div>
+
+            <el-button @click="getSelectdValue">获取选中的值</el-button>
+            <el-button @click="getSelectdText">获取选中的text</el-button>
+            <el-button @click="resetSelect">清空</el-button>
+          </div>
+          <div>
+            <el-row :gutter="24">
+              <el-col :span="8">
+                <el-input v-model="setSelected" placeholder="请输入设置选中的值"></el-input>
+                <el-button @click="setSelectdByValue">设置选中某值</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+        <div>
+          =======================================
+          <h4>属性</h4>
+          <el-table :data="grid.data1">
+            <el-table-column prop="name" label="参数名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="type" label="类型" width="100"></el-table-column>
+            <el-table-column prop="option" label="可选值" width="100"></el-table-column>
+            <el-table-column prop="default" label="默认值"></el-table-column>
+          </el-table>
+        </div>
+
+        <div>
+          <h4>方法</h4>
+          <el-table :data="grid.data2">
+            <el-table-column prop="name" label="方法名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="param" label="参数"></el-table-column>
+          </el-table>
+        </div>
+
+        <div>
+          <h4>事件</h4>
+          <el-table :data="grid.data3">
+            <el-table-column prop="name" label="事件名" width="150"></el-table-column>
+            <el-table-column prop="remark" label="说明" width="260"></el-table-column>
+            <el-table-column prop="param" label="回调参数"></el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </el-col>
+  </el-row>
+</div>

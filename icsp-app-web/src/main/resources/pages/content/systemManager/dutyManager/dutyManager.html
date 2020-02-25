@@ -1,0 +1,327 @@
+<!-- 必须全局拥有唯一的id -->
+<!-- 岗位管理页面 -->
+<div id="dutyManager">
+    <el-row :gutter="10">
+    <!--左侧机构树-->
+        <el-col :span="5">
+            <yu-xtree ref="refTree" :height="m_orgTree.orgHeight - 200" @node-click="nodeClickFn"
+            :data-url="m_orgTree.orgTreeUrl" data-id="orgCode" data-label="orgName" data-pid="upOrgId"
+            :data-async="m_orgTree.orgAsync" :data-params="m_orgTree.orgTreeParam" data-root="500"
+            style="margin:0 10px 0 0;">
+        </yu-xtree>
+        </el-col>
+        <!-- <el-form :inline="true"  ref="userInfoForm" class="demo-form-inline">
+            <el-form-item  class="search_input">
+                <el-input
+                        placeholder="岗位代码"
+                        v-model="m_query.dutyCde">
+                </el-input>
+            </el-form-item>
+            <el-form-item class="search_input">
+                <el-input
+                        placeholder="岗位名称"
+                        v-model="m_query.dutyName">
+                </el-input>
+            </el-form-item>
+            <el-form-item class="search_input">
+                <el-select v-model="m_query.dutySts" placeholder="状态">
+                    <el-option v-for="item in m_datasource.datasource.DATA_STS" :key="item.key" :value="item.key" :label="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="queryDataFn">搜索</el-button>
+            <el-button type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
+        </el-form> -->
+
+        <!-- 搜索区域 -->
+        <el-col :span="19">
+        <yu-xform related-table-name="refTable" form-type="search" v-model="m_dutyTable.searchform">
+                <yu-xform-group :column="6">
+                    <yu-xform-item placeholder="岗位代码" ctype="input" name="dutyCde" ></yu-xform-item>
+                    <yu-xform-item placeholder="岗位名称" ctype="input" name="dutyName" ></yu-xform-item>
+                    <yu-xform-item placeholder="机构代码" ctype="input" name="dutyId" :hidden="true"></yu-xform-item> 
+                    <yu-xform-item placeholder="状态" ctype="select" name="dutySts" data-code="DATA_STS"></yu-xform-item>         
+                </yu-xform-group>
+        </yu-xform> 
+
+        <!-- <div class="fox-toolBar">
+            <el-button-group>
+                <el-button icon="el-icon-plus" @click="createfunc" v-if="m_btn.createButton">添加</el-button>
+                <el-button icon="el-icon-edit" @click="editfunc" v-if="m_btn.editButton">编辑</el-button>
+                <el-button icon="el-icon-delete" @click="deletefunc" v-if="m_btn.deleteButton">删除</el-button>
+                <el-button icon="el-icon-yx-unlocked" @click="usefunc" v-if="m_btn.useButton">启用</el-button>
+                <el-button icon="el-icon-yx-lock" @click="unusefunc" v-if="m_btn.unuseButton">停用</el-button>
+                <el-button icon="el-icon-yx-user-plus" @click="unusefunUser" v-if="m_btn.dutyButton">岗位用户</el-button>
+            </el-button-group>
+        </div> -->
+
+        <!-- 按钮区域 -->
+         <div class="fox-toolBar">
+                <el-button-group>
+                    <el-button icon="el-icon-plus" @click="addFn" v-if="m_btn.createButton">添加</el-button>
+                    <el-button icon="el-icon-edit" @click="modifyFn" v-if="m_btn.editButton">编辑</el-button>
+                    <el-button icon="el-icon-delete" @click="deleteDataFn" v-if="m_btn.deleteButton">删除</el-button>
+                    <el-button icon="el-icon-yx-unlocked" @click="useBatchFn" v-if="m_btn.useButton">启用</el-button>
+                    <el-button icon="el-icon-yx-lock" @click="unUseBatchFn" v-if="m_btn.unuseButton">停用</el-button>
+                    <el-button icon="el-icon-yx-user-plus" @click="openDutyFn" v-if="m_btn.unuseButton" width="200">岗位用户</el-button>
+                </el-button-group>
+        </div> 
+
+        <!-- <el-table
+                border
+                ref="multipleTable"
+                :data="m_table.tableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @row-click="clickRow"
+                @selection-change="handleSelectionChange"
+                >
+            <el-table-column
+                    type="selection"
+                    sortable
+                    width="65">
+            </el-table-column>
+            <el-table-column prop="orgName" label="所属机构" width="200"></el-table-column>
+            <el-table-column prop="dutyCde" label="岗位代码" width="200"></el-table-column>
+            <el-table-column prop="dutyName" label="岗位名称">
+                <template slot-scope='scope'>
+                    <el-button @click="openDetailFn(scope.row)" type="text" > {{scope.row.dutyName}} </el-button>
+                </template>
+            </el-table-column>
+            <el-table-column prop="dutySts" label="状态"  width="100">
+                <template slot-scope='scope'>
+                    <p>{{m_datasource.mapDataSource.DATA_STS[scope.row.dutySts]}}</p> 
+                  </template>
+            </el-table-column>
+            <el-table-column prop="userName" label="最新变更人" width="200" sortable></el-table-column>
+            <el-table-column prop="lastChgDt" label="最新变更时间" width="200" sortable></el-table-column>
+        </el-table> -->
+
+        <!-- 表格区域 -->
+        <yu-xtable ref="refTable" default-load="false" row-number :data-url="m_dutyTable.dutyDataUrl"
+                reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
+                <yu-xtable-column prop="orgName" label="所属机构" ></yu-xtable-column>
+                <yu-xtable-column prop="dutyCde" label="岗位代码" width="100" type="slot"></yu-xtable-column>
+                <yu-xtable-column prop="dutyName" label="岗位名称" width="120">
+                        < <template slot-scope='scope'>
+                                <el-button @click="infoFn(scope.row)" type="text"> {{scope.row.userName}} </el-button>
+                        </template>
+                </yu-xtable-column>
+                <yu-xtable-column prop="dutySts" label="状态" width="100" data-code="DATA_STS"></yu-xtable-column>     
+                <yu-xtable-column prop="userName" label="最新变更用户" width="160"></yu-xtable-column>
+                <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="160"></yu-xtable-column>
+        </yu-xtable>
+    </el-col>
+    </el-row>
+    <!-- <el-pagination class="split_page_bar"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="m_table.currentPage"
+            @prev-click="prevClick"
+            @next-click="nextClick"
+            :page-sizes="[10, 20, 30, 40,50,100]"
+            :page-size="m_table.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total=" m_table.m_total">
+    </el-pagination> -->
+
+<!--添加-修改功能图层-->
+    <!-- 新增修改弹出框 -->
+    <!-- <el-dialog :title="m_dialog.titleName" :visible.sync="m_dialog.addfuncLayerVisible" width="400px">
+                <el-form :inline="true"  :model="editForm" :rules="m_dialog.rules" ref="editForm" class="demo-form-inline" label-position="right" label-width="100px">
+                    <el-row :gutter="28" style="text-align: center">
+                        <el-form-item label="岗位代码" prop="dutyCde">
+                            <el-input
+                                v-model="editForm.dutyCde" :readonly="!(m_dialog.isAddRoledetail)"> -->
+                                <!-- :readonly="!(isAddRoledetail)" -->
+                            <!-- </el-input>
+                        </el-form-item>
+                        <el-form-item label="岗位名称"  prop="dutyName">
+                            <el-input
+                                v-model="editForm.dutyName">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="所属机构"  prop="orgName">
+                                <el-popover
+                                width="400"
+                                trigger='click'
+                                v-model='m_table.visible'
+                            > -->
+                             <!-- 新增加style,防止数据以后过多时占满屏幕而无法选择的bug -->
+                            <!-- <el-tree
+                               :data="m_tree.orgTreeData"
+                               :props="m_tree.orgTreeProps"
+                               style="height:300px;overflow:auto;"
+                               :filter-node-method='filterNode'
+                               ref='orgtree'
+                               highlight-current
+                               @node-click="handleNodeClick"
+                               node-key="orgId"
+                               :default-expanded-keys="['500']"
+                            >
+                            </el-tree>
+
+                            <el-input slot='reference'
+                                placeholder="请选择机构"
+                                v-model="editForm.orgName">
+                            </el-input>
+                        </el-popover>
+                        </el-form-item>
+                        <el-form-item label="状态" prop="dutySts">
+                            <el-select v-model="editForm.dutySts" placeholder="状态">
+                                <el-option v-for="item in m_datasource.datasource.DATA_STS" :key="item.key" :value="item.key" :label="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-row>
+                </el-form>
+        <div slot="footer" class="dialog-footer" align="center">
+            <el-button type="primary" @click="submitvmData" icon="el-icon-check">{{m_dialog.buttonName}}</el-button>
+            <el-button  type="primary" @click="cancelvmData" icon="el-icon-close">取 消</el-button>
+        </div>
+    </el-dialog> -->
+
+     <!-- 弹出框 数据信息维护页面 -->
+     <!-- 添加弹出 --> <!-- 编辑弹出 -->
+    <yu-xdialog :title="m_duty.viewTitle[m_duty.viewType]" :visible.sync="m_duty.dialogVisible" width="400px">
+            <yu-xform ref="refDutyForm" label-width="120px" v-model="m_duty.formdata"  >
+                <yu-xform-group >
+                        <yu-xform-item name="dutyCde" ctype="input" label="岗位代码" :colspan="30" :rules="m_rules['dutyCde']"> </yu-xform-item>                          
+                        <yu-xform-item name="dutyName" ctype="input"  label="岗位名称" :colspan="30" :rules="m_rules['dutyName']"> </yu-xform-item>
+                        <yu-xform-item name="belongOrgId" label="所属机构" ctype="fox-org-tree"  :rules="m_rules['orgName']" :colspan="25">
+                            <fox-org-tree label="所属机构" :params="{needCheckbox: false}"
+                                v-model="m_duty.formdata.belongOrgId">
+                            </fox-org-tree>
+                        </yu-xform-item> 
+                        <!-- <yu-xform-item name="orgId" ctype="fox-org-tree" label="所属机构" :colspan="30" :rules="m_rules['orgName']">
+                            <fox-org-tree label="所属机构" :params="{needCheckbox: false}"
+                                v-model="m_duty.formdata.orgId">
+                            </fox-org-tree>
+                        </yu-xform-item>                                                    -->
+                        <yu-xform-item name="dutySts" label="状态" ctype="select" data-code="DATA_STS"  :colspan="30" :rules="m_rules['dutySts']"></yu-xform-item>
+                </yu-xform-group>
+                <div class="yu-grpButton">
+                    <yu-button v-show="m_duty.saveBtnShow" icon="check" type="primary" @click="submitFn">保存</yu-button>
+                    <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+                </div>
+            </yu-xform>
+        </yu-xdialog>
+
+    <!-- 查看详细信息弹出框 -->
+    <!-- <el-dialog :title="m_dialog.titleName" :visible.sync="m_dialog.dialogFormVisible" width="400px">
+        <el-form :inline="true"  :model="editForm" :rules="m_dialog.rules" class="demo-form-inline" label-position="right" label-width="100px">
+            <el-row :gutter="28" style="text-align: center">
+                <el-form-item label="岗位代码" prop="dutyCde">
+                    <el-input
+                        v-model="editForm.dutyCde" :disabled="m_dialog.isAddRoledetail"   > -->
+                        <!-- :readonly="!(isAddRoledetail)" -->
+                    <!-- </el-input>
+                </el-form-item>
+                <el-form-item label="岗位名称"  prop="dutyName">
+                    <el-input
+                        v-model="editForm.dutyName" :disabled="m_dialog.isAddRoledetail" >
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="所属机构"  prop="orgName">
+                    <el-input
+                        v-model="editForm.orgName" :disabled="m_dialog.isAddRoledetail" >
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="状态" prop="dutySts">
+                    <el-select v-model="editForm.dutySts" placeholder="状态" :disabled="m_dialog.isAddRoledetail">
+                        <el-option v-for="item in m_datasource.datasource.DATA_STS" :key="item.key" :value="item.key" :label="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="最新更新人"  prop="userName">
+                    <el-input
+                        v-model="editForm.userName" :disabled="m_dialog.isAddRoledetail" >
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="最新更新时间"  prop="lastChgDt">
+                    <el-input
+                        v-model="editForm.lastChgDt" :disabled="m_dialog.isAddRoledetail" >
+                    </el-input>
+                </el-form-item>
+            </el-row>
+        </el-form>
+    </el-dialog> -->
+    <!-- 岗位用户弹窗 -->
+    <!-- <el-dialog :title="m_dialog.titleName" :visible.sync="m_dialog.m_addfuncLayer" width="850px">
+                <el-row>
+                        <el-form :inline="true"  ref="userInfoForm" class="demo-form-inline">
+                                <el-form-item  class="search_input">
+                                    <el-input
+                                            placeholder="登录代码"
+                                            v-model="m_dialog.m_querygang.loginCode">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item class="search_input">
+                                    <el-input
+                                            placeholder="员工姓名"
+                                            v-model="m_dialog.m_querygang.userName">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item class="search_input">
+                                    <el-input
+                                            placeholder="员工号"
+                                            v-model="m_dialog.m_querygang.userCode">
+                                    </el-input>
+                                </el-form-item>
+                                <el-button type="primary" icon="el-icon-search" @click="unsetFunDataSearch">搜索</el-button>
+                                <el-button type="primary" icon="el-icon-refresh-left" @click="m_reset">重置</el-button>
+                            </el-form>
+                         
+                            <el-table
+                border
+                ref="diamultipleTable"
+                :data="m_dialog.m_funcData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange"
+                > -->
+            <!-- <el-table-column
+                    type="selection"
+                    sortable
+                    width="65">
+            </el-table-column> -->
+            <!-- <el-table-column prop="loginCode" label="登录代码" width="160"></el-table-column>
+            <el-table-column prop="userName" label="员工姓名" width="160"></el-table-column>
+            <el-table-column prop="orgName" label="所属机构" show-overflow-tooltip></el-table-column>
+        </el-table>
+    <el-pagination class="split_page_bar"
+            @size-change="diahandleSizeChange"
+            @current-change="diahandleCurrentChange"
+            :current-page="m_dialog.currentPage"
+            @prev-click="diaprevClick"
+            @next-click="dianextClick"
+            :page-sizes="[10, 20, 30, 40,50,100]"
+            :page-size="m_dialog.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total=" m_dialog.m_total">
+    </el-pagination>
+
+                </el-row>
+                <el-row>
+                    
+                </el-row>
+    </el-dialog> -->
+
+    <!-- 岗位用户信息弹出框 -->
+    <yu-xdialog title="岗位用户信息" :visible.sync="m_user.m_addfuncLayer" height="360px" width="600px">
+            <yu-xform related-table-name="refDutyTable" form-type="search" v-model="m_user.searchform">
+                <yu-xform-group :column="6">
+                    <yu-xform-item placeholder="登录代码" ctype="input" name="loginCode" :colspan="5"></yu-xform-item>
+                    <yu-xform-item placeholder="员工姓名" ctype="input" name="userName" :colspan="5"></yu-xform-item>
+                    <yu-xform-item placeholder="员工号" ctype="input" name="userCode" :colspan="5"></yu-xform-item> 
+                 </yu-xform-group>
+            </yu-xform>
+            <yu-xtable ref="refDutyTable"  :data="m_user.roleTableData">
+                <yu-xtable-column prop="loginCode" label="登录代码" width="190"></yu-xtable-column>
+                <yu-xtable-column prop="userName" label="员工姓名" width="190"></yu-xtable-column>
+                <yu-xtable-column prop="orgName" label="所属机构" width="190"></yu-xtable-column>
+            </yu-xtable>
+    </yu-xdialog>
+</div>
+<style scoped>
+    .cell{
+        text-align: center;
+    }
+</style>

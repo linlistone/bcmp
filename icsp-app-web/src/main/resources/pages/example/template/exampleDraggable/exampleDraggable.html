@@ -1,0 +1,40 @@
+<div id="exampleDraggable">
+  <el-row>
+    <el-col :span="11">
+      <el-checkbox v-model="editable">开启/禁用拖拽</el-checkbox>
+    </el-col>
+
+    <el-col :span="11">
+      <el-checkbox v-model="editableClone">开启/禁用拖拽（复制区）</el-checkbox>
+    </el-col>
+  </el-row>
+
+  <el-row>
+    <el-col :span="11">
+      <draggable class="wrapper" element="div" v-model="list" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+        <transition-group type="transition">
+          <span class="wrapper" v-for="element in list" :key="element.index">
+            <el-button :type="element.type">{{element.name}}{{element.index}}</el-button>
+          </span>
+        </transition-group>
+      </draggable>
+    </el-col>
+    <el-col :span="11">
+      <draggable class="wrapper" element="div" v-model="listClone" :options="dragOptionsClone" @start="isDragging=true" @end="isDragging=false">
+        <transition-group type="transition">
+          <span class="wrapper" v-for="element in listClone" :key="element.index">
+            <el-button :type="element.type">{{element.name}}{{element.index}}</el-button>
+          </span>
+        </transition-group>
+      </draggable>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="11">
+      <pre>{{listString}}</pre>
+    </el-col>
+    <el-col :span="11">
+      <pre>{{listStringClone}}</pre>
+    </el-col>
+  </el-row>
+</div>

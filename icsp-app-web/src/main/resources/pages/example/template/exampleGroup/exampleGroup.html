@@ -1,0 +1,23 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——分组表单
+-->
+<div>
+  <el-collapse v-model="expandCollapseName">
+    <el-collapse-item title="基本信息" name="base">
+      <el-form-x ref="baseRef" :rules="baseRules" :group-fields="baseFields" label-width="80px"></el-form-x>
+    </el-collapse-item>
+    <el-collapse-item title="家庭信息" name="family">
+      <el-form-x ref="familyRef" :group-fields="familyFields" label-width="80px"></el-form-x>
+    </el-collapse-item>
+    <el-collapse-item title="其他信息" name="other">
+      <el-form-x ref="otherRef" :group-fields="otherFields" label-width="80px"></el-form-x>
+    </el-collapse-item>
+  </el-collapse>
+  <!-- <el-form-x ref="otherRef" :group-fields="totalFields" :expand-collapse-name="expandCollapseName" :collapse=true label-width="80px"></el-form-x> -->
+  <div class="yu-grpButton">
+    <el-button type="primary" @click="submitForm" icon="check">保存</el-button>
+    <el-button type="primary" @click="resetForm" icon="yx-loop2">重置</el-button>
+  </div>
+</div>

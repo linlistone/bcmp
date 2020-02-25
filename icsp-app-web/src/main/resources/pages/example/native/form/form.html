@@ -1,0 +1,98 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="fx_form" class="filter-container">
+  <el-row :gutter="20">
+    <el-col :span="11">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <el-form-item label="下拉组件" prop="selected">
+          <!--<el-select-x-->
+          <!--v-model="ruleForm.selected"-->
+          <!--cmptype="LOOKURL"-->
+          <!--code-url="trade/example/select"-->
+          <!--code-name="CODE"-->
+          <!--@change="showValFn('ruleForm')">-->
+          <!--</el-select-x>-->
+          <el-select-x ref="mySelect" v-model="ruleForm.selected" :data-url="dataUrl" :multiple="true">
+          </el-select-x>
+        </el-form-item>
+        <el-form-item label="单选框组件">
+          <el-radio-x v-model="radioX" data-url="trade/example/radio" :disabled="true" @change="showVal"></el-radio-x>
+        </el-form-item>
+        <el-form-item label="复选框组件">
+          <el-checkbox-x v-model="checkboxX" data-url="trade/example/checkbox" :min='1' :max='3' @change="showVal"></el-checkbox-x>
+        </el-form-item>
+        <el-form-item label="级联组件" prop="cascader">
+          <el-cascader-x ref="myCascader" v-model="ruleForm.cascader" :options="ruleForm.options2" @change="handleChange">
+          </el-cascader-x>
+        </el-form-item>
+        <el-form-item label="活动名称" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域" prop="region">
+          <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="活动时间" required>
+          <el-col :span="11">
+            <el-form-item prop="date1">
+              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="date2">
+              <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+            </el-form-item>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="即时配送" prop="delivery">
+          <el-switch v-model="ruleForm.delivery"></el-switch>
+        </el-form-item>
+        <el-form-item label="活动性质" prop="type">
+          <el-checkbox-group v-model="ruleForm.type">
+            <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+            <el-checkbox label="地推活动" name="type"></el-checkbox>
+            <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+            <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="特殊资源" prop="resource">
+          <el-radio-group v-model="ruleForm.resource">
+            <el-radio label="线上品牌商赞助"></el-radio>
+            <el-radio label="线下场地免费"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="活动形式" DISABLE="EMAIL" prop="desc">
+          <el-input placeholder="请输入内容" v-model="input4">
+            <template slot="append">
+              <el-button icon="search"></el-button>
+              <el-button icon="search"></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+    <el-col :span="11">
+      <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input v-model.number="ruleForm2.age"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
+</div>

@@ -1,0 +1,62 @@
+<!-- 业务功能管理 -->
+<div>
+    <el-row style="margin-top: 10px;">
+        <!--左侧模块管理-->
+        <el-col :span="8">
+            <h2 class="yu-formTitle" style="margin-bottom: 0px;">模块管理</h2>
+            <yu-xform related-table-name="refModTable" form-type="search">
+                <yu-xform-group :column="4">
+                    <yu-xform-item placeholder="模块名称" ctype="input" name="modName"></yu-xform-item>
+                </yu-xform-group>
+            </yu-xform>
+            <yu-xtable ref="refModTable" :data-url="m_table.modDataUrl" reserve-selection row-key="id" style="width: 100%" @row-click="modSelect">
+                <yu-xtable-column label="模块代码" prop="modCde" width="110"></yu-xtable-column>
+                <yu-xtable-column label="模块名称" prop="modName" sortable></yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+        <!--右侧业务功能管理-->
+        <el-col :span="16" style="padding-left:10px">
+            <h2 class="yu-formTitle" style="margin-bottom: 0px;">业务功能管理</h2>
+            <yu-row :gutter="20">
+                <yu-col :span="20">
+                    <yu-xform related-table-name="refFuncTable" form-type="search" v-model="func.searchform">
+                        <yu-xform-group :column="3">
+                            <yu-xform-item placeholder="功能点名称" ctype="input" name="funcName"></yu-xform-item>
+                            <yu-xform-item placeholder="URL链接" ctype="input" name="funcUrl"></yu-xform-item>
+                        </yu-xform-group>
+                    </yu-xform>
+                </yu-col>
+                <yu-col :span="1">
+                    <el-button icon="plus" @click="addFn" style="margin-top: 10px;" v-if="m_btn.createButton">添加</el-button>
+                </yu-col>
+            </yu-row>
+            <yu-xtable ref="refFuncTable" :data-url="m_table.funcDataUrl" reserve-selection row-key="id" style="width: 100%">
+                <yu-xtable-column label="业务功能名称" prop="funcName" width="120"></yu-xtable-column>
+                <yu-xtable-column label="URL链接" prop="funcUrl"></yu-xtable-column>
+                <yu-xtable-column fixed="right" label="操作" width="120">
+                    <template slot-scope="scope">
+                        <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                        <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                        <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
+                    </template>
+                </yu-xtable-column>
+            </yu-xtable>
+        </el-col>
+    </el-row>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="func.viewTitle[func.viewType]" :visible.sync="func.dialogVisible" width="800px">
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
+            <yu-xform-item label="功能点名称" ctype="input" name="funcName" :rules="func.rules['funcName']"></yu-xform-item>
+            <yu-xform-item label="URL链接" ctype="input" name="funcUrl" :rules="func.rules['funcUrl']" placeholder='例如: pages/...'>
+            </yu-xform-item>
+            <yu-xform-item label="功能点编号" ctype="input" name="funcId" :disabled="true" :hidden="func.funcDisabled"></yu-xform-item>
+            <yu-xform-item label="顺序" ctype="input" name="funcOrder" :rules="func.rules['funcOrder']"></yu-xform-item>
+            <yu-xform-item label="功能点描述" ctype="textarea" name="funcDesc" :rules="func.rules['funcDesc']">
+            </yu-xform-item>
+            <div class="yu-grpButton">
+                <yu-button icon="check" type="primary" @click="submitFn" v-if="!formDisabled">保存</yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+</div>

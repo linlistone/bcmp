@@ -1,0 +1,26 @@
+<div id="elforminput" class="filter-container">
+  <el-row :gutter="20">
+    <el-col :span="11">
+      <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="100px">
+        <el-form-input label="只读输入框" v-model="ruleForm.name" prop="name" :readonly=true>
+          <template>
+            <template slot="prepend">Http1://</template>
+          </template>
+        </el-form-input>
+        <el-form-input label="禁用输入框" v-model="ruleForm.name" :disabled=true>
+        </el-form-input>
+        <el-form-input label="默认获取焦点" v-model="ruleForm.name" :autofocus=true @blur="onblur">
+        </el-form-input>
+        <el-form-input label="带图标框" v-model="ruleForm.name" icon="search" @click="onclick" :on-icon-click="handleIconClick">
+        </el-form-input>
+        <el-form-input label-width="80px" label="获取焦点事件" type="textarea" :rows="4" placeholder="请输入内容" @focus="onfocus" v-model="ruleForm.name">
+        </el-form-input>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
+
+</div>

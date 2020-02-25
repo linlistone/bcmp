@@ -1,0 +1,9 @@
+.yuEcharts_demo .yu-Con {
+  float: left;
+  display: block;
+  margin: 5px;
+}
+.yuEcharts_demo .change-btn {
+  float: right;
+  margin-right: 10px;
+}

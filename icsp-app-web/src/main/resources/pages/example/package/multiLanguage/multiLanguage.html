@@ -1,0 +1,23 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 {{ $t('multiLanguage.xg') }}代码规范
+  @description 模板示例——普通查询
+-->
+<div>
+  <el-form-q :field-data="queryFields" :buttons="queryButtons"></el-form-q>
+  <div class="yu-toolBar">
+    <el-button-group>
+      <el-button icon="plus" @click="addFn">{{ $t('multiLanguage.xz') }}</el-button>
+      <el-button icon="edit" @click="modifyFn">{{ $t('multiLanguage.xg') }}</el-button>
+      <el-button icon="document" @click="infoFn">{{ $t('multiLanguage.xq') }}</el-button>
+      <el-button icon="yx-bin" @click="deleteFn">{{ $t('multiLanguage.sc') }}</el-button>
+      <el-button icon="yx-file-excel" @click="exportFn">{{ $t('multiLanguage.dc') }}</el-button>
+    </el-button-group>
+  </div>
+  <el-table-x ref="reftable" :row-index="true" :radiobox="true" :base-params="baseParams" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+  <!-- 说明dialog可配置宽高属性，若不配置则宽度默认为屏幕50%，高度自适应
+     width="650px" height="380px" -->
+  <el-dialog-x :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="650px">
+    <el-form-x ref="reform" :group-fields="updateFields" :buttons="updateButtons" :disabled="formDisabled" label-width="80px"></el-form-x>
+  </el-dialog-x>
+</div>

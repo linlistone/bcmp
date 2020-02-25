@@ -1,0 +1,236 @@
+<!-- 必须全局拥有唯一的id -->
+<!-- 功能授权页面 -->
+<div id="resourceSet">
+    <el-row :gutter="10">
+        <!--对象部分-->
+        <el-col :span="13">
+            <div style="margin-top: 10px;margin-bottom: 10px;">
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <yu-select v-model="m_select.sourObjectType" placeholder="对象类型" @change="change">
+                            <yu-option v-for="item in typeOptions" :key="item.key" :label="item.value+'('+item.key+')'"
+                                :value="item.key">
+                            </yu-option>
+                        </yu-select>
+                    </el-col>
+                    <el-col :span="12">
+                        <yu-button icon="yx-copy" @click="copyInfoFn" v-if="m_btn.copyButton">复制
+                        </yu-button>
+                        <yu-button icon="yx-folder-upload" @click="exportInfoFn">导出</yu-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <!--角色对象-->
+            <div class="filter-container" v-show="m_select.sourObjectType ==='R'">
+                <yu-row :gutter="10">
+                    <yu-col :span="7">
+                        <fox-org-tree placeholder="机构代码" name="orgId" v-model="m_roleGrid.query.orgId">
+                        </fox-org-tree>
+                    </yu-col>
+                    <yu-col :span="5">
+                        <yu-input placeholder="角色代码" name="roleCode" v-model="m_roleGrid.query.roleCode">
+                        </yu-input>
+                    </yu-col>
+                    <yu-col :span="5">
+                        <yu-input placeholder="角色名称" name="roleName" v-model="m_roleGrid.query.roleName">
+                        </yu-input>
+                    </yu-col>
+                    </yu-col>
+                    <yu-col :span="7">
+                        <yu-button type="primary" icon="search" @click="queryRoleFn">查询</yu-button>
+                        <yu-button type="primary" icon="information" @click="resetQueryRoleFn">重置</yu-button>
+                    </yu-col>
+                </yu-row>
+                <yu-row style="margin-top: 10px">
+                    <yu-col :span="24">
+                        <!--表格区域-->
+                        <yu-xtable ref="roleTable" row-number :data-url="m_roleGrid.dataUrl"
+                            :base-params="m_roleGrid.dataParams" reserve-selection row-key="id" style="width: 100%"
+                            @row-click="selectRowRole">
+                            <yu-xtable-column label="角色名称" prop="roleName" width="150"></yu-xtable-column>
+                            <yu-xtable-column label="角色代码" prop="roleCode" width="160"></yu-xtable-column>
+                            <yu-xtable-column label="所属模块" prop="modNames"></yu-xtable-column>
+                            <!-- <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column> -->
+                        </yu-xtable>
+                    </yu-col>
+                </yu-row>
+            </div>
+            <!--机构树对象-->
+            <div class="filter-container" v-show="m_select.sourObjectType ==='G'">
+                <fox-ext-tree ref="orgTree" @node-click="orgClickFn" :show-checkbox="false" :height="m_orgGrid.height"
+                    :data-url="m_orgGrid.treeUrl" data-id="orgCode" data-label="orgName" data-pid="upOrgId"
+                    :data-root="m_orgGrid.orgRootId" :highlight-current="true"></fox-ext-tree>
+            </div>
+            <!-- 部门对象-->
+            <div class="filter-container" v-show="m_select.sourObjectType ==='D'">
+                <yu-row :gutter="10">
+                    <yu-col :span="7">
+                        <fox-org-tree placeholder="所属机构" name="belongOrgId" v-model="m_dptGrid.query.belongOrgId">
+                        </fox-org-tree>
+                    </yu-col>
+                    <yu-col :span="5">
+                        <yu-input placeholder="部门代码" name="dptCde" v-model="m_dptGrid.query.dptCde">
+                        </yu-input>
+                    </yu-col>
+                    <yu-col :span="5">
+                        <yu-input placeholder="部门名称" name="dptName" v-model="m_dptGrid.query.dptName">
+                        </yu-input>
+                    </yu-col>
+                    </yu-col>
+                    <yu-col :span="7">
+                        <yu-button type="primary" icon="search" @click="queryDptFn">查询</yu-button>
+                        <yu-button type="primary" icon="information" @click="resetDptRoleFn">重置</yu-button>
+                    </yu-col>
+                </yu-row>
+                <yu-row style="margin-top: 10px">
+                    <yu-col :span="24">
+                        <!--表格区域-->
+                        <yu-xtable ref="dptTable" row-number :data-url="m_dptGrid.dataUrl"
+                            :base-params="m_dptGrid.dataParams" reserve-selection row-key="id" style="width: 100%"
+                            @row-click="rowClickFnDep">
+                            <yu-xtable-column label="部门名称" prop="dptName" width="150"></yu-xtable-column>
+                            <yu-xtable-column label="部门代码" prop="dptId" width="160"></yu-xtable-column>
+                            <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column>
+                        </yu-xtable>
+                    </yu-col>
+                </yu-row>
+            </div>
+            <!--用户对象-->
+            <div class="filter-container" v-show="m_select.sourObjectType ==='U'">
+                <yu-row :gutter="10">
+                    <yu-col :span="7">
+                        <fox-org-tree placeholder="所属机构" name="orgId" v-model="m_userGrid.query.orgId">
+                        </fox-org-tree>
+                    </yu-col>
+                    <yu-col :span="6">
+                        <yu-input placeholder="登录代码/用户名" name="userInfo" v-model="m_userGrid.query.userInfo">
+                        </yu-input>
+                    </yu-col>
+                    <yu-col :span="11">
+                        <yu-button type="primary" icon="search" @click="queryUserFn">查询</yu-button>
+                        <yu-button type="primary" icon="information" @click="resetUserFn">重置</yu-button>
+                    </yu-col>
+                </yu-row>
+                <yu-row style="margin-top: 10px">
+                    <yu-col :span="24">
+                        <!--表格区域-->
+                        <yu-xtable ref="userTable" row-number :data-url="m_userGrid.dataUrl"
+                            :base-params="m_userGrid.dataParams" reserve-selection row-key="id" style="width: 100%"
+                            @row-click="selectRowUser">
+                            <yu-xtable-column label="姓名" prop="userName" width="150"></yu-xtable-column>
+                            <yu-xtable-column label="登录代码" prop="loginCode" width="160"></yu-xtable-column>
+                            <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column>
+                        </yu-xtable>
+                    </yu-col>
+                </yu-row>
+            </div>
+        </el-col>
+
+        <!--资源部分-->
+        <el-col :span="11">
+            <yu-tabs v-model="activeName">
+                <yu-tab-pane label="PC菜单资源" name="pcresouce">
+                    <!--菜单和控制点资源-->
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <div class="yu-toolBar" style="margin-top: 10px;">
+                                <el-button-group>
+                                    <el-button icon="yx-cloud-check" @click="selectAllFn" v-if="m_btn.selectAllButton"
+                                        :disabled="m_btn.ifTreeButton">全选</el-button>
+                                    <el-button icon="yx-checkmark2" @click="reSelectFn" v-if="m_btn.setOtherButton"
+                                        :disabled="m_btn.ifTreeButton">反选</el-button>
+                                    <el-button icon="yx-cross" @click="reSetFn" v-if="m_btn.resetButton"
+                                        :disabled="m_btn.ifTreeButton">重置</el-button>
+                                </el-button-group>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-input placeholder="输入关键字" v-model="filterText"
+                                style="margin-top: 10px;margin-left: -35px;">
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                    <fox-ext-tree ref="menuTree" :show-checkbox="m_menuTree.treeCheckBox" :height="m_menuTree.height-50"
+                        :data-url="m_menuTree.reourceUrl" data-id="id" data-label="menuName"
+                        v-loading="m_menuTree.loading" element-loading-text="拼命加载中" node-key="id"
+                        :check-strictly="false" :expand-level="1" data-pid="upMenuId" data-root="0"
+                        :render-content="renderContent" :filter-node-method="filterNode" accordion></fox-ext-tree>
+                    <!--保存按钮-->
+                    <div align="center" style="margin-top: 10px">
+                        <el-button type="primary" icon="information" @click="savePcAllInfoFn" center>保存</el-button>
+                    </div>
+                </yu-tab-pane>
+                <yu-tab-pane label="PAD应用资源" name="padresource">
+                    <!--菜单和控制点资源-->
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <div class="yu-toolBar" style="margin-top: 10px;">
+                                <el-button-group>
+                                    <el-button icon="yx-cloud-check" @click="selectAllPadFn" v-if="m_btn.selectAllButton"
+                                        :disabled="m_btn.ifPadTreeButton">全选</el-button>
+                                    <el-button icon="yx-checkmark2" @click="reSelectPadFn" v-if="m_btn.setOtherButton"
+                                        :disabled="m_btn.ifPadTreeButton">反选</el-button>
+                                    <el-button icon="yx-cross" @click="reSetPadFn" v-if="m_btn.resetButton"
+                                        :disabled="m_btn.ifPadTreeButton">重置</el-button>
+                                </el-button-group>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-input placeholder="输入关键字" v-model="filterAppText"
+                                style="margin-top: 10px;margin-left: -35px;">
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                    <fox-ext-tree ref="appTree" :show-checkbox="m_appTree.treeCheckBox" :height="m_appTree.height-50"
+                        :data-url="m_appTree.reourceUrl" data-id="id" data-label="appName"
+                        v-loading="m_appTree.loading" element-loading-text="拼命加载中" node-key="id" :check-strictly="false"
+                        :expand-level="1" data-pid="upAppId" data-root="0" :render-content="renderAppContent"
+                        :filter-node-method="filterAppNode" accordion></fox-ext-tree>
+                    <!--保存按钮-->
+                    <div align="center" style="margin-top: 10px">
+                        <el-button type="primary" icon="information" @click="savePadAllInfoFn" center>保存</el-button>
+                    </div>
+                </yu-tab-pane>
+            </yu-tabs>
+        </el-col>
+    </el-row>
+    <!-- 功能图层 复制 -->
+    <div>
+        <el-dialog title="粘贴对象选择" :visible.sync="m_copyGrid.dialogVisible" width="800">
+            <div class="filter-container" v-show="m_select.showObjectFlag ==='R'">
+                <yu-xtable ref="roleTable1" row-number :data-url="m_roleGrid.dataUrl" :default-load="false"
+                    :base-params="m_roleGrid.dataParams" reserve-selection row-key="id" style="width: 100%">
+                    <yu-xtable-column label="角色名称" prop="roleName" width="150"></yu-xtable-column>
+                    <yu-xtable-column label="角色代码" prop="roleCode" width="160"></yu-xtable-column>
+                    <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column>
+                </yu-xtable>
+            </div>
+            <div class="filter-container" v-show="m_select.showObjectFlag ==='U'">
+                <yu-xtable ref="userTable1" row-number :data-url="m_userGrid.dataUrl" :default-load="false"
+                    :base-params="m_userGrid.dataParams" reserve-selection row-key="id" style="width: 100%">
+                    <yu-xtable-column label="姓名" prop="userName" width="150"></yu-xtable-column>
+                    <yu-xtable-column label="登录代码" prop="loginCode" width="160"></yu-xtable-column>
+                    <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column>
+                </yu-xtable>
+            </div>
+            <div class="filter-container" v-show="m_select.showObjectFlag ==='D'">
+                <yu-xtable ref="dptTable1" row-number :data-url="m_dptGrid.dataUrl" :default-load="false"
+                    :base-params="m_dptGrid.dataParams" reserve-selection row-key="id" style="width: 100%">
+                    <yu-xtable-column label="部门名称" prop="dptName" width="150"></yu-xtable-column>
+                    <yu-xtable-column label="部门代码" prop="dptId" width="160"></yu-xtable-column>
+                    <yu-xtable-column label="所属机构" prop="orgName"></yu-xtable-column>
+                </yu-xtable>
+            </div>
+            <div class="filter-container" v-show="m_select.showObjectFlag ==='G'">
+                <fox-ext-tree ref="orgTree1" @node-click="orgClickFn1" :show-checkbox="false" :height="m_orgGrid.height"
+                    :data-url="m_orgGrid.treeUrl" :default-load="false" data-id="orgCode" data-label="orgName"
+                    data-pid="upOrgId" :data-root="m_orgGrid.orgRootId" :highlight-current="true"></fox-ext-tree>
+            </div>
+            <div slot="footer" class="dialog-footer" align="center">
+                <el-button type="primary" icon="check" @click="copyCheck">确定</el-button>
+                <el-button type="primary" icon="yx-undo2" @click="m_copyGrid.dialogVisible=false">取消</el-button>
+            </div>
+        </el-dialog>
+    </div>
+
+</div>

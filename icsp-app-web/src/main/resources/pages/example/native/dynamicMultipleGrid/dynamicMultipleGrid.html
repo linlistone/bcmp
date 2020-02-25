@@ -1,0 +1,49 @@
+<!-- 必须全局拥有唯一的id -->
+<div id="dynamic_multiple_grid">
+  <div class="yu-search">
+    <el-form ref="queryForm" :inline="true" :model="mainGrid.query">
+      <el-form-item>
+        <el-input @keyup.enter.native="queryMainGridFn" v-model="mainGrid.query.title" placeholder="标题" style="width: 200px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker type="date" format="yyyy-MM-dd" v-model="mainGrid.query.createAt" placeholder="时间"></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-select clearable v-model="mainGrid.query.type" placeholder="类型">
+          <el-option v-for="item in typeOptions" :key="item.key" :value="item.key" :label="item.value+'('+item.key+')'"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="search" @click="queryMainGridFn">搜索</el-button>
+        <el-button type="primary" icon="information" @click="resetQueryCondFn">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <el-table :key='tableKey' ref="mytable" :data="mainGrid.data" v-loading="mainGrid.loading" :max-height="height" stripe border
+    fit highlight-current-row element-loading-text="加载中...">
+    <el-table-column type="index" label="序号" width="65"></el-table-column>
+    <el-table-column v-for='(it0,idx0) in currentHeaders' :key='idx0' :label="it0.label" :width="!it0.children?(it0.width):0"
+      :header-align="it0.children?'center':'left'">
+      <!-- 一级表头 -->
+      <template scope="scope" v-if="!it0.children"> {{ scope.row[it0.prop] }} </template>
+      <el-table-column v-for='(it1,idx1) in it0.children' :key='idx1' :label="it1.label" :width="!it1.children?(it1.width):0" :header-align="it1.children?'center':'left'">
+        <!-- 二级表头 -->
+        <template scope="scope" v-if="!it1.children">
+          <!-- 若有数据字典转换等类型，可以自行添加，否则请参考一级表头即可 -->
+          <span v-if="it1.prop=='type'">{{ scope.row[it1.prop] | typeFilter}}</span>
+          <span v-else>{{ scope.row[it1.prop]}}</span>
+        </template>
+        <el-table-column v-for='(it2,idx2) in it1.children' :key='idx2' :label="it2.label" :width="it2.width">
+          <!-- 三级表头 -->
+          <template scope="scope">{{ scope.row[it2.prop] }}</template>
+        </el-table-column>
+      </el-table-column>
+    </el-table-column>
+  </el-table>
+  <div v-show="!mainGrid.loading" class="pagination-container">
+    <el-pagination :total="mainGrid.total" :current-page.sync="mainGrid.paging.start" :page-size="mainGrid.paging.size" @size-change="sizeChangeFn"
+      @current-change="startChangeFn" layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+  </div>
+</div>

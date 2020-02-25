@@ -1,0 +1,23 @@
+<!--
+  @created by
+  @updated by taoting1 2018-8-16 修改代码规范
+  @description 模板示例——普通查询
+-->
+<div>
+  <el-form-q :field-data="queryFields" :buttons="queryButtons"></el-form-q>
+  <div class="yu-toolBar">
+    <el-button-group>
+      <el-button icon="plus" @click="addFn">新增</el-button>
+      <el-button icon="edit" @click="modifyFn">修改</el-button>
+      <el-button icon="document" @click="infoFn">详情</el-button>
+      <el-button icon="yx-bin" @click="deleteFn">删除</el-button>
+      <el-button icon="yx-file-excel" @click="exportFn">导出</el-button>
+    </el-button-group>
+  </div>
+  <el-table-x ref="reftable" :row-index="true" :radiobox="true" :base-params="baseParams" data-url="/trade/example/list" :table-columns="tableColumns"></el-table-x>
+  <!-- 说明dialog可配置宽高属性，若不配置则宽度默认为屏幕50%，高度自适应
+     width="650px" height="380px" -->
+  <el-dialog-x :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="650px">
+    <el-form-x ref="reform" :group-fields="updateFields" :buttons="updateButtons" :disabled="formDisabled" label-width="80px"></el-form-x>
+  </el-dialog-x>
+</div>
