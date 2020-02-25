@@ -1,0 +1,32 @@
+/*
+  @created by wy 2018-2-27
+  @updated by wy 2018-05-11
+  @description 紧凑模式css
+*/
+.el-input {font-size:12px;}
+.el-input .el-input__inner {height:30px;}
+.el-button {padding:7px 9px;font-size:12px;border-radius:4px;}
+.el-table td,.el-table th,.el-table__expand-icon {height:30px;}
+.el-table .cell {padding-left:8px;padding-right:8px;line-height:inherit;}
+.el-tree-node__content {line-height:26px;height:26px;}
+.el-tree-node__label {font-size:12px;}
+.el-tree-node__expand-icon {border:4px solid transparent;border-right-width:0;border-left-color:#97a8be;border-left-width:4px;}
+.el-select-dropdown {margin-top:0;}
+.el-select-dropdown__item {height:28px;padding:4px 10px;}
+.el-tabs__item {line-height:32px;height:32px;}
+.el-tabs__active-bar {height:2px;}
+.el-form-item {margin-bottom:0;}
+.el-form-item__error {left:inherit;right:30px;top:8px;}
+.el-input + .el-form-item__error,.el-radio-group + .el-form-item__error {right:10px;}
+.el-select .el-input + .el-form-item__error,.el-date-editor.el-input  + .el-form-item__error {right:30px;}
+.el-form-x-footer {margin-top:10px;}
+.el-collapse-item__header {height:33px;line-height:33px;}
+.el-dialog-x__header {padding:10px 10px 0;}
+.el-dialog-x__title {font-size:14px;}
+.el-dialog-x__headerbtn {font-size:12px;}
+.el-dialog-x__body {padding:10px;}
+.el-input_account,.el-input_notice {left:inherit!important;right:10px!important;top:10px;opacity:.2;}
+.el-input_account + .el-input_notice {right:50px!important;}
+.yu-gridRightPanel>h1 {font-size:14px;padding-left:15px;line-height:30px;height:30px;margin-bottom:5px;}
+.yu-search .el-form-item {height:30px;overflow:hidden;}
+.yu-search .el-form-item__content {line-height:29px;}

@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+.npmrc
+.vscode
+.idea
+.project
+.settings
+.packageinfo
+dist
+
