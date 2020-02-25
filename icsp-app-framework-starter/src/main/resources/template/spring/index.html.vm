@@ -1,0 +1,44 @@
+<!-- 管理 -->
+<div>
+    <!--查询区域-->
+    <yu-xform related-table-name="refTable" form-type="search">
+    	<!--
+        <yu-xform-group :column="4">
+        </yu-xform-group>
+        -->
+    </yu-xform>
+    <!--按钮区域-->
+    <div class="fox-toolBar">
+        <el-button-group>
+            <el-button icon="plus" @click="addFn">添加</el-button>
+        </el-button-group>
+    </div>
+    <!--表格区域-->
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
+        <#list columns as column>
+		<yu-xtable-column prop="${column.attrname}" label="${column.comments}"></yu-xtable-column>
+		</#list>
+        <yu-xtable-column fixed="right" label="操作" width="120">
+            <template slot-scope="scope">
+                <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
+            </template>
+        </yu-xtable-column>
+    </yu-xtable>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
+            <yu-xform-group>
+              <#list columns as column>
+                <yu-xform-item label="${column.comments}" ctype="input" name="${column.attrname}" ></yu-xform-item>
+              </#list>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+</div>

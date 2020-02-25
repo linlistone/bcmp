@@ -42,7 +42,7 @@ public class GeneratorService {
 		return list;
 	}
 
-	public  byte[] generatorCode(String[] tableNames,String moduleName) throws Exception {
+	public  byte[] generatorCode(String[] tableNames,String moduleName,String createType) throws Exception {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		ZipOutputStream zip = new ZipOutputStream(outputStream);
 		for (String tableName : tableNames) {
@@ -51,7 +51,7 @@ public class GeneratorService {
 			// 查询列信息
 			List<Map<String, String>> columns = queryColumns(tableName);
 			// 生成代码
-			GenUtils.generatorCode(moduleName,table, columns, zip);
+			GenUtils.generatorCode(createType,moduleName,table, columns, zip);
 		}
 //		zip.close();
 		IOUtils.closeQuietly(zip);

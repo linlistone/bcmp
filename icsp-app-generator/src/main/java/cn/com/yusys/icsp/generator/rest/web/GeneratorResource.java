@@ -61,7 +61,8 @@ public class GeneratorResource extends BaseResouce {
     public void code(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String tables=request.getParameter("tableName");
         String moduleName=request.getParameter("moduleName");
-        byte[] data = generatorService.generatorCode(tables.split(","), moduleName);
+        String createType=request.getParameter("createType");
+        byte[] data = generatorService.generatorCode(tables.split(","), moduleName,createType);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");
         response.addHeader("Content-Length", "" + data.length);

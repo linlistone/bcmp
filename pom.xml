@@ -21,6 +21,7 @@
         <module>icsp-app-common</module>
         <module>icsp-app-framework-starter</module>
         <module>icsp-app-generator</module>
+        <module>icsp-app-web</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

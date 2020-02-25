@@ -1,0 +1,106 @@
+package ${package}.${moduleName}.service;
+
+import service.common.base.BaseService;
+import ${QueryModel};
+import service.common.mybatis.MapperFactory;
+import ${package}.${moduleName}.domain.${className};
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import java.util.List;
+import both.constants.IResponseConstant;
+import service.common.exception.FoxException;
+import com.github.pagehelper.PageHelper;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public class ${className}Service extends BaseService {
+	
+	public ${className}Service() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public static int create(${className} domain) throws Exception {
+		${className}Mapper mapper = MapperFactory
+				.getMapper(${className}Mapper.class);
+		domain.set${pk.attrName}(createUUId());
+		//domain.setLastChgDt(DateUtil.getFormatDateTime());
+		return mapper.insert(domain);
+	}
+
+	/**
+	 * @throws FoxException
+	 * @方法名称: getMenuInfo
+	 * @方法描述: 查询信息 by ${pk.attrName}
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	public static ${className} show(String ${pk.attrname}) throws Exception {
+		QueryModel model = new QueryModel();
+		model.addCondition("${pk.attrname}", ${pk.attrname});
+		List<${className}> list = index(model);
+		if (list == null || list.isEmpty()) {
+			throw new FoxException(IResponseConstant.FAILED, "数据不存在" + ${pk.attrname});
+		}
+		${className} domain = list.get(0);
+		return domain;
+	}
+
+	/**
+	 * @方法名称: index
+	 * @方法描述: 查询所有 
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	public static List<${className}> index(QueryModel model)
+			throws Exception {
+		${className}Mapper mapper = MapperFactory
+				.getMapper(${className}Mapper.class);
+		PageHelper.startPage(model.getPage(), model.getSize());
+		List<${className}> list = mapper.selectByModel(model);
+		PageHelper.clearPage();
+		return list;
+	}
+
+	/**
+	 * 根据数据库主建更新
+	 * 
+	 * @param ${className}
+	 * @return
+	 */
+	public static int update(${className} domain) throws Exception {
+		${className}Mapper mapper = MapperFactory
+				.getMapper(${className}Mapper.class);
+		//domain.setLastChgDt(DateUtil.getFormatDateTime());
+		return mapper.updateByPrimaryKey(domain);
+	}
+
+	/**
+	 * @方法名称: delete
+	 * @方法描述: 根据主键删除
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public static int delete(String ${pk.attrname}) throws Exception {
+		${className}Mapper mapper = MapperFactory
+				.getMapper(${className}Mapper.class);
+		return mapper.deleteByPrimaryKey(${pk.attrname});
+	}
+
+	/**
+	 * @方法名称: delete
+	 * @方法描述:根据多个主键删除
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public static int deleteByIds(String ids) throws Exception {
+		${className}Mapper mapper = MapperFactory
+				.getMapper(${className}Mapper.class);
+		return mapper.deleteByIds(ids);
+	}
+}
+
