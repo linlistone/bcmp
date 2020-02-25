@@ -1,8 +1,6 @@
 package cn.com.yusys.icsp.adminsm.domain;
 
 import java.io.Serializable;
-import java.util.Date;
-
 import cn.com.yusys.icsp.base.base.BaseDomain;
 
 
@@ -11,63 +9,64 @@ import cn.com.yusys.icsp.base.base.BaseDomain;
  * 
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-25 02:38:28
+ * @date 2020-02-25 16:47:36
  */
 //TableName("admin_sm_instu")
 public class AdminSmInstu extends BaseDomain implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-    /**
+   /**
 	 * 记录编号
 	 *	pk
 	 */
 	private String instuId;
-    /**
+   /**
 	 * 逻辑系统记录编号
 	 */
 	private String sysId;
-    /**
+   /**
 	 * 金融机构代码
 	 */
 	private String instuCde;
-    /**
+   /**
 	 * 金融机构名称
 	 */
 	private String instuName;
-    /**
+   /**
 	 * 进入日期
 	 */
 	private String joinDt;
-    /**
+   /**
 	 * 地址
 	 */
 	private String instuAddr;
-    /**
+   /**
 	 * 邮编
 	 */
 	private String zipCde;
-    /**
+   /**
 	 * 联系电话
 	 */
 	private String contTel;
-    /**
+   /**
 	 * 联系人
 	 */
 	private String contUsr;
-    /**
+   /**
 	 * 状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效
 	 */
 	private String instuSts;
-    /**
+   /**
 	 * 最新变更用户
 	 */
 	private String lastChgUsr;
-    /**
+   /**
 	 * 最新变更时间
 	 */
 	private String lastChgDt;
 	
 	/**
+	 * 记录编号
 	 * @param instuId
 	 */
 	public void setInstuId(String instuId) {
@@ -75,12 +74,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 记录编号
 	 * @return instuId
 	 */
 	public String getInstuId() {
 		return this.instuId;
 	}
 	/**
+	 * 逻辑系统记录编号
 	 * @param sysId
 	 */
 	public void setSysId(String sysId) {
@@ -88,12 +89,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 逻辑系统记录编号
 	 * @return sysId
 	 */
 	public String getSysId() {
 		return this.sysId;
 	}
 	/**
+	 * 金融机构代码
 	 * @param instuCde
 	 */
 	public void setInstuCde(String instuCde) {
@@ -101,12 +104,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 金融机构代码
 	 * @return instuCde
 	 */
 	public String getInstuCde() {
 		return this.instuCde;
 	}
 	/**
+	 * 金融机构名称
 	 * @param instuName
 	 */
 	public void setInstuName(String instuName) {
@@ -114,12 +119,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 金融机构名称
 	 * @return instuName
 	 */
 	public String getInstuName() {
 		return this.instuName;
 	}
 	/**
+	 * 进入日期
 	 * @param joinDt
 	 */
 	public void setJoinDt(String joinDt) {
@@ -127,12 +134,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 进入日期
 	 * @return joinDt
 	 */
 	public String getJoinDt() {
 		return this.joinDt;
 	}
 	/**
+	 * 地址
 	 * @param instuAddr
 	 */
 	public void setInstuAddr(String instuAddr) {
@@ -140,12 +149,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 地址
 	 * @return instuAddr
 	 */
 	public String getInstuAddr() {
 		return this.instuAddr;
 	}
 	/**
+	 * 邮编
 	 * @param zipCde
 	 */
 	public void setZipCde(String zipCde) {
@@ -153,12 +164,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 邮编
 	 * @return zipCde
 	 */
 	public String getZipCde() {
 		return this.zipCde;
 	}
 	/**
+	 * 联系电话
 	 * @param contTel
 	 */
 	public void setContTel(String contTel) {
@@ -166,12 +179,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 联系电话
 	 * @return contTel
 	 */
 	public String getContTel() {
 		return this.contTel;
 	}
 	/**
+	 * 联系人
 	 * @param contUsr
 	 */
 	public void setContUsr(String contUsr) {
@@ -179,12 +194,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 联系人
 	 * @return contUsr
 	 */
 	public String getContUsr() {
 		return this.contUsr;
 	}
 	/**
+	 * 状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效
 	 * @param instuSts
 	 */
 	public void setInstuSts(String instuSts) {
@@ -192,12 +209,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效
 	 * @return instuSts
 	 */
 	public String getInstuSts() {
 		return this.instuSts;
 	}
 	/**
+	 * 最新变更用户
 	 * @param lastChgUsr
 	 */
 	public void setLastChgUsr(String lastChgUsr) {
@@ -205,12 +224,14 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 最新变更用户
 	 * @return lastChgUsr
 	 */
 	public String getLastChgUsr() {
 		return this.lastChgUsr;
 	}
 	/**
+	 * 最新变更时间
 	 * @param lastChgDt
 	 */
 	public void setLastChgDt(String lastChgDt) {
@@ -218,6 +239,7 @@ public class AdminSmInstu extends BaseDomain implements Serializable {
 	}
 
 	/**
+	 * 最新变更时间
 	 * @return lastChgDt
 	 */
 	public String getLastChgDt() {

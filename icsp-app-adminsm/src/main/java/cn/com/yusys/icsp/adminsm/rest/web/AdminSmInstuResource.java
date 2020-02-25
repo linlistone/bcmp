@@ -1,6 +1,5 @@
 package cn.com.yusys.icsp.adminsm.rest.web;
 
-import java.util.Arrays;
 import java.util.List;
 import cn.com.yusys.icsp.base.base.BaseResouce;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-25 03:09:16
+ * @date 2020-02-25 16:47:36
  */
 @RestController
-@RequestMapping("/api/AdminSmInstu")
+@RequestMapping("/api/adminSmInstu")
 public class AdminSmInstuResource extends BaseResouce {
 
 
@@ -32,7 +31,7 @@ public class AdminSmInstuResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/create")
-	public ResultDto<Integer> create(AdminSmInstu adminSmInstu) throws Exception {
+	public ResultDto<Integer> create(@RequestBody AdminSmInstu adminSmInstu) throws Exception {
 		int result = adminSmInstuService.create(adminSmInstu);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
@@ -75,7 +74,7 @@ public class AdminSmInstuResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/update")
-	public ResultDto<Integer> update(AdminSmInstu adminSmInstu) throws Exception {
+	public ResultDto<Integer> update(@RequestBody AdminSmInstu adminSmInstu) throws Exception {
 		int result =  adminSmInstuService.update(adminSmInstu);
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {

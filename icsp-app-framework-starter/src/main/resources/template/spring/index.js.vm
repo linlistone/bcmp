@@ -14,7 +14,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/funcmod/index',
+      dataUrl: backend.adminService + '/${classname}/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false // 弹出框层是否可见
     };
@@ -61,13 +61,9 @@ define(function (require, exports) {
           }).then(function () {
             // 调用删除提交服务
             var ${pk.attrname} = viewData.${pk.attrname};
-            var delData = {
-              '${pk.attrname}': ${pk.attrname}
-            };
             yufp.service.request({
               method: 'POST',
-              data: delData,
-              name: backend.adminService + '/funcmod/delete',
+              name: backend.adminService + '/${classname}/delete/'+${pk.attrname},
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -118,7 +114,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/funcmod/create',
+            name: backend.adminService + '/${classname}/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -159,7 +155,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/funcmod/update',
+            name: backend.adminService + '/${classname}/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

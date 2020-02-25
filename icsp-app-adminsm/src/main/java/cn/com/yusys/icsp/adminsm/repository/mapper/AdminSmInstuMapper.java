@@ -12,7 +12,7 @@ import cn.com.yusys.icsp.adminsm.domain.AdminSmInstu;
  * 
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-25 02:38:28
+ * @date 2020-02-25 16:47:36
  */
 //@Mapper
 public interface AdminSmInstuMapper {
@@ -46,7 +46,7 @@ public interface AdminSmInstuMapper {
 	 * @参数与返回说明: modId - 主键
 	 * @算法描述: 无
 	 */
-	int deleteByPrimaryKey(@Param("instuId") String instuId);
+	int deleteByPrimaryKey(@Param("instuId" ) String instuId);
 
 	/**
 	 * @方法名称: deleteByIds
@@ -54,6 +54,6 @@ public interface AdminSmInstuMapper {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	int deleteByIds(@Param("ids") String ids);
+	int deleteByIds(@Param("ids" ) String ids);
 	
 }

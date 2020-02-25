@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${package}.${moduleName}.mapper.${className}Mapper">
+<mapper namespace="${package}.${moduleName}.repository.mapper.${className}Mapper">
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${package}.${moduleName}.domain.${className}" id="BaseResultMap">
 <#list columns as column>
@@ -23,7 +23,7 @@
 			<if test="condition.${column.attrname} != null">
 				<choose>
 					<when
-						test="@both.common.util.OGNLUtil@like(condition.${column.attrname})">
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.${column.attrname})">
 						AND ${column.columnName} like ${r"#"}{condition.${column.attrname},jdbcType=${column.dataType}}
 					</when>
 					<otherwise>
@@ -72,7 +72,7 @@
 	<delete id="deleteByIds" parameterType="java.lang.String">
 		delete from ${tableName} where ${pk.columnName} in
 		<foreach
-			collection="@both.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
 			open="(" close=")" separator="," item="${pk.attrname}">${r"#"}{${pk.attrname},jdbcType=${pk.dataType}}</foreach>
 	</delete>
 

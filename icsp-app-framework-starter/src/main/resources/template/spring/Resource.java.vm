@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @date ${datetime}
  */
 @RestController
-@RequestMapping("/api/${className}")
+@RequestMapping("/api/${classname}")
 public class ${className}Resource extends BaseResouce {
 
 
@@ -32,7 +32,7 @@ public class ${className}Resource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/create")
-	public ResultDto<Integer> create(${className} ${classname}) throws Exception {
+	public ResultDto<Integer> create(@RequestBody ${className} ${classname}) throws Exception {
 		int result = ${classname}Service.create(${classname});
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {
@@ -75,7 +75,7 @@ public class ${className}Resource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@PostMapping(value = "/update")
-	public ResultDto<Integer> update(${className} ${classname}) throws Exception {
+	public ResultDto<Integer> update(@RequestBody ${className} ${classname}) throws Exception {
 		int result =  ${classname}Service.update(${classname});
 		ResultDto<Integer> resultDto = new ResultDto<>();
 		if (result >= 1) {

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmInstuMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmInstu" id="BaseResultMap">
+        <result column="INSTU_ID"  property="instuId" jdbcType="VARCHAR" />
+        <result column="SYS_ID"  property="sysId" jdbcType="VARCHAR" />
+        <result column="INSTU_CDE"  property="instuCde" jdbcType="VARCHAR" />
+        <result column="INSTU_NAME"  property="instuName" jdbcType="VARCHAR" />
+        <result column="JOIN_DT"  property="joinDt" jdbcType="VARCHAR" />
+        <result column="INSTU_ADDR"  property="instuAddr" jdbcType="VARCHAR" />
+        <result column="ZIP_CDE"  property="zipCde" jdbcType="VARCHAR" />
+        <result column="CONT_TEL"  property="contTel" jdbcType="VARCHAR" />
+        <result column="CONT_USR"  property="contUsr" jdbcType="VARCHAR" />
+        <result column="INSTU_STS"  property="instuSts" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		INSTU_ID,
+		SYS_ID,
+		INSTU_CDE,
+		INSTU_NAME,
+		JOIN_DT,
+		INSTU_ADDR,
+		ZIP_CDE,
+		CONT_TEL,
+		CONT_USR,
+		INSTU_STS,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_instu
+		<where>
+			<if test="condition.instuId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuId)">
+						AND INSTU_ID like #{condition.instuId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_ID = #{condition.instuId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.sysId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.sysId)">
+						AND SYS_ID like #{condition.sysId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND SYS_ID = #{condition.sysId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuCde != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuCde)">
+						AND INSTU_CDE like #{condition.instuCde,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_CDE = #{condition.instuCde,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuName)">
+						AND INSTU_NAME like #{condition.instuName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_NAME = #{condition.instuName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.joinDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.joinDt)">
+						AND JOIN_DT like #{condition.joinDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND JOIN_DT = #{condition.joinDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuAddr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuAddr)">
+						AND INSTU_ADDR like #{condition.instuAddr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_ADDR = #{condition.instuAddr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.zipCde != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.zipCde)">
+						AND ZIP_CDE like #{condition.zipCde,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ZIP_CDE = #{condition.zipCde,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contTel != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contTel)">
+						AND CONT_TEL like #{condition.contTel,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_TEL = #{condition.contTel,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contUsr)">
+						AND CONT_USR like #{condition.contUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_USR = #{condition.contUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuSts != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuSts)">
+						AND INSTU_STS like #{condition.instuSts,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_STS = #{condition.instuSts,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmInstu">
+		insert into admin_sm_instu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="instuId != null">INSTU_ID ,</if>
+			<if test="sysId != null">SYS_ID ,</if>
+			<if test="instuCde != null">INSTU_CDE ,</if>
+			<if test="instuName != null">INSTU_NAME ,</if>
+			<if test="joinDt != null">JOIN_DT ,</if>
+			<if test="instuAddr != null">INSTU_ADDR ,</if>
+			<if test="zipCde != null">ZIP_CDE ,</if>
+			<if test="contTel != null">CONT_TEL ,</if>
+			<if test="contUsr != null">CONT_USR ,</if>
+			<if test="instuSts != null">INSTU_STS ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="instuId != null">#{instuId,jdbcType=VARCHAR},</if>
+			<if test="sysId != null">#{sysId,jdbcType=VARCHAR},</if>
+			<if test="instuCde != null">#{instuCde,jdbcType=VARCHAR},</if>
+			<if test="instuName != null">#{instuName,jdbcType=VARCHAR},</if>
+			<if test="joinDt != null">#{joinDt,jdbcType=VARCHAR},</if>
+			<if test="instuAddr != null">#{instuAddr,jdbcType=VARCHAR},</if>
+			<if test="zipCde != null">#{zipCde,jdbcType=VARCHAR},</if>
+			<if test="contTel != null">#{contTel,jdbcType=VARCHAR},</if>
+			<if test="contUsr != null">#{contUsr,jdbcType=VARCHAR},</if>
+			<if test="instuSts != null">#{instuSts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmInstu">
+		update admin_sm_instu
+		<set>
+			<if test="instuId != null">INSTU_ID = #{instuId,jdbcType=VARCHAR},</if>
+			<if test="sysId != null">SYS_ID = #{sysId,jdbcType=VARCHAR},</if>
+			<if test="instuCde != null">INSTU_CDE = #{instuCde,jdbcType=VARCHAR},</if>
+			<if test="instuName != null">INSTU_NAME = #{instuName,jdbcType=VARCHAR},</if>
+			<if test="joinDt != null">JOIN_DT = #{joinDt,jdbcType=VARCHAR},</if>
+			<if test="instuAddr != null">INSTU_ADDR = #{instuAddr,jdbcType=VARCHAR},</if>
+			<if test="zipCde != null">ZIP_CDE = #{zipCde,jdbcType=VARCHAR},</if>
+			<if test="contTel != null">CONT_TEL = #{contTel,jdbcType=VARCHAR},</if>
+			<if test="contUsr != null">CONT_USR = #{contUsr,jdbcType=VARCHAR},</if>
+			<if test="instuSts != null">INSTU_STS = #{instuSts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where INSTU_ID = #{instuId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_instu where  INSTU_ID = #{instuId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_instu where INSTU_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="instuId">#{instuId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>
