@@ -363,7 +363,7 @@
         if (val.id === 'topTile' || val.id === 'topTree') {
           // 水平状态下的
           this.$nextTick(function () {
-            var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-template >li');
+            var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-templates >li');
             this.menuScrollW = this.$refs.menuScrollarea.clientWidth;
             for (var i = 0, len = menuRootList.length; i < len; i++) {
               var domLi = menuRootList[i];
@@ -509,7 +509,7 @@
       leftArrowClickFn: function () {
         // 顶部菜单，所有菜单项的宽度总和
         var listW = 0;
-        var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-template >li');
+        var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-templates >li');
         for (var i = 0, len = menuRootList.length; i < len; i++) {
           var domLi = menuRootList[i];
           listW += domLi.clientWidth;
@@ -528,7 +528,7 @@
       * 顶部菜单左箭头点击事件处理程序
       */
       rightArrowClickFn: function () {
-        var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-template >li');
+        var menuRootList = document.querySelectorAll('.el-menu.el-menu--horizontal > .cust-self-call-menu-templates >li');
         for (var i = menuRootList.length - 1; i >= 0; i--) {
           var domLi = menuRootList[i];
           if (domLi.style.display === 'none') {
@@ -923,28 +923,28 @@
  */
 (function (vue, name) {
   Vue.component(name, {
-    template: ' <div class="cust-self-call-menu-template">\
+    template: ' <div class="cust-self-call-menu-templates">\
    <el-submenu v-if="justChildren(child)"  v-for="child in menuChildren" :index="child.mId" :key="child.mId" :class="{\'yu-root-level\': child.mPid === \'0\'}">\
-     <template slot="title">\
+     <templates slot="title">\
        <i :class="[rootMenu.mode === \'vertical\' ? child.mIcon : \'\']"></i>\
        <span slot="title">{{ child.mText }}</span>\
-     </template>\
+     </templates>\
      <!-- 组件递归调用 -->\
      <yu-base-menu-self-call v-if="submenuMode === \'tree\'" :menu-children="child.children" :submenu-mode="submenuMode" ></yu-base-menu-self-call>\
-     <template v-else>\
+     <templates v-else>\
          <!-- 平铺菜单 -->\
          <yu-base-menu-tile-item v-for="(tileMenuData, index) in child.children" :key="index">\
            <span slot="title" @click="topTileItemClickFn(tileMenuData, $event)" :class="{\'title-item-cursor\': tileMenuData.routeId != \'\'}">{{ tileMenuData.mText }}</span>\
            <li :class="[\'tile-item\', {\'is-active\': activeTileItem(item.id)}]" v-for="(item, index) in tileMenuData.children" :key="index" @click="topTileItemClickFn(item, $event)">{{ item.mText }}</li>\
          </yu-base-menu-tile-item>\
-     </template>\
+     </templates>\
    </el-submenu>\
    <el-menu-item v-else :index="child.mId" :menu-item-data="child" :menu-right-list-data="menurightListData"\
    @menu-rightlist-click="menurightListClickFn">\
       <i :class="[rootMenu.mode === \'vertical\' ? child.mIcon : \'\']"></i>\
      <span slot="title">{{ child.mText }}</span>\
      <!-- 菜单项右键列表 -->\
-     <template slot="menuRightList"></template>\
+     <templates slot="menuRightList"></templates>\
    </el-menu-item>\
 </div>',
     componentName: 'YuBaseMenuSelfCall',

@@ -102,9 +102,9 @@
                       @change="i.change && i.change(formModel[i.field],formModel,arguments)"\
                       :is="i.is" @select-fn="i.selectFn && i.selectFn(formModel[i.field],formModel,arguments)">\
                     </component>\
-                    <template v-else-if="i.type==\'slot\'">\
+                    <templates v-else-if="i.type==\'slot\'">\
                       <slot :name="i.slotName" :ref="i.ref||i.field"></slot>\
-                    </template>\
+                    </templates>\
                   </el-form-item>\
                 </el-col>\
                 <el-col :span="1" v-if="i.uFlag">\
@@ -315,9 +315,9 @@
                          @change="i.change && i.change(formModel[i.field],formModel,arguments)"\
                          :is="i.is" @select-fn="i.selectFn && i.selectFn(formModel[i.field],formModel,arguments)">\
                         </component>\
-                        <template v-else-if="i.type==\'slot\'">\
+                        <templates v-else-if="i.type==\'slot\'">\
                         <slot :name="i.slotName" :ref="i.ref||i.field"></slot>\
-                       </template>\
+                       </templates>\
                      </el-form-item>\
                </el-col>\
              </el-row>\

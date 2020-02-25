@@ -67,9 +67,9 @@
             width: 80,
             dataCode: 'PUBLISH_STATUS',
             template: function () {
-              return '<template scope="scope">\
+              return '<templates scope="scope">\
                                 <el-tag :type="scope.row.status === \'deleted\' ? \'danger\' : \'success\'">{{ scope.row.status }}</el-tag>\
-                            </template>';
+                            </templates>';
             }
           }
         ]

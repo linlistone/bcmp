@@ -91,21 +91,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (XHR) XHR.Mock = Mock
 
 	/*
-	    * Mock.mock( template )
+	    * Mock.mock( templates )
 	    * Mock.mock( function() )
-	    * Mock.mock( rurl, template )
+	    * Mock.mock( rurl, templates )
 	    * Mock.mock( rurl, function(options) )
-	    * Mock.mock( rurl, rtype, template )
+	    * Mock.mock( rurl, rtype, templates )
 	    * Mock.mock( rurl, rtype, function(options) )
 
 	    根据数据模板生成模拟数据。
 	*/
 	Mock.mock = function(rurl, rtype, template) {
-	    // Mock.mock(template)
+	    // Mock.mock(templates)
 	    if (arguments.length === 1) {
 	        return Handler.gen(rurl)
 	    }
-	    // Mock.mock(rurl, template)
+	    // Mock.mock(rurl, templates)
 	    if (arguments.length === 2) {
 	        template = rtype
 	        rtype = undefined
@@ -131,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    处理数据模板。
 	    
-	    * Handler.gen( template, name?, context? )
+	    * Handler.gen( templates, name?, context? )
 
 	        入口方法。
 
@@ -170,12 +170,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/*
-	    template        属性值（即数据模板）
+	    templates        属性值（即数据模板）
 	    name            属性名
 	    context         数据上下文，生成后的数据
 	    templateContext 模板上下文，
 
-	    Handle.gen(template, name, options)
+	    Handle.gen(templates, name, options)
 	    context
 	        currentContext, templateCurrentContext, 
 	        path, templatePath
@@ -199,7 +199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // 模板的根
 	            templateRoot: context.templateRoot || context.templateCurrentContext || template
 	        }
-	        // console.log('path:', context.path.join('.'), template)
+	        // console.log('path:', context.path.join('.'), templates)
 
 	    var rule = Parser.parse(name)
 	    var type = Util.type(template)
@@ -362,10 +362,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            /*
 	                会改变非函数属性的顺序
-	                keys = Util.keys(options.template)
+	                keys = Util.keys(options.templates)
 	                keys.sort(function(a, b) {
-	                    var afn = typeof options.template[a] === 'function'
-	                    var bfn = typeof options.template[b] === 'function'
+	                    var afn = typeof options.templates[a] === 'function'
+	                    var bfn = typeof options.templates[b] === 'function'
 	                    if (afn === bfn) return 0
 	                    if (afn && !bfn) return 1
 	                    if (!afn && bfn) return -1
@@ -7635,16 +7635,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	    ## valid(template, data)
+	    ## valid(templates, data)
 
-	    校验真实数据 data 是否与数据模板 template 匹配。
+	    校验真实数据 data 是否与数据模板 templates 匹配。
 	    
 	    实现思路：
 	    1. 解析规则。
-	        先把数据模板 template 解析为更方便机器解析的 JSON-Schame
+	        先把数据模板 templates 解析为更方便机器解析的 JSON-Schame
 	        name               属性名 
 	        type               属性值类型
-	        template           属性值模板
+	        templates           属性值模板
 	        properties         对象属性数组
 	        items              数组元素数组
 	        rule               属性值生成规则
@@ -7664,7 +7664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var schema = toJSONSchema(template)
 	    var result = Diff.diff(schema, data)
 	    for (var i = 0; i < result.length; i++) {
-	        // console.log(template, data)
+	        // console.log(templates, data)
 	        // console.warn(Assert.message(result[i]))
 	    }
 	    return result
@@ -7676,8 +7676,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        无生成规则：直接比较
 	    ## type
 	        无类型转换：直接比较
-	        有类型转换：先试着解析 template，然后再检查？
-	    ## value vs. template
+	        有类型转换：先试着解析 templates，然后再检查？
+	    ## value vs. templates
 	        基本类型
 	            无生成规则：直接比较
 	            有生成规则：

@@ -25,7 +25,7 @@ public class FreemarkerUtil {
             throws Exception {
         //创建一个Configuration对象
         Configuration configuration = new Configuration(Configuration.getVersion());
-        Resource resouce=new ClassPathResource("template");
+        Resource resouce=new ClassPathResource("templates");
         File file=resouce.getFile();
         System.out.printf("file"+file.getAbsolutePath());
         //设置模板文件所在的路径

@@ -13,7 +13,17 @@
     <name>icsp-app-bcmp</name>
     <description>前端监控管理</description>
     <dependencies>
-
+        <dependency>
+            <groupId>cn.com.yusys.icsp</groupId>
+            <artifactId>icsp-app-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.yusys.icsp</groupId>
+            <artifactId>icsp-app-common</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 

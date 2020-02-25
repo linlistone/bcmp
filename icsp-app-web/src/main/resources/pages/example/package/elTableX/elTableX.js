@@ -37,9 +37,9 @@ define(function (require, exports) {
               // 关于如何配置click事件方法，
               // 1、固定写法：_$event('custom-row-click', scope) ，其中custom-row-click是用于在组件内部触发事件方法，scope是传递的参数
               // 2、在el-table-x组件上通过配置监听：@custom-row-click="customRowClick" ，其中customRowClick是当前业务功能接收事件处理的方法
-                return '<template scope="scope">\
+                return '<templates scope="scope">\
                                 <a href="javascipt:void(0);" style="text-decoration:underline;" @click="$emit(\'custom-row-click\', scope)">{{ scope.row.title }}</a>\
-                            </template>';
+                            </templates>';
               } },
             { label: '标志',
               prop: 'flag',
@@ -56,9 +56,9 @@ define(function (require, exports) {
                 ]);
               },
               template: function () {
-                return '<template slot-scope="scope">\
+                return '<templates slot-scope="scope">\
                  <el-checkbox v-model="scope.row.selectFlag" @change="$emit(\'change\', scope)">{{scope.row.flag}}</el-checkbox>\
-                 </template>';
+                 </templates>';
               }},
             { label: '类型', prop: 'type', width: 110, dataCode: 'NATIONALITY', hidden: true},
             { label: '参与人',
@@ -74,18 +74,18 @@ define(function (require, exports) {
               width: 80,
               dataCode: 'PUBLISH_STATUS',
               template: function () {
-                return '<template scope="scope">\
+                return '<templates scope="scope">\
                                 <el-tag :type="scope.row.status === \'deleted\' ? \'danger\' : \'success\'">{{ scope.row.status | statusFilter }}</el-tag>\
-                            </template>';
+                            </templates>';
               }},
             { label: '操作',
               width: 160,
               fixed: 'right',
               template: function () {
-                return '<template scope="scope">\
+                return '<templates scope="scope">\
                                 <el-button size="small" @click="$emit(\'custom-row-op\', scope, \'edit\')">编辑</el-button>\
                                 <el-button size="small" type="danger" @click="$emit(\'custom-row-op\', scope, \'delete\')">删除</el-button>\
-                            </template>';
+                            </templates>';
               }}
           ]
         };

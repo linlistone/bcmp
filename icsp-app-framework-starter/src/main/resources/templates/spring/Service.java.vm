@@ -33,7 +33,7 @@ public class ${className}Service extends BaseService {
 	 */
 	public int create(${className} ${classname}) throws Exception {
 		${classname}.set${pk.attrName}(createUUId());
-		//domain.setLastChgDt(DateUtil.getFormatDateTime());
+		//${classname}.setLastChgDt(DateUtil.getFormatDateTime());
 		return ${classname}Mapper.insert(${classname});
 	}
 
@@ -76,7 +76,7 @@ public class ${className}Service extends BaseService {
 	 * @算法描述:
 	 */
 	public int update(${className} ${classname}) throws Exception {
-		//domain.setLastChgDt(DateUtil.getFormatDateTime());
+		//${classname}.setLastChgDt(DateUtil.getFormatDateTime());
 		return ${classname}Mapper.updateByPrimaryKey(${classname});
 	}
 

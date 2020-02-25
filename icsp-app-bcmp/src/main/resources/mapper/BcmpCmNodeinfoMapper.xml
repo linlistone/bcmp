@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.bcmp.repository.mapper.BcmpCmNodeinfoMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo" id="BaseResultMap">
+        <result column="NODE_ID"  property="nodeId" jdbcType="VARCHAR" />
+        <result column="HOST_IP"  property="hostIp" jdbcType="VARCHAR" />
+        <result column="NODE_TYPE"  property="nodeType" jdbcType="VARCHAR" />
+        <result column="APPLY_PATH"  property="applyPath" jdbcType="VARCHAR" />
+        <result column="NODE_NAME"  property="nodeName" jdbcType="VARCHAR" />
+        <result column="DESCRIPTION"  property="description" jdbcType="VARCHAR" />
+        <result column="ISLINK"  property="islink" jdbcType="VARCHAR" />
+        <result column="LINK_DIRECTORY"  property="linkDirectory" jdbcType="VARCHAR" />
+        <result column="UPDATE_DIRECTORY"  property="updateDirectory" jdbcType="VARCHAR" />
+        <result column="APPLY_PORT"  property="applyPort" jdbcType="VARCHAR" />
+        <result column="HTTP_PORT"  property="httpPort" jdbcType="VARCHAR" />
+        <result column="JVM_PORT"  property="jvmPort" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		NODE_ID,
+		HOST_IP,
+		NODE_TYPE,
+		APPLY_PATH,
+		NODE_NAME,
+		DESCRIPTION,
+		ISLINK,
+		LINK_DIRECTORY,
+		UPDATE_DIRECTORY,
+		APPLY_PORT,
+		HTTP_PORT,
+		JVM_PORT,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_cm_nodeinfo
+		<where>
+			<if test="condition.nodeId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.nodeId)">
+						AND NODE_ID like #{condition.nodeId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND NODE_ID = #{condition.nodeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.hostIp != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostIp)">
+						AND HOST_IP like #{condition.hostIp,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HOST_IP = #{condition.hostIp,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.nodeType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.nodeType)">
+						AND NODE_TYPE like #{condition.nodeType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND NODE_TYPE = #{condition.nodeType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.applyPath != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.applyPath)">
+						AND APPLY_PATH like #{condition.applyPath,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND APPLY_PATH = #{condition.applyPath,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.nodeName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.nodeName)">
+						AND NODE_NAME like #{condition.nodeName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND NODE_NAME = #{condition.nodeName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.description != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.description)">
+						AND DESCRIPTION like #{condition.description,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DESCRIPTION = #{condition.description,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.islink != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.islink)">
+						AND ISLINK like #{condition.islink,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ISLINK = #{condition.islink,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.linkDirectory != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.linkDirectory)">
+						AND LINK_DIRECTORY like #{condition.linkDirectory,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LINK_DIRECTORY = #{condition.linkDirectory,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.updateDirectory != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.updateDirectory)">
+						AND UPDATE_DIRECTORY like #{condition.updateDirectory,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UPDATE_DIRECTORY = #{condition.updateDirectory,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.applyPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.applyPort)">
+						AND APPLY_PORT like #{condition.applyPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND APPLY_PORT = #{condition.applyPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.httpPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.httpPort)">
+						AND HTTP_PORT like #{condition.httpPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HTTP_PORT = #{condition.httpPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.jvmPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.jvmPort)">
+						AND JVM_PORT like #{condition.jvmPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND JVM_PORT = #{condition.jvmPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo">
+		insert into bcmp_cm_nodeinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">NODE_ID ,</if>
+			<if test="hostIp != null">HOST_IP ,</if>
+			<if test="nodeType != null">NODE_TYPE ,</if>
+			<if test="applyPath != null">APPLY_PATH ,</if>
+			<if test="nodeName != null">NODE_NAME ,</if>
+			<if test="description != null">DESCRIPTION ,</if>
+			<if test="islink != null">ISLINK ,</if>
+			<if test="linkDirectory != null">LINK_DIRECTORY ,</if>
+			<if test="updateDirectory != null">UPDATE_DIRECTORY ,</if>
+			<if test="applyPort != null">APPLY_PORT ,</if>
+			<if test="httpPort != null">HTTP_PORT ,</if>
+			<if test="jvmPort != null">JVM_PORT ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">#{nodeId,jdbcType=VARCHAR},</if>
+			<if test="hostIp != null">#{hostIp,jdbcType=VARCHAR},</if>
+			<if test="nodeType != null">#{nodeType,jdbcType=VARCHAR},</if>
+			<if test="applyPath != null">#{applyPath,jdbcType=VARCHAR},</if>
+			<if test="nodeName != null">#{nodeName,jdbcType=VARCHAR},</if>
+			<if test="description != null">#{description,jdbcType=VARCHAR},</if>
+			<if test="islink != null">#{islink,jdbcType=VARCHAR},</if>
+			<if test="linkDirectory != null">#{linkDirectory,jdbcType=VARCHAR},</if>
+			<if test="updateDirectory != null">#{updateDirectory,jdbcType=VARCHAR},</if>
+			<if test="applyPort != null">#{applyPort,jdbcType=VARCHAR},</if>
+			<if test="httpPort != null">#{httpPort,jdbcType=VARCHAR},</if>
+			<if test="jvmPort != null">#{jvmPort,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo">
+		update bcmp_cm_nodeinfo
+		<set>
+			<if test="nodeId != null">NODE_ID = #{nodeId,jdbcType=VARCHAR},</if>
+			<if test="hostIp != null">HOST_IP = #{hostIp,jdbcType=VARCHAR},</if>
+			<if test="nodeType != null">NODE_TYPE = #{nodeType,jdbcType=VARCHAR},</if>
+			<if test="applyPath != null">APPLY_PATH = #{applyPath,jdbcType=VARCHAR},</if>
+			<if test="nodeName != null">NODE_NAME = #{nodeName,jdbcType=VARCHAR},</if>
+			<if test="description != null">DESCRIPTION = #{description,jdbcType=VARCHAR},</if>
+			<if test="islink != null">ISLINK = #{islink,jdbcType=VARCHAR},</if>
+			<if test="linkDirectory != null">LINK_DIRECTORY = #{linkDirectory,jdbcType=VARCHAR},</if>
+			<if test="updateDirectory != null">UPDATE_DIRECTORY = #{updateDirectory,jdbcType=VARCHAR},</if>
+			<if test="applyPort != null">APPLY_PORT = #{applyPort,jdbcType=VARCHAR},</if>
+			<if test="httpPort != null">HTTP_PORT = #{httpPort,jdbcType=VARCHAR},</if>
+			<if test="jvmPort != null">JVM_PORT = #{jvmPort,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where NODE_ID = #{nodeId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_cm_nodeinfo where  NODE_ID = #{nodeId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_cm_nodeinfo where NODE_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="nodeId">#{nodeId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

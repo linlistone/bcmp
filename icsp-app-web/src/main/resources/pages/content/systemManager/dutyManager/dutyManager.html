@@ -83,14 +83,14 @@
             <el-table-column prop="orgName" label="所属机构" width="200"></el-table-column>
             <el-table-column prop="dutyCde" label="岗位代码" width="200"></el-table-column>
             <el-table-column prop="dutyName" label="岗位名称">
-                <template slot-scope='scope'>
+                <templates slot-scope='scope'>
                     <el-button @click="openDetailFn(scope.row)" type="text" > {{scope.row.dutyName}} </el-button>
-                </template>
+                </templates>
             </el-table-column>
             <el-table-column prop="dutySts" label="状态"  width="100">
-                <template slot-scope='scope'>
+                <templates slot-scope='scope'>
                     <p>{{m_datasource.mapDataSource.DATA_STS[scope.row.dutySts]}}</p> 
-                  </template>
+                  </templates>
             </el-table-column>
             <el-table-column prop="userName" label="最新变更人" width="200" sortable></el-table-column>
             <el-table-column prop="lastChgDt" label="最新变更时间" width="200" sortable></el-table-column>

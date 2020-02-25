@@ -527,9 +527,9 @@
           prefixTpl += '<el-table-column type="selection" width="65"></el-table-column>';
         } else if (this.radiobox) {
           prefixTpl += '<el-table-column type="index" width="52">\
-                        <template scope="scope">\
+                        <templates scope="scope">\
                           <el-radio v-model="radio" :label="scope.row.$index = scope.$index">&nbsp;</el-radio>\
-                        </template>\
+                        </templates>\
                       </el-table-column>';
         }
         var suffixTpl = '</el-table>';
@@ -553,15 +553,15 @@
           middleTpl += '<el-table-column ';
           middleTpl += joinProp('tableColumns[' + i + ']', tc, flag);
           // middleTpl += '>';
-          middleTpl += '><template scope="scope">';
+          middleTpl += '><templates scope="scope">';
           if (flag) {
             middleTpl += tc.template();
           } else {
             middleTpl += '{{ scope.row.' + tc.prop + '}}';
           }
           middleTpl += ' <a v-if="typeof scope.row.flag == \'object\' && scope.row.flag.indexOf(\'' + tc.prop + '\') !=-1" style="cursor:pointer;" @click="uClick(scope)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-tag :title="scope.row.message[scope.row.flag.indexOf(\'' + tc.prop + '\')]">U</el-tag></a>';
-          middleTpl += ' </template>';
-          // middleTpl += flag ? tc.template() : '';
+          middleTpl += ' </templates>';
+          // middleTpl += flag ? tc.templates() : '';
           if (tc.children) {
             // 循环二级表头
             for (var j = 0, jlen = tc.children.length; j < jlen; j++) {
@@ -569,15 +569,15 @@
               middleTpl += '<el-table-column ';
               middleTpl += joinProp('tableColumns[' + i + '].children[' + j + ']', tc1, flag1);
               // middleTpl += '>';
-              middleTpl += '><template scope="scope">';
+              middleTpl += '><templates scope="scope">';
               if (flag1) {
                 middleTpl += tc1.template();
               } else {
                 middleTpl += '{{ scope.row.' + tc1.prop + '}}';
               }
               middleTpl += ' <a v-if="typeof scope.row.flag == \'object\' && scope.row.flag.indexOf(\'' + tc1.prop + '\') !=-1" style="cursor:pointer;" @click="uClick(scope)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-tag :title="scope.row.message[scope.row.flag.indexOf(\'' + tc1.prop + '\')]">U</el-tag></a>';
-              middleTpl += ' </template>';
-              // middleTpl += flag1 ? tc1.template() : '';
+              middleTpl += ' </templates>';
+              // middleTpl += flag1 ? tc1.templates() : '';
               if (tc1.children) {
                 // 循环三级表头
                 for (var k = 0, klen = tc1.children.length; k < klen; k++) {
@@ -585,15 +585,15 @@
                   middleTpl += '<el-table-column ';
                   middleTpl += joinProp('tableColumns[' + i + '].children[' + j + '].children[' + k + ']', tc2, flag2);
                   // middleTpl += '>';
-                  middleTpl += '><template scope="scope">';
+                  middleTpl += '><templates scope="scope">';
                   if (flag2) {
                     middleTpl += tc2.template();
                   } else {
                     middleTpl += '{{ scope.row.' + tc2.prop + '}}';
                   }
                   middleTpl += ' <a v-if="typeof scope.row.flag == \'object\' && scope.row.flag.indexOf(\'' + tc2.prop + '\') !=-1" style="cursor:pointer;" @click="uClick(scope)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-tag :title="scope.row.message[scope.row.flag.indexOf(\'' + tc2.prop + '\')]">U</el-tag></a>';
-                  middleTpl += ' </template>';
-                  // middleTpl += flag2 ? tc2.template() : '';
+                  middleTpl += ' </templates>';
+                  // middleTpl += flag2 ? tc2.templates() : '';
                   middleTpl += '</el-table-column>';
                 }
               }

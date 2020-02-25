@@ -322,7 +322,7 @@
   vue.component(name, {
     // 模板
     template: '\
-          <canvas class="canvas_monitor_bg" id="monitor-graph" width="750" height="226" ref="monitor-graph">\
+          <canvas class="canvas_monitor_bg" id="bcmp-graph" width="750" height="226" ref="bcmp-graph">\
             ',
     // 属性
     props: {
@@ -455,4 +455,4 @@
       ctx.fillText(this.datasource.index, 9, 23);
     }
   });
-}(Vue, yufp.$, 'yufp-monitor-graph'));
+}(Vue, yufp.$, 'yufp-bcmp-graph'));

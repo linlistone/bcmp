@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.bcmp.repository.mapper.BcmpSmHostinfoMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.bcmp.domain.BcmpSmHostinfo" id="BaseResultMap">
+        <result column="HOST_ID"  property="hostId" jdbcType="VARCHAR" />
+        <result column="HOST_IP"  property="hostIp" jdbcType="VARCHAR" />
+        <result column="FILE_TRANSPORT_WAY"  property="fileTransportWay" jdbcType="VARCHAR" />
+        <result column="FILE_TRANSPORT_PORT"  property="fileTransportPort" jdbcType="VARCHAR" />
+        <result column="FILE_TRANSPORT_USERNAME"  property="fileTransportUsername" jdbcType="VARCHAR" />
+        <result column="FILE_TRANSPORT_PASSWORD"  property="fileTransportPassword" jdbcType="VARCHAR" />
+        <result column="LOGIN_WAY"  property="loginWay" jdbcType="VARCHAR" />
+        <result column="LOGIN_PORT"  property="loginPort" jdbcType="VARCHAR" />
+        <result column="LOGIN_USERNAME"  property="loginUsername" jdbcType="VARCHAR" />
+        <result column="LOGIN_PASSWORD"  property="loginPassword" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		HOST_ID,
+		HOST_IP,
+		FILE_TRANSPORT_WAY,
+		FILE_TRANSPORT_PORT,
+		FILE_TRANSPORT_USERNAME,
+		FILE_TRANSPORT_PASSWORD,
+		LOGIN_WAY,
+		LOGIN_PORT,
+		LOGIN_USERNAME,
+		LOGIN_PASSWORD,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_hostinfo
+		<where>
+			<if test="condition.hostId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostId)">
+						AND HOST_ID like #{condition.hostId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HOST_ID = #{condition.hostId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.hostIp != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostIp)">
+						AND HOST_IP like #{condition.hostIp,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HOST_IP = #{condition.hostIp,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.fileTransportWay != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.fileTransportWay)">
+						AND FILE_TRANSPORT_WAY like #{condition.fileTransportWay,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FILE_TRANSPORT_WAY = #{condition.fileTransportWay,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.fileTransportPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.fileTransportPort)">
+						AND FILE_TRANSPORT_PORT like #{condition.fileTransportPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FILE_TRANSPORT_PORT = #{condition.fileTransportPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.fileTransportUsername != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.fileTransportUsername)">
+						AND FILE_TRANSPORT_USERNAME like #{condition.fileTransportUsername,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FILE_TRANSPORT_USERNAME = #{condition.fileTransportUsername,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.fileTransportPassword != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.fileTransportPassword)">
+						AND FILE_TRANSPORT_PASSWORD like #{condition.fileTransportPassword,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FILE_TRANSPORT_PASSWORD = #{condition.fileTransportPassword,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginWay != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginWay)">
+						AND LOGIN_WAY like #{condition.loginWay,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_WAY = #{condition.loginWay,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginPort)">
+						AND LOGIN_PORT like #{condition.loginPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_PORT = #{condition.loginPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginUsername != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginUsername)">
+						AND LOGIN_USERNAME like #{condition.loginUsername,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_USERNAME = #{condition.loginUsername,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginPassword != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginPassword)">
+						AND LOGIN_PASSWORD like #{condition.loginPassword,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_PASSWORD = #{condition.loginPassword,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpSmHostinfo">
+		insert into bcmp_sm_hostinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="hostId != null">HOST_ID ,</if>
+			<if test="hostIp != null">HOST_IP ,</if>
+			<if test="fileTransportWay != null">FILE_TRANSPORT_WAY ,</if>
+			<if test="fileTransportPort != null">FILE_TRANSPORT_PORT ,</if>
+			<if test="fileTransportUsername != null">FILE_TRANSPORT_USERNAME ,</if>
+			<if test="fileTransportPassword != null">FILE_TRANSPORT_PASSWORD ,</if>
+			<if test="loginWay != null">LOGIN_WAY ,</if>
+			<if test="loginPort != null">LOGIN_PORT ,</if>
+			<if test="loginUsername != null">LOGIN_USERNAME ,</if>
+			<if test="loginPassword != null">LOGIN_PASSWORD ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="hostId != null">#{hostId,jdbcType=VARCHAR},</if>
+			<if test="hostIp != null">#{hostIp,jdbcType=VARCHAR},</if>
+			<if test="fileTransportWay != null">#{fileTransportWay,jdbcType=VARCHAR},</if>
+			<if test="fileTransportPort != null">#{fileTransportPort,jdbcType=VARCHAR},</if>
+			<if test="fileTransportUsername != null">#{fileTransportUsername,jdbcType=VARCHAR},</if>
+			<if test="fileTransportPassword != null">#{fileTransportPassword,jdbcType=VARCHAR},</if>
+			<if test="loginWay != null">#{loginWay,jdbcType=VARCHAR},</if>
+			<if test="loginPort != null">#{loginPort,jdbcType=VARCHAR},</if>
+			<if test="loginUsername != null">#{loginUsername,jdbcType=VARCHAR},</if>
+			<if test="loginPassword != null">#{loginPassword,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpSmHostinfo">
+		update bcmp_sm_hostinfo
+		<set>
+			<if test="hostId != null">HOST_ID = #{hostId,jdbcType=VARCHAR},</if>
+			<if test="hostIp != null">HOST_IP = #{hostIp,jdbcType=VARCHAR},</if>
+			<if test="fileTransportWay != null">FILE_TRANSPORT_WAY = #{fileTransportWay,jdbcType=VARCHAR},</if>
+			<if test="fileTransportPort != null">FILE_TRANSPORT_PORT = #{fileTransportPort,jdbcType=VARCHAR},</if>
+			<if test="fileTransportUsername != null">FILE_TRANSPORT_USERNAME = #{fileTransportUsername,jdbcType=VARCHAR},</if>
+			<if test="fileTransportPassword != null">FILE_TRANSPORT_PASSWORD = #{fileTransportPassword,jdbcType=VARCHAR},</if>
+			<if test="loginWay != null">LOGIN_WAY = #{loginWay,jdbcType=VARCHAR},</if>
+			<if test="loginPort != null">LOGIN_PORT = #{loginPort,jdbcType=VARCHAR},</if>
+			<if test="loginUsername != null">LOGIN_USERNAME = #{loginUsername,jdbcType=VARCHAR},</if>
+			<if test="loginPassword != null">LOGIN_PASSWORD = #{loginPassword,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where HOST_ID = #{hostId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_hostinfo where  HOST_ID = #{hostId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_hostinfo where HOST_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="hostId">#{hostId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

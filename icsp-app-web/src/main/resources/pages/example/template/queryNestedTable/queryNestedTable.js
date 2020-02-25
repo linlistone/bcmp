@@ -26,14 +26,14 @@ define(function (require, exports) {
             {
               type: 'expand',
               template: function () {
-                return '<template scope="props">\
+                return '<templates scope="props">\
                                 <el-table-x :max-height="200" data-url="/trade/example/list" \
                                 :table-columns="[\
                                   { label: \'编码\', prop: \'id\' },\
                                   { label: \'名称\', prop: \'title\'},\
                                   { label: \'作者\', prop: \'author\'}\
                                 ]"></el-table-x>\
-                            </template>';
+                            </templates>';
               }
             },
             { label: '编码', prop: 'id' },
@@ -48,9 +48,9 @@ define(function (require, exports) {
                 // 关于如何配置click事件方法，
                 // 1、固定写法：_$emit('custom-row-click', scope) ，其中custom-row-click是用于在组件内部触发事件方法，scope是传递的参数
                 // 2、在el-table-x组件上通过配置监听：@custom-row-click="customRowClick" ，其中customRowClick是当前业务功能接收事件处理的方法
-                return '<template scope="scope">\
+                return '<templates scope="scope">\
                                     <a href="javascipt:void(0);" style="text-decoration:underline;" @click="_$emit(\'custom-row-click\', scope)">{{ scope.row.title }}</a>\
-                                </template>';
+                                </templates>';
               }
             },
             { label: '类型', prop: 'type', width: 110, dataCode: 'NATIONALITY' },
@@ -61,10 +61,10 @@ define(function (require, exports) {
               label: '操作',
               width: 86,
               template: function () {
-                return '<template scope="scope">\
+                return '<templates scope="scope">\
                                 <el-button type="text" size="small" @click="_$emit(\'custom-row-op\', scope, \'edit\')">编辑</el-button>\
                                 <el-button type="text" size="small" @click="_$emit(\'custom-row-op\', scope, \'delete\')">删除</el-button>\
-                            </template>';
+                            </templates>';
               }
             }
           ]

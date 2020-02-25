@@ -42,13 +42,13 @@ define(function (require) {
     },
 
     cmnodeinfo: {
-      html: 'pages/monitor/node/node.html',
-      js: 'pages/monitor/node/node.js'
+      html: 'pages/bcmp/node/node.html',
+      js: 'pages/bcmp/node/node.js'
     },
 
     cmdeployinfo: {
-      html: 'pages/monitor/deployinfo/deployinfo.html',
-      js: 'pages/monitor/deployinfo/deployinfo.js'
+      html: 'pages/bcmp/deployinfo/deployinfo.html',
+      js: 'pages/bcmp/deployinfo/deployinfo.js'
     }
   };
   // 注册路由表

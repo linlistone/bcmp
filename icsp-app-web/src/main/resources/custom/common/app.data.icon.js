@@ -1570,7 +1570,7 @@
       tag: '表格、栅格、数据、报表、统计、汇总'
     },
     {
-      id: 'el-icon-yx-insert-template',
+      id: 'el-icon-yx-insert-templates',
       tag: '插入模板、栅格、数据、报表、统计、汇总'
     },
     {

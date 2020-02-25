@@ -14,11 +14,61 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.bcmpService + '/hostinfo/index',
+      dataUrl: backend.bcmpService + '/bcmpCmNodeinfo/index',
       buttonName: '', // 弹出框提交按钮名称
-      dialogVisible: false // 弹出框层是否可见
+      dialogVisible: false, // 弹出框层是否可见
+      rules: { // 校验规则配置
+        hostIp: [{ // 节点主机IP
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        nodeType: [{ // 节点类型
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        nodeName: [{ // 节点名称
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 20,
+          message: '最大长度不超过20个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        applyPath: [{ // 应用路径
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        updateDirectory: [{ // 更新目录
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        applyPort: [{ // 应用端口
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        httpPort: [{ // HTTP端口
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }],
+        jvmPort: [{ // JVM端口
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }]
+      }
     };
-    yufp.lookup.reg('LOGIN_TREATY,TRANS_TREATY', false);
+    yufp.lookup.reg('FOX_NODETYPE,YESNO', false);
     // 创建vue model
     const vm = new Vue({
       el: cite.el,
@@ -55,20 +105,20 @@ define(function (require, exports) {
         // 批量删除
         deleteFn: function (viewData) {
           var _this = this;
-          this.$confirm('确定要删除【' + viewData.hostId + '】吗?', '提示', {
+          this.$confirm('确定要删除【' + viewData.nodeId + '】吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(function () {
             // 调用删除提交服务
-            var hostId = viewData.hostId;
+            var nodeId = viewData.nodeId;
             var delData = {
-              'hostId': hostId
+              'nodeId': nodeId
             };
             yufp.service.request({
               method: 'POST',
               data: delData,
-              name: backend.bcmpService + '/hostinfo/delete',
+              name: backend.bcmpService + '/bcmpCmNodeinfo/delete',
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -119,7 +169,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.bcmpService + '/hostinfo/create',
+            name: backend.bcmpService + '/bcmpCmNodeinfo/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -160,7 +210,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.bcmpService + '/hostinfo/update',
+            name: backend.bcmpService + '/bcmpCmNodeinfo/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({
@@ -189,10 +239,37 @@ define(function (require, exports) {
           _this.$nextTick(function () {
             _this.$refs['refForm'].resetFields();
           });
+        },
+        // 加载主机配置
+        getHostList: function () {
+          var querModel = {
+            page: 1,
+            size: 999
+          };
+          yufp.service.request({
+            method: 'GET',
+            data: querModel,
+            name: backend.bcmpService + '/hostinfo/index',
+            callback: function (code, message, response) {
+              if (code === 0) {
+                var list = [];
+                var data = response.data;
+                for (var i = 0; i < data.length; i++) {
+                  var item = {
+                    key: data[i].hostIp,
+                    value: data[i].hostIp
+                  };
+                  list.push(item);
+                }
+                yufp.lookup.storageDataCodePut('HOSTLIST', list);
+              }
+            }
+          });
         }
       },
       // 加载后处理
       mounted: function () {
+        this.getHostList();
       }
     });
   };

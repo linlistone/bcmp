@@ -4,7 +4,6 @@ package ${package}.${moduleName}.domain;
 import java.math.BigDecimal;
 </#if>
 import java.io.Serializable;
-import java.util.Date;
 import ${package}.base.base.BaseDomain;
 
 

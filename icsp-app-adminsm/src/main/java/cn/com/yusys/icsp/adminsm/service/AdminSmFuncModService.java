@@ -58,7 +58,7 @@ public class AdminSmFuncModService  extends BaseService {
 
 	/**
 	 * 根据数据库主建更新
-	 * 
+	 *
 	 * @param adminSmMenu
 	 * @return
 	 */
