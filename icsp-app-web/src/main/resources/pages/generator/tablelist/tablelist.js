@@ -76,7 +76,7 @@ define(function (require, exports) {
           var tradeType = _this.$refs['refForm'].formdata.tradeType;
           var createType = _this.$refs['refForm'].formdata.createType;
           var downloadUrl = backend.generatorService + '/generator/code?tableName=' +
-            tableName + '&moduleName=' + moduleName + '&tradeType' + tradeType + '&createType' + createType;
+            tableName + '&moduleName=' + moduleName + '&tradeType=' + tradeType + '&createType=' + createType;
           yufp.util.download(downloadUrl);
         }
 
