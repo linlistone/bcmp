@@ -1,65 +1,62 @@
 server:
-  port: 9100 #Ó¦ÓÃÆô¶¯¶Ë¿Ú
-#Í¨ÓÃÅäÖÃ
+  port: 9100 #åº”ç”¨å¯åŠ¨ç«¯å£
+  #é€šç”¨é…ç½®
   tomcat:
     additional-tld-skip-patterns: jaxb-api.jar,jaxb-core.jar
-# Êı¾İ¿âÅäÖÃ£¬²»Ê¹ÓÃÊı¾İ¿âÊ±ÇëÉ¾³ıÒÔÏÂÅäÖÃ
+# æ•°æ®åº“é…ç½®ï¼Œä¸ä½¿ç”¨æ•°æ®åº“æ—¶è¯·åˆ é™¤ä»¥ä¸‹é…ç½®
 spring:
   application:
-    name: icsp-app-framework  #Ó¦ÓÃÃû³Æ
-    # Êı¾İ¿âÅäÖÃ£¬²»Ê¹ÓÃÊı¾İ¿âÊ±ÇëÉ¾³ıÒÔÏÂÅäÖÃ
-      #jacksonÅäÖÃ
+    name: icsp-app-framework  #åº”ç”¨åç§°
+      # æ•°æ®åº“é…ç½®ï¼Œä¸ä½¿ç”¨æ•°æ®åº“æ—¶è¯·åˆ é™¤ä»¥ä¸‹é…ç½®
+    #jacksoné…ç½®
   jackson:
     serialization:
-      INDENT_OUTPUT: true # jackson¸ñÊ½»¯Êä³ö
-  # Êı¾İ¿âÅäÖÃ£¬
+      INDENT_OUTPUT: true # jacksonæ ¼å¼åŒ–è¾“å‡º
+  # æ•°æ®åº“é…ç½®ï¼Œ
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver  # Êı¾İ¿âÇı¶¯Àà
-    type: com.zaxxer.hikari.HikariDataSource            # datasourceÊ¹ÓÃµÄÁ¬½Ó³ØÀàĞÍ
-    validation-query: SELECT 1 FROM DUAL                # datasourceÁ¬½ÓÑéÖ¤µÄ²éÑ¯Óï¾ä
-    url: jdbc:mysql://139.196.162.66:3306/bcmp?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false        # Êı¾İ¿âÁ¬½ÓµÄurl
-    username: root # Êı¾İ¿âÁ¬½ÓµÄÓÃ»§Ãû
-    password: admin # Êı¾İ¿âÁ¬½ÓµÄÃÜÂë
+    driver-class-name: com.mysql.jdbc.Driver  # æ•°æ®åº“é©±åŠ¨ç±»
+    type: com.zaxxer.hikari.HikariDataSource            # datasourceä½¿ç”¨çš„è¿æ¥æ± ç±»å‹
+    validation-query: SELECT 1 FROM DUAL                # datasourceè¿æ¥éªŒè¯çš„æŸ¥è¯¢è¯­å¥
+    url: jdbc:mysql://139.196.162.66:3306/bcmp?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false        # æ•°æ®åº“è¿æ¥çš„url
+    username: root # æ•°æ®åº“è¿æ¥çš„ç”¨æˆ·å
+    password: admin # æ•°æ®åº“è¿æ¥çš„å¯†ç 
     hikari:
-      minimum-idle: 5                 # ¿ÕÏĞÊ±×îĞ¡Á¬½ÓÊı
-      maximum-pool-size: 5            # Á¬½Ó³Ø´óĞ¡
+      minimum-idle: 5                 # ç©ºé—²æ—¶æœ€å°è¿æ¥æ•°
+      maximum-pool-size: 5            # è¿æ¥æ± å¤§å°
       data-source-properties:
-        cachePrepStmts: true        # ÊÇ·ñÆôÓÃPrep»º´æ
-        prepStmtCacheSize: 250      # Prep»º´æ´óĞ¡
-        prepStmtCacheSqlLimit: 2048 # Prep»º´æsqlÏŞÖÆ´óĞ¡
-        useServerPrepStmts: true    # ÊÇ·ñÓÃ·şÎñ»º´æPrep
-  # Êı¾İ¿âÅäÖÃ£¬²»Ê¹ÓÃÊı¾İ¿âÊ±ÇëÉ¾³ıÒÔÉÏÅäÖÃ
-  # Èç²»Ê¹ÓÃredis£¬Çë½«ÒÔÏÂÅäÖÃÉ¾³ı
+        cachePrepStmts: true        # æ˜¯å¦å¯ç”¨Prepç¼“å­˜
+        prepStmtCacheSize: 250      # Prepç¼“å­˜å¤§å°
+        prepStmtCacheSqlLimit: 2048 # Prepç¼“å­˜sqlé™åˆ¶å¤§å°
+        useServerPrepStmts: true    # æ˜¯å¦ç”¨æœåŠ¡ç¼“å­˜Prep
+  # æ•°æ®åº“é…ç½®ï¼Œä¸ä½¿ç”¨æ•°æ®åº“æ—¶è¯·åˆ é™¤ä»¥ä¸Šé…ç½®
+  # å¦‚ä¸ä½¿ç”¨redisï¼Œè¯·å°†ä»¥ä¸‹é…ç½®åˆ é™¤
   redis:
-    database: 0         # RedisÄ¬ÈÏÇé¿öÏÂÓĞ16¸ö·ÖÆ¬£¬ÕâÀïÅäÖÃ¾ßÌåÊ¹ÓÃµÄ·ÖÆ¬£¬Ä¬ÈÏÊÇ0
-    host: 106.12.191.34 # RedisµÄµØÖ·
-    port: 6379          # RedisµÄ¶Ë¿Ú
-    password: Redis@123456 # RedisµÄÃÜÂë
-    timeout: 60000      # Á¬½Ó³¬Ê±Ê±¼ä£¨ºÁÃë£©
+    database: 0         # Redisé»˜è®¤æƒ…å†µä¸‹æœ‰16ä¸ªåˆ†ç‰‡ï¼Œè¿™é‡Œé…ç½®å…·ä½“ä½¿ç”¨çš„åˆ†ç‰‡ï¼Œé»˜è®¤æ˜¯0
+    host: 106.12.191.34 # Redisçš„åœ°å€
+    port: 6379          # Redisçš„ç«¯å£
+    password: Redis@123456 # Redisçš„å¯†ç 
+    timeout: 60000      # è¿æ¥è¶…æ—¶æ—¶é—´ï¼ˆæ¯«ç§’ï¼‰
   cache:
-      type: redis #spring cacheÀàĞÍ
-# Èç²»Ê¹ÓÃredis£¬Çë½«ÒÔÉÏÅäÖÃÉ¾³ı
+    type: redis #spring cacheç±»å‹
+# å¦‚ä¸ä½¿ç”¨redisï¼Œè¯·å°†ä»¥ä¸Šé…ç½®åˆ é™¤
 #########################
-# mybatis  ÅäÖÃ
+# mybatis  é…ç½®
 #########################
 mybatis:
-  mapperLocations: classpath*:mapper/**/*.xml # mybatis¶ÔÓ¦µÄxmlÎÄ¼şÂ·¾¶
+  mapperLocations: classpath*:mapper/**/*.xml # mybatiså¯¹åº”çš„xmlæ–‡ä»¶è·¯å¾„
   configuration:
-    map-underscore-to-camel-case: true      # ÊÇ·ñ¿ªÆôÍÕ·åÃüÃû
+    map-underscore-to-camel-case: true      # æ˜¯å¦å¼€å¯é©¼å³°å‘½å
 
-# ·ÖÒ³ÅäÖÃ
+# åˆ†é¡µé…ç½®
 pagehelper:
-  helperDialect: mysql # ·ÖÒ³Ê¹ÓÃµÄÊı¾İ¿â·½ÑÔ
-  reasonable: true      # ×îºóÒ»Ò³Ê±ÊÇ·ñ×Ü·µ»Ø×îºóÒ»Ò³Êı¾İ
+  helperDialect: mysql # åˆ†é¡µä½¿ç”¨çš„æ•°æ®åº“æ–¹è¨€
+  reasonable: true      # æœ€åä¸€é¡µæ—¶æ˜¯å¦æ€»è¿”å›æœ€åä¸€é¡µæ•°æ®
 
-# ÈÕÖ¾Ïà¹Ø
+# æ—¥å¿—ç›¸å…³
 logging:
-  path: ../logs #ÈÕÖ¾ÎÄ¼şÂ·¾¶
-  file: ${spring.application.name}_${server.port}.log #ÈÕÖ¾ÎÄ¼şÃû³Æ
+  path: ../logs #æ—¥å¿—æ–‡ä»¶è·¯å¾„
+  file: ${spring.application.name}_${server.port}.log #æ—¥å¿—æ–‡ä»¶åç§°
   level:
     root: DEBUG
-    springfox.documentation.spring.web.readers.operation: OFF  #springfoxÈÕÖ¾¹Ø±ÕÊä³ö
+    springfox.documentation.spring.web.readers.operation: OFF  #springfoxæ—¥å¿—å…³é—­è¾“å‡º
     org.springframework.boot.autoconfigure: ERROR
-
-
-

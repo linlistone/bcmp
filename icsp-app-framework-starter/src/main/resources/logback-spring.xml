@@ -14,9 +14,9 @@
 	<springProperty scope="context" name="logLevel" source="logging.level.root" defaultValue="INFO"></springProperty>
 	<!-- logback上下文属性配置 -->
 	<!-- 日志文件输出格式定义（如不定义，默认取defaults.xml中配置） -->
-	<property name="FILE_LOG_PATTERN" value="[${applicationName}, ${ip}] %-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}] %c.%M:%L - %m%n)"/>
+	<property name="FILE_LOG_PATTERN" value="[${applicationName}, %X{ip}] %-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}] %c.%M:%L - %m%n)"/>
 	<!-- 控制台日志格式输出定义（如不定义，默认取defaults.xml中配置） -->
-	<property name="CONSOLE_LOG_PATTERN" value="%black([${applicationName}, ${ip}])  %highlight(%-5p) %red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green([%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}]) %boldMagenta(%c.%M:%L) - %cyan(%m%n)"/>
+	<property name="CONSOLE_LOG_PATTERN" value="%black([${applicationName}, %X{ip}])  %highlight(%-5p) %red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green([%t, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}]) %boldMagenta(%c.%M:%L) - %cyan(%m%n)"/>
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 	
 	<!-- 默认的日志文件输出 -->
