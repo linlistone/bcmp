@@ -1,0 +1,28 @@
+.server-cluster-el-card>.el-card__header {
+    /*background-color: rgb(119, 164, 245);*/
+    background-color: RGB(119, 164, 245);
+
+}
+
+
+.flag {
+    position:relative;
+    left:35px;
+    top:-15px;
+}
+
+.el-card__body {
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.server_cluster{
+    margin:20px;
+}
+
+
+
