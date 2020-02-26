@@ -7,6 +7,7 @@ import ${package}.${moduleName}.repository.mapper.${className}Mapper;
 import ${package}.common.exception.ICSPException;
 import java.util.List;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,11 +52,11 @@ public class ${className}Service extends BaseService {
 	public ${className} show(String ${pk.attrname}) throws Exception {
 		QueryModel model = new QueryModel();
 		model.addCondition("${pk.attrname}", ${pk.attrname});
-		List<${className}> list = index(model);
-		if (list == null || list.isEmpty()) {
+		PageInfo<${className}> pageInfo = index(model);
+		if (pageInfo == null || pageInfo.getTotal()==0) {
 			throw new ICSPException("数据不存在" + ${pk.attrname});
 		}
-		${className} ${classname} = list.get(0);
+		${className} ${classname} = pageInfo.getList().get(0);
 		return  ${classname};
 	}
 
@@ -65,12 +66,11 @@ public class ${className}Service extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public List<${className}> index(QueryModel model)
-			throws Exception {
+	public PageInfo<${className}> index(QueryModel model) throws Exception {
 		PageHelper.startPage(model.getPage(), model.getSize());
 		List<${className}> list = ${classname}Mapper.selectByModel(model);
 		PageHelper.clearPage();
-		return list;
+		return new PageInfo<>(list);
 	}
 
 	/**

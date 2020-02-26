@@ -64,8 +64,7 @@ public class BcmpCmNodeinfoService extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	public PageInfo<BcmpCmNodeinfo> index(QueryModel model)
-			throws Exception {
+	public PageInfo<BcmpCmNodeinfo> index(QueryModel model) {
 		PageHelper.startPage(model.getPage(), model.getSize());
 		List<BcmpCmNodeinfo> list = bcmpCmNodeinfoMapper.selectByModel(model);
 		PageHelper.clearPage();
