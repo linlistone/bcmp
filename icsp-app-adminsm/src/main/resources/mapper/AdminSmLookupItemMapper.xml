@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmLookupItemMapper">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmLookupItemMapper">
 	<!-- 可根据自己的需求，是否要使用 -->
-	<resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem"
+	<resultMap type="cn.com.yusys.icsp.domain.AdminSmLookupItem"
 		id="BaseResultMap">
 		<result property="lookupItemId" column="LOOKUP_ITEM_ID"
 			jdbcType="VARCHAR" />
@@ -56,7 +56,7 @@
 
 	<!-- 插入-只插入非空字段 -->
 	<insert id="insert"
-		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem">
+		parameterType="cn.com.yusys.icsp.domain.AdminSmLookupItem">
 		insert into ADMIN_SM_LOOKUP_ITEM
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="lookupItemId != null">LOOKUP_ITEM_ID,</if>
@@ -82,7 +82,7 @@
 
 	<!-- 根据主键更新-只更新非空字段 -->
 	<update id="updateByPrimaryKey"
-		parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmLookupItem">
+		parameterType="cn.com.yusys.icsp.domain.AdminSmLookupItem">
 		update ADMIN_SM_LOOKUP_ITEM
 		<set>
 			<if test="lookupCode != null">LOOKUP_CODE = #{lookupCode,jdbcType=VARCHAR},</if>

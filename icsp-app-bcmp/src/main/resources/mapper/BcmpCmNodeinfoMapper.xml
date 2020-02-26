@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.yusys.icsp.bcmp.repository.mapper.BcmpCmNodeinfoMapper">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpCmNodeinfoMapper">
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo" id="BaseResultMap">
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpCmNodeinfo" id="BaseResultMap">
         <result column="NODE_ID"  property="nodeId" jdbcType="VARCHAR" />
         <result column="HOST_IP"  property="hostIp" jdbcType="VARCHAR" />
         <result column="NODE_TYPE"  property="nodeType" jdbcType="VARCHAR" />
@@ -201,7 +201,7 @@
 	</select>
 
 	<!-- 插入-只插入非空字段 -->
-	<insert id="insert" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo">
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpCmNodeinfo">
 		insert into bcmp_cm_nodeinfo
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="nodeId != null">NODE_ID ,</if>
@@ -238,7 +238,7 @@
 	</insert>
 
 	<!-- 根据主键更新-只更新非空字段 -->
-	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.bcmp.domain.BcmpCmNodeinfo">
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpCmNodeinfo">
 		update bcmp_cm_nodeinfo
 		<set>
 			<if test="nodeId != null">NODE_ID = #{nodeId,jdbcType=VARCHAR},</if>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.LoginMapper">
-    <resultMap id="MenuBeanMap" type="cn.com.yusys.icsp.adminsm.domain.MenuBean">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.LoginMapper">
+    <resultMap id="MenuBeanMap" type="cn.com.yusys.icsp.domain.MenuBean">
         <result column="MENU_ID" property="menuId" jdbcType="VARCHAR"/>
         <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
         <result column="UP_MENU_ID" property="upMenuId" jdbcType="VARCHAR"/>
@@ -15,7 +15,7 @@
         <result column="MOD_ID" property="modId" jdbcType="VARCHAR"/>
         <result column="MOD_CDE" property="modCde" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="RoleMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+    <resultMap id="RoleMap" type="cn.com.yusys.icsp.domain.AdminSmRole">
         <!--  记录编号  -->
         <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
         <!--  角色代码  -->
@@ -27,7 +27,7 @@
         <!--  状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效  -->
         <result column="ROLE_STS" property="roleSts" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="LogicSysMap" type="cn.com.yusys.icsp.adminsm.domain.AdminSmLogicSys">
+    <resultMap id="LogicSysMap" type="cn.com.yusys.icsp.domain.AdminSmLogicSys">
         <!--  记录编号  -->
         <result column="SYS_ID" property="sysId" jdbcType="VARCHAR"/>
         <!--  认证类型  -->
@@ -47,7 +47,7 @@
     </resultMap>
 
     <!--对一根据id查询个人信息：级联查询的第二种方法（嵌套结果，执行一个SQL语句）-->
-    <resultMap id="UserBeanMap" type="cn.com.yusys.icsp.adminsm.domain.UserBean">
+    <resultMap id="UserBeanMap" type="cn.com.yusys.icsp.domain.UserBean">
         <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
         <result column="CERT_NO" property="certNo" jdbcType="VARCHAR"/>
         <result column="CERT_TYPE" property="certType" jdbcType="VARCHAR"/>
@@ -77,7 +77,7 @@
         <result column="USER_STS" property="userSts" jdbcType="VARCHAR"/>
         <result column="IS_BUSINESS" property="isBusiness" jdbcType="VARCHAR"/>
         <!-- 一对一级联金融机构查询-->
-        <association property="instu" javaType="cn.com.yusys.icsp.adminsm.domain.AdminSmInstu">
+        <association property="instu" javaType="cn.com.yusys.icsp.domain.AdminSmInstu">
             <result column="INSTU_ID" property="instuId" jdbcType="VARCHAR"/>
             <result column="CONT_TEL" property="contTel" jdbcType="VARCHAR"/>
             <result column="CONT_USR" property="contUsr" jdbcType="VARCHAR"/>
@@ -90,7 +90,7 @@
             <result column="ZIP_CDE" property="zipCde" jdbcType="VARCHAR"/>
         </association>
         <!-- 一对一级联机构查询-->
-        <association property="org" javaType="cn.com.yusys.icsp.adminsm.domain.AdminSmOrgInfo">
+        <association property="org" javaType="cn.com.yusys.icsp.domain.AdminSmOrgInfo">
             <!-- 内部机构号 -->
             <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
             <!-- 金融机构编号 -->
@@ -145,7 +145,7 @@
             <result column="ORG_PARENTS" property="orgParents" jdbcType="VARCHAR"/>
         </association>
         <!-- 一对一级联金融机构查询-->
-        <association property="dpt" javaType="cn.com.yusys.icsp.adminsm.domain.AdminsmDpt">
+        <association property="dpt" javaType="cn.com.yusys.icsp.domain.AdminsmDpt">
             <!--  记录编号  -->
             <result column="DPT_ID" property="dptId" jdbcType="VARCHAR"/>
             <!--  部门代码  -->

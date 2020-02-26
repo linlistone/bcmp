@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.yusys.icsp.common.repository.mapper.CommonMapper">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.CommonMapper">
     <!--对一根据id查询个人信息：级联查询的第二种方法（嵌套结果，执行一个SQL语句）-->
     <resultMap id="UserBeanMap" type="cn.com.yusys.icsp.base.bean.UserBean">
         <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>

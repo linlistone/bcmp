@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmRoleMapper">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmRoleMapper">
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmRole" id="BaseResultMap">
+    <resultMap type="cn.com.yusys.icsp.domain.AdminSmRole" id="BaseResultMap">
         <result column="ROLE_ID"  property="roleId" jdbcType="VARCHAR" />
         <result column="ROLE_CODE"  property="roleCode" jdbcType="VARCHAR" />
         <result column="ROLE_NAME"  property="roleName" jdbcType="VARCHAR" />
@@ -123,7 +123,7 @@
 	</select>
 
 	<!-- 插入-只插入非空字段 -->
-	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.AdminSmRole">
 		insert into admin_sm_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="roleId != null">ROLE_ID ,</if>
@@ -148,7 +148,7 @@
 	</insert>
 
 	<!-- 根据主键更新-只更新非空字段 -->
-	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.AdminSmRole">
 		update admin_sm_role
 		<set>
 			<if test="roleId != null">ROLE_ID = #{roleId,jdbcType=VARCHAR},</if>

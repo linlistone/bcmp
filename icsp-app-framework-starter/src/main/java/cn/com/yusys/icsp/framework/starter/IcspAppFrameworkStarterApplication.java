@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 @SpringBootApplication(scanBasePackages = {"cn.com.yusys.icsp"},
         exclude = {JmxAutoConfiguration.class, ThymeleafAutoConfiguration.class,
                 SecurityAutoConfiguration.class})
-@MapperScan({"cn.com.yusys.icsp.*.repository.mapper"})
+@MapperScan({"cn.com.yusys.icsp.repository.mapper"})
 public class IcspAppFrameworkStarterApplication {
     private static final Logger logger = LoggerFactory.getLogger(IcspAppFrameworkStarterApplication.class);
 
