@@ -1,139 +1,52 @@
-<!-- 必须全局拥有唯一的id -->
-<div id="roleManage">
+<!-- 管理 -->
+<div>
     <!--查询区域-->
-    <yu-xform ref="searchForm" v-model="mainGrid.query" related-table-name="roletable">
+    <yu-xform related-table-name="refTable" form-type="search">
+    	<!--
         <yu-xform-group :column="4">
-            <yu-xform-item placeholder="角色代码" ctype="input" name="roleCode" :colspan="6"></yu-xform-item>
-            <yu-xform-item placeholder="角色名称" ctype="input" name="roleName" :colspan="6"></yu-xform-item>
-            <yu-xform-item placeholder="状态" ctype="select" name="roleSts" data-code="DATA_STS" :colspan="6">
-            </yu-xform-item>
-            <!-->自定义内容<!-->
-            <div slot="custom" class="btn-group">
-                <yu-button-group>
-                    <yu-button type="primary" icon="search" @click="queryMainGridFn">查询</yu-button>
-                    <yu-button type="primary" icon="edit" @click="resetFn">重置</yu-button>
-                </yu-button-group>
-            </div>
         </yu-xform-group>
+        -->
     </yu-xform>
     <!--按钮区域-->
     <div class="fox-toolBar">
         <el-button-group>
-            <el-button icon="plus" @click="openCreateFn" v-if="m_btn.createButton">添加</el-button>
-            <el-button icon="edit" @click="modifyFn" v-if="m_btn.editButton">编辑</el-button>
-            <el-button icon="delete" @click="deleteFn" v-if="m_btn.deleteButton">删除</el-button>
-            <el-button icon="yx-unlocked" @click="useFn" v-if="m_btn.useButton">启用</el-button>
-            <el-button icon="yx-lock" @click="unUseFn" v-if="m_btn.unuseButton">停用</el-button>
-            <el-button icon="yx-user-plus" @click="openRoleUserFn" v-if="m_btn.unuseButton" width="200">角色用户
-            </el-button>
-            <el-button icon="yx-user-plus" @click="openRoleAuthFn" v-if="m_btn.AuthButton" width="200">默认权限
-            </el-button>
+            <el-button icon="plus" @click="addFn">添加</el-button>
         </el-button-group>
     </div>
-    <!-- 表格区域 -->
-    <yu-xtable ref="roletable" :data-url="m_roleUrl.roleDataUrl" selection-type="checkbox" row-key="id"
-        style="width: 100%">
-        <yu-xtable-column prop="roleCode" label="角色代码" width="200"></yu-xtable-column>
-        <yu-xtable-column prop="roleName" label="角色名称" width="260">
-            <template scope="scope" type="text">
-                <el-button @click="infoFn(scope.row)" type="text">
-                    {{ scope.row.roleName }}</el-button>
-            </template>';
-        </yu-xtable-column>
-        <!-- <yu-xtable-column prop="modName" label="所属模块" width="220"></yu-xtable-column> -->
-        <!-- <yu-xtable-column prop="orgName" label="所属机构" width="220"></yu-xtable-column> -->
-        <yu-xtable-column prop="roleSts" label="状态" width="200" data-code="DATA_STS"></yu-xtable-column>
-        <yu-xtable-column prop="userName" label="最新变更用户" width="260"></yu-xtable-column>
+    <!--表格区域-->
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
+                <yu-xtable-column prop="roleCode" label="角色代码"></yu-xtable-column>
+        <yu-xtable-column prop="roleName" label="角色名称"></yu-xtable-column>
+        <yu-xtable-column prop="roleLevel" label="角色层级"></yu-xtable-column>
+        <yu-xtable-column prop="roleSts" label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgUsr" label="最新变更用户"></yu-xtable-column>
         <yu-xtable-column prop="lastChgDt" label="最新变更时间"></yu-xtable-column>
+        <yu-xtable-column prop="orgId" label="机构id"></yu-xtable-column>
+        <yu-xtable-column fixed="right" label="操作" width="120">
+            <template slot-scope="scope">
+                <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
+            </template>
+        </yu-xtable-column>
     </yu-xtable>
-
-    <!-- 添加弹出 -->
-    <yu-xdialog :title="m_role.viewTitle[m_role.viewType]" :visible.sync="m_role.dialogVisible" width="800px">
-        <yu-xform ref="roleForm" label-width="120px" v-model="m_role.formdata" :disabled="m_role.formDisabled">
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item name="roleCode" ctype="input" label="角色代码" :rules="m_rules['roleCode']"
-                :disabled="m_role.viewType!='ADD'">
-                </yu-xform-item>
-                <yu-xform-item name="roleName" ctype="input" label="角色名称" :rules="m_rules['roleName']"> </yu-xform-item>
-                <!-- <yu-xform-item name="modId" ctype="select" label="所属模块" :options="m_role.busModOptions" rules="required"></yu-xform-item> -->
-                <!-- <yu-xform-item name="orgId" label="所属机构" ctype="fox-org-tree" :rules="m_rules['orgName']">
-                    <fox-org-tree label="所属机构" :params="{needCheckbox: false}" v-model="m_role.formdata.orgId">
-                    </fox-org-tree>
-                </yu-xform-item> -->
-                <yu-xform-item name="roleSts" label="状态" ctype="select" data-code="DATA_STS" :rules="m_rules['roleSts']"
-                    disabled='false'> </yu-xform-item>
+                <yu-xform-item label="角色代码" ctype="input" name="roleCode" ></yu-xform-item>
+                <yu-xform-item label="角色名称" ctype="input" name="roleName" ></yu-xform-item>
+                <yu-xform-item label="角色层级" ctype="input" name="roleLevel" ></yu-xform-item>
+                <yu-xform-item label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效" ctype="input" name="roleSts" ></yu-xform-item>
+                <yu-xform-item label="最新变更用户" ctype="input" name="lastChgUsr" :disabled="true" ></yu-xform-item>
+                <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :disabled="true" ></yu-xform-item>
+                <yu-xform-item label="机构id" ctype="input" name="orgId" ></yu-xform-item>
             </yu-xform-group>
             <div class="yu-grpButton">
-                <yu-button v-show="m_role.saveBtnShow" icon="check" type="primary" @click="submitFn">保存</yu-button>
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
+                </yu-button>
                 <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
             </div>
         </yu-xform>
-    </yu-xdialog> <!-- -->
-    <!-- 角色用户信息弹出框 -->
-    <yu-xdialog title="角色用户信息" :visible.sync="m_role.dialogGridVisible" height="360px" width="800px">
-        <yu-xform ref="userQuery" related-table-name="userTable">
-            <yu-xform-group :column="4">
-                <yu-xform-item placeholder="登录代码" ctype="input" name="loginCode" :colspan="5"></yu-xform-item>
-                <yu-xform-item placeholder="员工姓名" ctype="input" name="userName" :colspan="5"></yu-xform-item>
-                <yu-xform-item placeholder="员工号" ctype="input" name="userCode" :colspan="5"></yu-xform-item>
-                <!-->自定义内容<!-->
-                <div slot="custom" class="btn-group">
-                    <yu-button-group>
-                        <yu-button type="primary" icon="search" @click="queryUserGridFn">查询</yu-button>
-                        <yu-button type="primary" icon="edit" @click="resetUserFn">重置</yu-button>
-                    </yu-button-group>
-                </div>
-            </yu-xform-group>
-        </yu-xform>
-        <yu-xtable ref="userTable" :data-url="m_roleUrl.userDataUrl">
-            <yu-xtable-column prop="loginCode" label="登录代码" width="120"></yu-xtable-column>
-            <yu-xtable-column prop="userName" label="员工姓名" width="120"></yu-xtable-column>
-            <yu-xtable-column prop="orgName" label="所属机构"></yu-xtable-column>
-        </yu-xtable>
     </yu-xdialog>
-    <!-- 用户默认权限 -->
-    <yu-xdialog :visible.sync="m_role.authDialogVisible" height="500px" width="800px">
-
-        <!--权限列表-->
-        <el-row :gutter="10">
-            <el-col :span="12">
-                <yufp-template-selector ref="demoSelector" placeholder="选择模板" width="200px" v-model="yourVal"
-                    :raw-value="rawValue" @select-fn="selectFn">
-                </yufp-template-selector>
-            </el-col>
-            <el-col :span="12">
-                <div class="yu-toolBar">
-                    <el-button-group>
-                        <el-button icon="yx-undo2" @click="selectCancel">取消选择</el-button>
-                    </el-button-group>
-                </div>
-            </el-col>
-        </el-row>
-
-        <yu-collapse v-model="m_role.activeNames">
-            <yu-collapse-item title="待确认模板" name="1">
-                <yu-xtable ref="authAddTable" :data="m_role.m_funcDataselectFn" reserve-selection row-key="id"
-                    :pageable="false" width="100%" style="margin:10px 10px 10px 10px;">
-                    <yu-xtable-column prop="authTmplName" label="模版名" width="120"></yu-xtable-column>
-                    <yu-xtable-column prop="sqlString" label="数据权限SQL条件" width="120"></yu-xtable-column>
-                    <yu-xtable-column prop="lastChgUsr" label="最新变更用户"></yu-xtable-column>
-                    <yu-xtable-column prop="lastChgDt" label="最新变更时间"></yu-xtable-column>
-                </yu-xtable>
-            </yu-collapse-item>
-            <yu-collapse-item title="默认权限模板" name="2">
-                <yu-xtable ref="authTable" :data-url="m_roleUrl.authUrl" reserve-selection row-key="authId" width="100%"
-                    style="margin:10px 10px 10px 10px;">
-                    <yu-xtable-column prop="authTmplName" label="模版名称" width="120"></yu-xtable-column>
-                    <yu-xtable-column prop="sqlString" label="数据权限SQL条件" width="120"></yu-xtable-column>
-                    <yu-xtable-column prop="lastChgUsr" label="最新变更用户"></yu-xtable-column>
-                    <yu-xtable-column prop="lastChgDt" label="最新变更时间"></yu-xtable-column>
-                </yu-xtable>
-            </yu-collapse-item>
-        </yu-collapse>
-        <div slot="footer" class="dialog-footer">
-            <yu-button v-show="m_role.saveBtnShow" icon="check" type="primary" @click="saveUserAuth">保存</yu-button>
-            <yu-button icon="yx-undo2" type="primary" @click="cleanAuthFn">清除默认权限</yu-button>
-        </div>
-    </yu-xdialog>
-
 </div>

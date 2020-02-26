@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.adminsm.repository.mapper.AdminSmRoleMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.adminsm.domain.AdminSmRole" id="BaseResultMap">
+        <result column="ROLE_ID"  property="roleId" jdbcType="VARCHAR" />
+        <result column="ROLE_CODE"  property="roleCode" jdbcType="VARCHAR" />
+        <result column="ROLE_NAME"  property="roleName" jdbcType="VARCHAR" />
+        <result column="ROLE_LEVEL"  property="roleLevel" jdbcType="VARCHAR" />
+        <result column="ROLE_STS"  property="roleSts" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+        <result column="ORG_ID"  property="orgId" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		ROLE_ID,
+		ROLE_CODE,
+		ROLE_NAME,
+		ROLE_LEVEL,
+		ROLE_STS,
+		LAST_CHG_USR,
+		LAST_CHG_DT,
+		ORG_ID
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_role
+		<where>
+			<if test="condition.roleId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleId)">
+						AND ROLE_ID like #{condition.roleId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ROLE_ID = #{condition.roleId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.roleCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleCode)">
+						AND ROLE_CODE like #{condition.roleCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ROLE_CODE = #{condition.roleCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.roleName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleName)">
+						AND ROLE_NAME like #{condition.roleName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ROLE_NAME = #{condition.roleName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.roleLevel != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleLevel)">
+						AND ROLE_LEVEL like #{condition.roleLevel,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ROLE_LEVEL = #{condition.roleLevel,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.roleSts != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleSts)">
+						AND ROLE_STS like #{condition.roleSts,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ROLE_STS = #{condition.roleSts,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgId)">
+						AND ORG_ID like #{condition.orgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_ID = #{condition.orgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+		insert into admin_sm_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">ROLE_ID ,</if>
+			<if test="roleCode != null">ROLE_CODE ,</if>
+			<if test="roleName != null">ROLE_NAME ,</if>
+			<if test="roleLevel != null">ROLE_LEVEL ,</if>
+			<if test="roleSts != null">ROLE_STS ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT ,</if>
+			<if test="orgId != null">ORG_ID </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">#{roleId,jdbcType=VARCHAR},</if>
+			<if test="roleCode != null">#{roleCode,jdbcType=VARCHAR},</if>
+			<if test="roleName != null">#{roleName,jdbcType=VARCHAR},</if>
+			<if test="roleLevel != null">#{roleLevel,jdbcType=VARCHAR},</if>
+			<if test="roleSts != null">#{roleSts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR},</if>
+			<if test="orgId != null">#{orgId,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.adminsm.domain.AdminSmRole">
+		update admin_sm_role
+		<set>
+			<if test="roleId != null">ROLE_ID = #{roleId,jdbcType=VARCHAR},</if>
+			<if test="roleCode != null">ROLE_CODE = #{roleCode,jdbcType=VARCHAR},</if>
+			<if test="roleName != null">ROLE_NAME = #{roleName,jdbcType=VARCHAR},</if>
+			<if test="roleLevel != null">ROLE_LEVEL = #{roleLevel,jdbcType=VARCHAR},</if>
+			<if test="roleSts != null">ROLE_STS = #{roleSts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR},</if>
+			<if test="orgId != null">ORG_ID = #{orgId,jdbcType=VARCHAR}</if>
+		</set>
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_role where  ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_role where ROLE_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="roleId">#{roleId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

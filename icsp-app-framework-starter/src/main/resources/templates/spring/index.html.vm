@@ -16,7 +16,9 @@
     <!--表格区域-->
     <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
         <#list columns as column>
-		<yu-xtable-column prop="${column.attrname}" label="${column.comments}"></yu-xtable-column>
+        <#if (column.columnName != pk.columnName) >
+        <yu-xtable-column prop="${column.attrname}" label="${column.comments}"></yu-xtable-column>
+        </#if>
 		</#list>
         <yu-xtable-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
@@ -31,7 +33,13 @@
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
               <#list columns as column>
+                <#if (column.columnName != pk.columnName) >
+                     <#if (column.attrname == 'lastChgUsr'|| column.attrname == 'lastChgDt') >
+                <yu-xform-item label="${column.comments}" ctype="input" name="${column.attrname}" :disabled="true" ></yu-xform-item>
+                     <#else>
                 <yu-xform-item label="${column.comments}" ctype="input" name="${column.attrname}" ></yu-xform-item>
+                    </#if>
+                </#if>
               </#list>
             </yu-xform-group>
             <div class="yu-grpButton">
