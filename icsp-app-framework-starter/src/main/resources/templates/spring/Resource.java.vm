@@ -1,12 +1,11 @@
-package ${package}.${moduleName}.rest;
+package ${package}.rest;
 
-import java.util.Arrays;
 import java.util.List;
 import ${package}.base.base.BaseResouce;
 import ${package}.base.web.rest.dto.ResultDto;
 import ${QueryModel};
-import ${package}.${moduleName}.domain.${className};
-import ${package}.${moduleName}.service.${className}Service;
+import ${package}.domain.${className};
+import ${package}.service.${className}Service;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

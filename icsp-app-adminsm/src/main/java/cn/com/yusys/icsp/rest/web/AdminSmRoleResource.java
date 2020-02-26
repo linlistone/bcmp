@@ -1,6 +1,5 @@
 package cn.com.yusys.icsp.rest.web;
 
-import java.util.List;
 import cn.com.yusys.icsp.base.base.BaseResouce;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
@@ -9,12 +8,14 @@ import cn.com.yusys.icsp.service.AdminSmRoleService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 /**
  * 系统角色表
  *
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-26 11:59:53
+ * @date 2020-02-26 17:29:11
  */
 @RestController
 @RequestMapping("/api/adminSmRole")
@@ -33,7 +34,7 @@ public class AdminSmRoleResource extends BaseResouce {
 	@PostMapping(value = "/create")
 	public ResultDto<Integer> create(@RequestBody AdminSmRole adminSmRole) throws Exception {
 		int result = adminSmRoleService.create(adminSmRole);
-		return ResultDto.success(result);
+		return ResultDto.success( result);
 	}
 
 	/**
@@ -54,9 +55,10 @@ public class AdminSmRoleResource extends BaseResouce {
 	 * @算法描述:
 	 */
 	@GetMapping(value = "/index")
-	public ResultDto<List<AdminSmRole>> index(QueryModel model) {
+	public ResultDto<List<AdminSmRole>> index(QueryModel model)
+			throws Exception {
 		PageInfo<AdminSmRole> pageInfo = adminSmRoleService.index(model);
-		return ResultDto.success(pageInfo);
+		return ResultDto.success( pageInfo);
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class AdminSmRoleResource extends BaseResouce {
 	@PostMapping(value = "/update")
 	public ResultDto<Integer> update(@RequestBody AdminSmRole adminSmRole) throws Exception {
 		int result =  adminSmRoleService.update(adminSmRole);
-		return ResultDto.success(result);
+		return ResultDto.success( result);
 	}
 
 	/**
@@ -80,6 +82,6 @@ public class AdminSmRoleResource extends BaseResouce {
 	@PostMapping(value = "/delete/{roleId}")
 	public ResultDto<Integer> delete(@PathVariable("roleId") String roleId) throws Exception {
 		int result = adminSmRoleService.delete(roleId);
-		return ResultDto.success(result);
+		return ResultDto.success( result);
 	}
 }

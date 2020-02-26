@@ -1,9 +1,9 @@
-package ${package}.${moduleName}.mapper;
+package ${package}.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import ${QueryModel};
-import ${package}.${moduleName}.domain.${className};
+import ${package}.domain.${className};
 
 
 

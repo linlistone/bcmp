@@ -1,9 +1,9 @@
-package ${package}.${moduleName}.service;
+package ${package}.service;
 
 import ${package}.base.base.BaseService;
 import ${QueryModel};
-import ${package}.${moduleName}.domain.${className};
-import ${package}.${moduleName}.repository.mapper.${className}Mapper;
+import ${package}.domain.${className};
+import ${package}.repository.mapper.${className}Mapper;
 import ${package}.common.exception.ICSPException;
 import java.util.List;
 import com.github.pagehelper.PageHelper;

@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.domain;
+package ${package}.domain;
 
 <#if hasBigDecimal>
 import java.math.BigDecimal;
