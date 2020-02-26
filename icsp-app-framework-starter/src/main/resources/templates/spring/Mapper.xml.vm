@@ -38,7 +38,7 @@
 	</select>
 
 	<!-- 插入-只插入非空字段 -->
-	<insert id="insert" parameterType="${package}.${moduleName}.domain.${className}">
+	<insert id="insert" parameterType="${package}.domain.${className}">
 		insert into ${tableName}
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		<#list columns as column>
@@ -53,7 +53,7 @@
 	</insert>
 
 	<!-- 根据主键更新-只更新非空字段 -->
-	<update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.domain.${className}">
+	<update id="updateByPrimaryKey" parameterType="${package}.domain.${className}">
 		update ${tableName}
 		<set>
 			<#list columns as column>

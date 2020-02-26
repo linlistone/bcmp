@@ -1,154 +1,106 @@
-<!-- 机构管理页面 -->
-<div id="orgInfo">
-    <el-row :gutter="10">
-        <!--左侧机构树-->
-        <el-col :span="5">
-            <yu-xtree ref="orgTree" :height="m_tree.orgHeight - 200" @node-click="nodeClickFn"
-                :data-url="m_tree.orgTreeUrl" data-id="orgId" data-label="orgName" data-pid="upOrgId"
-                :data-async="m_tree.orgAsync" :data-params="m_tree.orgTreeParam" :data-root="m_tree.superOrgId"
-                style="margin:0 10px 0 0;">
-            </yu-xtree>
-        </el-col>
-        <!--机构列表部分-->
-        <el-col :span="19">
-            <!--查询区域-->
-            <yu-xform related-table-name="refTable" form-type="search" v-model="m_table.searchform">
-                <yu-xform-group :column="4">
-                    <!-- <yu-xform-item placeholder="选中的机构id" ctype="input" name="unitOrgId" :hidden="true"></yu-xform-item> -->
-                    <yu-xform-item placeholder="机构代码" ctype="input" name="orgCode"></yu-xform-item>
-                    <yu-xform-item placeholder="机构名称" ctype="input" name="orgName"></yu-xform-item>
-                    <yu-xform-item placeholder="状态" ctype="select" name="orgSts" data-code="DATA_STS"></yu-xform-item>
-                </yu-xform-group>
-            </yu-xform>
-            <!--按钮区域-->
-            <div class="fox-toolBar">
-                <el-button-group>
-                    <el-button icon="plus" @click="addFn" v-if="m_btn.createButton">添加</el-button>
-                    <el-button icon="edit" @click="modifyFn" v-if="m_btn.editButton">修改</el-button>
-                    <el-button icon="delete" @click="deleteDataFn" v-if="m_btn.deleteButton">删除</el-button>
-                    <el-button icon="yx-unlocked" @click="useDataFn" v-if="m_btn.useButton">启用</el-button>
-                    <el-button icon="yx-lock" @click="unuseDataFn" v-if="m_btn.unuseButton">停用</el-button>
-                </el-button-group>
-            </div>
-            <!--表格区域-->
-            <yu-xtable ref="refTable" :data-url="m_table.dataUrl" reserve-selection selection-type="checkbox"
-                row-key="id" style="width: 100%">
-                <yu-xtable-column label="机构名称" prop="orgName" width="160">
-                    <template scope="scope" type="text">
-                        <el-button @click="infoFn(scope.row)" type="text">
-                            {{ scope.row.orgName }}</el-button>
-                    </template>
-                </yu-xtable-column>
-                <yu-xtable-column label="机构代码" prop="orgCode" width="150"></yu-xtable-column>
-                <yu-xtable-column label="金融机构名称" prop="instuName" width="160"></yu-xtable-column>
-                <yu-xtable-column label="上级机构" prop="upOrgName" width="150"></yu-xtable-column>
-                <yu-xtable-column label="状态" prop="orgSts" data-code="DATA_STS" width="150"></yu-xtable-column>
-                <yu-xtable-column label="最新变更用户" prop="lastChgName" width="150"></yu-xtable-column>
-                <yu-xtable-column label="最新变更时间" prop="lastChgDt" width="150"></yu-xtable-column>
-            </yu-xtable>
-        </el-col>
-    </el-row>
+<!-- 管理 -->
+<div>
+    <!--查询区域-->
+    <yu-xform related-table-name="refTable" form-type="search">
+    	<!--
+        <yu-xform-group :column="4">
+        </yu-xform-group>
+        -->
+    </yu-xform>
+    <!--按钮区域-->
+    <div class="fox-toolBar">
+        <el-button-group>
+            <el-button icon="plus" @click="addFn">添加</el-button>
+        </el-button-group>
+    </div>
+    <!--表格区域-->
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
+                <yu-xtable-column prop="instuId" label="金融机构编号"></yu-xtable-column>
+        <yu-xtable-column prop="orgCode" label="机构号"></yu-xtable-column>
+        <yu-xtable-column prop="orgName" label="机构中文简称"></yu-xtable-column>
+        <yu-xtable-column prop="orgFullName" label="机构中文全称"></yu-xtable-column>
+        <yu-xtable-column prop="checkOrgId" label="核算机构"></yu-xtable-column>
+        <yu-xtable-column prop="upOrgId" label="上级机构id"></yu-xtable-column>
+        <yu-xtable-column prop="orgHrId" label="HR机构主键"></yu-xtable-column>
+        <yu-xtable-column prop="orgInCode" label="内部机构号"></yu-xtable-column>
+        <yu-xtable-column prop="orgLevel" label="机构层级"></yu-xtable-column>
+        <yu-xtable-column prop="orgGrade" label="机构层级"></yu-xtable-column>
+        <yu-xtable-column prop="orgType" label="机构类型：0：总行 1：支行"></yu-xtable-column>
+        <yu-xtable-column prop="orgCategory" label="机构类别 0-核算机构 1-网点机构 2-虚拟机构"></yu-xtable-column>
+        <yu-xtable-column prop="province" label="省"></yu-xtable-column>
+        <yu-xtable-column prop="city" label="市"></yu-xtable-column>
+        <yu-xtable-column prop="district" label="区"></yu-xtable-column>
+        <yu-xtable-column prop="street" label="街道"></yu-xtable-column>
+        <yu-xtable-column prop="addresses" label="门牌地址"></yu-xtable-column>
+        <yu-xtable-column prop="orgAddr" label="地址"></yu-xtable-column>
+        <yu-xtable-column prop="zipCde" label="邮编"></yu-xtable-column>
+        <yu-xtable-column prop="bankOrgId" label="银行机构代码"></yu-xtable-column>
+        <yu-xtable-column prop="financialLicense" label="金融许可证号"></yu-xtable-column>
+        <yu-xtable-column prop="businessLicense" label="营业执照号"></yu-xtable-column>
+        <yu-xtable-column prop="contUsr" label="负责人"></yu-xtable-column>
+        <yu-xtable-column prop="contDuty" label="负责人职务"></yu-xtable-column>
+        <yu-xtable-column prop="contTel" label="负责人电话"></yu-xtable-column>
+        <yu-xtable-column prop="contOther" label="其他联系方式"></yu-xtable-column>
+        <yu-xtable-column prop="area" label="区域"></yu-xtable-column>
+        <yu-xtable-column prop="orgSts" label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效"></yu-xtable-column>
+        <yu-xtable-column prop="establishTime" label="成立时间"></yu-xtable-column>
+        <yu-xtable-column prop="workStartTime" label="机构工作开始时间"></yu-xtable-column>
+        <yu-xtable-column prop="workEndTime" label="机构工作终止时间"></yu-xtable-column>
+        <yu-xtable-column prop="orgParents" label="所有父机构的orgCode"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgUsr" label="最新变更用户"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgDt" label="最新变更时间"></yu-xtable-column>
+        <yu-xtable-column fixed="right" label="操作" width="120">
+            <template slot-scope="scope">
+                <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
+            </template>
+        </yu-xtable-column>
+    </yu-xtable>
     <!-- 弹出框 数据信息维护页面 -->
-    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
-            <yu-collapse v-model="activeNames">
-                <yu-collapse-item title="关键信息" name="1">
-                    <yu-xform-group>
-                        <yu-xform-item label="机构代码" ctype="input" name="orgCode" v-model="formdata.orgCode"
-                            :rules="rules['orgCode']"></yu-xform-item>
-                        <yu-xform-item label="机构中文简称" ctype="input" name="orgName" v-model="formdata.orgName"
-                            :rules="rules['orgName']"></yu-xform-item>
-                        <yu-xform-item label="机构中文全称" ctype="input" name="orgFullName" v-model="formdata.orgFullName"
-                            :rules="rules['orgName']"></yu-xform-item>
-                        <yu-xform-item label="核算机构" ctype="input" name="checkOrgId" v-model="formdata.checkOrgId"
-                            :rules="rules['checkOrgId']"></yu-xform-item>
-                        <yu-xform-item label="上级机构" ctype="custom" name="upOrgId" v-model="formdata.upOrgId"
-                            :rules="rules['upOrgId']">
-                            <el-popover width="200" tigger="click" v-model="upOrgTree.visible">
-                                <yu-xtree ref="orgTree" @node-click="selectFn" :data-url="m_tree.orgTreeUrl"
-                                    data-id="orgId" data-label="orgName" data-pid="upOrgId"
-                                    :data-async="m_tree.orgAsync" :data-params="m_tree.orgTreeParam" data-root="000000"
-                                    style="margin:0 10px 0 0;" :height="200">
-                                </yu-xtree>
-                                <el-input slot='reference' :disabled="formDisabled" placeholder="请选择机构"
-                                    v-model="formdata.upOrgName">
-                                </el-input>
-                            </el-popover>
-                        </yu-xform-item>
-                        <yu-xform-item label="机构类别" ctype="select" name="orgCategory" v-model="formdata.orgCategory"
-                            data-code="ORG_CATEGORY"></yu-xform-item>
-                        <yu-xform-item label="机构类型" ctype="select" name="orgType" v-model="formdata.orgType"
-                            data-code="ORG_TYPE"></yu-xform-item>
-                        <!-- <yu-xform-item label="上级机构" name="upOrgId" ctype="fox-org-tree" rules="required">
-                                <fox-org-tree label="上级机构" :params="{needCheckbox: false}" @select-fn="selectFn" 
-                                    v-model="formdata.upOrgId">
-                                </fox-org-tree>
-                            </yu-xform-item> -->
-                        <yu-xform-item label="金融机构" ctype="select" name="instuId" :disabled="true"
-                            v-model="formdata.instuId" :options="instuOptions"></yu-xform-item>
-                        <yu-xform-item label="机构层级" ctype="input" name="orgGrade" :disabled="true"
-                            v-model="formdata.orgGrade"></yu-xform-item>
-                        <yu-xform-item label="状态" ctype="select" name="orgSts" :disabled="true"
-                            v-model="formdata.orgSts" data-code="DATA_STS"></yu-xform-item>
-                    </yu-xform-group>
-                </yu-collapse-item>
-                <yu-collapse-item title="扩展信息" name="2">
-                    <div class="block-sa">
-                        <span class="demonstration">市/区/街道:</span>
-                        <yu-cascader ref='handCas' :options="m_linkage.options" v-model="m_linkage.selectedOptions"
-                            @change="handleChange" style="position: absolute;padding-left: 10px;">
-                        </yu-cascader>
-                    </div>
-                    <yu-xform-group>
-                        <yu-xform-item label="省" ctype="input" name="province" v-model="formdata.province"
-                            :hidden="true"></yu-xform-item>
-                        <yu-xform-item label="门牌地址" ctype="input" name="addresses" v-model="formdata.addresses">
-                        </yu-xform-item>
-                        <yu-xform-item label=" 邮编" ctype="input" name="zipCde" v-model="formdata.zipCde"
-                            :rules="rules['zipCde']"></yu-xform-item>
-                        <yu-xform-item label="银行机构代码" ctype="input" name="bankOrgId" v-model="formdata.bankOrgId">
-                        </yu-xform-item>
-                        <yu-xform-item label="金融许可证号" ctype="input" name="financialLicense"
-                            v-model="formdata.financialLicense"></yu-xform-item>
-                        <yu-xform-item label="营业执照号" ctype="input" name="businessLicense"
-                            v-model="formdata.businessLicense"></yu-xform-item>
-                        <yu-xform-item label="负责人姓名" ctype="input" name="contUsr" v-model="formdata.contUsr"
-                            :rules="rules['contUsr']"></yu-xform-item>
-                        <yu-xform-item label="负责人职务" ctype="input" name="contDuty" v-model="formdata.contDuty">
-                        </yu-xform-item>
-                        <yu-xform-item label="负责人联系电话" ctype="input" name="contTel" v-model="formdata.contTel"
-                            :rules="rules['contTel']"></yu-xform-item>
-                        <!-- <yu-xform-item label="地址" ctype="input" name="orgAddr" v-model="formdata.orgAddr"
-                            :rules="rules['orgAddr']"></yu-xform-item> -->
-                        <yu-xform-item label="区域" ctype="input" name="area" v-model="formdata.area"></yu-xform-item>
-
-                    </yu-xform-group>
-                </yu-collapse-item>
-            </yu-collapse>
+            <yu-xform-group>
+                <yu-xform-item label="金融机构编号" ctype="input" name="instuId" ></yu-xform-item>
+                <yu-xform-item label="机构号" ctype="input" name="orgCode" ></yu-xform-item>
+                <yu-xform-item label="机构中文简称" ctype="input" name="orgName" ></yu-xform-item>
+                <yu-xform-item label="机构中文全称" ctype="input" name="orgFullName" ></yu-xform-item>
+                <yu-xform-item label="核算机构" ctype="input" name="checkOrgId" ></yu-xform-item>
+                <yu-xform-item label="上级机构id" ctype="input" name="upOrgId" ></yu-xform-item>
+                <yu-xform-item label="HR机构主键" ctype="input" name="orgHrId" ></yu-xform-item>
+                <yu-xform-item label="内部机构号" ctype="input" name="orgInCode" ></yu-xform-item>
+                <yu-xform-item label="机构层级" ctype="input" name="orgLevel" ></yu-xform-item>
+                <yu-xform-item label="机构层级" ctype="input" name="orgGrade" ></yu-xform-item>
+                <yu-xform-item label="机构类型：0：总行 1：支行" ctype="input" name="orgType" ></yu-xform-item>
+                <yu-xform-item label="机构类别 0-核算机构 1-网点机构 2-虚拟机构" ctype="input" name="orgCategory" ></yu-xform-item>
+                <yu-xform-item label="省" ctype="input" name="province" ></yu-xform-item>
+                <yu-xform-item label="市" ctype="input" name="city" ></yu-xform-item>
+                <yu-xform-item label="区" ctype="input" name="district" ></yu-xform-item>
+                <yu-xform-item label="街道" ctype="input" name="street" ></yu-xform-item>
+                <yu-xform-item label="门牌地址" ctype="input" name="addresses" ></yu-xform-item>
+                <yu-xform-item label="地址" ctype="input" name="orgAddr" ></yu-xform-item>
+                <yu-xform-item label="邮编" ctype="input" name="zipCde" ></yu-xform-item>
+                <yu-xform-item label="银行机构代码" ctype="input" name="bankOrgId" ></yu-xform-item>
+                <yu-xform-item label="金融许可证号" ctype="input" name="financialLicense" ></yu-xform-item>
+                <yu-xform-item label="营业执照号" ctype="input" name="businessLicense" ></yu-xform-item>
+                <yu-xform-item label="负责人" ctype="input" name="contUsr" ></yu-xform-item>
+                <yu-xform-item label="负责人职务" ctype="input" name="contDuty" ></yu-xform-item>
+                <yu-xform-item label="负责人电话" ctype="input" name="contTel" ></yu-xform-item>
+                <yu-xform-item label="其他联系方式" ctype="input" name="contOther" ></yu-xform-item>
+                <yu-xform-item label="区域" ctype="input" name="area" ></yu-xform-item>
+                <yu-xform-item label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效" ctype="input" name="orgSts" ></yu-xform-item>
+                <yu-xform-item label="成立时间" ctype="input" name="establishTime" ></yu-xform-item>
+                <yu-xform-item label="机构工作开始时间" ctype="input" name="workStartTime" ></yu-xform-item>
+                <yu-xform-item label="机构工作终止时间" ctype="input" name="workEndTime" ></yu-xform-item>
+                <yu-xform-item label="所有父机构的orgCode" ctype="input" name="orgParents" ></yu-xform-item>
+                <yu-xform-item label="最新变更用户" ctype="input" name="lastChgUsr" :disabled="true" ></yu-xform-item>
+                <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :disabled="true" ></yu-xform-item>
+            </yu-xform-group>
             <div class="yu-grpButton">
-                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">保存</yu-button>
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
+                </yu-button>
                 <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
             </div>
         </yu-xform>
     </yu-xdialog>
 </div>
-<style>
-    .block-sa {
-        /* 84% */
-        display: inline-block !important;
-        position: relative !important;
-        margin-bottom: 30px !important;
-        margin-left: 10px;
-        margin-top: 10px;
-        /* margin-bottom: 15px; */
-        width: 84%;
-    }
-
-    .block-sa .demonstration {
-        padding-left: 37px;
-    }
-
-    .el-cascader__label {
-        left: 10px;
-    }
-</style>

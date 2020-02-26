@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmOrgMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.AdminSmOrg" id="BaseResultMap">
+        <result column="ORG_ID"  property="orgId" jdbcType="VARCHAR" />
+        <result column="INSTU_ID"  property="instuId" jdbcType="VARCHAR" />
+        <result column="ORG_CODE"  property="orgCode" jdbcType="VARCHAR" />
+        <result column="ORG_NAME"  property="orgName" jdbcType="VARCHAR" />
+        <result column="ORG_FULL_NAME"  property="orgFullName" jdbcType="VARCHAR" />
+        <result column="CHECK_ORG_ID"  property="checkOrgId" jdbcType="VARCHAR" />
+        <result column="UP_ORG_ID"  property="upOrgId" jdbcType="VARCHAR" />
+        <result column="ORG_HR_ID"  property="orgHrId" jdbcType="VARCHAR" />
+        <result column="ORG_IN_CODE"  property="orgInCode" jdbcType="VARCHAR" />
+        <result column="ORG_LEVEL"  property="orgLevel" jdbcType="VARCHAR" />
+        <result column="ORG_GRADE"  property="orgGrade" jdbcType="VARCHAR" />
+        <result column="ORG_TYPE"  property="orgType" jdbcType="VARCHAR" />
+        <result column="ORG_CATEGORY"  property="orgCategory" jdbcType="VARCHAR" />
+        <result column="PROVINCE"  property="province" jdbcType="VARCHAR" />
+        <result column="CITY"  property="city" jdbcType="VARCHAR" />
+        <result column="DISTRICT"  property="district" jdbcType="VARCHAR" />
+        <result column="STREET"  property="street" jdbcType="VARCHAR" />
+        <result column="ADDRESSES"  property="addresses" jdbcType="VARCHAR" />
+        <result column="ORG_ADDR"  property="orgAddr" jdbcType="VARCHAR" />
+        <result column="ZIP_CDE"  property="zipCde" jdbcType="VARCHAR" />
+        <result column="BANK_ORG_ID"  property="bankOrgId" jdbcType="VARCHAR" />
+        <result column="FINANCIAL_LICENSE"  property="financialLicense" jdbcType="VARCHAR" />
+        <result column="BUSINESS_LICENSE"  property="businessLicense" jdbcType="VARCHAR" />
+        <result column="CONT_USR"  property="contUsr" jdbcType="VARCHAR" />
+        <result column="CONT_DUTY"  property="contDuty" jdbcType="VARCHAR" />
+        <result column="CONT_TEL"  property="contTel" jdbcType="VARCHAR" />
+        <result column="CONT_OTHER"  property="contOther" jdbcType="VARCHAR" />
+        <result column="AREA"  property="area" jdbcType="VARCHAR" />
+        <result column="ORG_STS"  property="orgSts" jdbcType="VARCHAR" />
+        <result column="ESTABLISH_TIME"  property="establishTime" jdbcType="VARCHAR" />
+        <result column="WORK_START_TIME"  property="workStartTime" jdbcType="VARCHAR" />
+        <result column="WORK_END_TIME"  property="workEndTime" jdbcType="VARCHAR" />
+        <result column="ORG_PARENTS"  property="orgParents" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		ORG_ID,
+		INSTU_ID,
+		ORG_CODE,
+		ORG_NAME,
+		ORG_FULL_NAME,
+		CHECK_ORG_ID,
+		UP_ORG_ID,
+		ORG_HR_ID,
+		ORG_IN_CODE,
+		ORG_LEVEL,
+		ORG_GRADE,
+		ORG_TYPE,
+		ORG_CATEGORY,
+		PROVINCE,
+		CITY,
+		DISTRICT,
+		STREET,
+		ADDRESSES,
+		ORG_ADDR,
+		ZIP_CDE,
+		BANK_ORG_ID,
+		FINANCIAL_LICENSE,
+		BUSINESS_LICENSE,
+		CONT_USR,
+		CONT_DUTY,
+		CONT_TEL,
+		CONT_OTHER,
+		AREA,
+		ORG_STS,
+		ESTABLISH_TIME,
+		WORK_START_TIME,
+		WORK_END_TIME,
+		ORG_PARENTS,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_org
+		<where>
+			<if test="condition.orgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgId)">
+						AND ORG_ID like #{condition.orgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_ID = #{condition.orgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.instuId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.instuId)">
+						AND INSTU_ID like #{condition.instuId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INSTU_ID = #{condition.instuId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgCode)">
+						AND ORG_CODE like #{condition.orgCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_CODE = #{condition.orgCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgName)">
+						AND ORG_NAME like #{condition.orgName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_NAME = #{condition.orgName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgFullName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgFullName)">
+						AND ORG_FULL_NAME like #{condition.orgFullName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_FULL_NAME = #{condition.orgFullName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.checkOrgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.checkOrgId)">
+						AND CHECK_ORG_ID like #{condition.checkOrgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CHECK_ORG_ID = #{condition.checkOrgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.upOrgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.upOrgId)">
+						AND UP_ORG_ID like #{condition.upOrgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UP_ORG_ID = #{condition.upOrgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgHrId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgHrId)">
+						AND ORG_HR_ID like #{condition.orgHrId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_HR_ID = #{condition.orgHrId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgInCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgInCode)">
+						AND ORG_IN_CODE like #{condition.orgInCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_IN_CODE = #{condition.orgInCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgLevel != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgLevel)">
+						AND ORG_LEVEL like #{condition.orgLevel,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_LEVEL = #{condition.orgLevel,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgGrade != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgGrade)">
+						AND ORG_GRADE like #{condition.orgGrade,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_GRADE = #{condition.orgGrade,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgType)">
+						AND ORG_TYPE like #{condition.orgType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_TYPE = #{condition.orgType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgCategory != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgCategory)">
+						AND ORG_CATEGORY like #{condition.orgCategory,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_CATEGORY = #{condition.orgCategory,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.province != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.province)">
+						AND PROVINCE like #{condition.province,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND PROVINCE = #{condition.province,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.city != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.city)">
+						AND CITY like #{condition.city,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CITY = #{condition.city,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.district != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.district)">
+						AND DISTRICT like #{condition.district,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DISTRICT = #{condition.district,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.street != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.street)">
+						AND STREET like #{condition.street,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND STREET = #{condition.street,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.addresses != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.addresses)">
+						AND ADDRESSES like #{condition.addresses,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ADDRESSES = #{condition.addresses,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgAddr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgAddr)">
+						AND ORG_ADDR like #{condition.orgAddr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_ADDR = #{condition.orgAddr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.zipCde != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.zipCde)">
+						AND ZIP_CDE like #{condition.zipCde,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ZIP_CDE = #{condition.zipCde,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.bankOrgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.bankOrgId)">
+						AND BANK_ORG_ID like #{condition.bankOrgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND BANK_ORG_ID = #{condition.bankOrgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.financialLicense != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.financialLicense)">
+						AND FINANCIAL_LICENSE like #{condition.financialLicense,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FINANCIAL_LICENSE = #{condition.financialLicense,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.businessLicense != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.businessLicense)">
+						AND BUSINESS_LICENSE like #{condition.businessLicense,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND BUSINESS_LICENSE = #{condition.businessLicense,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contUsr)">
+						AND CONT_USR like #{condition.contUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_USR = #{condition.contUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contDuty != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contDuty)">
+						AND CONT_DUTY like #{condition.contDuty,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_DUTY = #{condition.contDuty,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contTel != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contTel)">
+						AND CONT_TEL like #{condition.contTel,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_TEL = #{condition.contTel,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.contOther != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.contOther)">
+						AND CONT_OTHER like #{condition.contOther,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CONT_OTHER = #{condition.contOther,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.area != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.area)">
+						AND AREA like #{condition.area,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND AREA = #{condition.area,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgSts != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgSts)">
+						AND ORG_STS like #{condition.orgSts,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_STS = #{condition.orgSts,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.establishTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.establishTime)">
+						AND ESTABLISH_TIME like #{condition.establishTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ESTABLISH_TIME = #{condition.establishTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.workStartTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.workStartTime)">
+						AND WORK_START_TIME like #{condition.workStartTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND WORK_START_TIME = #{condition.workStartTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.workEndTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.workEndTime)">
+						AND WORK_END_TIME like #{condition.workEndTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND WORK_END_TIME = #{condition.workEndTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgParents != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgParents)">
+						AND ORG_PARENTS like #{condition.orgParents,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_PARENTS = #{condition.orgParents,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.AdminSmOrg">
+		insert into admin_sm_org
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orgId != null">ORG_ID ,</if>
+			<if test="instuId != null">INSTU_ID ,</if>
+			<if test="orgCode != null">ORG_CODE ,</if>
+			<if test="orgName != null">ORG_NAME ,</if>
+			<if test="orgFullName != null">ORG_FULL_NAME ,</if>
+			<if test="checkOrgId != null">CHECK_ORG_ID ,</if>
+			<if test="upOrgId != null">UP_ORG_ID ,</if>
+			<if test="orgHrId != null">ORG_HR_ID ,</if>
+			<if test="orgInCode != null">ORG_IN_CODE ,</if>
+			<if test="orgLevel != null">ORG_LEVEL ,</if>
+			<if test="orgGrade != null">ORG_GRADE ,</if>
+			<if test="orgType != null">ORG_TYPE ,</if>
+			<if test="orgCategory != null">ORG_CATEGORY ,</if>
+			<if test="province != null">PROVINCE ,</if>
+			<if test="city != null">CITY ,</if>
+			<if test="district != null">DISTRICT ,</if>
+			<if test="street != null">STREET ,</if>
+			<if test="addresses != null">ADDRESSES ,</if>
+			<if test="orgAddr != null">ORG_ADDR ,</if>
+			<if test="zipCde != null">ZIP_CDE ,</if>
+			<if test="bankOrgId != null">BANK_ORG_ID ,</if>
+			<if test="financialLicense != null">FINANCIAL_LICENSE ,</if>
+			<if test="businessLicense != null">BUSINESS_LICENSE ,</if>
+			<if test="contUsr != null">CONT_USR ,</if>
+			<if test="contDuty != null">CONT_DUTY ,</if>
+			<if test="contTel != null">CONT_TEL ,</if>
+			<if test="contOther != null">CONT_OTHER ,</if>
+			<if test="area != null">AREA ,</if>
+			<if test="orgSts != null">ORG_STS ,</if>
+			<if test="establishTime != null">ESTABLISH_TIME ,</if>
+			<if test="workStartTime != null">WORK_START_TIME ,</if>
+			<if test="workEndTime != null">WORK_END_TIME ,</if>
+			<if test="orgParents != null">ORG_PARENTS ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orgId != null">#{orgId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">#{instuId,jdbcType=VARCHAR},</if>
+			<if test="orgCode != null">#{orgCode,jdbcType=VARCHAR},</if>
+			<if test="orgName != null">#{orgName,jdbcType=VARCHAR},</if>
+			<if test="orgFullName != null">#{orgFullName,jdbcType=VARCHAR},</if>
+			<if test="checkOrgId != null">#{checkOrgId,jdbcType=VARCHAR},</if>
+			<if test="upOrgId != null">#{upOrgId,jdbcType=VARCHAR},</if>
+			<if test="orgHrId != null">#{orgHrId,jdbcType=VARCHAR},</if>
+			<if test="orgInCode != null">#{orgInCode,jdbcType=VARCHAR},</if>
+			<if test="orgLevel != null">#{orgLevel,jdbcType=VARCHAR},</if>
+			<if test="orgGrade != null">#{orgGrade,jdbcType=VARCHAR},</if>
+			<if test="orgType != null">#{orgType,jdbcType=VARCHAR},</if>
+			<if test="orgCategory != null">#{orgCategory,jdbcType=VARCHAR},</if>
+			<if test="province != null">#{province,jdbcType=VARCHAR},</if>
+			<if test="city != null">#{city,jdbcType=VARCHAR},</if>
+			<if test="district != null">#{district,jdbcType=VARCHAR},</if>
+			<if test="street != null">#{street,jdbcType=VARCHAR},</if>
+			<if test="addresses != null">#{addresses,jdbcType=VARCHAR},</if>
+			<if test="orgAddr != null">#{orgAddr,jdbcType=VARCHAR},</if>
+			<if test="zipCde != null">#{zipCde,jdbcType=VARCHAR},</if>
+			<if test="bankOrgId != null">#{bankOrgId,jdbcType=VARCHAR},</if>
+			<if test="financialLicense != null">#{financialLicense,jdbcType=VARCHAR},</if>
+			<if test="businessLicense != null">#{businessLicense,jdbcType=VARCHAR},</if>
+			<if test="contUsr != null">#{contUsr,jdbcType=VARCHAR},</if>
+			<if test="contDuty != null">#{contDuty,jdbcType=VARCHAR},</if>
+			<if test="contTel != null">#{contTel,jdbcType=VARCHAR},</if>
+			<if test="contOther != null">#{contOther,jdbcType=VARCHAR},</if>
+			<if test="area != null">#{area,jdbcType=VARCHAR},</if>
+			<if test="orgSts != null">#{orgSts,jdbcType=VARCHAR},</if>
+			<if test="establishTime != null">#{establishTime,jdbcType=VARCHAR},</if>
+			<if test="workStartTime != null">#{workStartTime,jdbcType=VARCHAR},</if>
+			<if test="workEndTime != null">#{workEndTime,jdbcType=VARCHAR},</if>
+			<if test="orgParents != null">#{orgParents,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.AdminSmOrg">
+		update admin_sm_org
+		<set>
+			<if test="orgId != null">ORG_ID = #{orgId,jdbcType=VARCHAR},</if>
+			<if test="instuId != null">INSTU_ID = #{instuId,jdbcType=VARCHAR},</if>
+			<if test="orgCode != null">ORG_CODE = #{orgCode,jdbcType=VARCHAR},</if>
+			<if test="orgName != null">ORG_NAME = #{orgName,jdbcType=VARCHAR},</if>
+			<if test="orgFullName != null">ORG_FULL_NAME = #{orgFullName,jdbcType=VARCHAR},</if>
+			<if test="checkOrgId != null">CHECK_ORG_ID = #{checkOrgId,jdbcType=VARCHAR},</if>
+			<if test="upOrgId != null">UP_ORG_ID = #{upOrgId,jdbcType=VARCHAR},</if>
+			<if test="orgHrId != null">ORG_HR_ID = #{orgHrId,jdbcType=VARCHAR},</if>
+			<if test="orgInCode != null">ORG_IN_CODE = #{orgInCode,jdbcType=VARCHAR},</if>
+			<if test="orgLevel != null">ORG_LEVEL = #{orgLevel,jdbcType=VARCHAR},</if>
+			<if test="orgGrade != null">ORG_GRADE = #{orgGrade,jdbcType=VARCHAR},</if>
+			<if test="orgType != null">ORG_TYPE = #{orgType,jdbcType=VARCHAR},</if>
+			<if test="orgCategory != null">ORG_CATEGORY = #{orgCategory,jdbcType=VARCHAR},</if>
+			<if test="province != null">PROVINCE = #{province,jdbcType=VARCHAR},</if>
+			<if test="city != null">CITY = #{city,jdbcType=VARCHAR},</if>
+			<if test="district != null">DISTRICT = #{district,jdbcType=VARCHAR},</if>
+			<if test="street != null">STREET = #{street,jdbcType=VARCHAR},</if>
+			<if test="addresses != null">ADDRESSES = #{addresses,jdbcType=VARCHAR},</if>
+			<if test="orgAddr != null">ORG_ADDR = #{orgAddr,jdbcType=VARCHAR},</if>
+			<if test="zipCde != null">ZIP_CDE = #{zipCde,jdbcType=VARCHAR},</if>
+			<if test="bankOrgId != null">BANK_ORG_ID = #{bankOrgId,jdbcType=VARCHAR},</if>
+			<if test="financialLicense != null">FINANCIAL_LICENSE = #{financialLicense,jdbcType=VARCHAR},</if>
+			<if test="businessLicense != null">BUSINESS_LICENSE = #{businessLicense,jdbcType=VARCHAR},</if>
+			<if test="contUsr != null">CONT_USR = #{contUsr,jdbcType=VARCHAR},</if>
+			<if test="contDuty != null">CONT_DUTY = #{contDuty,jdbcType=VARCHAR},</if>
+			<if test="contTel != null">CONT_TEL = #{contTel,jdbcType=VARCHAR},</if>
+			<if test="contOther != null">CONT_OTHER = #{contOther,jdbcType=VARCHAR},</if>
+			<if test="area != null">AREA = #{area,jdbcType=VARCHAR},</if>
+			<if test="orgSts != null">ORG_STS = #{orgSts,jdbcType=VARCHAR},</if>
+			<if test="establishTime != null">ESTABLISH_TIME = #{establishTime,jdbcType=VARCHAR},</if>
+			<if test="workStartTime != null">WORK_START_TIME = #{workStartTime,jdbcType=VARCHAR},</if>
+			<if test="workEndTime != null">WORK_END_TIME = #{workEndTime,jdbcType=VARCHAR},</if>
+			<if test="orgParents != null">ORG_PARENTS = #{orgParents,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where ORG_ID = #{orgId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_org where  ORG_ID = #{orgId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_org where ORG_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="orgId">#{orgId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>
