@@ -31,7 +31,10 @@ define(function (require, exports) {
         addFn: function (data) {
           var _this = this;
           _this.switchStatus('ADD', true);
-          _this.formdata.joinDt = new Date();
+          _this.$nextTick(function () {
+            _this.$refs.refForm.resetFields();
+            _this.formdata.dutySts = 'W';
+          });
         },
         // 修改数据按钮
         modifyFn: function (viewData) {
@@ -63,7 +66,7 @@ define(function (require, exports) {
             var dutyId = viewData.dutyId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmDuty/delete/'+dutyId,
+              name: backend.adminService + '/adminSmDuty/delete/' + dutyId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -173,6 +176,67 @@ define(function (require, exports) {
             }
           });
           this.$refs['refTable'].clearSelection();
+        }, // 启用
+        useFn: function () {
+          this.doUserorUnuserFn('usebatch', '启用', '只能选择失效或待生效的数据');
+        },
+        // 停用
+        unUseFn: function () {
+          this.doUserorUnuserFn('unusebatch', '停用', '只能选择生效的数据');
+        },
+        // 岗位用户
+        openDutyFn: function () {
+
+        },
+        // 启用或停用方法
+        doUserorUnuserFn: function (action, actionName, title) {
+          var _this = this;
+          if (this.$refs.refTable.selections.length > 0) {
+            var id = '';
+            var userId = yufp.session.userId;
+            for (var i = 0; i < this.$refs.refTable.selections.length; i++) {
+              var row = this.$refs.refTable.selections[i];
+              var useCheck = row.dutySts === 'W' || row.dutySts === 'I';
+              var unUserCheck = row.dutySts === 'A';
+              if (action === 'usebatch' ? useCheck : unUserCheck) {
+                id = id + ',' + row.roleId;
+              } else {
+                _this.$message({
+                  message: title,
+                  type: 'warning'
+                });
+                return;
+              }
+            }
+            this.$confirm('此操作将' + actionName + '该岗位, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+            }).then(function () {
+              yufp.service.request({
+                method: 'POST',
+                url: backend.appOcaService + '/adminsmduty/' + action,
+                data: {
+                  id: id,
+                  userId: userId
+                },
+                callback: function (code, message, response) {
+                  _this.$message({
+                    message: response.data
+                  });
+                  _this.$refs['refTable'].remoteData();
+                  _this.$refs['refTable'].clearSelection();
+                }
+              });
+            });
+          } else {
+            this.$message({
+              message: '请先选择要' + actionName + '的数据',
+              type: 'warning'
+            });
+            return;
+          }
         },
         // 弹出框状态控制
         switchStatus: function (viewType, editable) {

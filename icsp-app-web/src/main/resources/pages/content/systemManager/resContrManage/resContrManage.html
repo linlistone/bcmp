@@ -34,8 +34,8 @@
                 <yu-xtable-column prop="contrUrl" label="控制操作URL"></yu-xtable-column>
                 <yu-xtable-column prop="methodType" label="HTTP方法" data-code="HTTP_METHOD_TYPE" width="80">
                 </yu-xtable-column>
-                <yu-xtable-column prop="lastChgName" label="最新变更用户" width="110"></yu-xtable-column>
-                <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="140"></yu-xtable-column>
+                <yu-xtable-column prop="lastChgName" label="最新变更用户" width="100"></yu-xtable-column>
+                <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="150"></yu-xtable-column>
                 <yu-xtable-column fixed="right" label="操作" width="120">
                     <template slot-scope="scope">
                         <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
@@ -47,8 +47,8 @@
         </el-col>
     </el-row>
     <!-- 弹出框 数据信息维护页面 -->
-    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
-        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled" >
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
                 <yu-xform-item label="控制操作名称" ctype="input" name="contrName" :rules="rules['contrName']">
                 </yu-xform-item>

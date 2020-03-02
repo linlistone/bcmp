@@ -35,6 +35,7 @@ public class AdminSmDutyService extends BaseService {
 	 */
 	public int create(AdminSmDuty adminSmDuty) throws Exception {
 		adminSmDuty.setDutyId(createUUId());
+		adminSmDuty.setBelongOrgId("000000");
 		adminSmDuty.setLastChgDt(DateUtil.getFormatDateTime());
 		return adminSmDutyMapper.insert(adminSmDuty);
 	}

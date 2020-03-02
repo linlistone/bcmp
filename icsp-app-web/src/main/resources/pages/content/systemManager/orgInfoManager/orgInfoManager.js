@@ -8,6 +8,9 @@ define(function (require, exports) {
   exports.ready = function (code, data, cite) {
     // vue data
     let vmData = {
+      async: false,
+      param: { instuId: 'eb8d6baa57264ad3b071940a4d9a1b87' },
+      height: yufp.frame.size().height,
       formDisabled: true,
       saveBtnShow: true,
       viewType: 'DETAIL',
@@ -27,6 +30,10 @@ define(function (require, exports) {
       computed: {},
       // 方法
       methods: {
+        nodeClickFn: function (nodeData, node, self) {
+          var _this = this;
+          _this.$refs.refTable.remoteData();
+        },
         // 新增按钮事件
         addFn: function (data) {
           var _this = this;
@@ -63,7 +70,7 @@ define(function (require, exports) {
             var orgId = viewData.orgId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmOrg/delete/'+orgId,
+              name: backend.adminService + '/adminSmOrg/delete/' + orgId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -173,6 +180,75 @@ define(function (require, exports) {
             }
           });
           this.$refs['refTable'].clearSelection();
+        },
+        // 启用
+        useFn: function () {
+          this.doUserorUnuserFn('usebatch', '启用', '只能选择失效或待生效的数据');
+        },
+        // 停用
+        unUseFn: function () {
+          this.doUserorUnuserFn('unusebatch', '停用', '只能选择生效的数据');
+        },
+        // 启用或停用方法
+        doUserorUnuserFn: function (action, actionName, title) {
+          var _this = this;
+          if (this.$refs.refTable.selections.length > 0) {
+            var id = '';
+            var userId = yufp.session.userId;
+            for (var i = 0; i < this.$refs.refTable.selections.length; i++) {
+              var row = this.$refs.refTable.selections[i];
+              var useCheck = row.roleSts === 'W' || row.roleSts === 'I';
+              var unUserCheck = row.roleSts === 'A';
+              if (action === 'usebatch' ? useCheck : unUserCheck) {
+                id = id + ',' + row.roleId;
+              } else {
+                _this.$message({
+                  message: title,
+                  type: 'warning'
+                });
+                return;
+              }
+            }
+            this.$confirm('此操作将' + actionName + '该机构, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+            }).then(function () {
+              yufp.service.request({
+                method: 'POST',
+                url: backend.appOcaService + '/adminSmOrg/' + action,
+                data: {
+                  id: id,
+                  userId: userId
+                },
+                callback: function (code, message, response) {
+                  _this.$message({
+                    message: response.data
+                  });
+                  _this.$refs['refTable'].remoteData();
+                  _this.$refs['refTable'].clearSelection();
+                }
+              });
+            });
+          } else {
+            this.$message({
+              message: '请先选择要' + actionName + '的数据',
+              type: 'warning'
+            });
+            return;
+          }
+        },
+        // 弹出框状态控制
+        switchStatus: function (viewType, editable) {
+          var _this = this;
+          _this.viewType = viewType;
+          _this.saveBtnShow = editable;
+          _this.dialogVisible = true;
+          _this.formDisabled = !editable;
+          _this.$nextTick(function () {
+            _this.$refs['refForm'].resetFields();
+          });
         },
         // 弹出框状态控制
         switchStatus: function (viewType, editable) {

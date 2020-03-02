@@ -77,7 +77,10 @@ define(function (require, exports) {
         addFn: function (data) {
           var _this = this;
           _this.switchStatus('ADD', true);
-          _this.formdata.joinDt = new Date();
+          _this.$nextTick(function () {
+            _this.$refs.refForm.resetFields();
+            _this.formdata.roleSts = 'W';
+          });
         },
         // 修改数据按钮
         modifyFn: function (viewData) {

@@ -16,7 +16,59 @@ define(function (require, exports) {
       formdata: {},
       dataUrl: backend.adminService + '/adminSmInstu/index',
       buttonName: '', // 弹出框提交按钮名称
-      dialogVisible: false // 弹出框层是否可见
+      dialogVisible: false, // 弹出框层是否可见
+      rules: { // 校验规则配置
+        instuCde: [{ // 机构代码
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 10,
+          message: '最大长度不超过10个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        instuName: [{ // 机构名称
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 100,
+          message: '最大长度不超过50个汉字',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        zipCde: [{ // 邮编
+          max: 100,
+          message: '最大长度不超过100个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.postcode,
+          message: '请输入正确信息',
+          trigger: 'blur'
+        }],
+        contUsr: [{ // 联系人
+          max: 100,
+          message: '最大长度不超过50个汉字',
+          trigger: 'blur'
+        }],
+        contTel: [{ // 手机号码
+          validator: yufp.validator.mobile,
+          message: '请输入正确信息',
+          trigger: 'blur'
+        }],
+        instuAddr: [{ // 地址
+          max: 200,
+          message: '最大长度不超过100个汉字',
+          trigger: 'blur'
+        }]
+      }
     };
     // 创建vue model
     const vm = new Vue({
@@ -31,7 +83,11 @@ define(function (require, exports) {
         addFn: function (data) {
           var _this = this;
           _this.switchStatus('ADD', true);
-          _this.formdata.joinDt = new Date();
+          _this.$nextTick(function () {
+            _this.$refs.refForm.resetFields();
+            _this.formdata.instuSts = 'W';
+            _this.formdata.joinDt = new Date();
+          });
         },
         // 修改数据按钮
         modifyFn: function (viewData) {
@@ -174,6 +230,64 @@ define(function (require, exports) {
             }
           });
           this.$refs['refTable'].clearSelection();
+        },
+        // 启用
+        useFn: function () {
+          this.doUserorUnuserFn('usebatch', '启用', '只能选择失效或待生效的数据');
+        },
+        // 停用
+        unUseFn: function () {
+          this.doUserorUnuserFn('unusebatch', '停用', '只能选择生效的数据');
+        },
+        // 启用或停用方法
+        doUserorUnuserFn: function (action, actionName, title) {
+          var _this = this;
+          if (this.$refs.refTable.selections.length > 0) {
+            var id = '';
+            var userId = yufp.session.userId;
+            for (var i = 0; i < this.$refs.refTable.selections.length; i++) {
+              var row = this.$refs.refTable.selections[i];
+              var useCheck = row.instuSts === 'W' || row.instuSts === 'I';
+              var unUserCheck = row.instuSts === 'A';
+              if (action === 'usebatch' ? useCheck : unUserCheck) {
+                id = id + ',' + row.roleId;
+              } else {
+                _this.$message({
+                  message: title,
+                  type: 'warning'
+                });
+                return;
+              }
+            }
+            this.$confirm('此操作将' + actionName + '该法人机构, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+            }).then(function () {
+              yufp.service.request({
+                method: 'POST',
+                url: backend.appOcaService + '/adminSmInstu/' + action,
+                data: {
+                  id: id,
+                  userId: userId
+                },
+                callback: function (code, message, response) {
+                  _this.$message({
+                    message: response.data
+                  });
+                  _this.$refs['refTable'].remoteData();
+                  _this.$refs['refTable'].clearSelection();
+                }
+              });
+            });
+          } else {
+            this.$message({
+              message: '请先选择要' + actionName + '的数据',
+              type: 'warning'
+            });
+            return;
+          }
         },
         // 弹出框状态控制
         switchStatus: function (viewType, editable) {

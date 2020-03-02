@@ -2,26 +2,29 @@
 <div>
     <!--查询区域-->
     <yu-xform related-table-name="refTable" form-type="search">
-    	<!--
         <yu-xform-group :column="4">
+            <yu-xform-item placeholder="岗位代码" ctype="input" name="dutyCde"></yu-xform-item>
+            <yu-xform-item placeholder="岗位名称" ctype="input" name="dutyName"></yu-xform-item>
+            <yu-xform-item placeholder="状态" ctype="select" name="dutySts" data-code="DATA_STS"></yu-xform-item>
         </yu-xform-group>
-        -->
     </yu-xform>
     <!--按钮区域-->
     <div class="fox-toolBar">
         <el-button-group>
             <el-button icon="plus" @click="addFn">添加</el-button>
+            <el-button icon="yx-unlocked" @click="useFn">启用</el-button>
+            <el-button icon="yx-lock" @click="unUseFn">停用</el-button>
+            <el-button icon="yx-user-plus" @click="openDutyFn" width="200">岗位用户</el-button>
         </el-button-group>
     </div>
     <!--表格区域-->
-    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
-                <yu-xtable-column prop="dutyCde" label="岗位代码"></yu-xtable-column>
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
+        <yu-xtable-column prop="dutyCde" label="岗位代码"></yu-xtable-column>
         <yu-xtable-column prop="dutyName" label="岗位名称"></yu-xtable-column>
-        <yu-xtable-column prop="belongOrgId" label="所属机构编号"></yu-xtable-column>
+        <yu-xtable-column prop="dutySts" label="状态" data-code="DATA_STS"></yu-xtable-column>
         <yu-xtable-column prop="dutyRemark" label="备注"></yu-xtable-column>
-        <yu-xtable-column prop="dutySts" label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效"></yu-xtable-column>
-        <yu-xtable-column prop="lastChgUsr" label="最新变更用户"></yu-xtable-column>
-        <yu-xtable-column prop="lastChgDt" label="最新变更时间"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgName" label="最新变更用户" width="100" ></yu-xtable-column>
+        <yu-xtable-column prop="lastChgDt" label="最新变更时间" width="150" ></yu-xtable-column>
         <yu-xtable-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
                 <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
@@ -31,16 +34,15 @@
         </yu-xtable-column>
     </yu-xtable>
     <!-- 弹出框 数据信息维护页面 -->
-    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item label="岗位代码" ctype="input" name="dutyCde" ></yu-xform-item>
-                <yu-xform-item label="岗位名称" ctype="input" name="dutyName" ></yu-xform-item>
-                <yu-xform-item label="所属机构编号" ctype="input" name="belongOrgId" ></yu-xform-item>
-                <yu-xform-item label="备注" ctype="input" name="dutyRemark" ></yu-xform-item>
-                <yu-xform-item label="状态：对应字典项=NORM_STS A：生效 I：失效 W：待生效" ctype="input" name="dutySts" ></yu-xform-item>
-                <yu-xform-item label="最新变更用户" ctype="input" name="lastChgUsr" :disabled="true" ></yu-xform-item>
-                <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :disabled="true" ></yu-xform-item>
+                <yu-xform-item label="岗位代码" ctype="input" name="dutyCde"></yu-xform-item>
+                <yu-xform-item label="岗位名称" ctype="input" name="dutyName"></yu-xform-item>
+                <yu-xform-item label="状态" ctype="select" name="dutySts" data-code="DATA_STS" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="备注" ctype="input" name="dutyRemark" :colspan="24"></yu-xform-item>
+                <yu-xform-item label="最新变更用户" ctype="input" name="lastChgUsr" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :disabled="true"></yu-xform-item>
             </yu-xform-group>
             <div class="yu-grpButton">
                 <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
