@@ -4,6 +4,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="cn.com.yusys.icsp.domain.BcmpSmHostinfo" id="BaseResultMap">
         <result column="HOST_ID"  property="hostId" jdbcType="VARCHAR" />
+        <result column="HOST_TYPE"  property="hostType" jdbcType="VARCHAR" />
         <result column="HOST_IP"  property="hostIp" jdbcType="VARCHAR" />
         <result column="FILE_TRANSPORT_WAY"  property="fileTransportWay" jdbcType="VARCHAR" />
         <result column="FILE_TRANSPORT_PORT"  property="fileTransportPort" jdbcType="VARCHAR" />
@@ -19,6 +20,7 @@
 
 	<sql id="Base_Column_List">
 		HOST_ID,
+		HOST_TYPE,
 		HOST_IP,
 		FILE_TRANSPORT_WAY,
 		FILE_TRANSPORT_PORT,
@@ -48,7 +50,18 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.hostIp != null">
+			<if test="condition.hostType != null and condition.hostType != ''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostType)">
+						AND HOST_TYPE like #{condition.hostType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HOST_TYPE = #{condition.hostType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.hostIp != null and condition.hostIp != '' ">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostIp)">
@@ -179,6 +192,7 @@
 		insert into bcmp_sm_hostinfo
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="hostId != null">HOST_ID ,</if>
+			<if test="hostType != null">HOST_TYPE ,</if>
 			<if test="hostIp != null">HOST_IP ,</if>
 			<if test="fileTransportWay != null">FILE_TRANSPORT_WAY ,</if>
 			<if test="fileTransportPort != null">FILE_TRANSPORT_PORT ,</if>
@@ -193,6 +207,7 @@
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="hostId != null">#{hostId,jdbcType=VARCHAR},</if>
+			<if test="hostType != null">#{hostType,jdbcType=VARCHAR},</if>
 			<if test="hostIp != null">#{hostIp,jdbcType=VARCHAR},</if>
 			<if test="fileTransportWay != null">#{fileTransportWay,jdbcType=VARCHAR},</if>
 			<if test="fileTransportPort != null">#{fileTransportPort,jdbcType=VARCHAR},</if>
@@ -212,6 +227,7 @@
 		update bcmp_sm_hostinfo
 		<set>
 			<if test="hostId != null">HOST_ID = #{hostId,jdbcType=VARCHAR},</if>
+			<if test="hostType != null">HOST_TYPE = #{hostType,jdbcType=VARCHAR},</if>
 			<if test="hostIp != null">HOST_IP = #{hostIp,jdbcType=VARCHAR},</if>
 			<if test="fileTransportWay != null">FILE_TRANSPORT_WAY = #{fileTransportWay,jdbcType=VARCHAR},</if>
 			<if test="fileTransportPort != null">FILE_TRANSPORT_PORT = #{fileTransportPort,jdbcType=VARCHAR},</if>

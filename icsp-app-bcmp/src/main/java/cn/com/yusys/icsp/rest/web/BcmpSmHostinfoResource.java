@@ -1,5 +1,6 @@
 package cn.com.yusys.icsp.rest.web;
 
+import java.util.List;
 import cn.com.yusys.icsp.base.base.BaseResouce;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
@@ -8,14 +9,12 @@ import cn.com.yusys.icsp.service.BcmpSmHostinfoService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 /**
  * 主机信息配置
  *
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-25 22:59:17
+ * @date 2020-03-01 16:35:25
  */
 @RestController
 @RequestMapping("/api/bcmpSmHostinfo")
@@ -45,7 +44,7 @@ public class BcmpSmHostinfoResource extends BaseResouce {
 	 */
 	@GetMapping(value = "/show")
 	public ResultDto<BcmpSmHostinfo> show(@RequestParam("hostId") String hostId) throws Exception {
-		return ResultDto.success( bcmpSmHostinfoService.show(hostId));
+		return ResultDto.success(bcmpSmHostinfoService.show(hostId));
 	}
 
 	/**
@@ -58,7 +57,7 @@ public class BcmpSmHostinfoResource extends BaseResouce {
 	public ResultDto<List<BcmpSmHostinfo>> index(QueryModel model)
 			throws Exception {
 		PageInfo<BcmpSmHostinfo> pageInfo = bcmpSmHostinfoService.index(model);
-		return ResultDto.success(pageInfo);
+		return ResultDto.success( pageInfo);
 	}
 
 	/**

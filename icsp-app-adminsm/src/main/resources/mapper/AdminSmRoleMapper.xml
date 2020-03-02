@@ -40,7 +40,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.roleCode != null">
+			<if test="condition.roleCode != null and condition.roleCode != ''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleCode)">
@@ -51,7 +51,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.roleName != null">
+			<if test="condition.roleName != null and condition.roleName != ''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleName)">
@@ -73,7 +73,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.roleSts != null">
+			<if test="condition.roleSts != null and condition.roleSts != ''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.roleSts)">

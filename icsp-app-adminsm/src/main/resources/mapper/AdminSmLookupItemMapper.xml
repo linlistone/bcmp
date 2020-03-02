@@ -139,6 +139,7 @@
 			<foreach item="item" index="index" collection="list" open="("
 				separator="," close=")">#{item}</foreach>
 		</where>
+		order by t0.LOOKUP_CODE asc,t0.LOOKUP_ITEM_CODE asc
 	</select>
 
 

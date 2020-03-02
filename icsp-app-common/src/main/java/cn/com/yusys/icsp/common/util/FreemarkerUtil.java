@@ -27,7 +27,6 @@ public class FreemarkerUtil {
         Configuration configuration = new Configuration(Configuration.getVersion());
         Resource resouce=new ClassPathResource("templates");
         File file=resouce.getFile();
-        System.out.printf("file"+file.getAbsolutePath());
         //设置模板文件所在的路径
         configuration.setDirectoryForTemplateLoading(file);
         //设置模板文件所使用的字符集，一般是utf-8

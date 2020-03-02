@@ -80,8 +80,8 @@ a:active {color: #666;}
 .yu-idxBody.yu-box-top .el-menu--horizontal.tile-menu .tile-menu-item .tile-item.is-active {color: #2877FF;}
 .yu-idxBody.yu-box-top .el-menu--horizontal .el-submenu.yu-root-level > .el-submenu__title:hover, .yu-idxBody.yu-box-top .el-menu.el-menu--horizontal > .cust-self-call-menu-template > .el-menu-item:hover {background-color: rgba(16, 16, 16, 0.11);}
 .yu-idxBody.yu-box-top .menu-body .el-menu--horizontal .el-submenu.yu-root-level>.el-menu {top: 38px !important;box-shadow: 0 32px 32px 0 rgba(48,48,77,0.05), 0 16px 16px 0 rgba(48,48,77,0.05), 0 8px 8px 0 rgba(48,48,77,0.05), 0 4px 4px 0 rgba(48,48,77,0.05), 0 2px 2px 0 rgba(48,48,77,0.05);border-radius: 2px;border: none;}
-.yu-idxBody.yu-cust-idxMenu-vertical .yu-mainBox .yu-content-oper {height: 74px;}
-.yu-idxBody.yu-cust-idxMenu-vertical .yu-mainBox .yu-idxTab {margin-top: -39px;}
+.yu-idxBody.yu-cust-idxMenu-vertical .yu-mainBox .yu-content-oper {height: 130px;}
+.yu-idxBody.yu-cust-idxMenu-vertical .yu-mainBox .yu-idxTab {margin-top: -80px;}
 .yu-idxBody.yu-box-top .yu-mainBox .yu-content-oper {background: url(images/logo-blue-h.svg) no-repeat 30px; background-color: #fff;background-size: 112px 48px;}
 .yu-idxBody.yu-box-top .yu-mainBox .yu-content-oper>div {color: #19233C;transition: all .2s linear;}
 .yu-idxBody.yu-box-top .yu-mainBox .yu-content-oper>div:hover{color: #20a0ff}

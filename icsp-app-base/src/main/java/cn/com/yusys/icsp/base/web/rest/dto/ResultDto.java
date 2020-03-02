@@ -85,8 +85,8 @@ public class ResultDto<T> {
         return ResultDto.error(ResultHttpCode.Fail, new Object());
     }
 
-    public static <T> ResultDto<T> error(T data) {
-        return ResultDto.error(ResultHttpCode.Fail, data);
+    public static <T> ResultDto<T> error(String message) {
+        return ResultDto.error(500, message);
     }
 
     public static <T> ResultDto<T> error(ResultHttpCode code) {

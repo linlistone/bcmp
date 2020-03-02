@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmDutyMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.AdminSmDuty" id="BaseResultMap">
+        <result column="DUTY_ID"  property="dutyId" jdbcType="VARCHAR" />
+        <result column="DUTY_CDE"  property="dutyCde" jdbcType="VARCHAR" />
+        <result column="DUTY_NAME"  property="dutyName" jdbcType="VARCHAR" />
+        <result column="BELONG_ORG_ID"  property="belongOrgId" jdbcType="VARCHAR" />
+        <result column="DUTY_REMARK"  property="dutyRemark" jdbcType="VARCHAR" />
+        <result column="DUTY_STS"  property="dutySts" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		DUTY_ID,
+		DUTY_CDE,
+		DUTY_NAME,
+		BELONG_ORG_ID,
+		DUTY_REMARK,
+		DUTY_STS,
+		LAST_CHG_USR,
+		LAST_CHG_DT
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_duty
+		<where>
+			<if test="condition.dutyId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dutyId)">
+						AND DUTY_ID like #{condition.dutyId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DUTY_ID = #{condition.dutyId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.dutyCde != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dutyCde)">
+						AND DUTY_CDE like #{condition.dutyCde,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DUTY_CDE = #{condition.dutyCde,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.dutyName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dutyName)">
+						AND DUTY_NAME like #{condition.dutyName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DUTY_NAME = #{condition.dutyName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.belongOrgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.belongOrgId)">
+						AND BELONG_ORG_ID like #{condition.belongOrgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND BELONG_ORG_ID = #{condition.belongOrgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.dutyRemark != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dutyRemark)">
+						AND DUTY_REMARK like #{condition.dutyRemark,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DUTY_REMARK = #{condition.dutyRemark,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.dutySts != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dutySts)">
+						AND DUTY_STS like #{condition.dutySts,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DUTY_STS = #{condition.dutySts,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.AdminSmDuty">
+		insert into admin_sm_duty
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dutyId != null">DUTY_ID ,</if>
+			<if test="dutyCde != null">DUTY_CDE ,</if>
+			<if test="dutyName != null">DUTY_NAME ,</if>
+			<if test="belongOrgId != null">BELONG_ORG_ID ,</if>
+			<if test="dutyRemark != null">DUTY_REMARK ,</if>
+			<if test="dutySts != null">DUTY_STS ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dutyId != null">#{dutyId,jdbcType=VARCHAR},</if>
+			<if test="dutyCde != null">#{dutyCde,jdbcType=VARCHAR},</if>
+			<if test="dutyName != null">#{dutyName,jdbcType=VARCHAR},</if>
+			<if test="belongOrgId != null">#{belongOrgId,jdbcType=VARCHAR},</if>
+			<if test="dutyRemark != null">#{dutyRemark,jdbcType=VARCHAR},</if>
+			<if test="dutySts != null">#{dutySts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.AdminSmDuty">
+		update admin_sm_duty
+		<set>
+			<if test="dutyId != null">DUTY_ID = #{dutyId,jdbcType=VARCHAR},</if>
+			<if test="dutyCde != null">DUTY_CDE = #{dutyCde,jdbcType=VARCHAR},</if>
+			<if test="dutyName != null">DUTY_NAME = #{dutyName,jdbcType=VARCHAR},</if>
+			<if test="belongOrgId != null">BELONG_ORG_ID = #{belongOrgId,jdbcType=VARCHAR},</if>
+			<if test="dutyRemark != null">DUTY_REMARK = #{dutyRemark,jdbcType=VARCHAR},</if>
+			<if test="dutySts != null">DUTY_STS = #{dutySts,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where DUTY_ID = #{dutyId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_duty where  DUTY_ID = #{dutyId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_duty where DUTY_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="dutyId">#{dutyId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

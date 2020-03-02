@@ -16,7 +16,53 @@ define(function (require, exports) {
       formdata: {},
       dataUrl: backend.adminService + '/adminSmRole/index',
       buttonName: '', // 弹出框提交按钮名称
-      dialogVisible: false // 弹出框层是否可见
+      dialogVisible: false, // 弹出框层是否可见
+      roleRules: {
+        roleCode: [{
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 10,
+          message: '最大长度不超过10个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        roleName: [{
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 20,
+          message: '最大长度不超过20个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        roleLevel: [{
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 5,
+          message: '最大长度不超过5个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.speChar,
+          message: '输入信息包含特殊字符',
+          trigger: 'blur'
+        }],
+        roleSts: [{
+          required: true,
+          message: '必填项',
+          trigger: 'blur'
+        }]
+      }
     };
     // 创建vue model
     const vm = new Vue({
@@ -63,7 +109,7 @@ define(function (require, exports) {
             var roleId = viewData.roleId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmRole/delete/'+roleId,
+              name: backend.adminService + '/adminSmRole/delete/' + roleId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -173,6 +219,72 @@ define(function (require, exports) {
             }
           });
           this.$refs['refTable'].clearSelection();
+        },
+        // 启用
+        useFn: function () {
+          this.doUserorUnuserFn('usebatch', '启用', '只能选择失效或待生效的数据');
+        },
+        // 停用
+        unUseFn: function () {
+          this.doUserorUnuserFn('unusebatch', '停用', '只能选择生效的数据');
+        },
+        // 角色用户
+        openRoleUserFn: function () {
+
+        },
+        // 默认权限
+        openRoleAuthFn: function () {
+
+        },
+        // 启用或停用方法
+        doUserorUnuserFn: function (action, actionName, title) {
+          var _this = this;
+          if (this.$refs.refTable.selections.length > 0) {
+            var id = '';
+            var userId = yufp.session.userId;
+            for (var i = 0; i < this.$refs.refTable.selections.length; i++) {
+              var row = this.$refs.refTable.selections[i];
+              var useCheck = row.roleSts === 'W' || row.roleSts === 'I';
+              var unUserCheck = row.roleSts === 'A';
+              if (action === 'usebatch' ? useCheck : unUserCheck) {
+                id = id + ',' + row.roleId;
+              } else {
+                _this.$message({
+                  message: title,
+                  type: 'warning'
+                });
+                return;
+              }
+            }
+            this.$confirm('此操作将' + actionName + '该角色, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+            }).then(function () {
+              yufp.service.request({
+                method: 'POST',
+                url: backend.appOcaService + '/adminsmrole/' + action,
+                data: {
+                  id: id,
+                  userId: userId
+                },
+                callback: function (code, message, response) {
+                  _this.$message({
+                    message: response.data
+                  });
+                  _this.$refs['refTable'].remoteData();
+                  _this.$refs['refTable'].clearSelection();
+                }
+              });
+            });
+          } else {
+            this.$message({
+              message: '请先选择要' + actionName + '的数据',
+              type: 'warning'
+            });
+            return;
+          }
         },
         // 弹出框状态控制
         switchStatus: function (viewType, editable) {

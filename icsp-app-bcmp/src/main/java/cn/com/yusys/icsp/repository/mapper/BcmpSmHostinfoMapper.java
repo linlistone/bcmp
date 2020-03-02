@@ -1,10 +1,10 @@
 package cn.com.yusys.icsp.repository.mapper;
 
 import java.util.List;
-
-import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import org.apache.ibatis.annotations.Param;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
+import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
+
 
 
 /**
@@ -12,7 +12,7 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
  * 
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-02-25 22:59:17
+ * @date 2020-03-01 16:35:25
  */
 //@Mapper
 public interface BcmpSmHostinfoMapper {
@@ -46,7 +46,7 @@ public interface BcmpSmHostinfoMapper {
 	 * @参数与返回说明: modId - 主键
 	 * @算法描述: 无
 	 */
-	int deleteByPrimaryKey(@Param("hostId" ) String hostId);
+	int deleteByPrimaryKey(@Param("hostId") String hostId);
 
 	/**
 	 * @方法名称: deleteByIds
@@ -54,6 +54,6 @@ public interface BcmpSmHostinfoMapper {
 	 * @参数与返回说明:
 	 * @算法描述: 无
 	 */
-	int deleteByIds(@Param("ids" ) String ids);
+	int deleteByIds(@Param("ids") String ids);
 	
 }

@@ -23,13 +23,13 @@ public class IcspAppFrameworkStarterApplication {
     private static final Logger logger = LoggerFactory.getLogger(IcspAppFrameworkStarterApplication.class);
 
     public static void main(String[] args) {
-        String ip="Unkown";
+        String ip = "Unkown";
         try {
-             ip = InetAddress.getLocalHost().getHostAddress();
+            ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             logger.warn("获取绑定IP信息异常,将使用缺省IP配置[{}]", (Object) ip);
         }
-        MDC.put("ip",ip);
+        MDC.put("ip", ip);
         // SpringApplication.run(IcspAppFrameworkStarterApplication.class, args);
         Environment env = SpringApplication.run(IcspAppFrameworkStarterApplication.class, args).getEnvironment();
         logger.info(AppStartMessageUtil.updServiceStartMessage(env));
