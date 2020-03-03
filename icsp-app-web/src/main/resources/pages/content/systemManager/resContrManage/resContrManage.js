@@ -22,7 +22,7 @@ define([
       // 表单数据
       formdata: {},
       // 树组件参数
-      reourceUrl: backend.adminService + '/adminSmResContr/funcTree?sysId=' + backend.sysId,
+      reourceUrl: backend.appOcaService + '/adminSmResContr/funcTree?sysId=' + backend.sysId,
       loading: false,
       height: yufp.custom.viewSize().height - 40,
       /** 按钮区域定义*/
@@ -31,7 +31,7 @@ define([
       deleteButton: true, // 删除按钮控制
       /** 表格区域定义*/
       searchform: {},
-      dataUrl: backend.adminService + '/adminSmResContr/index',
+      dataUrl: backend.appOcaService + '/adminSmResContr/index',
       /** 弹出框属性域定义*/
       viewType: 'DETAIL',
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
@@ -187,7 +187,7 @@ define([
           }).then(function () {
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmResContr/delete/' + viewData.contrId,
+              name: backend.appOcaService + '/adminSmResContr/delete/' + viewData.contrId,
               callback: function (code, message, data) {
                 if (code === 0) {
                   vm.$alert(data.message, '提示', {
@@ -218,7 +218,7 @@ define([
           }
           yufp.service.request({
             method: 'GET',
-            url: backend.adminService + '/adminSmResContr/ifcoderepeat',
+            url: backend.appOcaService + '/adminSmResContr/ifcoderepeat',
             data: reqData,
             callback: function (code, message, response) {
               if (response.data.length > 0) {
@@ -262,7 +262,7 @@ define([
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmResContr/create',
+            name: backend.appOcaService + '/adminSmResContr/create',
             callback: function (code, message, data) {
               if (code === 0) {
                 if (data.data.code == 2) {
@@ -304,7 +304,7 @@ define([
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmResContr/update',
+            name: backend.appOcaService + '/adminSmResContr/update',
             callback: function (code, message, data) {
               vm.$alert('更新成功!', '提示', {
                 confirmButtonText: '确定',

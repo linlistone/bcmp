@@ -14,7 +14,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
       lookupItemFormdata: {},
       // 数据字典类别
       treeHeight: yufp.custom.viewSize().height - 80,
-      typeUrl: backend.adminService + '/adminSmLookupType/tree',
+      typeUrl: backend.appOcaService + '/adminSmLookupType/tree',
       // 当前数据目录节点 ID
       currentTypeId: '',
       // 当前数据目录节点 Name
@@ -42,9 +42,9 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
 
       /** 中间表格区域定义*/
       // 类别表格url
-      lookupUrl: backend.adminService + '/adminSmLookup/index',
+      lookupUrl: backend.appOcaService + '/adminSmLookup/index',
       // 内容url
-      lookupitemUrl: backend.adminService + '/adminSmLookupItem/index',
+      lookupitemUrl: backend.appOcaService + '/adminSmLookupItem/index',
       // 字典项查询条件
       filterQueryform: {},
       // 字典内容查询条件
@@ -281,7 +281,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
             type: 'warning'
           }).then(function () {
             yufp.service.request({
-              url: backend.adminService + '/adminSmLookupType/delete',
+              url: backend.appOcaService + '/adminSmLookupType/delete',
               method: 'post',
               data: delData,
               callback: function (code, message, response) {
@@ -328,7 +328,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
           let _this = this;
           delete model.lookupTypeId;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookupType/create',
+            url: backend.appOcaService + '/adminSmLookupType/create',
             method: 'post',
             data: model,
             callback: function (code, message, response) {
@@ -351,7 +351,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
         updateLookUpType: function (model) {
           let _this = this;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookupType/update',
+            url: backend.appOcaService + '/adminSmLookupType/update',
             method: 'post',
             data: model,
             callback: function (code, message, response) {
@@ -426,7 +426,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
             type: 'warning'
           }).then(function () {
             yufp.service.request({
-              url: backend.adminService + '/adminSmLookup/delete',
+              url: backend.appOcaService + '/adminSmLookup/delete',
               method: 'post',
               data: {
                 lookupId: currentRow[0].lookupId,
@@ -486,7 +486,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
           let _this = this;
           delete model.lookupId;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookup/create',
+            url: backend.appOcaService + '/adminSmLookup/create',
             method: 'post',
             data: model,
             callback: function (code, message, response) {
@@ -517,7 +517,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
         lookuptableUpdateFn: function (model) {
           let _this = this;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookup/update',
+            url: backend.appOcaService + '/adminSmLookup/update',
             method: 'post',
             data: model,
             callback: function (code, message, response) {
@@ -592,7 +592,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
             type: 'warning'
           }).then(function () {
             yufp.service.request({
-              url: backend.adminService + '/adminSmLookupItem/delete/' + currentItemRow[0].lookupItemId,
+              url: backend.appOcaService + '/adminSmLookupItem/delete/' + currentItemRow[0].lookupItemId,
               method: 'POST',
               // data: lookupItem,
               callback: function (code, message, response) {
@@ -644,7 +644,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
           let _this = this;
           delete model.lookupItemId;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookupItem/create',
+            url: backend.appOcaService + '/adminSmLookupItem/create',
             method: 'post',
             data: model,
             callback: function (code, message, response) {
@@ -672,7 +672,7 @@ define(['./custom/widgets/js/yufpExtTree.js'], function (require, exports) {
         updateLookUpItem: function (model) {
           let _this = this;
           yufp.service.request({
-            url: backend.adminService + '/adminSmLookupItem/update',
+            url: backend.appOcaService + '/adminSmLookupItem/update',
             method: 'post',
             data: model,
             callback: function (code, message, response) {

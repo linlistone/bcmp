@@ -18,7 +18,7 @@
   function Lookup () {
     var _options = {
       lookupMgr: {}, // 内存字典对象
-      remoteUrl: backend.adminService + '/adminSmLookupItem/weblist', // 远程URL
+      remoteUrl: backend.appOcaService + '/adminSmLookupItem/weblist', // 远程URL
       remoteParamName: 'lookupCodes', // 远程参数名
       codeKey: 'key', // 对应后台字段key
       codeValue: 'value', // 对应后台字段value

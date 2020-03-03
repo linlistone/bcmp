@@ -34,8 +34,8 @@ define(function (require, exports) {
       },
       // 表格查询URL
       m_table: {
-        modDataUrl: backend.adminService + '/adminSmFuncMod/index',
-        funcDataUrl: backend.adminService + '/adminSmBusiFunc/index'
+        modDataUrl: backend.appOcaService + '/adminSmFuncMod/index',
+        funcDataUrl: backend.appOcaService + '/adminSmBusiFunc/index'
       },
       // 功能表单数据
       formdata: {},
@@ -162,7 +162,7 @@ define(function (require, exports) {
           }).then(function () {
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmBusiFunc/delete/' + viewData.funcId,
+              name: backend.appOcaService + '/adminSmBusiFunc/delete/' + viewData.funcId,
               callback: function (code, message, data) {
                 if (code === 0) {
                   vm.$alert(data.message, '提示', {
@@ -216,7 +216,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmBusiFunc/create',
+            name: backend.appOcaService + '/adminSmBusiFunc/create',
             callback: function (code, message, data) {
               if (code === 0) {
                 if (data.data.code == 2) {
@@ -258,7 +258,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmBusiFunc/update',
+            name: backend.appOcaService + '/adminSmBusiFunc/update',
             callback: function (code, message, data) {
               vm.$alert('更新成功!', '提示', {
                 confirmButtonText: '确定',

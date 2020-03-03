@@ -1,11 +1,11 @@
 <!-- 管理 -->
 <div>
-    <yu-col :span="5">
-        <yu-xtree ref="refTree" :height="height - 40" @node-click="nodeClickFn" :data-url="dataUrl" data-id="orgCode" data-label="orgName"
-            data-pid="upOrgId" :data-async="async" :data-params="param" data-root="10000" style="margin:10px 10px 0 0;">
+    <yu-col :span="6">
+        <yu-xtree ref="refTree" :height="height - 40" @node-click="nodeClickFn" :data-url="treeDataUrl" data-id="orgId" data-label="orgName"
+            data-pid="upOrgId" :data-async="async" :data-params="param" :data-root="rootId" style="margin:10px 10px 0 0;">
         </yu-xtree>
     </yu-col>
-    <yu-col :span="19">
+    <yu-col :span="18">
         <!--查询区域-->
         <yu-xform related-table-name="refTable" form-type="search">
             <yu-xform-group :column="4">
@@ -44,22 +44,21 @@
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
                 <yu-xform-item label="机构号" ctype="input" name="orgCode"></yu-xform-item>
-                <yu-xform-item label="机构中文简称" ctype="input" name="orgName"></yu-xform-item>
-                <yu-xform-item label="机构中文全称" ctype="input" name="orgFullName"></yu-xform-item>
+                <yu-xform-item label="机构中文简称" ctype="input" name="orgName" ></yu-xform-item>
+                <yu-xform-item label="机构中文全称" ctype="input" name="orgFullName" :colspan="24"></yu-xform-item>
                 <yu-xform-item label="核算机构" ctype="input" name="checkOrgId"></yu-xform-item>
-                <yu-xform-item label="上级机构id" ctype="input" name="upOrgId"></yu-xform-item>
-                <yu-xform-item label="HR机构主键" ctype="input" name="orgHrId"></yu-xform-item>
+                <yu-xform-item label="上级机构号" ctype="input" name="upOrgId"></yu-xform-item>
                 <yu-xform-item label="内部机构号" ctype="input" name="orgInCode"></yu-xform-item>
                 <yu-xform-item label="机构层级" ctype="input" name="orgLevel"></yu-xform-item>
                 <yu-xform-item label="机构层级" ctype="input" name="orgGrade"></yu-xform-item>
-                <yu-xform-item label="机构类型：0：总行 1：支行" ctype="input" name="orgType"></yu-xform-item>
-                <yu-xform-item label="机构类别 0-核算机构 1-网点机构 2-虚拟机构" ctype="input" name="orgCategory"></yu-xform-item>
+                <yu-xform-item label="机构类型" ctype="input" name="orgType"></yu-xform-item>
+                <yu-xform-item label="机构类别" ctype="input" name="orgCategory"></yu-xform-item>
                 <yu-xform-item label="省" ctype="input" name="province"></yu-xform-item>
                 <yu-xform-item label="市" ctype="input" name="city"></yu-xform-item>
                 <yu-xform-item label="区" ctype="input" name="district"></yu-xform-item>
                 <yu-xform-item label="街道" ctype="input" name="street"></yu-xform-item>
-                <yu-xform-item label="门牌地址" ctype="input" name="addresses"></yu-xform-item>
-                <yu-xform-item label="地址" ctype="input" name="orgAddr"></yu-xform-item>
+                <yu-xform-item label="门牌地址" ctype="input" name="addresses" :colspan="24"></yu-xform-item>
+                <yu-xform-item label="地址" ctype="input" name="orgAddr" :colspan="24"></yu-xform-item>
                 <yu-xform-item label="邮编" ctype="input" name="zipCde"></yu-xform-item>
                 <yu-xform-item label="银行机构代码" ctype="input" name="bankOrgId"></yu-xform-item>
                 <yu-xform-item label="金融许可证号" ctype="input" name="financialLicense"></yu-xform-item>
@@ -73,7 +72,6 @@
                 <yu-xform-item label="成立时间" ctype="input" name="establishTime"></yu-xform-item>
                 <yu-xform-item label="机构工作开始时间" ctype="input" name="workStartTime"></yu-xform-item>
                 <yu-xform-item label="机构工作终止时间" ctype="input" name="workEndTime"></yu-xform-item>
-                <yu-xform-item label="所有父机构的orgCode" ctype="input" name="orgParents"></yu-xform-item>
                 <yu-xform-item label="最新变更用户" ctype="input" name="lastChgUsr" :disabled="true"></yu-xform-item>
                 <yu-xform-item label="最新变更时间" ctype="input" name="lastChgDt" :disabled="true"></yu-xform-item>
             </yu-xform-group>

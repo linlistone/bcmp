@@ -4,6 +4,7 @@
  */
 (function (window) {
   window.backend = {
+    appOcaService: '/api',
     adminService: '/api',
     uaaService: '/api',
     bcmpService: '/api',

@@ -12,7 +12,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      funcmodDataUrl: backend.adminService + '/adminSmFuncMod/index',
+      funcmodDataUrl: backend.appOcaService + '/adminSmFuncMod/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false, // 弹出框层是否可见
       rules: { // 校验规则配置
@@ -82,7 +82,7 @@ define(function (require, exports) {
             yufp.service.request({
               method: 'POST',
               data: null,
-              name: backend.adminService + '/adminSmFuncMod/delete/' + modId,
+              name: backend.appOcaService + '/adminSmFuncMod/delete/' + modId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -133,7 +133,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmFuncMod/create',
+            name: backend.appOcaService + '/adminSmFuncMod/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -174,7 +174,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmFuncMod/update',
+            name: backend.appOcaService + '/adminSmFuncMod/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

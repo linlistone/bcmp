@@ -154,11 +154,12 @@
           dataId: 'orgId',
           dataLabel: 'orgName',
           dataPid: 'upOrgId',
-          dataRoot: '500',
+          dataRoot: '000000',
           // 数据参数
           dataParams: {
             userId: yufp.session.userId,
             orgCode: yufp.session.org.code,
+            instuId: 'eb8d6baa57264ad3b071940a4d9a1b87',
             needFin: false,
             needManage: false,
             needDpt: false,
@@ -167,7 +168,7 @@
           searchType: 'CUR_ORG', // 所辖或者当前""
           tempNodekeys: [],
           tempTreeData: [],
-          dataUrl: '/trade/example/orgtree'
+          dataUrl: backend.appOcaService + '/adminSmOrg/tree'
         };
       }
     },

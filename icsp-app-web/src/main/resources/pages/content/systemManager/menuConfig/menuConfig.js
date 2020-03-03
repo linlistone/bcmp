@@ -27,9 +27,9 @@ define([
       tempCheckNode: '',
       iconDialogVisible: false,
       // 功能列表请求
-      funcdataUrl: backend.adminService + '/adminSmBusiFunc/index',
+      funcdataUrl: backend.appOcaService + '/adminSmBusiFunc/index',
       // 菜单树请求URL
-      treeUrl: backend.adminService + '/adminSmMenu/tree?sysId=' + backend.sysId,
+      treeUrl: backend.appOcaService + '/adminSmMenu/tree?sysId=' + backend.sysId,
       // 机构树请求参数
       treeParam: {},
       // 权构树高度
@@ -94,7 +94,7 @@ define([
           yufp.service.request({
             type: 'GET',
             data: reqData,
-            name: backend.adminService + '/adminSmFuncMod/index',
+            name: backend.appOcaService + '/adminSmFuncMod/index',
             callback: function (code, message, response) {
               if (code === 0) {
                 for (var i = 0; i < response.data.length; i++) {
@@ -150,7 +150,7 @@ define([
             // 开始删除
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmMenu/delete/' + _this.currClickNode,
+              name: backend.appOcaService + '/adminSmMenu/delete/' + _this.currClickNode,
               callback: function (code, message, data) {
                 if (code === 0) {
                   _this.$message({
@@ -210,7 +210,7 @@ define([
           yufp.service.request({
             method: 'GET',
             data: param,
-            url: backend.adminService + '/adminSmMenu/show',
+            url: backend.appOcaService + '/adminSmMenu/show',
             callback: function (code, message, response) {
               if (code == '0' && response.code == 0) {
                 var formModel = yufp.extend({}, response.data);
@@ -294,7 +294,7 @@ define([
             formModel.upMenuId = _this.currClickNode;
             yufp.service.request({
               method: 'POST',
-              url: backend.adminService + '/adminSmMenu/create',
+              url: backend.appOcaService + '/adminSmMenu/create',
               data: formModel,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == 0) {
@@ -313,7 +313,7 @@ define([
           } else { // 修改
             yufp.service.request({
               method: 'POST',
-              url: backend.adminService + '/adminSmMenu/update',
+              url: backend.appOcaService + '/adminSmMenu/update',
               data: formModel,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == 0) {

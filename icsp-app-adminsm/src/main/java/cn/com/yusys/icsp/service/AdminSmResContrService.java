@@ -106,12 +106,7 @@ public class AdminSmResContrService extends BaseService {
 	 */
 	public  List<Map<String, Object>> getFuncTree(QueryModel mode) throws Exception {
 		List<Map<String, Object>> list = adminSmResContrMapper.getFuncTree(mode);
-		List<Map<String, Object>> swlist = new ArrayList<Map<String, Object>>();
-		for (Map<String, Object> map : list) {
-			Map<String, Object> swMap = mapUnderscoreToCamelCase(map);
-			swlist.add(swMap);
-		}
-		return swlist;
+		return changerList(list);
 	}
 
 	/**

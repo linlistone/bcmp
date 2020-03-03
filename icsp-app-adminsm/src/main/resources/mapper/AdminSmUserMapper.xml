@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmUserMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.AdminSmUser" id="BaseResultMap">
+        <result column="USER_ID"  property="userId" jdbcType="VARCHAR" />
+        <result column="LOGIN_CODE"  property="loginCode" jdbcType="VARCHAR" />
+        <result column="USER_NAME"  property="userName" jdbcType="VARCHAR" />
+        <result column="LOGIN_TYPE"  property="loginType" jdbcType="VARCHAR" />
+        <result column="CERT_TYPE"  property="certType" jdbcType="VARCHAR" />
+        <result column="CERT_NO"  property="certNo" jdbcType="VARCHAR" />
+        <result column="USER_CODE"  property="userCode" jdbcType="VARCHAR" />
+        <result column="DEADLINE"  property="deadline" jdbcType="VARCHAR" />
+        <result column="ORG_ID"  property="orgId" jdbcType="VARCHAR" />
+        <result column="DPT_ID"  property="dptId" jdbcType="VARCHAR" />
+        <result column="USER_PASSWORD"  property="userPassword" jdbcType="VARCHAR" />
+        <result column="USER_PASSWORD_MD5"  property="userPasswordMd5" jdbcType="VARCHAR" />
+        <result column="IS_BUSINESS"  property="isBusiness" jdbcType="VARCHAR" />
+        <result column="USER_SEX"  property="userSex" jdbcType="VARCHAR" />
+        <result column="USER_BIRTHDAY"  property="userBirthday" jdbcType="VARCHAR" />
+        <result column="USER_EMAIL"  property="userEmail" jdbcType="VARCHAR" />
+        <result column="USER_MOBILEPHONE"  property="userMobilephone" jdbcType="VARCHAR" />
+        <result column="USER_OFFICETEL"  property="userOfficetel" jdbcType="VARCHAR" />
+        <result column="USER_EDUCATION"  property="userEducation" jdbcType="VARCHAR" />
+        <result column="USER_CERTIFICATE"  property="userCertificate" jdbcType="VARCHAR" />
+        <result column="ENTRANTS_DATE"  property="entrantsDate" jdbcType="VARCHAR" />
+        <result column="POSITION_TIME"  property="positionTime" jdbcType="VARCHAR" />
+        <result column="FINANCIAL_JOB_TIME"  property="financialJobTime" jdbcType="VARCHAR" />
+        <result column="POSITION_DEGREE"  property="positionDegree" jdbcType="VARCHAR" />
+        <result column="USER_AVATAR"  property="userAvatar" jdbcType="VARCHAR" />
+        <result column="OFFEN_IP"  property="offenIp" jdbcType="VARCHAR" />
+        <result column="USER_STS"  property="userSts" jdbcType="VARCHAR" />
+        <result column="LAST_LOGIN_TIME"  property="lastLoginTime" jdbcType="VARCHAR" />
+        <result column="LAST_EDIT_PASS_TIME"  property="lastEditPassTime" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+        <result column="HEAD_PORT"  property="headPort" jdbcType="VARCHAR" />
+        <result column="FINGER_PRINT"  property="fingerPrint" jdbcType="VARCHAR" />
+        <result column="VOICE_PRINT"  property="voicePrint" jdbcType="VARCHAR" />
+        <result column="FACE_PRINT"  property="facePrint" jdbcType="VARCHAR" />
+        <result column="GESTURE_PASSWORD"  property="gesturePassword" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		USER_ID,
+		LOGIN_CODE,
+		USER_NAME,
+		LOGIN_TYPE,
+		CERT_TYPE,
+		CERT_NO,
+		USER_CODE,
+		DEADLINE,
+		ORG_ID,
+		DPT_ID,
+		USER_PASSWORD,
+		USER_PASSWORD_MD5,
+		IS_BUSINESS,
+		USER_SEX,
+		USER_BIRTHDAY,
+		USER_EMAIL,
+		USER_MOBILEPHONE,
+		USER_OFFICETEL,
+		USER_EDUCATION,
+		USER_CERTIFICATE,
+		ENTRANTS_DATE,
+		POSITION_TIME,
+		FINANCIAL_JOB_TIME,
+		POSITION_DEGREE,
+		USER_AVATAR,
+		OFFEN_IP,
+		USER_STS,
+		LAST_LOGIN_TIME,
+		LAST_EDIT_PASS_TIME,
+		LAST_CHG_USR,
+		LAST_CHG_DT,
+		HEAD_PORT,
+		FINGER_PRINT,
+		VOICE_PRINT,
+		FACE_PRINT,
+		GESTURE_PASSWORD
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_sm_user
+		<where>
+			<if test="condition.userInfo != null and condition.userInfo != ''">
+				and (s.LOGIN_CODE  LIKE CONCAT(CONCAT('%', #{condition.userInfo, jdbcType=VARCHAR}),'%')
+				or (s.USER_NAME  LIKE CONCAT(CONCAT('%', #{condition.userInfo, jdbcType=VARCHAR}),'%') )
+				or (s.USER_CODE  LIKE CONCAT(CONCAT('%', #{condition.userInfo, jdbcType=VARCHAR}),'%') ))
+			</if>
+			<if test="condition.userId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userId)">
+						AND USER_ID like #{condition.userId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_ID = #{condition.userId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginCode)">
+						AND LOGIN_CODE like #{condition.loginCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_CODE = #{condition.loginCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userName)">
+						AND USER_NAME like #{condition.userName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_NAME = #{condition.userName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.loginType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.loginType)">
+						AND LOGIN_TYPE like #{condition.loginType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LOGIN_TYPE = #{condition.loginType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.certType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.certType)">
+						AND CERT_TYPE like #{condition.certType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CERT_TYPE = #{condition.certType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.certNo != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.certNo)">
+						AND CERT_NO like #{condition.certNo,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CERT_NO = #{condition.certNo,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userCode)">
+						AND USER_CODE like #{condition.userCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_CODE = #{condition.userCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deadline != null and condition.deadline != ''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deadline)">
+						AND DEADLINE like #{condition.deadline,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DEADLINE = #{condition.deadline,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.orgId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.orgId)">
+						AND ORG_ID like #{condition.orgId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ORG_ID = #{condition.orgId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.dptId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.dptId)">
+						AND DPT_ID like #{condition.dptId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND DPT_ID = #{condition.dptId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userPassword != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userPassword)">
+						AND USER_PASSWORD like #{condition.userPassword,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_PASSWORD = #{condition.userPassword,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userPasswordMd5 != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userPasswordMd5)">
+						AND USER_PASSWORD_MD5 like #{condition.userPasswordMd5,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_PASSWORD_MD5 = #{condition.userPasswordMd5,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.isBusiness != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.isBusiness)">
+						AND IS_BUSINESS like #{condition.isBusiness,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND IS_BUSINESS = #{condition.isBusiness,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userSex != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userSex)">
+						AND USER_SEX like #{condition.userSex,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_SEX = #{condition.userSex,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userBirthday != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userBirthday)">
+						AND USER_BIRTHDAY like #{condition.userBirthday,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_BIRTHDAY = #{condition.userBirthday,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userEmail != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userEmail)">
+						AND USER_EMAIL like #{condition.userEmail,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_EMAIL = #{condition.userEmail,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userMobilephone != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userMobilephone)">
+						AND USER_MOBILEPHONE like #{condition.userMobilephone,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_MOBILEPHONE = #{condition.userMobilephone,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userOfficetel != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userOfficetel)">
+						AND USER_OFFICETEL like #{condition.userOfficetel,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_OFFICETEL = #{condition.userOfficetel,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userEducation != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userEducation)">
+						AND USER_EDUCATION like #{condition.userEducation,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_EDUCATION = #{condition.userEducation,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userCertificate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userCertificate)">
+						AND USER_CERTIFICATE like #{condition.userCertificate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_CERTIFICATE = #{condition.userCertificate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.entrantsDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.entrantsDate)">
+						AND ENTRANTS_DATE like #{condition.entrantsDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND ENTRANTS_DATE = #{condition.entrantsDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.positionTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.positionTime)">
+						AND POSITION_TIME like #{condition.positionTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND POSITION_TIME = #{condition.positionTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.financialJobTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.financialJobTime)">
+						AND FINANCIAL_JOB_TIME like #{condition.financialJobTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FINANCIAL_JOB_TIME = #{condition.financialJobTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.positionDegree != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.positionDegree)">
+						AND POSITION_DEGREE like #{condition.positionDegree,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND POSITION_DEGREE = #{condition.positionDegree,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userAvatar != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userAvatar)">
+						AND USER_AVATAR like #{condition.userAvatar,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_AVATAR = #{condition.userAvatar,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.offenIp != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.offenIp)">
+						AND OFFEN_IP like #{condition.offenIp,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND OFFEN_IP = #{condition.offenIp,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userSts != null and condition.userSts!='' ">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userSts)">
+						AND USER_STS like #{condition.userSts,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND USER_STS = #{condition.userSts,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastLoginTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastLoginTime)">
+						AND LAST_LOGIN_TIME like #{condition.lastLoginTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_LOGIN_TIME = #{condition.lastLoginTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastEditPassTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastEditPassTime)">
+						AND LAST_EDIT_PASS_TIME like #{condition.lastEditPassTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_EDIT_PASS_TIME = #{condition.lastEditPassTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUsr != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUsr)">
+						AND LAST_CHG_USR like #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_USR = #{condition.lastChgUsr,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgDt)">
+						AND LAST_CHG_DT like #{condition.lastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND LAST_CHG_DT = #{condition.lastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.headPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.headPort)">
+						AND HEAD_PORT like #{condition.headPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND HEAD_PORT = #{condition.headPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.fingerPrint != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.fingerPrint)">
+						AND FINGER_PRINT like #{condition.fingerPrint,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FINGER_PRINT = #{condition.fingerPrint,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.voicePrint != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.voicePrint)">
+						AND VOICE_PRINT like #{condition.voicePrint,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND VOICE_PRINT = #{condition.voicePrint,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.facePrint != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.facePrint)">
+						AND FACE_PRINT like #{condition.facePrint,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND FACE_PRINT = #{condition.facePrint,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.gesturePassword != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.gesturePassword)">
+						AND GESTURE_PASSWORD like #{condition.gesturePassword,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND GESTURE_PASSWORD = #{condition.gesturePassword,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.AdminSmUser">
+		insert into admin_sm_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">USER_ID ,</if>
+			<if test="loginCode != null">LOGIN_CODE ,</if>
+			<if test="userName != null">USER_NAME ,</if>
+			<if test="loginType != null">LOGIN_TYPE ,</if>
+			<if test="certType != null">CERT_TYPE ,</if>
+			<if test="certNo != null">CERT_NO ,</if>
+			<if test="userCode != null">USER_CODE ,</if>
+			<if test="deadline != null">DEADLINE ,</if>
+			<if test="orgId != null">ORG_ID ,</if>
+			<if test="dptId != null">DPT_ID ,</if>
+			<if test="userPassword != null">USER_PASSWORD ,</if>
+			<if test="userPasswordMd5 != null">USER_PASSWORD_MD5 ,</if>
+			<if test="isBusiness != null">IS_BUSINESS ,</if>
+			<if test="userSex != null">USER_SEX ,</if>
+			<if test="userBirthday != null">USER_BIRTHDAY ,</if>
+			<if test="userEmail != null">USER_EMAIL ,</if>
+			<if test="userMobilephone != null">USER_MOBILEPHONE ,</if>
+			<if test="userOfficetel != null">USER_OFFICETEL ,</if>
+			<if test="userEducation != null">USER_EDUCATION ,</if>
+			<if test="userCertificate != null">USER_CERTIFICATE ,</if>
+			<if test="entrantsDate != null">ENTRANTS_DATE ,</if>
+			<if test="positionTime != null">POSITION_TIME ,</if>
+			<if test="financialJobTime != null">FINANCIAL_JOB_TIME ,</if>
+			<if test="positionDegree != null">POSITION_DEGREE ,</if>
+			<if test="userAvatar != null">USER_AVATAR ,</if>
+			<if test="offenIp != null">OFFEN_IP ,</if>
+			<if test="userSts != null">USER_STS ,</if>
+			<if test="lastLoginTime != null">LAST_LOGIN_TIME ,</if>
+			<if test="lastEditPassTime != null">LAST_EDIT_PASS_TIME ,</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+			<if test="lastChgDt != null">LAST_CHG_DT ,</if>
+			<if test="headPort != null">HEAD_PORT ,</if>
+			<if test="fingerPrint != null">FINGER_PRINT ,</if>
+			<if test="voicePrint != null">VOICE_PRINT ,</if>
+			<if test="facePrint != null">FACE_PRINT ,</if>
+			<if test="gesturePassword != null">GESTURE_PASSWORD </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+			<if test="loginCode != null">#{loginCode,jdbcType=VARCHAR},</if>
+			<if test="userName != null">#{userName,jdbcType=VARCHAR},</if>
+			<if test="loginType != null">#{loginType,jdbcType=VARCHAR},</if>
+			<if test="certType != null">#{certType,jdbcType=VARCHAR},</if>
+			<if test="certNo != null">#{certNo,jdbcType=VARCHAR},</if>
+			<if test="userCode != null">#{userCode,jdbcType=VARCHAR},</if>
+			<if test="deadline != null">#{deadline,jdbcType=VARCHAR},</if>
+			<if test="orgId != null">#{orgId,jdbcType=VARCHAR},</if>
+			<if test="dptId != null">#{dptId,jdbcType=VARCHAR},</if>
+			<if test="userPassword != null">#{userPassword,jdbcType=VARCHAR},</if>
+			<if test="userPasswordMd5 != null">#{userPasswordMd5,jdbcType=VARCHAR},</if>
+			<if test="isBusiness != null">#{isBusiness,jdbcType=VARCHAR},</if>
+			<if test="userSex != null">#{userSex,jdbcType=VARCHAR},</if>
+			<if test="userBirthday != null">#{userBirthday,jdbcType=VARCHAR},</if>
+			<if test="userEmail != null">#{userEmail,jdbcType=VARCHAR},</if>
+			<if test="userMobilephone != null">#{userMobilephone,jdbcType=VARCHAR},</if>
+			<if test="userOfficetel != null">#{userOfficetel,jdbcType=VARCHAR},</if>
+			<if test="userEducation != null">#{userEducation,jdbcType=VARCHAR},</if>
+			<if test="userCertificate != null">#{userCertificate,jdbcType=VARCHAR},</if>
+			<if test="entrantsDate != null">#{entrantsDate,jdbcType=VARCHAR},</if>
+			<if test="positionTime != null">#{positionTime,jdbcType=VARCHAR},</if>
+			<if test="financialJobTime != null">#{financialJobTime,jdbcType=VARCHAR},</if>
+			<if test="positionDegree != null">#{positionDegree,jdbcType=VARCHAR},</if>
+			<if test="userAvatar != null">#{userAvatar,jdbcType=VARCHAR},</if>
+			<if test="offenIp != null">#{offenIp,jdbcType=VARCHAR},</if>
+			<if test="userSts != null">#{userSts,jdbcType=VARCHAR},</if>
+			<if test="lastLoginTime != null">#{lastLoginTime,jdbcType=VARCHAR},</if>
+			<if test="lastEditPassTime != null">#{lastEditPassTime,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR},</if>
+			<if test="headPort != null">#{headPort,jdbcType=VARCHAR},</if>
+			<if test="fingerPrint != null">#{fingerPrint,jdbcType=VARCHAR},</if>
+			<if test="voicePrint != null">#{voicePrint,jdbcType=VARCHAR},</if>
+			<if test="facePrint != null">#{facePrint,jdbcType=VARCHAR},</if>
+			<if test="gesturePassword != null">#{gesturePassword,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.AdminSmUser">
+		update admin_sm_user
+		<set>
+			<if test="userId != null">USER_ID = #{userId,jdbcType=VARCHAR},</if>
+			<if test="loginCode != null">LOGIN_CODE = #{loginCode,jdbcType=VARCHAR},</if>
+			<if test="userName != null">USER_NAME = #{userName,jdbcType=VARCHAR},</if>
+			<if test="loginType != null">LOGIN_TYPE = #{loginType,jdbcType=VARCHAR},</if>
+			<if test="certType != null">CERT_TYPE = #{certType,jdbcType=VARCHAR},</if>
+			<if test="certNo != null">CERT_NO = #{certNo,jdbcType=VARCHAR},</if>
+			<if test="userCode != null">USER_CODE = #{userCode,jdbcType=VARCHAR},</if>
+			<if test="deadline != null">DEADLINE = #{deadline,jdbcType=VARCHAR},</if>
+			<if test="orgId != null">ORG_ID = #{orgId,jdbcType=VARCHAR},</if>
+			<if test="dptId != null">DPT_ID = #{dptId,jdbcType=VARCHAR},</if>
+			<if test="userPassword != null">USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},</if>
+			<if test="userPasswordMd5 != null">USER_PASSWORD_MD5 = #{userPasswordMd5,jdbcType=VARCHAR},</if>
+			<if test="isBusiness != null">IS_BUSINESS = #{isBusiness,jdbcType=VARCHAR},</if>
+			<if test="userSex != null">USER_SEX = #{userSex,jdbcType=VARCHAR},</if>
+			<if test="userBirthday != null">USER_BIRTHDAY = #{userBirthday,jdbcType=VARCHAR},</if>
+			<if test="userEmail != null">USER_EMAIL = #{userEmail,jdbcType=VARCHAR},</if>
+			<if test="userMobilephone != null">USER_MOBILEPHONE = #{userMobilephone,jdbcType=VARCHAR},</if>
+			<if test="userOfficetel != null">USER_OFFICETEL = #{userOfficetel,jdbcType=VARCHAR},</if>
+			<if test="userEducation != null">USER_EDUCATION = #{userEducation,jdbcType=VARCHAR},</if>
+			<if test="userCertificate != null">USER_CERTIFICATE = #{userCertificate,jdbcType=VARCHAR},</if>
+			<if test="entrantsDate != null">ENTRANTS_DATE = #{entrantsDate,jdbcType=VARCHAR},</if>
+			<if test="positionTime != null">POSITION_TIME = #{positionTime,jdbcType=VARCHAR},</if>
+			<if test="financialJobTime != null">FINANCIAL_JOB_TIME = #{financialJobTime,jdbcType=VARCHAR},</if>
+			<if test="positionDegree != null">POSITION_DEGREE = #{positionDegree,jdbcType=VARCHAR},</if>
+			<if test="userAvatar != null">USER_AVATAR = #{userAvatar,jdbcType=VARCHAR},</if>
+			<if test="offenIp != null">OFFEN_IP = #{offenIp,jdbcType=VARCHAR},</if>
+			<if test="userSts != null">USER_STS = #{userSts,jdbcType=VARCHAR},</if>
+			<if test="lastLoginTime != null">LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=VARCHAR},</if>
+			<if test="lastEditPassTime != null">LAST_EDIT_PASS_TIME = #{lastEditPassTime,jdbcType=VARCHAR},</if>
+			<if test="lastChgUsr != null">LAST_CHG_USR = #{lastChgUsr,jdbcType=VARCHAR},</if>
+			<if test="lastChgDt != null">LAST_CHG_DT = #{lastChgDt,jdbcType=VARCHAR},</if>
+			<if test="headPort != null">HEAD_PORT = #{headPort,jdbcType=VARCHAR},</if>
+			<if test="fingerPrint != null">FINGER_PRINT = #{fingerPrint,jdbcType=VARCHAR},</if>
+			<if test="voicePrint != null">VOICE_PRINT = #{voicePrint,jdbcType=VARCHAR},</if>
+			<if test="facePrint != null">FACE_PRINT = #{facePrint,jdbcType=VARCHAR},</if>
+			<if test="gesturePassword != null">GESTURE_PASSWORD = #{gesturePassword,jdbcType=VARCHAR}</if>
+		</set>
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_sm_user where  USER_ID = #{userId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from admin_sm_user where USER_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="userId">#{userId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

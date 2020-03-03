@@ -51,10 +51,19 @@ public class ResultDto<T> {
         this.data = data;
     }
 
+    public ResultDto(long total, T data) {
+        this.code =ResultHttpCode.Success.getCode();
+        this.message =ResultHttpCode.Success.getMsg();
+        this.total = total;
+        this.data = data;
+    }
+
 
     public static ResultDto<Object> success() {
         return ResultDto.success(ResultHttpCode.Success, RESULT_OBJECT);
     }
+
+
 
     /**
      * 分页数据返回

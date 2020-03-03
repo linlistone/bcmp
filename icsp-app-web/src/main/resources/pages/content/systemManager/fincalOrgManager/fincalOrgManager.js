@@ -14,7 +14,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/adminSmInstu/index',
+      dataUrl: backend.appOcaService + '/adminSmInstu/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false, // 弹出框层是否可见
       rules: { // 校验规则配置
@@ -120,7 +120,7 @@ define(function (require, exports) {
             yufp.service.request({
               method: 'POST',
               // data: delData,
-              name: backend.adminService + '/adminSmInstu/delete/' + instuId,
+              name: backend.appOcaService + '/adminSmInstu/delete/' + instuId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -171,7 +171,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmInstu/create',
+            name: backend.appOcaService + '/adminSmInstu/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -212,7 +212,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmInstu/update',
+            name: backend.appOcaService + '/adminSmInstu/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

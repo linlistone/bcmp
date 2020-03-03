@@ -14,7 +14,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/adminSmDuty/index',
+      dataUrl: backend.appOcaService + '/adminSmDuty/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false // 弹出框层是否可见
     };
@@ -66,7 +66,7 @@ define(function (require, exports) {
             var dutyId = viewData.dutyId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmDuty/delete/' + dutyId,
+              name: backend.appOcaService + '/adminSmDuty/delete/' + dutyId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -117,7 +117,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmDuty/create',
+            name: backend.appOcaService + '/adminSmDuty/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -158,7 +158,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmDuty/update',
+            name: backend.appOcaService + '/adminSmDuty/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

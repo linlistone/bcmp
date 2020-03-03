@@ -8,6 +8,8 @@ define(function (require, exports) {
   exports.ready = function (code, data, cite) {
     // vue data
     let vmData = {
+      rootId: '000000',
+      treeDataUrl: backend.appOcaService + '/adminSmOrg/tree',
       async: false,
       param: { instuId: 'eb8d6baa57264ad3b071940a4d9a1b87' },
       height: yufp.frame.size().height,
@@ -17,7 +19,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/adminSmOrg/index',
+      dataUrl: backend.appOcaService + '/adminSmOrg/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false // 弹出框层是否可见
     };
@@ -32,7 +34,13 @@ define(function (require, exports) {
       methods: {
         nodeClickFn: function (nodeData, node, self) {
           var _this = this;
-          _this.$refs.refTable.remoteData();
+          var condition = {
+            condition: {
+              upOrgId: nodeData.orgId
+            }
+          };
+          // 查询用户数据
+          _this.$refs['refTable'].remoteData(condition);
         },
         // 新增按钮事件
         addFn: function (data) {
@@ -70,7 +78,7 @@ define(function (require, exports) {
             var orgId = viewData.orgId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/adminSmOrg/delete/' + orgId,
+              name: backend.appOcaService + '/adminSmOrg/delete/' + orgId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -121,7 +129,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmOrg/create',
+            name: backend.appOcaService + '/adminSmOrg/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -162,7 +170,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/adminSmOrg/update',
+            name: backend.appOcaService + '/adminSmOrg/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

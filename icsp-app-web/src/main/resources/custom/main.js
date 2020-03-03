@@ -35,6 +35,7 @@
     './libs/element-ui/index.js',
 
     './custom/common/app.data.service.js',
+    './custom/common/app.data.setting.js',
     './custom/widgets/js/components.js',
     './custom/plugins/yufp.settings.js',
     './custom/plugins/yufp.localstorage.js',

@@ -20,7 +20,7 @@
     var _settings = {
       settings: {
         logoutUrl: backend.uaaService + '/user/logout', // 注销URL
-        userUrl: backend.adminService + '/user/info', // 会话URL
+        userUrl: backend.appOcaService + '/user/info', // 会话URL
         userJsonRoot: '', // 用户返回数据节点,如：'data.user'
         userStoreKey: 'YUFP-SESSION-USER', // 会话存储前缀
         userMapping: { // 用户后端数据模型映射
@@ -37,7 +37,7 @@
           upDpt: 'upDpt' // 上级部门Object
         },
 
-        menuUrl: backend.adminService + '/user/menuandcontr', // 菜单远程URL
+        menuUrl: backend.appOcaService + '/user/menuandcontr', // 菜单远程URL
         menuRootPid: '0', // 菜单根节点父级Id
         menuJsonRoot: 'menus', // 菜单返回数据节点,如：'data.menus'
         menuStoreOgKey: 'YUFP-SESSION-MENUS-OG',
@@ -52,7 +52,7 @@
           mType: 'menuType' // 菜单类型
         },
 
-        ctrlUrl: backend.adminService + '/user/menuandcontr', // 控制点远程URL
+        ctrlUrl: backend.appOcaService + '/user/menuandcontr', // 控制点远程URL
         ctrlJsonRoot: 'ctrls', // 控制点返回数据节点,如：'data.ctrls'，控制点数据，查询需按菜单ID、功能ID排序返回
         ctrlStoreOgKey: 'YUFP-SESSION-STRLS-OG',
         ctrlStoreKey: 'YUFP-SESSION-STRLS',
@@ -130,6 +130,7 @@
         _this[key] = data[userMapping[key]] || '';
       }
       _this.user = data;
+      _this.user.logicSys.id = backend.sysId;
       storagePut(_this.settings.userStoreKey, _this.user);
     };
 
@@ -254,17 +255,17 @@
         }
         // 兼容原url参数方式访问外部网页
         if (obj.routeUrl.indexOf('url=') > -1) {
-          routeTable[obj.routeId] = {html: url + '.html?url=' + encodeURIComponent(param), js: url + '.js'};
+          routeTable[obj.routeId] = { html: url + '.html?url=' + encodeURIComponent(param), js: url + '.js' };
         } else {
-          routeTable[obj.routeId] = {html: obj.routeUrl, js: ''};
+          routeTable[obj.routeId] = { html: obj.routeUrl, js: '' };
         }
       } else {
         // 20181025增加url 参数时的解析
         var index = obj.routeUrl.indexOf('?');
         if (index > -1) {
-          routeTable[obj.routeId] = {html: obj.routeUrl.substring(0, index) + '.html' + obj.routeUrl.substring(index, obj.routeUrl.length), js: obj.routeUrl.substring(0, index) + '.js' + obj.routeUrl.substring(index, obj.routeUrl.length)};
+          routeTable[obj.routeId] = { html: obj.routeUrl.substring(0, index) + '.html' + obj.routeUrl.substring(index, obj.routeUrl.length), js: obj.routeUrl.substring(0, index) + '.js' + obj.routeUrl.substring(index, obj.routeUrl.length) };
         } else {
-          routeTable[obj.routeId] = {html: obj.routeUrl + '.html', js: obj.routeUrl + '.js'};
+          routeTable[obj.routeId] = { html: obj.routeUrl + '.html', js: obj.routeUrl + '.js' };
         }
       }
       for (var j = 0, jlen = nonLeafMenus.length; j < jlen; j++) {
@@ -284,7 +285,7 @@
 
     nonLeafMenus = nosubMenu.concat(nonLeafMenus);
     yufp.router.addRouteTable(routeTable);
-    var root = yufp.util.array2tree(nonLeafMenus, {id: 'mId', pid: 'mPid', root: _this.settings.menuRootPid});
+    var root = yufp.util.array2tree(nonLeafMenus, { id: 'mId', pid: 'mPid', root: _this.settings.menuRootPid });
     if (root.children && root.children.length > 0) {
       root.children[0].isIndex = true;
     }

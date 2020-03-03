@@ -83,4 +83,17 @@ public class AdminSmOrgResource extends BaseResouce {
 		int result = adminSmOrgService.delete(orgId);
 		return ResultDto.success( result);
 	}
+
+	/**
+	 * @方法名称:index
+	 * @方法描述:系统机构表查询
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	@GetMapping(value = "/tree")
+	public ResultDto<List<AdminSmOrg>> tree(@RequestParam("instuId") String instuId)
+			throws Exception {
+		List<AdminSmOrg> allList = adminSmOrgService.tree(instuId);
+		return ResultDto.success( allList);
+	}
 }

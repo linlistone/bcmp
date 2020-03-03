@@ -28,9 +28,9 @@ function (require, exports) {
     { url: backend.uaaService + '/api/account/password', method: 'GET', fn: system.passwordFn },
     { url: backend.uaaService + '/api/contr/url', method: 'GET', fn: system.contrUrlFn },
 
-    { url: backend.adminService + '/api/adminsmlookupitem/weblist', method: 'GET', fn: system.lookupFn },
-    { url: backend.adminService + '/api/userframeconfig/save', method: 'POST', fn: system.saveFn },
-    { url: backend.adminService + '/api/userframeconfig/query', method: 'POST', fn: system.queryFn },
+    { url: backend.appOcaService + '/api/adminsmlookupitem/weblist', method: 'GET', fn: system.lookupFn },
+    { url: backend.appOcaService + '/api/userframeconfig/save', method: 'POST', fn: system.saveFn },
+    { url: backend.appOcaService + '/api/userframeconfig/query', method: 'POST', fn: system.queryFn },
 
 
     // 小U测试信息
@@ -39,7 +39,7 @@ function (require, exports) {
     {url: backend.ncmisAppCommonService + '/api/smodifydemo/updateSModifyDemo', method: 'GET', fn: uData.getUList },
     {url: backend.ncmisAppCommonService + '/api/utrace/selectSModifyTraceWithPage', method: 'GET', fn: uData.contrUrlFn },
     {url: backend.ncmisAppCommonService + '/api/utrace/selectSModifyTrace', method: 'GET', fn: uData.getList },
-    
+
     // 下述服务是纯模拟演示使用
     { url: '/trade/example/list', method: 'GET', fn: admq.getList },
     { url: '/trade/example/export', method: 'POST', fn: admq.exportExcel},

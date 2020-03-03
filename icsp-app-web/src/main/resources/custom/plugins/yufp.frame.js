@@ -95,9 +95,9 @@
         saveInfo: {
           saveConfig: false,
           // 保存配置信息的请求路径
-          saveConfigUrl: backend.adminService + '/api/userframeconfig/save',
+          saveConfigUrl: backend.appOcaService + '/api/userframeconfig/save',
           // 查询配置信息的请求路径
-          queryConfigUrl: backend.adminService + '/api/userframeconfig/query',
+          queryConfigUrl: backend.appOcaService + '/api/userframeconfig/query',
           // 查询或保存时传入的附加参数如用户名
           baseParams: {userId: yufp.session.userId},
           // 保存字段的映射关系

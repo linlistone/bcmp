@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.AdminSmAuthRecoMapper">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.AdminSmAuthReco" id="BaseResultMap">
+        <result column="AUTH_RECO_ID"  property="authRecoId" jdbcType="VARCHAR" />
+        <result column="SYS_ID"  property="sysId" jdbcType="VARCHAR" />
+        <result column="AUTHOBJ_TYPE"  property="authobjType" jdbcType="VARCHAR" />
+        <result column="AUTHOBJ_ID"  property="authobjId" jdbcType="VARCHAR" />
+        <result column="AUTHRES_TYPE"  property="authresType" jdbcType="VARCHAR" />
+        <result column="AUTHRES_ID"  property="authresId" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_USR"  property="lastChgUsr" jdbcType="VARCHAR" />
+        <result column="LAST_CHG_DT"  property="lastChgDt" jdbcType="VARCHAR" />
+        <result column="MENU_ID"  property="menuId" jdbcType="VARCHAR" />
+    </resultMap>
+    <!-- 插入-只插入非空字段 -->
+    <insert id="insert" parameterType="cn.com.yusys.icsp.domain.AdminSmAuthReco">
+        insert into admin_sm_auth_reco
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authRecoId != null">AUTH_RECO_ID ,</if>
+            <if test="sysId != null">SYS_ID ,</if>
+            <if test="authobjType != null">AUTHOBJ_TYPE ,</if>
+            <if test="authobjId != null">AUTHOBJ_ID ,</if>
+            <if test="authresType != null">AUTHRES_TYPE ,</if>
+            <if test="authresId != null">AUTHRES_ID ,</if>
+            <if test="lastChgUsr != null">LAST_CHG_USR ,</if>
+            <if test="lastChgDt != null">LAST_CHG_DT ,</if>
+            <if test="menuId != null">MENU_ID </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authRecoId != null">#{authRecoId,jdbcType=VARCHAR},</if>
+            <if test="sysId != null">#{sysId,jdbcType=VARCHAR},</if>
+            <if test="authobjType != null">#{authobjType,jdbcType=VARCHAR},</if>
+            <if test="authobjId != null">#{authobjId,jdbcType=VARCHAR},</if>
+            <if test="authresType != null">#{authresType,jdbcType=VARCHAR},</if>
+            <if test="authresId != null">#{authresId,jdbcType=VARCHAR},</if>
+            <if test="lastChgUsr != null">#{lastChgUsr,jdbcType=VARCHAR},</if>
+            <if test="lastChgDt != null">#{lastChgDt,jdbcType=VARCHAR},</if>
+            <if test="menuId != null">#{menuId,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+    <!-- 查询对象资源关系数据 -->
+    <select id="getObjectResourcInfo" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        select a.AUTH_RECO_ID,a.SYS_ID,a.AUTHOBJ_TYPE,a.AUTHOBJ_ID,a.AUTHRES_TYPE,
+        a.AUTHRES_ID,a.menu_id from ADMIN_SM_AUTH_RECO a
+        <where>
+            <if test="objectType != null and objectType != ''">
+                and a.AUTHOBJ_TYPE = #{objectType , jdbcType=VARCHAR}
+            </if>
+            <if test="resType != null">
+                and a.AUTHRES_TYPE in
+                <foreach item="item" collection="resType" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="objectId != null and objectType != ''">
+                and a.AUTHOBJ_ID = #{objectId , jdbcType=VARCHAR}
+            </if>
+            <if test="sysId != null and sysId != ''">
+                and a.sys_id = #{sysId, jdbcType=VARCHAR}
+            </if>
+
+        </where>
+        <if test="sort != null">
+            order by ${sort}
+        </if>
+    </select>
+
+    <!-- 查询菜单树（包含数据权限模版节点） -->
+    <select id="queryDataPowerTree" parameterType="String" resultType="java.util.Map">
+        SELECT M.MENU_ID AS ID,M.MENU_NAME, '0' AS UP_MENU_ID,'M' AS MENU_TYPE, M.MENU_ID
+          FROM
+          (SELECT DISTINCT M1.MENU_ID,M1.MENU_NAME,M1.MENU_ORDER,M1.UP_MENU_ID
+            FROM  ADMIN_SM_MENU M1
+            LEFT JOIN ADMIN_SM_RES_CONTR T ON M1.FUNC_ID = T.FUNC_ID
+            WHERE M1.SYS_ID =#{sysId,jdbcType=VARCHAR}
+            AND T.CONTR_ID IN (SELECT CONTR_ID FROM ADMIN_SM_DATA_AUTH) ORDER BY M1.UP_MENU_ID,M1.MENU_ORDER) M
+
+        UNION ALL
+
+        SELECT T.CONTR_ID AS ID, T.CONTR_NAME AS MENU_NAME,M.MENU_ID AS UP_MENU_ID,'C' AS MENU_TYPE,M.MENU_ID
+          FROM ADMIN_SM_RES_CONTR T
+          LEFT JOIN ADMIN_SM_MENU M ON M.FUNC_ID = T.FUNC_ID
+          WHERE M.SYS_ID = #{sysId,jdbcType=VARCHAR} AND T.CONTR_ID IN
+                (SELECT CONTR_ID FROM ADMIN_SM_DATA_AUTH)
+
+        UNION ALL
+
+        SELECT D.AUTH_ID AS ID, D.AUTH_TMPL_NAME AS MENU_NAME, D.CONTR_ID AS UP_MENU_ID, 'D' AS MENU_TYPE,D.MENU_ID
+          FROM (SELECT T.AUTH_ID, T.CONTR_ID, T1.AUTH_TMPL_NAME, T2.MENU_ID
+                FROM ADMIN_SM_DATA_AUTH T LEFT JOIN
+                (SELECT T.CONTR_ID, M.MENU_ID
+                       FROM ADMIN_SM_RES_CONTR T
+                       LEFT JOIN ADMIN_SM_MENU M
+                         ON M.FUNC_ID = T.FUNC_ID
+                      WHERE M.SYS_ID = #{sysId,jdbcType=VARCHAR}
+                        AND T.CONTR_ID IN
+                            (SELECT CONTR_ID FROM ADMIN_SM_DATA_AUTH)) T2 ON T2.CONTR_ID = T.CONTR_ID
+                LEFT JOIN ADMIN_SM_DATA_AUTH_TMPL T1 ON T.AUTH_TMPL_ID = T1.AUTH_TMPL_ID) D
+    </select>
+
+
+    <!-- 查询菜单树(不包含数据权限模版节点) -->
+    <select id="queryMenuTree" parameterType="String" resultType="java.util.Map">
+            SELECT B.MENU_ID AS ID,
+                   B.MENU_NAME,
+                   B.UP_MENU_ID,
+                   'M' AS MENU_TYPE,
+                   B.MENU_ID
+              FROM (SELECT MENU_ID,MENU_NAME,UP_MENU_ID
+                      FROM ADMIN_SM_MENU M
+                     WHERE M.SYS_ID=#{sysId,jdbcType=VARCHAR}
+                     ORDER BY M.MENU_ORDER) B
+            UNION ALL
+            SELECT T.CONTR_ID AS ID,
+                   T.CONTR_NAME AS MENU_NAME,
+                   M.MENU_ID AS UP_MENU_ID,
+                   'C' AS MENU_TYPE,
+                   M.MENU_ID
+              FROM ADMIN_SM_RES_CONTR T
+              LEFT JOIN ADMIN_SM_MENU M
+                ON M.FUNC_ID = T.FUNC_ID
+             WHERE M.SYS_ID=#{sysId,jdbcType=VARCHAR}
+	</select>
+    <!-- 删除关联数据-->
+    <delete id="deleteRelInfo" parameterType="java.util.Map">
+        delete from ADMIN_SM_AUTH_RECO
+        <where>
+            <if test="objectType != null and objectType != ''">
+                and AUTHOBJ_TYPE = #{objectType , jdbcType=VARCHAR}
+            </if>
+            <if test="resType != null">
+                and AUTHRES_TYPE in
+                <foreach item="item" collection="resType" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="objectId != null and objectType != ''">
+                and AUTHOBJ_ID = #{objectId , jdbcType=VARCHAR}
+            </if>
+            <if test="sysId != null and sysId != ''">
+                and SYS_ID = #{sysId , jdbcType=VARCHAR}
+            </if>
+        </where>
+    </delete>
+
+    <!-- 删除菜单关联授权数据-->
+    <delete id="deleteMenuInfo" parameterType="String">
+		 DELETE FROM ADMIN_SM_AUTH_RECO WHERE MENU_ID = #{menuId}
+	</delete>
+
+    <!-- 删除数据权限关联授权数据-->
+    <delete id="deleteDataAuth" parameterType="String">
+        DELETE FROM ADMIN_SM_AUTH_RECO WHERE AUTHRES_TYPE = 'D' AND AUTHRES_ID IN
+        <foreach item="authId" index="index" collection="array" open="(" separator="," close=")">
+            #{authId}
+        </foreach>
+    </delete>
+    <!-- 删除控制点关联授权数据-->
+    <delete id="deleteContrInfo" parameterType="String">
+        DELETE FROM ADMIN_SM_AUTH_RECO WHERE AUTHRES_TYPE = 'C' AND AUTHRES_ID IN
+        <foreach item="contrId" index="index" collection="array" open="(" separator="," close=")">
+            #{contrId}
+        </foreach>
+    </delete>
+
+    <!--<resultMap id="ResultMap" type="cn.com.yusys.yusp.admin.domain.AuthRecoExportExcel">-->
+    <!--<result property="objectType" column="OBJECT_TYPE"/>-->
+    <!--<result property="objectName" column="OBJECT_NAME"/>-->
+    <!--<result property="resourceType" column="RESOURCE_TYPE"/>-->
+    <!--<result property="resourceName" column="RESOURCE_NAME"/>-->
+    <!--</resultMap>-->
+
+    <select id="authEcoExportExcel" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        select (case t.authobj_type when 'R' then t2.role_name
+        when 'U' then t1.user_name
+        when 'D' then t3.dpt_name
+        when 'G' then t4.org_name
+        else t.authobj_type end) as object_name,
+        (case t.authres_type when 'M' then t5.menu_name
+        when 'C' then t9.contr_name
+        when 'D' then t6.auth_tmpl_name
+        else t.authres_type end) as resource_name,
+        t7.lookup_item_name as object_type,
+        t8.lookup_item_name as resource_type
+        from ADMIN_SM_AUTH_RECO t
+        left join admin_sm_user t1 on t1.user_id=t.AUTHOBJ_ID
+        left join admin_sm_role t2 on t2.role_id=t.AUTHOBJ_ID
+        left join admin_sm_dpt t3 on t3.dpt_id=t.AUTHOBJ_ID
+        left join admin_sm_org t4 on t4.org_id=t.AUTHOBJ_ID
+        left join admin_sm_menu t5 on t5.menu_id=t.AUTHRES_ID
+        left join (select s.auth_id,s.contr_id,s1.auth_tmpl_name from ADMIN_SM_DATA_AUTH s
+        left join ADMIN_SM_DATA_AUTH_TMPL s1 on s1.auth_tmpl_id =s.auth_tmpl_id) t6 on t6.auth_id=t.AUTHRES_ID
+        left join ADMIN_SM_RES_CONTR t9 on t9.contr_id=t.AUTHRES_ID
+        left join admin_sm_lookup_item t7 on t7.lookup_item_code=t.authobj_type and t7.lookup_code='AUTHOBJ_TYPE'
+        left join admin_sm_lookup_item t8 on t8.lookup_item_code=t.authres_type and t8.lookup_code='AUTHRES_TYPE'
+        <where>
+            <if test="objectType != null and objectType != ''">
+                and t.authobj_type = #{objectType , jdbcType=VARCHAR}
+            </if>
+            <if test="objectId != null and objectId != ''">
+                and t.AUTHOBJ_ID = #{objectId , jdbcType=VARCHAR}
+            </if>
+            <if test="resourceType != null and resourceType != ''">
+                and t.AUTHRES_TYPE in
+                <foreach item="item" collection="resourceType" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <!--导出数据查询-->
+    <select id="exportAuthReco" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+            resultType="java.util.HashMap">
+        select (case t.authobj_type when 'R' then t2.role_name
+        when 'U' then t1.user_name
+        when 'D' then t3.dpt_name
+        when 'G' then t4.org_name
+        else t.authobj_type end) as object_name,
+        (case t.authres_type when 'M' then t5.menu_name
+        when 'C' then t9.contr_name
+        when 'D' then t6.auth_tmpl_name
+        else t.authres_type end) as resource_name,
+        t7.lookup_item_name as object_type,
+        t8.lookup_item_name as resource_type,
+        t10.menu_name as menu_name,
+        (case t.authres_type when 'M' then ''
+        when 'C' then t10.menu_name
+        when 'D' then t11.contr_name
+        else t.authres_type end) as up_node
+        from ADMIN_SM_AUTH_RECO t
+        left join admin_sm_user t1 on t1.user_id=t.AUTHOBJ_ID
+        left join admin_sm_role t2 on t2.role_id=t.AUTHOBJ_ID
+        left join admin_sm_dpt t3 on t3.dpt_id=t.AUTHOBJ_ID
+        left join admin_sm_org t4 on t4.org_id=t.AUTHOBJ_ID
+        left join admin_sm_menu t5 on t5.menu_id=t.AUTHRES_ID
+        left join admin_sm_menu t10 on t10.menu_id = t.menu_id
+        left join (select s.auth_id,s.contr_id,s1.auth_tmpl_name from ADMIN_SM_DATA_AUTH s
+        left join ADMIN_SM_DATA_AUTH_TMPL s1 on s1.auth_tmpl_id =s.auth_tmpl_id) t6 on t6.auth_id=t.AUTHRES_ID
+        left join ADMIN_SM_RES_CONTR t9 on t9.contr_id=t.AUTHRES_ID
+        left join admin_sm_lookup_item t7 on t7.lookup_item_code=t.authobj_type and t7.lookup_code='AUTHOBJ_TYPE'
+        left join admin_sm_lookup_item t8 on t8.lookup_item_code=t.authres_type and t8.lookup_code='AUTHRES_TYPE'
+        left join (select d.auth_id,d.contr_id,r.contr_name from ADMIN_SM_DATA_AUTH d
+        left join ADMIN_SM_RES_CONTR r on r.contr_id =d.contr_id) t11 on t11.auth_id=t.AUTHRES_ID
+        <where>
+            t.sys_id = #{condition.sysId , jdbcType=VARCHAR}
+            <if test="condition.objectType != null and condition.objectType != ''">
+                and t.authobj_type = #{condition.objectType , jdbcType=VARCHAR}
+            </if>
+            <if test="condition.objectId != null and condition.objectId != ''">
+                and t.AUTHOBJ_ID = #{condition.objectId , jdbcType=VARCHAR}
+            </if>
+            <if test="condition.resourceType != null">
+                and t.AUTHRES_TYPE in
+                <foreach item="item" collection="condition.resourceType" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!-- 批量新增数据(mysql) -->
+    <insert id="insertBatchByOracle" parameterType="List" >
+        insert into ADMIN_SM_AUTH_RECO (AUTH_RECO_ID,SYS_ID,AUTHOBJ_TYPE,AUTHOBJ_ID,AUTHRES_TYPE,AUTHRES_ID,
+        LAST_CHG_USR,LAST_CHG_DT) values
+        <foreach collection="list" item="poi" index="index" separator="," >
+            (#{poi.authRecoId},#{poi.sysId}, #{poi.authobjType}, #{poi.authobjId}, #{poi.authresType}, #{poi.authresId},#{poi.lastChgUsr}, #{poi.lastChgDt})
+        </foreach>
+    </insert>
+    <!-- 根据菜单ID查询所有父节点ID包含本身节点 -->
+    <select id="quryUpIdById" parameterType="java.util.Map" resultType="java.util.Map" >
+        select distinct t.menu_id as id,t.menu_type,t.UP_MENU_ID,t.menu_id from(
+        select menu_id,'M' as menu_type,UP_MENU_ID from admin_sm_menu ,(select getParentMenu(
+        <foreach item="menuId" index="index" collection="list" open="'" separator="," close="'">${menuId}</foreach>
+        ) pmids) p where
+        FIND_IN_SET(MENU_ID,pmids))t
+    </select>
+
+</mapper>

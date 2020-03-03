@@ -99,7 +99,7 @@
             return;
           }
           xhr.withCredentials = false;
-          var url = yufp.service.getUrl({ url: backend.adminService + _this.action });
+          var url = yufp.service.getUrl({ url: backend.appOcaService + _this.action });
           xhr.open('POST', url);
           xhr.setRequestHeader('Authorization', 'Bearer ' + yufp.service.getToken());
           xhr.setRequestHeader('busNo', _this.busNo);
@@ -191,7 +191,7 @@
                   var path = url.slice(0, url.indexOf('?'));
                   // 进行文件的删除
                   yufp.service.request({
-                    url: backend.adminService + '/api/adminfileuploadinfo/deletericheditfile',
+                    url: backend.appOcaService + '/api/adminfileuploadinfo/deletericheditfile',
                     method: 'post',
                     data: JSON.stringify({
                       filePath: path

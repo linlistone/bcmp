@@ -1,8 +1,6 @@
 package cn.com.yusys.icsp.base.base;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public abstract class BaseService {
@@ -40,6 +38,15 @@ public abstract class BaseService {
             retMap.put(underlineToCamel(key), map.get(key));
         }
         return retMap;
+    }
+
+    protected List<Map<String,Object>> changerList(List<Map<String,Object>> oldList){
+        List<Map<String, Object>> newist = new ArrayList<Map<String, Object>>();
+        for (Map<String, Object> map : oldList) {
+            Map<String, Object> swMap = mapUnderscoreToCamelCase(map);
+            newist.add(swMap);
+        }
+        return newist;
     }
 
     /**
