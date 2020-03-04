@@ -1,0 +1,36 @@
+<!-- 
+  @Created by   on 2020-3-1 17:06:47.
+  @updated by
+  @description 代理状态查询
+-->
+<div>
+  <yu-xform related-table-name="refTable" form-type="search">
+    <yu-xform-group :column="4">
+      <yu-xform-item placeholder="主机IP" ctype="input" name="hostIp"></yu-xform-item>
+      <yu-xform-item placeholder="主机类型" ctype="select" name="type" data-code="HOST_TYPE"></yu-xform-item>
+    </yu-xform-group>
+  </yu-xform>
+  <div class="fox-toolBar">
+    <yu-button icon="yx-loop2" @click="rebootFn" type="info">重启</yu-button>
+    <yu-button icon="yx-stop2" @click="shutdownFn" type="danger">停止</yu-button>
+  </div>
+  <yu-xtable ref="refTable" :data-url="dataUrl"  reserve-selection selection-type="checkbox" row-key="hostInfo.hostIp">
+    <yu-xtable-column label="主机IP" prop="hostInfo.hostIp"></yu-xtable-column>
+    <yu-xtable-column label="主机类型" prop="hostInfo.hostType" data-code="HOST_TYPE"></yu-xtable-column>
+    <yu-xtable-column label="操作系统" prop="agentInfo.osName"></yu-xtable-column>
+    <yu-xtable-column label="RMI-PORT" prop="agentInfo.rmiPort" width="110"></yu-xtable-column>
+    <yu-xtable-column label="RMI状态" prop="agentInfo.rmiStatus" width="110">
+      <template slot-scope="scope">
+        <yu-tag :type="scope.row.agentInfo.rmiStatus==='UP'?'success':'danger'">{{scope.row.agentInfo.rmiStatus}}</yu-tag>
+      </template>
+    </yu-xtable-column>
+    <yu-xtable-column label="HTTP-PORT" prop="agentInfo.socketPort" width="110"></yu-xtable-column>
+    <yu-xtable-column label="HTTP状态" prop="agentInfo.status" width="110">
+      <template slot-scope="scope">
+        <yu-tag :type="scope.row.agentInfo.status==='UP'?'success':'danger'">{{scope.row.agentInfo.rmiStatus}}</yu-tag>
+      </template>
+    </yu-xtable-column>
+    </yu-xtable-column>
+    <yu-xtable-column label="注册时间" prop="agentInfo.registryTime" width="140"></yu-xtable-column>
+  </yu-xtable>
+</div>
