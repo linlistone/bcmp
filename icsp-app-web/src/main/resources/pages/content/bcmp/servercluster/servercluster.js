@@ -60,6 +60,35 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       el: cite.el,
       data: vmData,
       methods: {
+
+        // 全选
+        selectAll: function () {
+          for (var i = 0; i < this.nodeInfos.length; i++) {
+            this.nodeInfos[i].checked = !this.nodeInfos[i].checked;
+          }
+        },
+        // 节点点击事件
+        tap: function (item, index) {
+          var customKey = 'custom_nodeinfo'; // 请以custom_前缀开头，并且全局唯一
+          var routeId = 'cmnodeinfo'; // 模板示例->普通查询的路由ID
+          // 数据
+          var data = {
+            ip: item.ip,
+            nodename: item.nodename,
+            serverstatus: item.serverstatus,
+            conncount: item.conncount
+          }; // 传递的业务数据，可选配置
+          // yufp.bus.put('nodeinfo', 'param', data);
+          // 添加新的标签页
+          yufp.frame.addTab({
+            id: routeId, // 菜单功能ID（路由ID）
+            key: customKey, // 自定义唯一页签key,请统一使用custom_前缀开头
+            title: '查看节点', // 页签名称
+            data: data
+          });
+        },
+
+
         nodeClickFn: function (nodeData, node, self) {
           this.currClickNode = nodeData.id + '|' + nodeData.label;
         },
@@ -345,33 +374,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           //     }
           // });
         },
-        // 全选
-        selectAll: function () {
-          for (var i = 0; i < this.nodeInfos.length; i++) {
-            this.nodeInfos[i].checked = !this.nodeInfos[i].checked;
-          }
-        },
-        // 节点点击事件
-        tap: function (item, index) {
-          var customKey = 'custom_nodeinfo'; // 请以custom_前缀开头，并且全局唯一
-          var routeId = 'nodeinfo'; // 模板示例->普通查询的路由ID
-          // 数据
-          var data = {
-            ip: item.ip,
-            nodename: item.nodename,
-            serverstatus: item.serverstatus,
-            conncount: item.conncount
-          }; // 传递的业务数据，可选配置
 
-          yufp.bus.put('nodeinfo', 'param', data);
-
-          // 添加新的标签页
-          yufp.frame.addTab({
-            id: routeId, // 菜单功能ID（路由ID）
-            key: customKey, // 自定义唯一页签key,请统一使用custom_前缀开头
-            title: '查看节点' // 页签名称
-          });
-        },
         handleRemove: function (file, fileList) {
           yufp.logger.info(file, fileList);
         },

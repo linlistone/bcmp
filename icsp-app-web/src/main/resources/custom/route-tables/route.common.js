@@ -42,8 +42,8 @@ define(function (require) {
     },
 
     cmnodeinfo: {
-      html: 'pages/bcmp/node/node.html',
-      js: 'pages/bcmp/node/node.js'
+      html: 'pages/content/bcmp/node/node.html',
+      js: 'pages/content/bcmp/node/node.js'
     },
 
     cmdeployinfo: {
