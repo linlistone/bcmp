@@ -1,9 +1,12 @@
 /**
  * Created by 樊苏超 on 2018/05/01.
  */
-define(function (require, exports) {
+define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) {
   // 数据源
   var vmData = {
+    queryNodeInfoInterval: {},
+    serverstatuschecked: false,
+    serverstatusdisabled: true,
     filterText: '',
     defaultProps: {
       children: 'children',
@@ -17,14 +20,6 @@ define(function (require, exports) {
     fileUploadVisible: false,
     // 节点信息
     nodeInfos: [],
-    nodeinfo: {
-      index: 3,
-      nodename: 'BIPSA',
-      serverstatus: false,
-      conncount: 0,
-      ip: '10.229.169.65',
-      checked: true
-    },
     deployDialogVisiable: false,
     dialogFormVisible: false,
     deployFormData: {
@@ -58,7 +53,6 @@ define(function (require, exports) {
     nodeKey: [],
     IMG_UPLOAD_URL: ''
   };
-
   // page加载完成后调用ready方法
   exports.ready = function (hashCode, data, cite) {
     // 创建virtual model
@@ -79,7 +73,10 @@ define(function (require, exports) {
             }
           }
           if (ids.length == 0) {
-            alert('至少选中一台服务器进行操作');
+            this.$message({
+              message: '请先选择需要操作的应用服务',
+              type: 'warning'
+            });
             return;
           }
           // 弹出版本部署对话框
@@ -99,7 +96,10 @@ define(function (require, exports) {
               if (code == 0) {
                 vmData.version_list = data.version_list;
               } else {
-                alert('查询部署列表失败');
+                this.$message({
+                  message: '查询部署列表失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -114,7 +114,10 @@ define(function (require, exports) {
             }
           }
           if (ids.length == 0) {
-            alert('至少选中一台服务器进行操作');
+            this.$message({
+              message: '至少选中一台服务器进行操作',
+              type: 'warning'
+            });
             return;
           }
           // 弹出版本部署对话框
@@ -137,7 +140,10 @@ define(function (require, exports) {
               if (code == 0) {
                 vmData.undeploy_version_list = data.version_list;
               } else {
-                alert('查询部署列表失败');
+                this.$message({
+                  message: '查询部署列表失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -172,7 +178,10 @@ define(function (require, exports) {
                 vmData.deployDialogVisiable = false;
                 vmData.dialogFormVisible = true;
               } else {
-                alert('部署失败');
+                this.$message({
+                  message: '部署失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -206,7 +215,10 @@ define(function (require, exports) {
                 vmData.undeployDialogVisiable = false;
                 vmData.backDetailPageVisible = true;
               } else {
-                alert('回退失败');
+                this.$message({
+                  message: '回退失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -225,7 +237,10 @@ define(function (require, exports) {
           }
 
           if (nodeList.length == 0) {
-            alert('至少选中一台服务器进行操作');
+            this.$message({
+              message: '至少选中一台服务器进行操作',
+              type: 'warning'
+            });
             return;
           }
           var reqData = {
@@ -239,7 +254,9 @@ define(function (require, exports) {
             name: 'cm/node/startNodes',
             callback: function (code, message, data) {
               if (code == 0) {
-                alert('启动成功');
+                vm.$message({
+                  message: '启动成功！'
+                });
                 for (var i = 0; i < vmData.nodeInfos.length; i++) {
                   // 被选中节点的服务状态改变
                   if (vmData.nodeInfos[i].checked) {
@@ -248,7 +265,10 @@ define(function (require, exports) {
                   }
                 }
               } else {
-                alert('启动失败');
+                this.$message({
+                  message: '启动失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -266,7 +286,10 @@ define(function (require, exports) {
             }
           }
           if (nodeList.length == 0) {
-            alert('至少选中一台服务器进行操作');
+            this.$message({
+              message: '至少选中一台服务器进行操作',
+              type: 'warning'
+            });
             return;
           }
           var reqData = {
@@ -281,7 +304,9 @@ define(function (require, exports) {
             callback: function (code, message, data) {
               // 登录成功
               if (code == 0) {
-                alert('停止成功');
+                vm.$message({
+                  message: '停止成功！'
+                });
                 for (var i = 0; i < vmData.nodeInfos.length; i++) {
                   // 被选中节点的服务状态改变
                   if (vmData.nodeInfos[i].checked) {
@@ -290,7 +315,10 @@ define(function (require, exports) {
                   }
                 }
               } else {
-                alert('停止失败');
+                this.$message({
+                  message: '停止失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -319,22 +347,20 @@ define(function (require, exports) {
         },
         // 全选
         selectAll: function () {
-          for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            vmData.nodeInfos[i].checked = true;
+          for (var i = 0; i < this.nodeInfos.length; i++) {
+            this.nodeInfos[i].checked = !this.nodeInfos[i].checked;
           }
         },
         // 节点点击事件
         tap: function (item, index) {
           var customKey = 'custom_nodeinfo'; // 请以custom_前缀开头，并且全局唯一
           var routeId = 'nodeinfo'; // 模板示例->普通查询的路由ID
-
           // 数据
           var data = {
             ip: item.ip,
             nodename: item.nodename,
             serverstatus: item.serverstatus,
             conncount: item.conncount
-
           }; // 传递的业务数据，可选配置
 
           yufp.bus.put('nodeinfo', 'param', data);
@@ -347,100 +373,118 @@ define(function (require, exports) {
           });
         },
         handleRemove: function (file, fileList) {
-          console.log(file, fileList);
+          yufp.logger.info(file, fileList);
         },
         handlePreview: function (file) {
-          console.log(file);
-        },
-        handleExceed: function (files, fileList) {
-          this.$message.warning('当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件');
+          yufp.logger.info(file);
         },
         beforeRemove: function (file, fileList) {
           return this.$confirm('确定移除 ${ file.name }？');
         },
         beforeUpload: function () {
           return true;
+        },
+        initApplist: function () {
+          // 初始化服务节点
+          let reqData = { page: 1, size: 9999 };
+          yufp.service.request({
+            data: reqData,
+            name: backend.bcmpService + '/bcmpSmNodeinfo/index',
+            callback: (code, message, data) => {
+              for (var i = 0; i < data.data.length; i++) {
+                let rowdata = {};
+                rowdata.nodename = data.data[i].nodeName; // 节点名称
+                rowdata.nodetype = data.data[i].nodeType; // 节点类型
+                rowdata.starttime = ''; // 启动时间
+                rowdata.serverstatus = false; // 节点状态
+                rowdata.conncount = data.data[i].isLink; // 连接数量
+                rowdata.ip = data.data[i].hostIp;// ip
+                rowdata.index = i + 1; // 节点索引
+                rowdata.checked = false; // 节点索引
+                rowdata.disabled = true;// 节点可用
+                this.nodeInfos.push(rowdata);
+              }
+            }
+          });
+        },
+        uuid: function () {
+          var s = [];
+          var hexDigits = '0123456789abcdef';
+          for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+          }
+          s[14] = '4'; // bits 12-15 of the time_hi_and_version field to 0010
+          s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+          s[8] = s[13] = s[18] = s[23] = '-';
+          var uuid = s.join('');
+          return uuid;
+        },
+        // 建立 WebSocket
+        connectSocket: function () {
+          var me = this;
+          let clilentId = this.uuid();
+          let wsUrl = yufp.settings.url + '/websocket/' + clilentId;
+          me.socketClient = new WebSocket('ws://' + wsUrl);
+          me.socketClient.onopen = function (message) {
+            yufp.logger.info('Connection open ...' + wsUrl);
+          };
+          me.socketClient.onmessage = function (message) {
+            yufp.logger.info('Connection onmessage ...' + message);
+          };
+          me.socketClient.onclose = function (message) {
+            yufp.logger.info('Connection onclose ...');
+            clearInterval(me.queryNodeInfoInterval);
+          };
+          me.socketClient.onerror = function (message) {
+            me.$message({ message: '建立连接失败，请刷新请求', type: 'warning' });
+            yufp.logger.info('Connection error ...');
+            clearInterval(me.queryNodeInfoInterval);
+          };
+          let queryNodeInfoFn = function () {
+            var nodeInfos = vmData.nodeInfos;
+            for (var i = 0; i < vmData.nodeInfos.length; i++) {
+              nodeInfos[i].disabled = !nodeInfos[i].disabled;
+            }
+          };
+          this.queryNodeInfoInterval = setInterval(queryNodeInfoFn, 1000 * 5);
+        },
+        // 关闭 WebSocket
+        closeSocket: function () {
+          var me = this;
+          if (me.term != null) {
+            me.term.dispose();
+            me.term = null;
+          }
+          if (me.socketClient != null) {
+            me.socketClient.close();
+            me.socketClient = null;
+          }
+        },
+        // 重新连接
+        reConnectSocket: function () {
+          this.isRefreshConnection = true;
+          this.closeSocket();
+          this.connectSocket();
         }
       },
       watch: {
         filterText: function (val) {
           this.$refs.orgTree.filter(val);
-        },
-        nodeInfos: {
-          handler: function (val) {
-            console.log(val);
-          },
-          deep: true
         }
       },
       // 界面加载成功
       mounted: function () {
-        // 查询服务器IP地址
-        // yufp.service1.request({
-        //   id: 'queryLoginServerIP',
-        //   name: 'mgr/common/queryLoginServerIP',
-        //   data: {},
-        //   callback: function (code, message, data) {
-        //     if (code == 0) {
-        //       var sercerIp = data.serverIp;
-        //       vmData.IMG_UPLOAD_URL = 'http://' + sercerIp + ':9291/services/trade/file/upload.do';
-        //     }
-        //   }
-        // });
-        // 通过名称查询卡号
-        var reqData = {};
-        yufp.service.request({
-          data: reqData,
-          name: backend.bcmpService + '/nodeinfo/index',
-          callback: function (code, message, data) {
-            vmData.nodeInfos = data.data;
-            for (var i = 0; i < vmData.nodeInfos.length; i++) {
-              // 节点名称
-              vmData.nodeInfos[i].nodename = vmData.nodeInfos[i].name;
-              // 节点状态
-              vmData.nodeInfos[i].serverstatus = false;
-              // 连接数量
-              vmData.nodeInfos[i].conncount = vmData.nodeInfos[i].isLink;
-              // ip
-              vmData.nodeInfos[i].ip = vmData.nodeInfos[i].hostIp;
-              // 节点索引
-              vmData.nodeInfos[i].index = i + 1;
-              // 节点索引
-              vmData.nodeInfos[i].checked = false;
-              // 节点可用
-              vmData.nodeInfos[i].disabled = false;
-            }
-            // // 获取服务器状态
-            // var nodeList = [];
-            // for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            //   var obj = {};
-            //   obj.hostip = vmData.nodeInfos[i].ip;
-            //   obj.nodeName = vmData.nodeInfos[i].nodeName;
-            //   nodeList.push(obj);
-            // }
-            // 获取节点状态
-            // var reqData = {
-            //   userId: yufp.session.user.TELLER_ID,
-            //   list: nodeList
-            // };
-            // yufp.service1.request({
-            //   id: 'getNodeStatus',
-            //   data: reqData,
-            //   name: 'cm/node/getNodeStatus',
-            //   callback: function (code, message, data) {
-            //     // 登录成功
-            //     if (code == 0) {
-            //       console.log('获取节点信息成功' + data);
-            //     } else {
-            //       console.log('获取节点信息失败' + data);
-            //     }
-            //   }
-            // });
-          }
-        });
+        // 初始化服务节点
+        this.initApplist();
+        // 创建websocket连接
+        this.connectSocket();
+      },
+      // 销毁的时候
+      destroyed: function () {
+        yufp.logger.info('page destroyed ...');
+        this.closeSocket();
       }
     });
-
     yufp.eventproxy.unbind('deploy');
     yufp.eventproxy.bind('deploy', function (content) {
       // 节点位置
@@ -564,7 +608,7 @@ define(function (require, exports) {
         for (var i = 0; i < vmData.nodeInfos.length; i++) {
           var ip = nodeInfos[i].HOSTIP;
           if (hostip == ip) {
-            nodeInfos[i].serverstatus = true;
+            nodeInfos[i].disabled = true;
           }
         }
       }

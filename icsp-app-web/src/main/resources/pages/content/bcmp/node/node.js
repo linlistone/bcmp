@@ -105,7 +105,7 @@ define(function (require, exports, cite) {
             },
             name: 'cm/node/getLogFiles',
             callback: function (code, message, data) {
-              console.log(data);
+              yufp.logger.debug(data);
               if (code == 0) {
                 vmData.resultLogFiles = data.resultMaps;
                 vmData.currentUrl = data.currentUrl;
@@ -562,7 +562,7 @@ define(function (require, exports, cite) {
         // 上下保留距离 上30px 下11.6px
         yPont = height - 11.6 - (yValue / yCeil * (height - 41.6));
         var m = xLen + ',' + yPont;
-        // console.log(m);
+        // yufp.logger.debug(m);
         g.lineTo(xLen, yPont);
       }
       g.stroke();
@@ -752,7 +752,7 @@ define(function (require, exports, cite) {
         data: reqData,
         name: 'cm/node/getNodeDetailInfo',
         callback: function (code, message, data) {
-          console.log(data);
+          yufp.logger.debug(data);
           // 登录成功
           if (code == 0) {
             // CPU

@@ -197,26 +197,26 @@ define([
           console.dir(file);
         },
         handleRemove: function (file, fileList) {
-          console.log(file, fileList);
+          yufp.logger.debug(file, fileList);
         },
         handlePreview: function (file) {
-          console.log(file);
+          yufp.logger.debug(file);
         },
         handleTimeout: function () { },
         handleChange: function () {
-          console.log('handleChange', arguments);
+          yufp.logger.debug('handleChange', arguments);
         },
         handleBeforeUpload: function () {
-          console.log('handleBeforeUpload', arguments);
+          yufp.logger.debug('handleBeforeUpload', arguments);
         },
         handleProgress: function () {
-          console.log('handleProgress', arguments);
+          yufp.logger.debug('handleProgress', arguments);
         },
         handleSuccess: function () {
-          console.log('handleSuccess', arguments);
+          yufp.logger.debug('handleSuccess', arguments);
         },
         handleStart: function () {
-          console.log('handleStart', arguments);
+          yufp.logger.debug('handleStart', arguments);
         },
         /**
          * 上传文件到服务器

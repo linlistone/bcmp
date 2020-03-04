@@ -11,7 +11,7 @@ define(['./pages/example/package/mindMap/index.js', './pages/example/package/min
    * @param cite 页面站点信息
    */
   exports.ready = function (hashCode, data, cite) {
-    console.log(window);
+    yufp.logger.debug(window);
     yufp.custom.vue({
       el: cite.el,
       data: function () {

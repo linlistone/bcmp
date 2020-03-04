@@ -228,7 +228,7 @@ define(function (require, exports) {
       },
       methods: {
         handleChange: function (val) {
-          console.log('change事件' + val);
+          yufp.logger.debug('change事件' + val);
         },
         getSelectdText: function () {
           this.$alert(this.$refs.myCascader.getSelectdText());

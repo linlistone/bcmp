@@ -57,13 +57,13 @@ public class BcmpSmAgentListResource {
 
     /**
      *
-     * @方法名称: rebootBatch
+     * @方法名称: rebootAgentBatch
      * @方法描述: 批量重启
      * @参数与返回说明: ips 代理服务IP
      * @算法描述:
      */
-    @PostMapping("/rebootBatch")
-    public ResultDto<Map<String,Integer>> rebootBatch(String ips) throws Exception {
+    @PostMapping("/rebootAgentBatch")
+    public ResultDto<Map<String,Integer>> rebootAgentBatch(String ips) throws Exception {
         int n=0;
         Map<String,Integer> result=new HashMap<>();
         if(ips !=null&&!"".equals(ips)) {
@@ -79,28 +79,76 @@ public class BcmpSmAgentListResource {
         return ResultDto.success(result);
     }
 
-    /**
-     *
-     * @方法名称: rebootBatch
-     * @方法描述: 批量停止
-     * @参数与返回说明: ips 代理服务IP
-     * @算法描述:
-     */
-    @PostMapping("/shutdownBatch")
-    public ResultDto<Map<String,Integer>> shutdownBatch(String ips) throws Exception {
-        int n=0;
-        Map<String,Integer> result=new HashMap<>();
-        if(ips !=null&&!"".equals(ips)) {
-            String[] idStr=ips.toString().split(",");
-            int nodeletes=0;
-            String delete="";
-            for(int i=0;i<idStr.length;i++)
-                if (!"".equals(idStr[i])) {
-                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
-                    result.put(idStr[i], res);
-                }
-        }
-        return ResultDto.success(result);
-    }
+//    /**
+//     *
+//     * @方法名称: shutdownAgentBatch
+//     * @方法描述: 批量停止
+//     * @参数与返回说明: ips 代理服务IP
+//     * @算法描述:
+//     */
+//    @PostMapping("/shutdownAgentBatch")
+//    public ResultDto<Map<String,Integer>> shutdownAgentBatch(String ips) throws Exception {
+//        int n=0;
+//        Map<String,Integer> result=new HashMap<>();
+//        if(ips !=null&&!"".equals(ips)) {
+//            String[] idStr=ips.toString().split(",");
+//            int nodeletes=0;
+//            String delete="";
+//            for(int i=0;i<idStr.length;i++)
+//                if (!"".equals(idStr[i])) {
+//                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
+//                    result.put(idStr[i], res);
+//                }
+//        }
+//        return ResultDto.success(result);
+//    }
+//
+//    /**
+//     *
+//     * @方法名称: startAppBatch
+//     * @方法描述: 批量停止
+//     * @参数与返回说明: ips 代理服务IP
+//     * @算法描述:
+//     */
+//    @PostMapping("/startAppBatch")
+//    public ResultDto<Map<String,Integer>> startAppBatch(String nodeInfoIds) throws Exception {
+//        int n=0;
+//        Map<String,Integer> result=new HashMap<>();
+//        if(nodeInfoIds !=null&&!"".equals(nodeInfoIds)) {
+//            String[] idStr=nodeInfoIds.toString().split(",");
+//            int nodeletes=0;
+//            String delete="";
+//            for(int i=0;i<idStr.length;i++)
+//                if (!"".equals(idStr[i])) {
+//                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
+//                    result.put(idStr[i], res);
+//                }
+//        }
+//        return ResultDto.success(result);
+//    }
+//
+//    /**
+//     *
+//     * @方法名称: shutdownAppBatch
+//     * @方法描述: 批量停止
+//     * @参数与返回说明: ips 代理服务IP
+//     * @算法描述:
+//     */
+//    @PostMapping("/shutdownAgentBatch")
+//    public ResultDto<Map<String,Integer>> shutdownAppBatch(String ips) throws Exception {
+//        int n=0;
+//        Map<String,Integer> result=new HashMap<>();
+//        if(ips !=null&&!"".equals(ips)) {
+//            String[] idStr=ips.toString().split(",");
+//            int nodeletes=0;
+//            String delete="";
+//            for(int i=0;i<idStr.length;i++)
+//                if (!"".equals(idStr[i])) {
+//                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
+//                    result.put(idStr[i], res);
+//                }
+//        }
+//        return ResultDto.success(result);
+//    }
 
 }

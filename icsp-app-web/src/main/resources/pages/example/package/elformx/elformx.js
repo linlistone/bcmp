@@ -71,7 +71,7 @@ function (require, exports) {
                 optionButton: true,
                 dataCode: 'NATIONALITY',
                 change: function (val) {
-                  console.log(val);
+                  yufp.logger.debug(val);
                 }
               },
               {label: 'checkbox组件',
@@ -81,7 +81,7 @@ function (require, exports) {
                 max: 3,
                 dataUrl: 'trade/example/checkbox',
                 change: function (val) {
-                  console.log(val);
+                  yufp.logger.debug(val);
                 }
               }
             ]
@@ -98,7 +98,7 @@ function (require, exports) {
                 type: 'select',
                 dataCode: 'NATIONALITY',
                 change: function (val) {
-                  console.log(val);
+                  yufp.logger.debug(val);
                 }
               }
             ]

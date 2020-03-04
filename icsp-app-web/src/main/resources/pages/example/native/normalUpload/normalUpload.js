@@ -40,7 +40,7 @@ define(function (require, exports) {
         //   if(fileList.length > 1){
         //     debugger
         //     this.$message.error('只能上传一个文件!');
-        //     console.log(file);
+        //    yufp.logger.debug(file);
         //     this.$refs.singleup.abort(file)
         //     this.singleFileUp = fileList.slice(0,1)
         //   }

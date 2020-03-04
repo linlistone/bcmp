@@ -17,13 +17,13 @@ define(['libs/md5/spark-md5.min.js'], function (require, exports) {
       },
       methods: {
         handleRemove: function (file, fileList) {
-          console.log(file, fileList);
+          yufp.logger.debug(file, fileList);
         },
         onChange: function (file, fileList) {
           if (!file) {
             return;
           }
-          console.log(file.status);
+          yufp.logger.debug(file.status);
 
           var _this = this;
           if (file.status == 'ready') {
@@ -33,10 +33,10 @@ define(['libs/md5/spark-md5.min.js'], function (require, exports) {
             var start = d.getTime();
             fileReader.onload = function (e) {
               if (file.size != e.target.result.byteLength) {} else {
-                console.log(SparkMD5.ArrayBuffer.hash(e.target.result)); // compute hash
+                yufp.logger.debug(SparkMD5.ArrayBuffer.hash(e.target.result)); // compute hash
                 d = new Date();
                 var end = d.getTime();
-                console.log('计算花费' + (end - start) + 'ms');
+                yufp.logger.debug('计算花费' + (end - start) + 'ms');
                 _this.$data.md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 _this.$refs.upload.submit();
               }

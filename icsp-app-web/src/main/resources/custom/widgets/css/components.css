@@ -1,9 +1,9 @@
-.server-cluster-el-card>.el-card__header {
-    /*background-color: rgb(119, 164, 245);*/
-    background-color: RGB(119, 164, 245);
-
+.server-cluster-el-card-up>.el-card__header {
+   background-color: #409EFF;
 }
-
+.server-cluster-el-card-down>.el-card__header {
+    background-color:#CCCFD5;
+ }
 
 .flag {
     position:relative;
@@ -19,10 +19,26 @@
 li {
     margin-bottom: 10px;
 }
-
 .server_cluster{
-    margin:20px;
+    margin: 10px;
+    float:left;
+    width:148px;
 }
-
-
+.server_cluster .title_font{
+    color: #ffffff;
+    font-size:14px;
+}
+.server_cluster .jdblue{
+    margin-top: -15px;
+}
+.server_cluster .jdblue_list ul{width:100%;font-size:12px;color:#0167b9}
+.server_cluster .jdblue_list li{
+	line-height:20px;
+	height:20px;
+	width:100%;
+	list-style-type:none;
+}
+.font_black{color:#2b2b2b}
+.font_orange{color:#e51b00}
+.server_cluster .jdblue_foot{float:left;width:148px;height:12px;}
 

@@ -265,7 +265,7 @@
      */
   document.onmousedown = function (event) {
     var time = new Date().getTime();
-    // console.log('onmousedown time'+time);//debug
+    // yufp.logger.debug('onmousedown time'+time);//debug
     idle.setLastOpsTime(time);
   };
 
@@ -275,7 +275,7 @@
      */
   document.onmousemove = function (event) {
     var time = new Date().getTime();
-    // console.log('onmousemove time'+time);//debug
+    // yufp.logger.debug('onmousemove time'+time);//debug
     idle.setLastOpsTime(time);
   };
 
@@ -285,7 +285,7 @@
      */
   document.onkeydown = function (event) {
     var time = new Date().getTime();
-    // console.log('onkeydown time'+time);//debug
+    // yufp.logger.debug('onkeydown time'+time);//debug
     idle.setLastOpsTime(time);
   };
 

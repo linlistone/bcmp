@@ -11,8 +11,8 @@
         </el-button-group>
     </el-row>
     <div class="server_container" style="margin-left:0px;margin-top:5px;background-color: white">
-        <yufp-serverstatus v-for="(item, index) in nodeInfos" :key="item.nodeId" @click="dialogFormVisible = true" :datasource="item"
-            v-on:tap="tap(item,index)" v-model="item.checked" :disabled="item.disabled"></yufp-serverstatus>
+        <yufp-serverstatus v-for="(item, index) in nodeInfos" :key="item.nodeId" :datasource="item" @tap="tap(item,index)" v-model="item.checked"
+            :disabled="item.disabled"></yufp-serverstatus>
     </div>
     <el-dialog title="版本文件上传" :visible.sync="fileUploadVisible" style="width:50%">
         <el-upload class="upload-demo" :action="IMG_UPLOAD_URL" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove"
@@ -86,21 +86,9 @@
     </el-dialog>
 </div>
 <style>
-    .box-card {
-        flex-direction: row;
-    }
-
     .server_container {
         display: flex;
         flex-wrap: wrap;
         margin: 20px;
-    }
-
-    .btn {
-        width: 100px;
-    }
-
-    .ck {
-        background-color: white;
     }
 </style>
