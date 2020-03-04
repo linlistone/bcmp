@@ -1,9 +1,6 @@
 <!-- 必须全局拥有唯一的id -->
 <div style="background-color: white">
-
-
     <div class="nodeinfo" style="margin-left:0px;margin-top:5px;background-color: white">
-
         <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white;">
             <el-col :span="5">
                 <div>主机ip地址:{{ip}}</div>
@@ -14,9 +11,7 @@
             <el-col :span="5">
                 <div>客户端连接数量:{{conncount}}</div>
             </el-col>
-
         </el-row>
-
         <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
             <el-col :span="5">
                 <div>运行时间:{{RUNNINGTIME}}</div>
@@ -25,7 +20,6 @@
                 <div>服务器状态:{{serverstatus}}</div>
             </el-col>
         </el-row>
-
         <el-row style="margin-top: 15px;margin-bottom: 15px;margin-left:0px;">
             <el-button-group>
                 <el-button type="primary" icon="el-icon-edit" @click="releaseDeploy()">版本部署</el-button>
@@ -35,23 +29,21 @@
             </el-button-group>
         </el-row>
     </div>
-
-
     <el-tabs type="border-card">
         <el-tab-pane>
             <span slot="label">
                 <i class="el-icon-date"></i> CPU监控</span>
-            <canvas class="canvas_monitor_bg" id="canvas_cpu" width="750" height="226">
+            <canvas class="canvas_monitor_bg" id="canvas_cpu" width="750" height="430">
                 <p>Your browserdoes not support the canvas element!</p>
             </canvas>
         </el-tab-pane>
         <el-tab-pane label="内存监控">
-            <canvas class="canvas_monitor_bg" id="canvas_cache" width="750" height="226">
+            <canvas class="canvas_monitor_bg" id="canvas_cache" width="750" height="430">
                 <p>Your browserdoes not support the canvas element!</p>
             </canvas>
         </el-tab-pane>
         <!-- <el-tab-pane label="文件浏览">文件浏览</el-tab-pane> -->
-        <el-tab-pane label="日志监控">
+        <el-tab-pane label="日志监控" height="430" >
             <!-- <el-button icon="yx-bin" @click="getLogFiles('','-2')">获取文件目录</el-button> -->
             <el-card class="box-card" v-for="item in resultLogFiles" :key="item.name">
                 <el-row :gutter="20">
@@ -68,14 +60,10 @@
                     </el-col>
                 </el-row>
             </el-card>
-
-
-
-
         </el-tab-pane>
-        <el-tab-pane label="客户端浏览">客户端浏览</el-tab-pane>
+        <el-tab-pane label="客户端浏览" height="430" >客户端浏览</el-tab-pane>
         <el-tab-pane label="数据库连接池">
-            <el-table :data="dbpoolinfo" height="500" border style="width: 100%">
+            <el-table :data="dbpoolinfo" height="430" border style="width: 100%">
                 <el-table-column prop="name" label="数据池名称" width="180">
                 </el-table-column>
                 <el-table-column prop="dbSourceType" label="数据池类型" width="180">
@@ -89,7 +77,7 @@
             </el-table>
         </el-tab-pane>
         <el-tab-pane label="磁盘信息监控">
-            <el-table :data="filedev" height="500" border style="width: 100%">
+            <el-table :data="filedev" height="430" border style="width: 100%">
                 <el-table-column prop="fileSystem" label="文件系统" width="180">
                 </el-table-column>
                 <el-table-column prop="mountedPoint" label="挂载点" width="180">
@@ -102,8 +90,8 @@
                 </el-table-column>
             </el-table>
         </el-tab-pane>
-        <el-tab-pane label="线程监控">
-            <canvas class="canvas_monitor_bg" id="canvas_thread" width="750" height="226">
+        <el-tab-pane label="线程监控" height="430" >
+            <canvas class="canvas_monitor_bg" id="canvas_thread" width="750" height="430">
                 <p>Your browserdoes not support the canvas element!</p>
             </canvas>
         </el-tab-pane>
@@ -122,9 +110,7 @@
                     <div>已启动的线程数:{{STARTEDTHREDCOUNT}}</div>
                 </el-col>
             </el-row>
-
             <hr>
-
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
                 <el-col :span="5">
                     <div>当前类已装入数:{{classloadnumber}}</div>
@@ -136,30 +122,22 @@
                     <div>已卸载类总数:{{uninstalledclassescount}}</div>
                 </el-col>
             </el-row>
-
             <hr>
-
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
                 <el-col :span="5">
                     <div>JVM参数:{{JvmInputArguments}}</div>
                 </el-col>
             </el-row>
         </el-tab-pane>
-
     </el-tabs>
-
-
     <el-dialog title="版本部署" :visible.sync="deployDialogVisiable">
-
         <el-form ref="deployFormData" :model="deployFormData" label-width="150px">
-
             <el-form-item label="版本选择">
                 <el-select v-model="deployFormData.version" placeholder="请选择">
-                    <el-option v-for="item in version_list" :key="item" :label="item" :value="item">
+                    <el-option v-for="item in versionList" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
-
             <el-form-item label="是否需要重启服务">
                 <el-select v-model="deployFormData.needRestart" placeholder="请选择">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -167,14 +145,11 @@
                 </el-select>
             </el-form-item>
         </el-form>
-
         <div slot="footer" class="dialog-footer">
             <el-button @click="deploy()">确定</el-button>
             <el-button @click="deployDialogVisiable = false">取消</el-button>
         </div>
     </el-dialog>
-
-
     <el-dialog title="部署页面" :visible.sync="dialogFormVisible">
         <el-steps :space="230" :active="step" finish-status="success">
             <el-step title="开始"></el-step>
@@ -182,37 +157,27 @@
             <el-step title="解包"></el-step>
             <el-step title="结束"></el-step>
         </el-steps>
-
         <div>
             <ul id="parentUl"></ul>
         </div>
-
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dialogFormVisible = false">关闭</el-button>
         </div>
     </el-dialog>
-
-
     <el-dialog title="版本回退" :visible.sync="undeployDialogVisiable">
-
         <el-form ref="unDeployFormData" :model="unDeployFormData" label-width="150px">
-
             <el-form-item label="版本选择">
                 <el-select v-model="unDeployFormData.version" placeholder="请选择">
-                    <el-option v-for="item in undeploy_version_list" :key="item" :label="item" :value="item">
+                    <el-option v-for="item in undeployVersionList" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
-
         </el-form>
-
         <div slot="footer" class="dialog-footer">
             <el-button @click="unDeploy()">确定</el-button>
             <el-button @click="undeployDialogVisiable = false">取消</el-button>
         </div>
     </el-dialog>
-
-
     <el-dialog title="回退页面" :visible.sync="backDetailPageVisible">
         <el-steps :space="180" :active="backstep" finish-status="success">
             <el-step title="开始"></el-step>
@@ -221,21 +186,15 @@
             <el-step title="启动服务器"></el-step>
             <el-step title="结束"></el-step>
         </el-steps>
-
         <div>
             <ul id="backMsgPan"></ul>
         </div>
-
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="backDetailPageVisible = false">关闭</el-button>
         </div>
     </el-dialog>
-
-
-
     <el-dialog title="查看日志" :visible.sync="sawLogView">
         <span>{{logMessage}}</span>
-
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="sawLogView = false">关闭</el-button>
         </div>

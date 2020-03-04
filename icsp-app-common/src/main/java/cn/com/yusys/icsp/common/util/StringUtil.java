@@ -1,9 +1,12 @@
-package cn.com.yusys.icsp.util;
+package cn.com.yusys.icsp.common.util;
 
-import org.apache.commons.lang3.*;
-import java.util.regex.*;
-import java.io.*;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public final class StringUtil {
 	public static final char CHAR_ZERROR = '0';
@@ -549,5 +552,22 @@ public final class StringUtil {
 			Arrays.stream(objects).forEach(s -> buffer.append(s));
 		}
 		return buffer.toString();
+	}
+
+	/**
+	 * 格式化路径
+	 *
+	 * @param path
+	 * @return
+	 */
+	public static String formatPath(String path) {
+		if (path == null || path.length() == 0) {
+			return path;
+		}
+		//去掉空格
+		path=path.trim();
+		//替换分割符
+		path=path.replace("\\", "/");
+		return path;
 	}
 }

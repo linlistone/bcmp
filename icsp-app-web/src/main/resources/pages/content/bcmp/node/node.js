@@ -1,29 +1,21 @@
 /**
  * Created by 樊苏超 on 2018/05/01.
  */
-define(function (require, exports, cite) {
+define(function (require, exports) {
   var getinfoTimer;
-  var param = yufp.bus.get('nodeinfo', 'param');
-  var status = param.serverstatus;
-  var serverstatus = '';
-  if (status == true) {
-    serverstatus = '已启动';
-  } else {
-    serverstatus = '未启动';
-  }
   // 数据源
   var vmData = {
-    ip: param.ip,
-    nodename: param.nodename,
-    serverstatus: serverstatus,
-    conncount: param.conncount,
+    ip: '',
+    nodename: '',
+    serverstatus: '',
+    conncount: '',
     deployDialogVisiable: false,
     dialogFormVisible: false,
     deployFormData: {
       version: '',
       needRestart: ''
     },
-    version_list: [],
+    versionList: [],
     options: [{
       value: 'true',
       label: '需要重启'
@@ -38,7 +30,7 @@ define(function (require, exports, cite) {
     unDeployFormData: {
       version: ''
     },
-    undeploy_version_list: [],
+    undeployVersionList: [],
     // 回退步骤位置
     backstep: 0,
     backDetailPageVisible: false,
@@ -70,8 +62,16 @@ define(function (require, exports, cite) {
     logMessage: ''
     // indexFlag:'',
   };
-    // page加载完成后调用ready方法
+  // page加载完成后调用ready方法
   exports.ready = function (hashCode, data, cite) {
+    var param = data;
+    var status = param.serverstatus;
+    var serverstatus = '';
+    if (status == true) {
+      serverstatus = '已启动';
+    } else {
+      serverstatus = '未启动';
+    }
     // 创建virtual model
     var vm = yufp.custom.vue({
       el: cite.el,
@@ -79,7 +79,7 @@ define(function (require, exports, cite) {
       methods: {
         downloadLog: function (name) {
           let requestUrl = 'http://192.144.128.218:9391/FSdot' + vmData.currentUrl.substr(25) + '/' + name;
-          yufp.service1.requestHttp({
+          yufp.service.requestHttp({
             name: requestUrl,
             callback: function (code, message, data) {
               if (code == 0) {
@@ -96,7 +96,7 @@ define(function (require, exports, cite) {
           if (logType == '-2') {
             this.currentUrl = '';
           }
-          yufp.service1.request({
+          yufp.service.request({
             id: 'getLogFiles',
             data: {
               name: name,
@@ -125,52 +125,45 @@ define(function (require, exports, cite) {
             type: 'deploy'
           };
           // 请求版本列表
-          yufp.service1.request({
+          yufp.service.request({
             id: 'listVersion',
             data: reqData,
             name: 'cm/deploy/listVersion',
             callback: function (code, message, data) {
               // 登录成功
               if (code == 0) {
-                vmData.version_list = data.version_list;
+                vmData.versionList = data.versionList;
               } else {
                 alert('查询部署列表失败');
               }
             }
           });
         },
-
-        /**
-                                         * 版本回退
-                                         */
+        // 版本回退
         releaseUnDeploy: function () {
           // 弹出版本部署对话框
           vmData.undeployDialogVisiable = true;
-
           // 查询部署的版本
           var reqData = {
             type: 'rollbacker',
             ids: param.ip + '_' + param.nodename
           };
           // 请求版本列表
-          yufp.service1.request({
+          yufp.service.request({
             id: 'listVersion',
             data: reqData,
             name: 'cm/deploy/listVersion',
             callback: function (code, message, data) {
               // 登录成功
               if (code == 0) {
-                vmData.undeploy_version_list = data.version_list;
+                vmData.undeployVersionList = data.versionList;
               } else {
                 alert('查询部署列表失败');
               }
             }
           });
         },
-
-        /**
-                                         * 版本部署
-                                         */
+        // 版本部署
         deploy: function () {
           // 查询部署的版本
           var reqData = {
@@ -180,7 +173,7 @@ define(function (require, exports, cite) {
             version: vmData.deployFormData.version
           };
           // 开始版本部署
-          yufp.service1.request({
+          yufp.service.request({
             id: 'listVersion',
             data: reqData,
             name: 'cm/deploy/startDeploy',
@@ -195,10 +188,7 @@ define(function (require, exports, cite) {
             }
           });
         },
-
-        /**
-                                         * 版本回退
-                                         */
+        // 版本回退
         unDeploy: function () {
           // 查询部署的版本
           var reqData = {
@@ -207,7 +197,7 @@ define(function (require, exports, cite) {
             version: vmData.unDeployFormData.version
           };
           // 开始版本部署
-          yufp.service1.request({
+          yufp.service.request({
             id: 'startUnDeploy',
             data: reqData,
             name: 'cm/deploy/startUnDeploy',
@@ -229,13 +219,11 @@ define(function (require, exports, cite) {
           obj.hostip = param.ip;
           obj.nodeName = param.nodename;
           nodeList.push(obj);
-
           var reqData = {
             userId: yufp.session.user.TELLER_ID,
             list: nodeList
           };
-
-          yufp.service1.request({
+          yufp.service.request({
             id: 'startNodes',
             data: reqData,
             name: 'cm/node/startNodes',
@@ -262,7 +250,7 @@ define(function (require, exports, cite) {
             list: nodeList
           };
 
-          yufp.service1.request({
+          yufp.service.request({
             id: 'stopNodes',
             data: reqData,
             name: 'cm/node/stopNodes',
@@ -280,48 +268,24 @@ define(function (require, exports, cite) {
           drawLabel('canvas_cpu', 'cpu');
           drawLabel('canvas_cache', 'cache');
           drawLabel('canvas_thread', 'thread');
-          // var arr = [10, 50, 30, 70, 80, 40, 70, 80, 80, 60, 69, 80, 80, 75, 50, 30, 70, 80,
-          //   40, 50, 80, 70, 60, 50, 80];
-          // var arr2=[];
-          // var i=0;
-          // setInterval(function(){
-          //   if(i<25){
-          //     if(i>20){
-          //       arr2.splice(0,1);
-          //     }
-          //     arr2.push(arr[i]);
-          //     toDraw(arr2,id,'cpu');
-          //     toDraw(arr2,'canvas_cache','cache');
-          //     i++;
-          //   }
-          //
-          // },5000)
         }
-
       },
       watch: {
-        filterText: function (val) {
-          this.$refs.orgTree.filter(val);
-        }
+
       },
-      /**
-                               *  界面加载成功
-                               */
+      // 界面加载成功
       mounted: function () {
-        this.bindLabelInfo();
-        this.getLogFiles('', '-2');
+        // this.bindLabelInfo();
+        // this.getLogFiles('', '-2');
       }
     });
 
     // 画文字部分
     function drawLabel (id, type) {
       var domCan = document.getElementById(id);
-      var width = domCan.width,
-        height = domCan.height;
       var g = domCan.getContext('2d');
       g.fillStyle = '#c30000'; // 文字填充颜色
       g.font = '1rem Adobe Ming Std';
-
       if (type == 'cpu') {
         g.fillText('CPU使用率：', 100, 20);
         // 初始Y轴绘制
@@ -332,7 +296,6 @@ define(function (require, exports, cite) {
         g.fillText('当前已使用：', 245, 20);
         g.fillText('总内存：', 400, 20);
       }
-
       if (type == 'thread') {
         g.fillText('—— 峰值：', 90, 20);
         g.fillStyle = '#66CD00';
@@ -343,15 +306,13 @@ define(function (require, exports, cite) {
         drawY(id, type);
       }
     }
-
     // 绘制Y轴百
     function drawY (id, type, arr) {
       var domCan = document.getElementById(id);
       if (domCan == null) {
         return;
       }
-      var width = domCan.width,
-        height = domCan.height;
+      var height = domCan.height;
       var g = domCan.getContext('2d');
       // 清除原数据
       g.clearRect(0, 0, 30, height);
@@ -368,7 +329,6 @@ define(function (require, exports, cite) {
       }
       // 内存
       if (type == 'cache') {
-
       }
       // 线程
       if (type == 'peekThread' || type == 'currentThread') {
@@ -379,7 +339,6 @@ define(function (require, exports, cite) {
           yGroup = [0, 20, 40, 60, 80, 100];
         }
       }
-
       // 上下保留距离  上30px 下11.6px
       var ySpace = (height - 41.6) / (yGroup.length - 1);
       for (var i = 0; i < yGroup.length; i++) {
@@ -388,7 +347,6 @@ define(function (require, exports, cite) {
         g.fillText(yGroup[i], 0, height - 11.6 - (ySpace * i));
       }
     }
-
     // 计算数组最大值
     function getArrayMax (arr) {
       // 先计算最大数值
@@ -546,12 +504,12 @@ define(function (require, exports, cite) {
       if (type == 'cache') {
         g.fillText(arr[arr.length - 1] + '%', 195, 20);
       }
-      var x_space = (width - 30) / 50; // 水平点的间隙像素
+      var xSpace = (width - 30) / 50; // 水平点的间隙像素
       // 绘制线条
       for (var i = 0; i < arr.length; i++) {
         var yValue = parseFloat(arr[i]); // 纵坐标值
         let yCeil;// y值上限
-        var xLen = width - x_space * (arr.length - 1 - i);
+        var xLen = width - xSpace * (arr.length - 1 - i);
         var yPont = 0;
         if (type == 'cpu' || type == 'cache') {
           yCeil = getPercentTenCeil(getArrayMax(arr));
@@ -568,22 +526,6 @@ define(function (require, exports, cite) {
       g.stroke();
       g.closePath();
     }
-
-    function bindCacheData (id, percent, total) {
-      var domCan = document.getElementById(id);
-      if (domCan == null) {
-        return;
-      }
-      var g = domCan.getContext('2d');
-      g.clearRect(340, 10, 60, 20);
-      g.clearRect(435, 10, 60, 20);
-
-      g.fillStyle = '#c30000'; // 文字填充颜色
-      g.font = '1rem Adobe Ming Std';
-      g.fillText((total * percent / 100).toFixed(0) + 'kb', 345, 20);
-      g.fillText(total + 'kb', 440, 20);
-    }
-
     function bindThreadData (id, peek, current, protect, started) {
       var domCan = document.getElementById(id);
       if (domCan == null) {
@@ -594,7 +536,6 @@ define(function (require, exports, cite) {
       g.clearRect(330, 10, 30, 20);
       g.clearRect(480, 10, 30, 20);
       g.clearRect(620, 10, 30, 20);
-
       g.fillStyle = '#c30000'; // 文字填充颜色
       g.font = '1rem Adobe Ming Std';
       g.fillText(peek, 175, 20);
@@ -611,12 +552,9 @@ define(function (require, exports, cite) {
       var taskStatus = content.taskStatus;
       // 消息
       var detail = content.detail;
-
       addElementLi('parentUl', detail);
-
       // 准备阶段
       if (action == 'prepare') {
-
         // 完成准备阶段
       } else if (action == 'finishPrepare') {
         // 01-节点成功
@@ -625,7 +563,6 @@ define(function (require, exports, cite) {
         }
         // 上传成功
       } else if (action == 'transmit') {
-
         // 完成上传
       } else if (action == 'finishTransmit') {
         // 01-节点成功
@@ -634,7 +571,6 @@ define(function (require, exports, cite) {
         }
         // 解压文件
       } else if (action == 'uncompress') {
-
         // 完成解压文件
       } else if (action == 'finishUncompress') {
         // 01-节点成功
@@ -643,22 +579,16 @@ define(function (require, exports, cite) {
         }
         // 开始备份
       } else if (action == 'backup') {
-
         // 完成备份
       } else if (action == 'finishBackup') {
-
         // 更新成功
       } else if (action == 'update') {
-
         // 完成更新
       } else if (action == 'finishUpdate') {
-
         // 检验成功
       } else if (action == 'check') {
-
         // 校验完成
       } else if (action == 'finishCheck') {
-
         // 部署完成
       } else if (action == 'finish') {
         // 01-节点成功
@@ -669,9 +599,7 @@ define(function (require, exports, cite) {
     }, true);
 
     yufp.eventproxy.unbind('deploy');
-
     yufp.eventproxy.unbind('unDelopy');
-
     yufp.eventproxy.bind('unDelopy', function (content) {
       // 节点位置
       var action = content.action;
@@ -679,12 +607,9 @@ define(function (require, exports, cite) {
       var taskStatus = content.taskStatus;
       // 消息
       var detail = content.detail;
-
       addElementLi('backMsgPan', detail);
-
       // 准备阶段
       if (action == 'prepare') {
-
         // 完成准备阶段
       } else if (action == 'finishPrepare') {
         // 01-节点成功
@@ -693,7 +618,6 @@ define(function (require, exports, cite) {
         }
         // 停止服务器
       } else if (action == 'shutdown') {
-
         // 停止服务器
       } else if (action == 'finishShutdown') {
         // 01-节点成功
@@ -702,7 +626,6 @@ define(function (require, exports, cite) {
         }
         // 回退
       } else if (action == 'rollback') {
-
         // 回退成功
       } else if (action == 'finishRollback') {
         // 01-节点成功
@@ -711,7 +634,6 @@ define(function (require, exports, cite) {
         }
         // 开始启动
       } else if (action == 'startup') {
-
         // 开始启动
       } else if (action == 'finishStartup') {
         // 01-节点成功
@@ -720,10 +642,8 @@ define(function (require, exports, cite) {
         }
         // 部署完成
       } else if (action == 'check') {
-
         // 校验完成
       } else if (action == 'finishCheck') {
-
         // 部署完成
       } else if (action == 'finish') {
         // 01-节点成功
@@ -733,21 +653,18 @@ define(function (require, exports, cite) {
       }
     }, true);
 
-
     // 通过名称查询卡号
     var reqData = {
       HOSTIP: param.ip,
       NAME: param.nodename
     };
-
     // 定时任务,每隔5秒刷新CPU，磁盘等信息
-    var cpuData = [],
-      memoryData = [];
+    var cpuData = [];
     var peekArray = [],
       currentArray = [];
     getinfoTimer = window.setInterval(function () {
       // 获取当前节点信息
-      yufp.service1.request({
+      yufp.service.request({
         id: 'getNodeDetailInfo',
         data: reqData,
         name: 'cm/node/getNodeDetailInfo',
@@ -766,44 +683,34 @@ define(function (require, exports, cite) {
             // randomNum = randomNum.toFixed(2);
             // cpuData.push(randomNum);
             toDraw(cpuData, 'canvas_cpu', 'cpu');
-
             // 线程监控
             vmData.DAEMONTHREADCOUNT = data.DAEMONTHREADCOUNT; // daemon线程数
             vmData.PEEKTHREADCOUNT = data.PEEKTHREADCOUNT; //
             vmData.STARTEDTHREDCOUNT = data.STARTEDTHREDCOUNT; // 开始的线程数量
             vmData.THREADCOUNT = data.THREADCOUNT; // 线程数量
-
             bindThreadData('canvas_thread', vmData.PEEKTHREADCOUNT, vmData.THREADCOUNT, vmData.DAEMONTHREADCOUNT, vmData.STARTEDTHREDCOUNT);
-
             if (peekArray.length > 50) {
               peekArray.splice(0, 1);
             }
             peekArray.push(vmData.PEEKTHREADCOUNT);
             toDraw(peekArray, 'canvas_thread', 'peekThread');
-
             if (currentArray.length > 50) {
               currentArray.splice(0, 1);
             }
             currentArray.push(vmData.THREADCOUNT);
             toDraw(currentArray, 'canvas_thread', 'currentThread');
-
             // JVM监控
             vmData.JvmInputArguments = data.JvmInputArguments; // JVM参数
             vmData.LoadedClassCount = data.LoadedClassCount; // 已经加载的class数量
-
             if (data.RUNNINGTIME != undefined && data.RUNNINGTIME != '') {
               var h = parseInt(data.RUNNINGTIME / 3600000);
               var m = parseInt(data.RUNNINGTIME / 60000) - 60 * h;
 
               vmData.RUNNINGTIME = h + '小时' + m + '分钟';
             }
-
-
             vmData.TOTALMEMORY = data.TOTALMEMORY; // 总的内存
-
             // 文件系统
             vmData.filedev = data.PartitionState;
-
             // 数据库连接池
             vmData.dbpoolinfo = data.connpool;
           } else {
@@ -815,7 +722,6 @@ define(function (require, exports, cite) {
   };
   // 消息处理
   exports.onmessage = function (type, message) {
-
   };
   // page销毁时触发destroy方法
   exports.destroy = function (id, cite) {

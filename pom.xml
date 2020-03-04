@@ -46,6 +46,8 @@
         <pagehelper-spring-boot-starter.version>1.2.7</pagehelper-spring-boot-starter.version>
         <spring-security-oauth.version>2.3.2.RELEASE</spring-security-oauth.version>
         <commons.configuration.version>1.0</commons.configuration.version>
+        <commons.net.version>3.6</commons.net.version>
+
     </properties>
 
     <dependencies>
@@ -161,7 +163,17 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
         <!--commons下的常用框架-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons.net.version}</version>
+        </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>

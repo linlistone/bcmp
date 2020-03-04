@@ -1,4 +1,4 @@
-package cn.com.yusys.icsp.bcmp;
+package cn.com.yusys.icsp.bcmp.shell;
 
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import org.slf4j.Logger;
@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 /**
  * shell管理器
