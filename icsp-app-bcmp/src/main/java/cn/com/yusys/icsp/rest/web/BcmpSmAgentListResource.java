@@ -1,19 +1,27 @@
 package cn.com.yusys.icsp.rest.web;
 
+import cn.com.yusys.icsp.agent.AgentClient;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
+import cn.com.yusys.icsp.bcmp.BcmpTools;
+import cn.com.yusys.icsp.bcmp.HostDescriptor;
+import cn.com.yusys.icsp.bcmp.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgnetBean;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import cn.com.yusys.icsp.service.BcmpSmAgentListService;
+import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
+import cn.com.yusys.icsp.util.GetNodesStatusTask;
+import cn.com.yusys.icsp.util.TaskManager;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 代理服务器查询
@@ -30,6 +38,10 @@ public class BcmpSmAgentListResource {
 
     @Autowired
     private BcmpSmAgentListService bcmpSmAgentListService;
+    @Autowired
+    private BcmpSmNodeinfoService bcmpSmNodeinfoService;
+    //agent 端口
+    private String agentPort = "1099";
 
     /**
      * @方法名称: create
@@ -102,53 +114,85 @@ public class BcmpSmAgentListResource {
 //        }
 //        return ResultDto.success(result);
 //    }
-//
-//    /**
-//     *
-//     * @方法名称: startAppBatch
-//     * @方法描述: 批量停止
-//     * @参数与返回说明: ips 代理服务IP
-//     * @算法描述:
-//     */
-//    @PostMapping("/startAppBatch")
-//    public ResultDto<Map<String,Integer>> startAppBatch(String nodeInfoIds) throws Exception {
-//        int n=0;
-//        Map<String,Integer> result=new HashMap<>();
-//        if(nodeInfoIds !=null&&!"".equals(nodeInfoIds)) {
-//            String[] idStr=nodeInfoIds.toString().split(",");
-//            int nodeletes=0;
-//            String delete="";
-//            for(int i=0;i<idStr.length;i++)
-//                if (!"".equals(idStr[i])) {
-//                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
-//                    result.put(idStr[i], res);
-//                }
-//        }
-//        return ResultDto.success(result);
-//    }
-//
-//    /**
-//     *
-//     * @方法名称: shutdownAppBatch
-//     * @方法描述: 批量停止
-//     * @参数与返回说明: ips 代理服务IP
-//     * @算法描述:
-//     */
-//    @PostMapping("/shutdownAgentBatch")
-//    public ResultDto<Map<String,Integer>> shutdownAppBatch(String ips) throws Exception {
-//        int n=0;
-//        Map<String,Integer> result=new HashMap<>();
-//        if(ips !=null&&!"".equals(ips)) {
-//            String[] idStr=ips.toString().split(",");
-//            int nodeletes=0;
-//            String delete="";
-//            for(int i=0;i<idStr.length;i++)
-//                if (!"".equals(idStr[i])) {
-//                    int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
-//                    result.put(idStr[i], res);
-//                }
-//        }
-//        return ResultDto.success(result);
-//    }
+
+    /**
+     *
+     * @方法名称: startAppBatch
+     * @方法描述: 批量停止
+     * @参数与返回说明: ips 代理服务IP
+     * @算法描述:
+     */
+    @PostMapping("/startAppBatch")
+    public ResultDto<Map<String,Integer>> startAppBatch(@RequestBody JSONObject request) throws Exception {
+        Map<String,Integer> response = new LinkedHashMap<>();
+        //获取选中节点主机信息
+        JSONArray checkedNodeList = request.getJSONArray("checkedNodeList");
+        //判断传入的参数是否为空
+        if (checkedNodeList == null || checkedNodeList.isEmpty()){
+            return ResultDto.error("选中列表为空");
+        }
+
+        //遍历选中节点状态
+        for (int i = 0, len = checkedNodeList.size(); i < len; i ++) {
+            //获取当前节点信息
+            JSONObject nodeInfo = checkedNodeList.getJSONObject(i);
+            //查询当前节点详细信息
+            BcmpSmNodeinfo bcmpSmNodeinfo= bcmpSmNodeinfoService.showByHostMessage(nodeInfo.getString("ip"),nodeInfo.getString("nodename"));
+
+            HostDescriptor hostDescriptor = new HostDescriptor(nodeInfo.getString("ip"), "", "", agentPort);
+            //初始化AgentClient
+            AgentClient agentClient = new AgentClient(hostDescriptor);
+
+            String localServerPath  = agentClient.goCmd("pwd");
+
+            String localLoginUser  = agentClient.goCmd("whoami");
+
+            String serverStat = agentClient.goCmd("sh checkServerStat.sh "+bcmpSmNodeinfo.getHttpPort()).replaceAll("\r|\n","");
+
+            System.out.println("查看当前服务器监听端口是否启动:"+serverStat+"         当前脚本位置:"+localServerPath+"        当前登录用户:"+localLoginUser);
+
+            if("close".equals(serverStat)){
+
+                String cmd = ShellScriptManager.getScript(hostDescriptor.getOsName(),"startup.sh",bcmpSmNodeinfo.getApplyPath());
+
+                String ret=BcmpTools.goCmd(hostDescriptor,cmd);
+
+                System.out.println("查看读取文本的结果 :"+cmd);
+
+                //String execStartUpResult= agentClient.goCmd(Arrays.toString(commands));
+
+                System.out.println("查看启动返回结果:"+ret);
+
+                response.put(nodeInfo.getString("ip"),1);
+            }else{
+                response.put(nodeInfo.getString("ip"),0);
+            }
+        }
+        return ResultDto.success(response);
+    }
+
+    ///**
+    // *
+    // * @方法名称: shutdownAppBatch
+    // * @方法描述: 批量停止
+    // * @参数与返回说明: ips 代理服务IP
+    // * @算法描述:
+    // */
+    //@PostMapping("/shutdownAgentBatch")
+    //public ResultDto<Map<String,Integer>> shutdownAppBatch(String ips) throws Exception {
+    //    int n=0;
+    //    Map<String,Integer> result=new HashMap<>();
+    //    if(ips !=null&&!"".equals(ips)) {
+    //        String[] idStr=ips.toString().split(",");
+    //        int nodeletes=0;
+    //        String delete="";
+    //        for(int i=0;i<idStr.length;i++)
+    //            if (!"".equals(idStr[i])) {
+    //                int res = bcmpSmAgentListService.shutdownAgent(idStr[i]);
+    //                result.put(idStr[i], res);
+    //            }
+    //    }
+    //    return ResultDto.success(result);
+    //}
 
 }
