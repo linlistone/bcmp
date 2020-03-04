@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BcmpSmNodeinfoService extends BaseService {
 
-
 	@Autowired
 	private BcmpSmNodeinfoMapper bcmpSmNodeinfoMapper;
 	/**
@@ -54,6 +53,24 @@ public class BcmpSmNodeinfoService extends BaseService {
 		BcmpSmNodeinfo bcmpSmNodeinfo = pageInfo.getList().get(0);
 		return  bcmpSmNodeinfo;
 	}
+	/**
+	 * @throws Exception
+	 * @方法名称: show
+	 * @方法描述: 查询信息 by NodeId
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	public BcmpSmNodeinfo showByHostMessage(String hostIp,String nodeName) throws Exception {
+		QueryModel model = new QueryModel();
+		model.addCondition("hostIp", hostIp);
+		model.addCondition("nodeName", nodeName);
+		PageInfo<BcmpSmNodeinfo> pageInfo = index(model);
+		if (pageInfo == null || pageInfo.getTotal()==0) {
+			throw new ICSPException("主机IP[" + hostIp+"],节点名称["+nodeName+"]的数据不存在");
+		}
+		BcmpSmNodeinfo bcmpSmNodeinfo = pageInfo.getList().get(0);
+		return  bcmpSmNodeinfo;
+	}
 
 	/**
 	 * @方法名称: index
@@ -66,6 +83,17 @@ public class BcmpSmNodeinfoService extends BaseService {
 		List<BcmpSmNodeinfo> list = bcmpSmNodeinfoMapper.selectByModel(model);
 		PageHelper.clearPage();
 		return new PageInfo<>(list);
+	}
+
+	/**
+	 * @方法名称: index
+	 * @方法描述: 查询所有不需要分页
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	public List<BcmpSmNodeinfo> selectAll(QueryModel model) throws Exception {
+		List<BcmpSmNodeinfo> list = bcmpSmNodeinfoMapper.selectByModel(model);
+		return list;
 	}
 
 	/**
