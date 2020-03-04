@@ -254,17 +254,29 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         },
         // 开启服务器
         startServer: function () {
+          // var nodeList = [];
+          // for (var i = 0; i < vmData.nodeInfos.length; i++) {
+          //   // 被选中状态才加入
+          //   if (vmData.nodeInfos[i].checked) {
+          //     var obj = {};
+          //     obj.hostip = vmData.nodeInfos[i].ip;
+          //     obj.nodeName = vmData.nodeInfos[i].nodename;
+          //     nodeList.push(obj);
+          //   }
+          // }
           var nodeList = [];
-          for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
-              var obj = {};
-              obj.hostip = vmData.nodeInfos[i].ip;
-              obj.nodeName = vmData.nodeInfos[i].nodename;
-              nodeList.push(obj);
-            }
+          var obj = {
+            nodename: "fox_server",
+            nodetype: "01",
+            starttime: "",
+            serverstatus: false,
+            conncount: undefined,
+            ip: "192.168.58.111",
+            index: 15,
+            checked: true,
+            disabled: false,
           }
-
+          nodeList.push(obj);
           if (nodeList.length == 0) {
             this.$message({
               message: '至少选中一台服务器进行操作',
@@ -274,15 +286,14 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           }
           var reqData = {
             userId: yufp.session.user.TELLER_ID,
-            list: nodeList
+            checkedNodeList: nodeList
           };
-
-          yufp.service1.request({
-            id: 'startNodes',
+          yufp.service.request({
+            method: 'POST',
             data: reqData,
-            name: 'cm/node/startNodes',
-            callback: function (code, message, data) {
-              if (code == 0) {
+            name: backend.bcmpService+'/agent/startAppBatch',
+            callback: function (code, message, response) {
+              if (code === 0) {
                 vm.$message({
                   message: '启动成功！'
                 });
@@ -304,53 +315,64 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         },
         // 停止服务器
         stopServer: function () {
-          var nodeList = [];
-          for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
-              var obj = {};
-              obj.hostip = vmData.nodeInfos[i].ip;
-              obj.nodeName = vmData.nodeInfos[i].nodename;
-              nodeList.push(obj);
-            }
-          }
-          if (nodeList.length == 0) {
-            this.$message({
-              message: '至少选中一台服务器进行操作',
-              type: 'warning'
-            });
-            return;
-          }
-          var reqData = {
-            userId: yufp.session.user.TELLER_ID,
-            list: nodeList
-          };
-
-          yufp.service1.request({
-            id: 'stopNodes',
-            data: reqData,
-            name: 'cm/node/stopNodes',
-            callback: function (code, message, data) {
-              // 登录成功
-              if (code == 0) {
-                vm.$message({
-                  message: '停止成功！'
-                });
-                for (var i = 0; i < vmData.nodeInfos.length; i++) {
-                  // 被选中节点的服务状态改变
-                  if (vmData.nodeInfos[i].checked) {
-                    vmData.nodeInfos[i].serverstatus = false;
-                    Vue.set(vmData.nodeInfos, i, vmData.nodeInfos[i]);
-                  }
-                }
+          yufp.service.request({
+            method: 'POST',
+            name: 'node/websocket/getNodesStat',
+            callback: function (code, message, response) {
+              if (code === 0) {
+                console.log("socket 消息发送成功!")
               } else {
-                this.$message({
-                  message: '停止失败',
-                  type: 'warning'
-                });
+                console.log("socket 消息发送失败!")
               }
             }
           });
+          // var nodeList = [];
+          // for (var i = 0; i < vmData.nodeInfos.length; i++) {
+          //   // 被选中状态才加入
+          //   if (vmData.nodeInfos[i].checked) {
+          //     var obj = {};
+          //     obj.hostip = vmData.nodeInfos[i].ip;
+          //     obj.nodeName = vmData.nodeInfos[i].nodename;
+          //     nodeList.push(obj);
+          //   }
+          // }
+          // if (nodeList.length == 0) {
+          //   this.$message({
+          //     message: '至少选中一台服务器进行操作',
+          //     type: 'warning'
+          //   });
+          //   return;
+          // }
+          // var reqData = {
+          //   userId: yufp.session.user.TELLER_ID,
+          //   list: nodeList
+          // };
+          //
+          // yufp.service1.request({
+          //   id: 'stopNodes',
+          //   data: reqData,
+          //   name: 'cm/node/stopNodes',
+          //   callback: function (code, message, data) {
+          //     // 登录成功
+          //     if (code == 0) {
+          //       vm.$message({
+          //         message: '停止成功！'
+          //       });
+          //       for (var i = 0; i < vmData.nodeInfos.length; i++) {
+          //         // 被选中节点的服务状态改变
+          //         if (vmData.nodeInfos[i].checked) {
+          //           vmData.nodeInfos[i].serverstatus = false;
+          //           Vue.set(vmData.nodeInfos, i, vmData.nodeInfos[i]);
+          //         }
+          //       }
+          //     } else {
+          //       this.$message({
+          //         message: '停止失败',
+          //         type: 'warning'
+          //       });
+          //     }
+          //   }
+          // });
         },
         // 版本文件上传服务器
         submitUpload: function () {
@@ -432,7 +454,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             yufp.logger.info('Connection open ...' + wsUrl);
           };
           me.socketClient.onmessage = function (message) {
-            yufp.logger.info('Connection onmessage ...' + message);
+            yufp.logger.info('Connection onmessage ...' + message.data);
           };
           me.socketClient.onclose = function (message) {
             yufp.logger.info('Connection onclose ...');

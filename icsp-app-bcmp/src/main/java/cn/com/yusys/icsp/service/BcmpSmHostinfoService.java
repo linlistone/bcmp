@@ -8,7 +8,7 @@ import cn.com.yusys.icsp.common.exception.ICSPException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import cn.com.yusys.icsp.rest.web.BcmpWebSocketController;
+import cn.com.yusys.icsp.rest.web.BcmpWebSocketResource;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BcmpSmHostinfoService extends BaseService {
 
-	private static ConcurrentHashMap<String, BcmpWebSocketController> webSocketSet = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, BcmpWebSocketResource> webSocketSet = new ConcurrentHashMap<>();
 
 
 	@Autowired

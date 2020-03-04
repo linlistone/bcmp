@@ -1,4 +1,4 @@
-package cn.com.yusys.icsp.rest.web;
+package cn.com.yusys.icsp.service;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @ServerEndpoint("/websocket/{name}")
-public class BcmpWebSocketController {
+public class BcmpWebSocketService {
 
-    private Logger log = LoggerFactory.getLogger(BcmpWebSocketController.class);
+    private Logger log = LoggerFactory.getLogger(BcmpWebSocketService.class);
     /**
      * 与某个客户端的连接对话，需要通过它来给客户端发送消息
      */
@@ -39,7 +39,7 @@ public class BcmpWebSocketController {
     /**
      * 用于存所有的连接服务的客户端，这个对象存储是安全的
      */
-    private static ConcurrentHashMap<String, BcmpWebSocketController> webSocketSet = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, BcmpWebSocketService> webSocketSet = new ConcurrentHashMap<>();
 
 
     @OnOpen
