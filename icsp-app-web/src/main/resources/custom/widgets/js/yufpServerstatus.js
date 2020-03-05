@@ -7,12 +7,12 @@
     <el-card :class="elcardCalss" >
         <canvas class="flag" id="flag" width="30" height="30" ref="flag"></canvas>
         <div slot="header" class="clearfix" ref="card_head">
-            <el-row :gutter="20">
-                <el-col :span="5">
-                    <el-checkbox v-model="checkedVal" @change="change(checkedVal)"></el-checkbox>
+            <el-row :gutter="10">
+                <el-col :span="4">
+                    <el-checkbox v-model="checkedVal" :disabled="disabled" @change="change(checkedVal)"></el-checkbox>
                 </el-col>
                 <el-col :span="15">
-                    <li class="title_font">{{datasource.ip}}</li>
+                    <li class="title_font" style="margin-top:2px">{{datasource.ip}}</li>
                 </el-col>
             </el-row>
         </div>
@@ -75,8 +75,8 @@
     },
     // model
     model: {
-      // prop: 'value',
-      // event: 'change'
+      prop: 'value',
+      event: 'change'
     },
     // 数据
     data: function () {
@@ -108,16 +108,22 @@
         if (!this.disabled) {
           // 触发事件
           this.$emit('tap', evt);
+        } else {
+          this.$message({
+            message: '服务器状态未知',
+            type: 'warning'
+          });
         }
       },
       // 值改变
       change: function (val) {
-        this.$emit('change', !val);
+        this.$emit('change', val);
       },
       drawNodeNum: function () {
         // 画节点编号
         var color = '';
         if (this.disabled) {
+          // this.checkedVal = false;
           color = '#CCCFD5';
           this.elcardCalss = 'server-cluster-el-card-down';
         } else {

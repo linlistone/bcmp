@@ -29,6 +29,11 @@ spring:
         prepStmtCacheSqlLimit: 2048 # Prep缓存sql限制大小
         useServerPrepStmts: true    # 是否用服务缓存Prep
   # 数据库配置，不使用数据库时请删除以上配置
+  servlet:
+    # 文件上传相关配置
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
   # 如不使用redis，请将以下配置删除
   redis:
     database: 0         # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0

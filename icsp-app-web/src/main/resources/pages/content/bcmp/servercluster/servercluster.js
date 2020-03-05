@@ -2,8 +2,11 @@
  * Created by 樊苏超 on 2018/05/01.
  */
 define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) {
+  yufp.lookup.reg('FOX_NODETYPE');
   // 数据源
   var vmData = {
+    appTypeDic: yufp.lookup.find('FOX_NODETYPE', true),
+    showUploadSuccessMsgTag: false,
     queryNodeInfoInterval: {},
     serverstatuschecked: false,
     serverstatusdisabled: true,
@@ -11,6 +14,23 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     defaultProps: {
       children: 'children',
       label: 'label'
+    },
+    upload: {
+      visible: false,
+      data: {
+        version: '',
+        name: ''
+      },
+      rules: {
+        required: true,
+        message: '必填项',
+        trigger: 'blur'
+      },
+      fileList: [],
+      action: '/api/agent/uploadfile',
+      headers: {
+        'Authorization': 'Basic ' + yufp.service.getToken()
+      }
     },
     serverstatus: [],
     fileList: [],
@@ -26,7 +46,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       version: '',
       needRestart: ''
     },
-    version_list: [],
+    versionList: [],
     options: [{
       value: 'true',
       label: '需要重启'
@@ -45,7 +65,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     unDeployFormData: {
       version: ''
     },
-    undeploy_version_list: [],
+    undeploy_versionList: [],
     // 回退步骤位置
     backstep: 0,
     backDetailPageVisible: false,
@@ -60,15 +80,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       el: cite.el,
       data: vmData,
       methods: {
-
-        // 全选
-        selectAll: function () {
-          for (var i = 0; i < this.nodeInfos.length; i++) {
-            this.nodeInfos[i].checked = !this.nodeInfos[i].checked;
-          }
-        },
         // 节点点击事件
-        tap: function (item, index) {
+        viewNodeInfo: function (item, index) {
           var customKey = 'custom_' + new Date().getTime(); // 请以custom_前缀开头，并且全局唯一
           var routeId = 'cmnodeinfo'; // 模板示例->普通查询的路由ID
           // 数据
@@ -87,18 +100,32 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             data: nodeInfo
           });
         },
-
-
-        nodeClickFn: function (nodeData, node, self) {
-          this.currClickNode = nodeData.id + '|' + nodeData.label;
+        // 全选
+        selectAll: function () {
+          for (var i = 0; i < this.nodeInfos.length; i++) {
+            if (!this.nodeInfos[i].disabled) {
+              this.nodeInfos[i].checked = !this.nodeInfos[i].checked;
+            }
+          }
         },
         // 版本部署
         releaseDeploy: function () {
           var ids = '';
+          var nodeType = '';
           for (var i = 0; i < vmData.nodeInfos.length; i++) {
             // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
+            if (vmData.nodeInfos[i].checked && !this.nodeInfos[i].disabled) {
+              var _nodeType = vmData.nodeInfos[i].nodetype;
               ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
+              if (nodeType === '' || nodeType === _nodeType) {
+                nodeType = _nodeType;
+              } else {
+                this.$message({
+                  message: '请选择同一类型服务节点',
+                  type: 'warning'
+                });
+                return;
+              }
             }
           }
           if (ids.length == 0) {
@@ -108,66 +135,21 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             });
             return;
           }
-          // 弹出版本部署对话框
-          vmData.deployDialogVisiable = true;
-
           // 查询部署的版本
           var reqData = {
-            type: 'deploy'
+            type: 'deploy',
+            nodeType: nodeType
           };
           // 请求版本列表
-          yufp.service1.request({
-            id: 'listVersion',
+          yufp.service.request({
+            method: 'get',
             data: reqData,
-            name: 'cm/deploy/listVersion',
+            name: backend.bcmpService + '/agent/listVersion',
             callback: function (code, message, data) {
-              // 登录成功
               if (code == 0) {
-                vmData.version_list = data.version_list;
-              } else {
-                this.$message({
-                  message: '查询部署列表失败',
-                  type: 'warning'
-                });
-              }
-            }
-          });
-        },
-        // 版本回退
-        releaseUnDeploy: function () {
-          var ids = '';
-          for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
-              ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
-            }
-          }
-          if (ids.length == 0) {
-            this.$message({
-              message: '至少选中一台服务器进行操作',
-              type: 'warning'
-            });
-            return;
-          }
-          // 弹出版本部署对话框
-          vmData.undeployDialogVisiable = true;
-          if (ids.indexOf(';') > 0) {
-            ids = ids.substr(0, ids.length - 1);
-          }
-          // 查询部署的版本
-          var reqData = {
-            type: 'rollbacker',
-            ids: ids
-          };
-          // 请求版本列表
-          yufp.service1.request({
-            id: 'listVersion',
-            data: reqData,
-            name: 'cm/deploy/listVersion',
-            callback: function (code, message, data) {
-              // 登录成功
-              if (code == 0) {
-                vmData.undeploy_version_list = data.version_list;
+                vmData.versionList = data.data;
+                // 弹出版本部署对话框
+                vmData.deployDialogVisiable = true;
               } else {
                 this.$message({
                   message: '查询部署列表失败',
@@ -180,10 +162,12 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         // 版本部署
         deploy: function () {
           var ids = '';
+          var nodeType = '';
           for (var i = 0; i < vmData.nodeInfos.length; i++) {
             // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
+            if (vmData.nodeInfos[i].checked && !vmData.nodeInfos[i].disabled) {
               ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
+              nodeType = vmData.nodeInfos[i].nodetype;
             }
           }
           if (ids.indexOf(';') > 0) {
@@ -193,14 +177,14 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           var reqData = {
             ids: ids,
             needRestart: vmData.deployFormData.needRestart,
-            userId: yufp.session.user.TELLER_ID,
-            version: vmData.deployFormData.version
+            userId: yufp.session.userId,
+            version: vmData.deployFormData.version,
+            nodeType: nodeType
           };
           // 开始版本部署
-          yufp.service1.request({
-            id: 'listVersion',
+          yufp.service.request({
             data: reqData,
-            name: 'cm/deploy/startDeploy',
+            name: backend.bcmpService + '/agent/startDeploy',
             callback: function (code, message, data) {
               // 登录成功
               if (code == 0) {
@@ -215,43 +199,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             }
           });
         },
-        // 版本回退
-        unDeploy: function () {
-          var ids = '';
-          for (var i = 0; i < vmData.nodeInfos.length; i++) {
-            // 被选中状态才加入
-            if (vmData.nodeInfos[i].checked) {
-              ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
-            }
-          }
-          if (ids.indexOf(';') > 0) {
-            ids = ids.substr(0, ids.length - 1);
-          }
-          // 查询部署的版本
-          var reqData = {
-            ids: ids,
-            userId: yufp.session.user.TELLER_ID,
-            version: vmData.unDeployFormData.version
-          };
-          // 开始版本部署
-          yufp.service1.request({
-            id: 'startUnDeploy',
-            data: reqData,
-            name: 'cm/deploy/startUnDeploy',
-            callback: function (code, message, data) {
-              // 登录成功
-              if (code == 0) {
-                vmData.undeployDialogVisiable = false;
-                vmData.backDetailPageVisible = true;
-              } else {
-                this.$message({
-                  message: '回退失败',
-                  type: 'warning'
-                });
-              }
-            }
-          });
-        },
+
         // 开启服务器
         startServer: function () {
           // var nodeList = [];
@@ -266,16 +214,16 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           // }
           var nodeList = [];
           var obj = {
-            nodename: "fox_server",
-            nodetype: "01",
-            starttime: "",
+            nodename: 'fox_server',
+            nodetype: '01',
+            starttime: '',
             serverstatus: false,
             conncount: undefined,
-            ip: "192.168.58.111",
+            ip: '192.168.58.111',
             index: 15,
             checked: true,
-            disabled: false,
-          }
+            disabled: false
+          };
           nodeList.push(obj);
           if (nodeList.length == 0) {
             this.$message({
@@ -291,7 +239,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           yufp.service.request({
             method: 'POST',
             data: reqData,
-            name: backend.bcmpService+'/agent/startAppBatch',
+            name: backend.bcmpService + '/agent/startAppBatch',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({
@@ -320,9 +268,9 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             name: 'node/websocket/getNodesStat',
             callback: function (code, message, response) {
               if (code === 0) {
-                console.log("socket 消息发送成功!")
+                console.log('socket 消息发送成功!');
               } else {
-                console.log("socket 消息发送失败!")
+                console.log('socket 消息发送失败!');
               }
             }
           });
@@ -374,29 +322,6 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           //   }
           // });
         },
-        // 版本文件上传服务器
-        submitUpload: function () {
-          this.$refs.upload.submit();
-          // 上传文件
-          // yufp.service1.uploadFile({
-          //     id:"upload",
-          //     name:"trade/file/upload",
-          //     data:{
-          //         file:"file",
-          //         tellerId:999999,
-          //         // fileList:vmData.fileList1,
-          //     },
-          //     callback:function(code,message,data){
-          //         //请求成功
-          //         if(code=="0"){
-          //             fox.layer.open("文件上传成功 response:"+data);
-          //         }else{
-          //             fox.layer.open("文件上传失败 response:"+message);
-          //         }
-          //     }
-          // });
-        },
-
         handleRemove: function (file, fileList) {
           yufp.logger.info(file, fileList);
         },
@@ -406,9 +331,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         beforeRemove: function (file, fileList) {
           return this.$confirm('确定移除 ${ file.name }？');
         },
-        beforeUpload: function () {
-          return true;
-        },
+
+
         initApplist: function () {
           // 初始化服务节点
           let reqData = { page: 1, size: 9999 };
@@ -490,11 +414,115 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           this.isRefreshConnection = true;
           this.closeSocket();
           this.connectSocket();
+        },
+        // 展示文件上传面板
+        showUpload: function () {
+          var me = this;
+          this.upload.visible = true;
+          // this.upload.data.name = 'fox-update-package';
+          this.upload.data.version = me.formatTime('yyyyMMdd.hhmmss', new Date());
+        },
+        closeUpload: function () {
+          this.upload.visible = false;
+          this.upload.fileList = [];
+          // 修复：YUSP-168 应用登记-上传版本文件点击取消或右上角×，文件实际还是在上传
+          // 关闭前取消上传
+          this.abortUploading();
+        },
+        uploadFile: function () {
+          // 增加上传前校验
+          if (this.$refs.uploadList.uploadFiles.length == 0) {
+            this.$message('请先选择文件!');
+            return false;
+          }
+          this.$refs.uploadList.submit();
+          this.btnUploadDisabled = true;
+        },
+        abortUploading: function () {
+          // 修复：YUSP-168 应用登记-上传版本文件点击取消或右上角×，文件实际还是在上传
+          // 取消上传文件
+          this.upload.visible = false;
+          this.$refs.uploadList.clearFiles();
+          this.$refs.uploadList.abort();
+          this.btnUploadDisabled = false;
+          this.showUploadSuccessMsgTag = false;
+        },
+        // 上传之前验证文件
+        fileChange: function (file, fileList) {
+          var fileName = file.name;
+          var suffix = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
+          if (suffix != 'jar' && suffix != 'war') {
+            fileList.pop();
+            this.$message('请选择jar或war文件！');
+          } else {
+            if (fileList.length > 1) {
+              fileList.pop();
+              fileList[0] = file;
+            }
+          }
+        },
+        // 文件上传之前参数校验
+        beforeUpload: function () {
+          var me = this;
+          if (this.upload.data.name == '' || this.upload.data.version == '') {
+            this.$message('请确认版本号已填写和服务名已有!');
+            return false;
+          }
+        },
+        // 上传成功回调函数
+        handleAvatarSuccess: function (res, file) {
+          if (res.code == '0') {
+            this.$message({ message: '文件上传成功', type: 'success' });
+            this.btnUploadDisabled = false;
+            this.showUploadSuccessMsgTag = false;
+            this.upload.visible = false;
+            this.upload.fileList = [];
+          } else {
+            this.$message({ message: '上传文件失败' + res.message, type: 'warning' });
+          }
+        },
+        onUploadProgress: function (event, file, fileList) {
+          if (event.percent >= 100) {
+            this.showUploadSuccessMsgTag = true;
+          }
+        },
+        // 上传失败回调函数
+        handleAvatarErr: function () {
+          this.$message({ message: '上传文件失败', type: 'warning' });
+          this.btnUploadDisabled = false;
+          this.showUploadSuccessMsgTag = false;
+        },
+        formatTime: function (fmt, value) {
+          var o = {
+            'M+': value.getMonth() + 1, // 月份
+            'd+': value.getDate(), // 日
+            'h+': value.getHours(), // 小时
+            'm+': value.getMinutes(), // 分
+            's+': value.getSeconds(), // 秒
+            'q+': Math.floor((value.getMonth() + 3) / 3), // 季度
+            'S': value.getMilliseconds() // 毫秒
+          };
+          if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (value.getFullYear() + '').substr(4 - RegExp.$1.length));
+          }
+          for (var k in o) {
+            if (new RegExp('(' + k + ')').test(fmt)) {
+              fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+            }
+          }
+          return fmt;
         }
       },
       watch: {
         filterText: function (val) {
           this.$refs.orgTree.filter(val);
+        }
+      },
+      computed: {
+        uploadAction: function () {
+          return yufp.service.getUrl({
+            url: this.upload.action
+          });
         }
       },
       // 界面加载成功

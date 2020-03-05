@@ -86,7 +86,10 @@ define(function (require, exports) {
                 vmData.sawLogView = true;
                 vmData.logMessage = data;
               } else {
-                alert('请求失败!');
+                this.$message({
+                  message: '请求失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -110,7 +113,10 @@ define(function (require, exports) {
                 vmData.resultLogFiles = data.resultMaps;
                 vmData.currentUrl = data.currentUrl;
               } else {
-                alert('操作失败');
+                this.$message({
+                  message: '操作失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -134,7 +140,10 @@ define(function (require, exports) {
               if (code == 0) {
                 vmData.versionList = data.versionList;
               } else {
-                alert('查询部署列表失败');
+                this.$message({
+                  message: '查询部署列表失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -158,7 +167,10 @@ define(function (require, exports) {
               if (code == 0) {
                 vmData.undeployVersionList = data.versionList;
               } else {
-                alert('查询部署列表失败');
+                this.$message({
+                  message: '查询部署列表失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -183,7 +195,10 @@ define(function (require, exports) {
                 vmData.deployDialogVisiable = false;
                 vmData.dialogFormVisible = true;
               } else {
-                alert('部署失败');
+                this.$message({
+                  message: '部署失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -207,7 +222,10 @@ define(function (require, exports) {
                 vmData.undeployDialogVisiable = false;
                 vmData.backDetailPageVisible = true;
               } else {
-                alert('回退失败');
+                this.$message({
+                  message: '回退失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -229,10 +247,15 @@ define(function (require, exports) {
             name: 'cm/node/startNodes',
             callback: function (code, message, data) {
               if (code == 0) {
-                alert('启动成功');
                 vmData.serverstatus = '已启动';
+                vm.$message({
+                  message: '启动成功！'
+                });
               } else {
-                alert('启动失败');
+                this.$message({
+                  message: '启动失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -256,10 +279,15 @@ define(function (require, exports) {
             name: 'cm/node/stopNodes',
             callback: function (code, message, data) {
               if (code == 0) {
-                alert('停止成功');
                 vmData.serverstatus = '未启动';
+                vm.$message({
+                  message: '停止成功！'
+                });
               } else {
-                alert('停止失败');
+                this.$message({
+                  message: '停止失败',
+                  type: 'warning'
+                });
               }
             }
           });
@@ -351,7 +379,7 @@ define(function (require, exports) {
     function getArrayMax (arr) {
       // 先计算最大数值
       let max = 0;
-      for (i in arr) {
+      for (var i in arr) {
         let tampNum = parseFloat(arr[i]);
         if (tampNum > max) {
           max = tampNum;
@@ -519,7 +547,7 @@ define(function (require, exports) {
         }
         // 上下保留距离 上30px 下11.6px
         yPont = height - 11.6 - (yValue / yCeil * (height - 41.6));
-        var m = xLen + ',' + yPont;
+        // var m = xLen + ',' + yPont;
         // yufp.logger.debug(m);
         g.lineTo(xLen, yPont);
       }
@@ -714,7 +742,10 @@ define(function (require, exports) {
             // 数据库连接池
             vmData.dbpoolinfo = data.connpool;
           } else {
-            alert('请求节点信息失败');
+            this.$message({
+              message: '请求节点信息失败',
+              type: 'warning'
+            });
           }
         }
       });

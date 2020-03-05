@@ -2,6 +2,8 @@ package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
+import cn.com.yusys.icsp.bcmp.HostResourceRepoConfig;
+import cn.com.yusys.icsp.bcmp.VersionInfo;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgnetBean;
 import cn.com.yusys.icsp.common.exception.ICSPException;
@@ -17,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,7 +61,7 @@ public class BcmpSmAgentListService {
             HostAgnetBean hostAgnetBean = new HostAgnetBean();
             hostAgnetBean.setHostInfo(host);
             AgentRegistryInfo agentRegistryInfo = agentHostMap.get(host.getHostIp());
-            if(agentRegistryInfo==null) {
+            if (agentRegistryInfo == null) {
                 agentRegistryInfo = new AgentRegistryInfo();
                 agentRegistryInfo.setHostAddress(host.getHostIp());
                 agentRegistryInfo.setOsName("UNKNOW");
@@ -80,25 +84,53 @@ public class BcmpSmAgentListService {
      * @算法描述: 无
      */
     public int retbootAgent(String ip) throws Exception {
-        HostDescriptor hostDescriptor=getHostDescriptor(ip);
-        String cmd = ShellScriptManager.getScript(hostDescriptor.getOsName(),"rebootAgent.sh");
-        String ret=BcmpTools.goCmd(hostDescriptor,cmd);
+        HostDescriptor hostDescriptor = getHostDescriptor(ip);
+        String cmd = ShellScriptManager.getScript(hostDescriptor.getOsName(), "rebootAgent.sh");
+        String ret = BcmpTools.goCmd(hostDescriptor, cmd);
         logger.debug(ret);
         return 0;
     }
 
-    private HostDescriptor getHostDescriptor(String ip){
-        AgentRegistryInfo agentRegistryInfo= agentHostMap.get(ip);
-        if(agentRegistryInfo==null){
-            throw new ICSPException("代理服务器不存在"+ip,900);
+    private HostDescriptor getHostDescriptor(String ip) {
+        AgentRegistryInfo agentRegistryInfo = agentHostMap.get(ip);
+        if (agentRegistryInfo == null) {
+            throw new ICSPException("代理服务器不存在" + ip, 900);
         }
-        HostDescriptor hostDescriptor=new HostDescriptor();
+        HostDescriptor hostDescriptor = new HostDescriptor();
 //        hostDescriptor.setIp(agentRegistryInfo.getHostAddress());
         hostDescriptor.setIp("127.0.0.1");
         hostDescriptor.setOsName(agentRegistryInfo.getOsName());
         hostDescriptor.setRmiPort(String.valueOf(agentRegistryInfo.getRmiPort()));
         hostDescriptor.setSocketPort(agentRegistryInfo.getSocketStatus());
-        return  hostDescriptor;
+        return hostDescriptor;
+    }
+
+
+    public int uploadFile(MultipartFile file, VersionInfo versionInfo) {
+        String serviceName = versionInfo.getName().toLowerCase();
+        String originalFilename = file.getOriginalFilename();
+        String outFileName = versionInfo.getVersion() + "_" + originalFilename;
+        this.logger.info("上传服务:{}对应资源包", (Object) serviceName);
+        try (InputStream inputStream = file.getInputStream()) {
+            File outFile = new File("deploy"+ File.separator +serviceName + File.separator + outFileName);
+            if (!outFile.exists()) {
+                File fileDir = outFile.getParentFile();
+                if (!fileDir.exists() || !fileDir.isDirectory()) {
+                    fileDir.mkdirs();
+                }
+            }
+            this.logger.info("上传文件到本地:{}", (Object) outFile.getAbsolutePath());
+            OutputStream os = new FileOutputStream(outFile);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
+            }
+        } catch (Exception e) {
+            this.logger.error(e.getMessage());
+            throw new ICSPException(e.getMessage(), e);
+        }
+        return 0;
     }
 
     /**
