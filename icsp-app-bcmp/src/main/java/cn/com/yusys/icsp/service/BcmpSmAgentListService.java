@@ -3,7 +3,7 @@ package cn.com.yusys.icsp.service;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
-import cn.com.yusys.icsp.bean.HostAgnetBean;
+import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
@@ -36,6 +36,14 @@ public class BcmpSmAgentListService {
     @Autowired
     private BcmpSmHostinfoMapper bcmpSmHostinfoMapper;
 
+    /*
+     *  @Description : 向外提供代理服务器节点注册列表
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 14:52
+     */
+    public ConcurrentHashMap<String, AgentRegistryInfo> getAgentHostMapInstance(){
+        return agentHostMap;
+    }
 
     public int registry(AgentRegistryInfo agentRegistryInfo) throws Exception {
         logger.info("registry:" + agentRegistryInfo.toString());
@@ -49,25 +57,25 @@ public class BcmpSmAgentListService {
      * @参数与返回说明:
      * @算法描述: 无
      */
-    public PageInfo<HostAgnetBean> index(QueryModel model) throws Exception {
+    public PageInfo<HostAgentBean> index(QueryModel model) throws Exception {
         PageHelper.startPage(model.getPage(), model.getSize());
         List<BcmpSmHostinfo> list = bcmpSmHostinfoMapper.selectByModel(model);
         List retList = new ArrayList();
         for (BcmpSmHostinfo host : list) {
-            HostAgnetBean hostAgnetBean = new HostAgnetBean();
-            hostAgnetBean.setHostInfo(host);
+            HostAgentBean hostAgentBean = new HostAgentBean();
+            hostAgentBean.setBcmpSmHostinfo(host);
             AgentRegistryInfo agentRegistryInfo = agentHostMap.get(host.getHostIp());
             if(agentRegistryInfo==null) {
                 agentRegistryInfo = new AgentRegistryInfo();
                 agentRegistryInfo.setHostAddress(host.getHostIp());
                 agentRegistryInfo.setOsName("UNKNOW");
-                agentRegistryInfo.setRmiPort(-1);
+                agentRegistryInfo.setRmiPort("-1");
                 agentRegistryInfo.setRmiStatus("未知");
-                agentRegistryInfo.setSocketPort(-1);
+                agentRegistryInfo.setSocketPort("-1");
                 agentRegistryInfo.setSocketStatus("未知");
             }
-            hostAgnetBean.setAgentInfo(agentRegistryInfo);
-            retList.add(hostAgnetBean);
+            hostAgentBean.setAgentRegistryInfo(agentRegistryInfo);
+            retList.add(hostAgentBean);
         }
         PageHelper.clearPage();
         return new PageInfo<>(retList);

@@ -1,11 +1,13 @@
 package cn.com.yusys.icsp.service;
 
-import cn.com.yusys.icsp.bcmp.node.Node;
-import cn.com.yusys.icsp.bcmp.node.NodeInfo;
 import cn.com.yusys.icsp.bcmp.node.PartitionState;
+import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
+import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
+import cn.com.yusys.icsp.repository.mapper.BcmpSmHostinfoMapper;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmNodeinfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,16 @@ public class NodeMonitorService {
 
     @Autowired
     private BcmpSmNodeinfoMapper bcmpSmNodeinfoMapper;
+
+    @Autowired
+    private BcmpSmHostinfoMapper bcmpSmHostinfoMapper;
+
+    @Autowired
+    private BcmpHostAgentService bcmpHostAgentService;
+
+    @Autowired
+    private BcmpSmAgentListService bcmpSmAgentListService;
+
     /**
      * 节点已启动
      */
@@ -47,14 +59,15 @@ public class NodeMonitorService {
      * 节点连接异常
      */
     private String NodeLinkError = "04";
+
     private int countNodeOfOneThread = 5;
-    /**
-     * 启动节点
-     *
-     * @param request
-     * @return
-     * @throws Exception
-     */
+    ///**
+    // * 启动节点
+    // *
+    // * @param request
+    // * @return
+    // * @throws Exception
+    // */
 //	public Map<String,Object> nodeStart(JsonRequest request) throws Exception {
 //		JsonResponse response = new JsonResponse();
 //		JSONArray nodeList = (JSONArray) request.get("list");
@@ -84,13 +97,13 @@ public class NodeMonitorService {
 //		return response;
 //	}
 
-    /**
-     * 关闭节点
-     *
-     * @param request
-     * @return
-     * @throws Exception
-     */
+    ///**
+    // * 关闭节点
+    // *
+    // * @param request
+    // * @return
+    // * @throws Exception
+    // */
 //	public JsonResponse nodeStop(JsonRequest request) throws Exception {
 //		JsonResponse response = new JsonResponse();
 //		JSONArray nodeList = (JSONArray) request.get("list");
@@ -121,59 +134,76 @@ public class NodeMonitorService {
 //		return response;
 //	}
 
-    /**
-     * 获取单个节点详细信息
-     *
-     * @return
+    /*
+     *  @Description : 获取节点信息
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 17:50
      */
-    public Map<String, Object> getNodeDetailInfo(String hostip, String name) {
+    public Map<String, Object> getNodeDetailInfo(String hostIP, String nodeName) {
         Map<String, Object> response = new HashMap<>();
         try {
-            BcmpSmNodeinfo bcmpSmNodeinfo = getNodeInfo(hostip, name);
+            //从数据库获取主机信息,并赋值给服务器信息中的主机信息Bean
+            BcmpSmHostinfo bcmpSmHostinfo = getBcmpSmHostinfo(hostIP);
+            //从数据库获取节点信息,并赋值给服务器信息中的节点信息Bean
+            BcmpSmNodeinfo bcmpSmNodeinfo = getBcmpSmNodeinfo(hostIP,nodeName);
+            //从Agent注册列表获取Agent信息,并赋值给服务器信息中的Agent注册信息Bean
+            AgentRegistryInfo agentRegistryInfo = getAgentRegistryInfo(hostIP);
+            //有参构造函数初始化服务器信息
+            HostAgentBean hostAgentBean = new HostAgentBean(bcmpSmHostinfo,bcmpSmNodeinfo,agentRegistryInfo);
+            /**---------------------------------通过Agent代理方式获取--------------------------------**/
+            //获取CPU使用率
+            response.put("CPUUSAGE", String.valueOf(bcmpHostAgentService.getCpuUsage(hostAgentBean)));
+            //获取磁盘分区情况
+            response.put("PartitionState", bcmpHostAgentService.getPartitionState(hostAgentBean));
+            /**-------------------------------------------------------------------------------------**/
 
-            NodeInfo nodeInfo = new NodeInfo();
-            nodeInfo.setHost(bcmpSmNodeinfo.getHostIp());
-            nodeInfo.setPort(Integer.parseInt(bcmpSmNodeinfo.getApplyPort()));
-            nodeInfo.setJvmPort(Integer.parseInt(bcmpSmNodeinfo.getJvmPort()));
-            nodeInfo.setAppHttpPort(Integer.parseInt(bcmpSmNodeinfo.getHttpPort()));
-            nodeInfo.setAppDir(bcmpSmNodeinfo.getApplyPath());
+            /**----------------------------------通过JVM连接方式获取----------------------------------**/
+            //初始化JVM环境
+            bcmpHostAgentService.prepareJvm(bcmpSmNodeinfo.getHostIp(),bcmpSmNodeinfo.getJvmPort());
+            //获取总内存大小
+            response.put("TOTALMEMORY",String.valueOf(bcmpHostAgentService.getTotalMemorySize(hostAgentBean)));
+            //获取系统运行时间
+			response.put("RUNNINGTIME", String.valueOf(bcmpHostAgentService.getRunningTime(bcmpSmNodeinfo)));
+			//获取峰值线程数
+			response.put("PEEKTHREADCOUNT",String.valueOf(bcmpHostAgentService.getPeakThreadCount(bcmpSmNodeinfo)));
+            //获取守护线程数
+			response.put("DAEMONTHREADCOUNT",String.valueOf(bcmpHostAgentService.getDaemonThreadCount(bcmpSmNodeinfo)));
+            //获取当前活动线程数
+			response.put("THREADCOUNT", String.valueOf(bcmpHostAgentService.getThreadCount(bcmpSmNodeinfo)));
+            //获取已经启动过的线程数
+			response.put("STARTEDTHREDCOUNT",String.valueOf(bcmpHostAgentService.getTotalStartedThreadCount(bcmpSmNodeinfo)));
+            //获取JVM输入参数
+			String[] args = bcmpHostAgentService.getJvmInputArguments(bcmpSmNodeinfo);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0, len = args.length; i < len; i++) {
+				sb.append(args[i]);
+				sb.append("|");
+			}
+			response.put("JvmInputArguments", sb.toString());
+            //获取当前加载的类数量
+			response.put("LoadedClassCount",String.valueOf(bcmpHostAgentService.getLoadedClassCount(bcmpSmNodeinfo)));
+            /**-------------------------------------------------------------------------------------**/
 
-            Node node = new Node(nodeInfo);
-            response.put("CPUUSAGE", String.valueOf(node.getCpuUsage()));
-            response.put("TOTALMEMORY",
-                    String.valueOf(node.getTotalMemorySize()));
-//			response.put("RUNNINGTIME", String.valueOf(node.getRunningTime()));
-//			response.put("PEEKTHREADCOUNT",
-//					String.valueOf(node.getPeakThreadCount()));
-//			response.put("DAEMONTHREADCOUNT",
-//					String.valueOf(node.getDaemonThreadCount()));
-//			response.put("THREADCOUNT", String.valueOf(node.getThreadCount()));
-//			response.put("STARTEDTHREDCOUNT",
-//					String.valueOf(node.getTotalStartedThreadCount()));
-//			String[] args = node.getJvmInputArguments();
-//			StringBuilder sb = new StringBuilder();
-//			for (int i = 0, len = args.length; i < len; i++) {
-//				sb.append(args[i]);
-//				sb.append("|");
-//			}
-//			response.put("JvmInputArguments", sb.toString());
-//			response.put("LoadedClassCount",
-//					String.valueOf(node.getLoadedClassCount()));
-//			PartitionState[] partitionState = node.getPartitionState();
-//			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//			for (int i = 0, len = partitionState.length; i < len; i++) {
-//				list.add(partitionState[i].toMap());
-//			}
-//			response.put("PartitionState", list);
+
+
+
+
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new ICSPException("节点状态获取异常", e);
+        }finally {
+            bcmpHostAgentService.releaseJvm();
         }
         return response;
     }
 
-
-    public BcmpSmNodeinfo getNodeInfo(String hostIp, String name) {
+    /*
+     *  @Description : 通过传入主机IP和节点名称获取主机信息
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 15:27
+     */
+    private BcmpSmNodeinfo getBcmpSmNodeinfo(String hostIp, String name) {
         QueryModel queryModel = new QueryModel();
         queryModel.addCondition("hostIp", hostIp);
         queryModel.addCondition("nodeName", name);
@@ -182,6 +212,29 @@ public class NodeMonitorService {
             throw new ICSPException("节点不存在" + hostIp + name);
         }
         return nodeList.get(0);
+    }
+    /*
+     *  @Description : 通过传入主机IP获取当前主机信息
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 15:31
+     */
+    private BcmpSmHostinfo getBcmpSmHostinfo(String hostIp) {
+        QueryModel queryModel = new QueryModel();
+        queryModel.addCondition("hostIp", hostIp);
+        List<BcmpSmHostinfo> hostList = bcmpSmHostinfoMapper.selectByModel(queryModel);
+        if (hostList == null || hostList.isEmpty()) {
+            throw new ICSPException("主机["+hostIp+"]不存在!");
+        }
+        return hostList.get(0);
+    }
+
+    /*
+     *  @Description : 向代理服务器节点注册列表获取当前主机的代理信息
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 15:40
+     */
+    private AgentRegistryInfo getAgentRegistryInfo(String hostIp) {
+        return bcmpSmAgentListService.getAgentHostMapInstance().get(hostIp);
     }
 
 
