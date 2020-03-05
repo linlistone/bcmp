@@ -52,14 +52,6 @@ public class NodeManager {
             if (node == null) {
                 node = new Node(nodeInfo);
                 nodes.put(ip + "_" + nodeName, node);
-            } else {
-                if (node.isChange(nodeInfo)) {
-                    //释放node连接
-                    node.release();
-                    //创建新的node节点
-                    node = new Node(nodeInfo);
-                    nodes.put(ip + "_" + nodeName, node);
-                }
             }
             return node;
         } catch (Exception e) {

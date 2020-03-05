@@ -159,17 +159,14 @@ public class ResultExtractor {
 	 * 
 	 * @param result
 	 * @param prompt
-	 * @param end
+	 * @param exitMark
 	 * @return
 	 */
 	public static String extract(String result, String prompt, String exitMark) {
-
 		if (result == null || result.length() == 0) {
 			return null;
 		}
-
 		StringBuilder sb = new StringBuilder();
-
 		int index = -1;
 		String mark = prompt + exitMark;
 		String[] lines = result.split("\n");
@@ -180,19 +177,16 @@ public class ResultExtractor {
 			if (lastChar == '\r') {
 				lines[i] = line.substring(0, len - 1);
 			}
-
 			// 查找退出标志
 			if (mark.equalsIgnoreCase(lines[i].trim())) {
 				index = i;
 			}
 		}
-
 		if (index == -1) {
 			index = lines.length - 1;
 		} else {
 			index--;
 		}
-
 		boolean find = false;
 		for (int i = index; i >= 0; i--) {
 			String line = lines[i];

@@ -1,5 +1,6 @@
 package cn.com.yusys.icsp.bcmp.ftp;
 
+import cn.com.yusys.icsp.common.util.StringUtil;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;

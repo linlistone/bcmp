@@ -655,8 +655,8 @@ define(function (require, exports) {
 
     // 通过名称查询卡号
     var reqData = {
-      HOSTIP: param.ip,
-      NAME: param.nodename
+      hostip: param.ip,
+      name: param.nodename
     };
     // 定时任务,每隔5秒刷新CPU，磁盘等信息
     var cpuData = [];
@@ -665,10 +665,10 @@ define(function (require, exports) {
     getinfoTimer = window.setInterval(function () {
       // 获取当前节点信息
       yufp.service.request({
-        id: 'getNodeDetailInfo',
         data: reqData,
-        name: 'cm/node/getNodeDetailInfo',
+        name: backend.bcmpService + '/agent/getNodeDetailInfo',
         callback: function (code, message, data) {
+          data = data.data;
           yufp.logger.debug(data);
           // 登录成功
           if (code == 0) {
@@ -718,7 +718,7 @@ define(function (require, exports) {
           }
         }
       });
-    }, 2000);
+    }, 10000);
   };
   // 消息处理
   exports.onmessage = function (type, message) {

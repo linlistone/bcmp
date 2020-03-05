@@ -4,15 +4,14 @@ import cn.com.yusys.icsp.agent.AgentClient;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
-import cn.com.yusys.icsp.bcmp.ShellScriptManager;
+import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgnetBean;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import cn.com.yusys.icsp.service.BcmpSmAgentListService;
 import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
-import cn.com.yusys.icsp.util.GetNodesStatusTask;
-import cn.com.yusys.icsp.util.TaskManager;
+import cn.com.yusys.icsp.service.NodeMonitorService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -40,6 +39,8 @@ public class BcmpSmAgentListResource {
     private BcmpSmAgentListService bcmpSmAgentListService;
     @Autowired
     private BcmpSmNodeinfoService bcmpSmNodeinfoService;
+    @Autowired
+    private NodeMonitorService nodeMonitorService;
     //agent 端口
     private String agentPort = "1099";
 
@@ -67,6 +68,12 @@ public class BcmpSmAgentListResource {
         return ResultDto.success(pageInfo);
     }
 
+    @GetMapping(value = "/getNodeDetailInfo")
+    public ResultDto<Map<String,Object>> getNodeDetailInfo(String hostip,String name ) {
+        Map<String,Object> data=  nodeMonitorService.getNodeDetailInfo(hostip,name);
+        return ResultDto.success(data);
+    }
+
     /**
      *
      * @方法名称: rebootAgentBatch
@@ -90,6 +97,8 @@ public class BcmpSmAgentListResource {
         }
         return ResultDto.success(result);
     }
+
+
 
 //    /**
 //     *

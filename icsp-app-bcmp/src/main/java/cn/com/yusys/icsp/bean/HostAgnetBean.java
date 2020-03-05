@@ -6,6 +6,7 @@ import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 public class HostAgnetBean {
 
     private BcmpSmHostinfo hostInfo;
+
     private AgentRegistryInfo agentInfo;
 
     public BcmpSmHostinfo getHostInfo() {

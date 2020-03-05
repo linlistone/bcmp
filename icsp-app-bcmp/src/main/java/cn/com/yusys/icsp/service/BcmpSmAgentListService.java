@@ -2,6 +2,7 @@ package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
+import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgnetBean;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import cn.com.yusys.icsp.common.mapper.QueryModel;

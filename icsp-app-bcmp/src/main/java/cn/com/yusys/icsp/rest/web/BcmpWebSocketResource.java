@@ -4,11 +4,12 @@ package cn.com.yusys.icsp.rest.web;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
-import cn.com.yusys.icsp.bcmp.ShellScriptManager;
+import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
 import cn.com.yusys.icsp.service.BcmpWebSocketService;
+import cn.com.yusys.icsp.service.NodeMonitorService;
 import com.alibaba.fastjson.JSONObject;
 
 import org.slf4j.Logger;
@@ -37,6 +38,8 @@ public class BcmpWebSocketResource {
 
     @Autowired
     private BcmpSmNodeinfoService bcmpSmNodeinfoService;
+
+
 
     //agent 端口
     private String agentPort = "1099";

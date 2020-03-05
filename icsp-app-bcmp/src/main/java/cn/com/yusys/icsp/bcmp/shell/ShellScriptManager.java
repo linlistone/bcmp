@@ -72,19 +72,11 @@ public class ShellScriptManager {
                 }
             }
         }
-
         String script = sb.toString();
         if (args != null && args.length > 0) {
             // 替换参数
             for (int i = 0; i < args.length; i++) {
-                String matchedMark = "$" + (i + 1);
-                int index = script.indexOf(matchedMark);
-                if (index != -1) {
-                    int len = matchedMark.length();
-                    String prePart = script.substring(0, index);
-                    String postPart = script.substring(index + len);
-                    script = prePart + args[i] + postPart;
-                }
+                script = script.replace("=$" + (i + 1),"="+ args[i]);
             }
         }
         return script;
@@ -99,12 +91,6 @@ public class ShellScriptManager {
      */
     public static String[] getCommands(String os, String name, String... args) throws Exception {
         String script = getScript(os, name, args);
-        if (args != null && args.length > 0) {
-            // 替换参数
-            for (int i = 0; i < args.length; i++) {
-                script = script.replace("$" + (i + 1), args[i]);
-            }
-        }
         String[] commands = script.split("\n");
         return commands;
     }
