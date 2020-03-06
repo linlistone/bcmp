@@ -22,7 +22,7 @@
             </el-form-item>
             <el-form-item label="服务节点类型" :rules="upload.rules">
                 <el-select v-model="upload.data.name" placeholder="服务节点类型">
-                    <el-option v-for="item in appTypeDic" :key="item.value" :label="item.label" :value="item.value">
+                    <el-option v-for="item in nodeTypeDic" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
             </el-form-item>

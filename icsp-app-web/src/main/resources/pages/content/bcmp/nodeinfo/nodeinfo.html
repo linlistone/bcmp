@@ -16,8 +16,8 @@
     </div>
     <!--表格区域-->
     <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
-        <yu-xtable-column prop="hostIp" label="节点主机IP"></yu-xtable-column>
-        <yu-xtable-column prop="nodeType" label="节点类型" data-code="FOX_NODETYPE"></yu-xtable-column>
+        <yu-xtable-column prop="hostIp" label="节点主机IP" ></yu-xtable-column>
+        <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
         <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
         <yu-xtable-column prop="islink" label="是否软连接" data-code="YESNO"></yu-xtable-column>
         <yu-xtable-column prop="applyPort" label="应用端口"></yu-xtable-column>
@@ -37,8 +37,8 @@
     <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item label="节点主机IP" ctype="select" name="hostIp" data-code="HOSTLIST"  :rules="rules['hostIp']" > </yu-xform-item>
-                <yu-xform-item label="节点类型" ctype="select" name="nodeType" data-code="FOX_NODETYPE"  :rules="rules['nodeType']"> </yu-xform-item>
+                <yu-xform-item label="节点主机IP" ctype="select" name="hostIp" data-code="HOSTLIST" @change="hostSelectFn"  :rules="rules['hostIp']" > </yu-xform-item>
+                <yu-xform-item label="节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE"  :rules="rules['nodeType']" :disabled="true"> </yu-xform-item>
                 <yu-xform-item label="应用路径" ctype="input" name="applyPath"  :colspan="24" :rules="rules['applyPath']" > </yu-xform-item>
                 <yu-xform-item label="节点名称" ctype="input" name="nodeName" :rules="rules['nodeName']" > </yu-xform-item>
                 <yu-xform-item label="是否软连接" ctype="select" name="islink" data-code="YESNO"> </yu-xform-item>

@@ -77,7 +77,7 @@ public class AdminSmLookupItemResource extends BaseResouce {
      * @算法描述:
      */
     @PostMapping(value = "/delete/{lookupItemId}")
-    public ResultDto<Integer> delete(@RequestParam("lookupItemId") String lookupItemId) throws Exception {
+    public ResultDto<Integer> delete(@PathVariable("lookupItemId") String lookupItemId) throws Exception {
         int result = adminSmLookupItemService.delete(lookupItemId);
         return ResultDto.success(result);
     }

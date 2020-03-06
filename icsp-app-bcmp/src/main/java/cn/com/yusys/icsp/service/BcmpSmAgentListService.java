@@ -1,5 +1,6 @@
 package cn.com.yusys.icsp.service;
 
+import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.HostResourceRepoConfig;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,13 +48,15 @@ public class BcmpSmAgentListService {
      *  @Author : Mr_Jiang
      *  @Date : 2020/3/5 14:52
      */
-    public ConcurrentHashMap<String, AgentRegistryInfo> getAgentHostMapInstance(){
+    public ConcurrentHashMap<String, AgentRegistryInfo> getAgentHostMapInstance() {
         return agentHostMap;
     }
 
     public int registry(AgentRegistryInfo agentRegistryInfo) throws Exception {
         logger.info("registry:" + agentRegistryInfo.toString());
-        agentHostMap.put(agentRegistryInfo.getHostAddress(), agentRegistryInfo);
+        String ip = agentRegistryInfo.getHostAddress();
+        ip = "192.168.58.111";
+        agentHostMap.put(ip, agentRegistryInfo);
         return 0;
     }
 
@@ -99,6 +104,40 @@ public class BcmpSmAgentListService {
         return 0;
     }
 
+    /**
+     * 获取板本列表
+     *
+     * @param type
+     * @param nodeType
+     * @return
+     */
+    public List<String> getVersionList(String type, String nodeType) {
+        File outFile = new File(type.toLowerCase() + File.separator + nodeType.toLowerCase());
+        logger.info("listVersion:{}", outFile.getAbsolutePath());
+        File files[] = outFile.listFiles();
+        List<String> list = new ArrayList<>();
+        if (files == null) {
+            return list;
+        }
+        for (File file2 : files) {
+            list.add(file2.getName());
+        }
+        // 排序
+        Collections.sort(list, new Comparator<String>() {
+            public int compare(String o1, String o2) {
+                return o2.compareToIgnoreCase(o1);
+            }
+        });
+        return list;
+    }
+
+
+    /**
+     * 主机信息
+     *
+     * @param ip
+     * @return
+     */
     private HostDescriptor getHostDescriptor(String ip) {
         AgentRegistryInfo agentRegistryInfo = agentHostMap.get(ip);
         if (agentRegistryInfo == null) {
@@ -120,7 +159,7 @@ public class BcmpSmAgentListService {
         String outFileName = versionInfo.getVersion() + "_" + originalFilename;
         this.logger.info("上传服务:{}对应资源包", (Object) serviceName);
         try (InputStream inputStream = file.getInputStream()) {
-            File outFile = new File("deploy"+ File.separator +serviceName + File.separator + outFileName);
+            File outFile = new File("deploy" + File.separator + serviceName + File.separator + outFileName);
             if (!outFile.exists()) {
                 File fileDir = outFile.getParentFile();
                 if (!fileDir.exists() || !fileDir.isDirectory()) {

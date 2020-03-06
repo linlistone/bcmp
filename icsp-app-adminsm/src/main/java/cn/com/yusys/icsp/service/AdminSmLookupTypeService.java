@@ -90,13 +90,12 @@ public class AdminSmLookupTypeService extends BaseService {
 	 * @参数与返回说明:
 	 * @算法描述:
 	 */
-	public  int delete(String data) throws Exception {
-		JSONArray array = JSONArray.parseArray(data);
+	public  int delete(List<String> data) throws Exception {
 		int ret = 0;
 		StringBuffer ids = new StringBuffer();
-		for (int i = 0; i < array.size(); i++) {
-			ids.append(array.getString(i));
-			if (i + 1 < array.size())
+		for (int i = 0; i < data.size(); i++) {
+			ids.append(data.get(i));
+			if (i + 1 < data.size())
 				ids.append(",");
 		}
 		ret = adminSmLookupTypeMapper.deleteByIds(ids.toString());

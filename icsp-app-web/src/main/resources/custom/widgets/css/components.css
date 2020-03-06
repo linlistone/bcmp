@@ -33,12 +33,13 @@ li {
 }
 .server_cluster .jdblue_list ul{width:100%;font-size:12px;color:#0167b9}
 .server_cluster .jdblue_list li{
-	line-height:20px;
+	line-height:30px;
 	height:20px;
-	width:100%;
+    width:100%;
+    margin-bottom: 5px;
 	list-style-type:none;
 }
 .font_black{color:#2b2b2b}
 .font_orange{color:#e51b00}
-.server_cluster .jdblue_foot{float:left;width:148px;height:12px;}
+.server_cluster .jdblue_foot{float:left;width:148px;height:15px;}
 

@@ -82,7 +82,7 @@ public class AdminSmLookupTypeResource extends BaseResouce {
      */
     @PostMapping(value = "/delete")
     public ResultDto<Integer> delete(@RequestBody Map<String, Object> reqMap) throws Exception {
-        String data = (String) reqMap.get("data");
+        List<String> data = (List<String>) reqMap.get("data");
         int result = adminSmLookupTypeService.delete(data);
         return ResultDto.success(result);
     }

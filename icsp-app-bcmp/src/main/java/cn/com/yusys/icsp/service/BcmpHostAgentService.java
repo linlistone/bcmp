@@ -72,19 +72,18 @@ public class BcmpHostAgentService {
     private long dayUnit = hourUnit * 24;
 
 
-
     /*
      *  @Description : 准备JVM环境
      *  @Author : Mr_Jiang
      *  @Date : 2020/3/5 17:44
      */
-    public synchronized boolean prepareJvm(String hostIp,String jvmPort) {
+    public synchronized boolean prepareJvm(String hostIp, String jvmPort) {
         if (isPrepareJvm) {
             return true;
         }
         // 定义JVM连接器
         jvmAccessor = new JmxAccessor();
-        boolean connected = jvmAccessor.connect(hostIp,jvmPort);
+        boolean connected = jvmAccessor.connect(hostIp, jvmPort);
         if (connected) {
             this.isPrepareJvm = true;
         }
@@ -103,7 +102,7 @@ public class BcmpHostAgentService {
         }
         this.isPrepareJvm = false;
     }
-    
+
     /*
      *  @Description : 获取CPU使用率
      *  @Author : Mr_Jiang
@@ -123,7 +122,7 @@ public class BcmpHostAgentService {
         float cpusage = -1;
         try {
             // 获取解压命令
-            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getCpuUsage.sh",bcmpSmNodeinfo.getJvmPort());
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getCpuUsage.sh", bcmpSmNodeinfo.getJvmPort());
             if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
                 HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
                 // 执行命令
@@ -145,11 +144,12 @@ public class BcmpHostAgentService {
             logger.info("完成获取cpu使用率，耗时:" + (System.currentTimeMillis() - s) + "毫秒");
             return cpusage;
         } catch (Exception e) {
-            String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort()+ "]";
+            String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             throw e;
         }
     }
+
     /*
      *  @Description : 获取内存总数
      *  @Author : Mr_Jiang
@@ -191,6 +191,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取系统运行时间
      *  @Author : Mr_Jiang
@@ -214,6 +215,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取峰值线程数
      *  @Author : Mr_Jiang
@@ -228,15 +230,16 @@ public class BcmpHostAgentService {
             // 定义对象名称
             String objectName = "java.lang:type=Threading";
             // 获取峰值线程数
-            int count = (Integer) jvmAccessor.getAttribute(objectName,"PeakThreadCount");
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "PeakThreadCount");
             return count;
         } catch (Exception e) {
-            String msg = "获取峰值线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            String msg = "获取峰值线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             //this.releaseJvm();
             throw e;
         }
     }
+
     /*
      *  @Description : 获取守护线程数
      *  @Author : Mr_Jiang
@@ -260,6 +263,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取当前活动线程数
      *  @Author : Mr_Jiang
@@ -283,6 +287,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取已经启动过的线程数
      *  @Author : Mr_Jiang
@@ -306,6 +311,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取JVM输入参数
      *  @Author : Mr_Jiang
@@ -329,6 +335,7 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取当前加载的类数量
      *  @Author : Mr_Jiang
@@ -343,10 +350,10 @@ public class BcmpHostAgentService {
             // 定义对象名称
             String objectName = "java.lang:type=ClassLoading";
             // 获取当前加载的类数量
-            int count = (Integer) jvmAccessor.getAttribute(objectName,"LoadedClassCount");
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "LoadedClassCount");
             return count;
         } catch (Exception e) {
-            String msg = "获取当前加载的类数量，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            String msg = "获取当前加载的类数量，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             //this.releaseJvm();
             throw e;
@@ -370,12 +377,12 @@ public class BcmpHostAgentService {
         logger.info("开始获取主机硬盘使用情况");
         try {
             // 获取解压命令
-            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getDiskState.sh",bcmpSmNodeinfo.getJvmPort());
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getDiskState.sh", bcmpSmNodeinfo.getJvmPort());
             if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
                 HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
                 // 执行命令
                 String res = BcmpTools.goShell(hostDescriptor, script);
-                System.out.println("获取分区情况:"+res);
+                System.out.println("获取分区情况:" + res);
                 //String[] items = StringUtil.split(res, "\n");
                 //for (int i = 0; i < items.length; i++) {
                 //    try {
@@ -475,36 +482,6 @@ public class BcmpHostAgentService {
             throw e;
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 
 //    /**
@@ -611,122 +588,114 @@ public class BcmpHostAgentService {
 //        return true;
 //    }
 //
-//    /**
-//     * 是否启动
-//     *
-//     * @return
-//     */
-//    public boolean isStarted() throws Exception {
-//        // 准备环境
-//        if (!this.prepareEnvironment()) {
-//            return false;
-//        }
+
+    /**
+     * 是否启动
+     *
+     * @return
+     */
+    public boolean isStarted(HostAgentBean hostAgentBean) throws Exception {
+        // 获取当前时间
+        long s = System.currentTimeMillis();
+        logger.info("判断是否启动");
+        //获取hostAgentBean中的主机信息
+        BcmpSmHostinfo bcmpSmHostinfo = hostAgentBean.getBcmpSmHostinfo();
+        //获取hostAgentBean中的节点信息
+        BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
+        //获取hostAgentBean中的agent注册信息
+        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        // 获取当前时间
+        try {
+            // 获取解压命令
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "checkServerState.sh", bcmpSmNodeinfo.getHttpPort());
+            HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
+            // 执行命令
+            String res = BcmpTools.goShell(hostDescriptor, script);
+            logger.debug("获取服务情况:" + res);
+            if (containsKey(res, "open")) {
+                logger.debug("检查服务器状态成功，服务器处于启动状态，耗时:"
+                        + (System.currentTimeMillis() - s) + "毫秒");
+                return true;
+            } else if (containsKey(res, "close")) {
+                logger.debug("检查服务器状态成功，服务器处于关闭状态，耗时:"
+                        + (System.currentTimeMillis() - s) + "毫秒");
+                return false;
+            }
+        } catch (Exception e) {
+            String msg = "检查服务器状态出错，错误服务器[host:" + bcmpSmHostinfo.getHostIp()
+                    + " ,port:" + agentRegistryInfo.getSocketPort() + "]";
+            Exception ex = new Exception(msg, e);
+            throw ex;
+        }
+        logger.info("检查服务器状态成功，服务器处于未知状态，耗时:"
+                + (System.currentTimeMillis() - s) + "毫秒");
+        return false;
+    }
+
+    /**
+     * 判断内容中是否包含指定的关键字
+     *
+     * @param content
+     * @param key
+     * @return
+     */
+    private boolean containsKey(String content, String key) {
+        if (content == null) {
+            return false;
+        }
+        int index = content.indexOf(key);
+        return (index != -1);
+    }
+
 //
-//        // 获取当前时间
-//        long s = System.currentTimeMillis();
-//        logger.info("判断是否启动");
-//
-//        try {
-//            // 获取协议
-//            Protocol protocol = nodeInfo.getProtocol();
-//            // 获取关闭命令
-//            String script = ShellScriptManager.getScript(os.getName(),
-//                    "checkServerState.sh",
-//                    String.valueOf(nodeInfo.getAppPort()));
-//            String command = script;
-//            command += "exit\n";
-//
-//            // 定义网络参数
-//            NetArgs netArgs = new NetArgs();
-//            netArgs.ip = nodeInfo.getHost();
-//            netArgs.port = nodeInfo.getPort();
-//            netArgs.userName = nodeInfo.getUserName();
-//            netArgs.password = nodeInfo.getPassword();
-//            netArgs.timeout = this.timeout;
-//            // 获取连接器
-//            IConnector connector = ConnectorFactory.getConnector(protocol,
-//                    netArgs);
-//            try {
-//                // 获取编码格式
-//                String encoding = this.getEncoding(this.lang);
-//                // 连接服务器
-//                connector.connect();
-//                // 执行命令
-//                String data = ShellExcutor.execute(command, encoding,
-//                        connector, this.timeout * 3);
-//                String res = ResultExtractor.extract(data, this.prompt, "exit");
-//                if (containsKey(res, "open")) {
-//                    logger.debug("检查服务器状态成功，服务器处于启动状态，耗时:"
-//                            + (System.currentTimeMillis() - s) + "毫秒");
-//                    return true;
-//                } else if (containsKey(res, "close")) {
-//                    logger.debug("检查服务器状态成功，服务器处于关闭状态，耗时:"
-//                            + (System.currentTimeMillis() - s) + "毫秒");
-//                    return false;
-//                }
-//            } finally {
-//                connector.disconnect();
-//            }
-//        } catch (Exception e) {
-//            String msg = "检查服务器状态出错，错误服务器[host:" + nodeInfo.getHost()
-//                    + " ,port:" + nodeInfo.getPort() + "]";
-//            Exception ex = new Exception(msg, e);
-//            throw ex;
-//        }
-//        logger.info("检查服务器状态成功，服务器处于未知状态，耗时:"
-//                + (System.currentTimeMillis() - s) + "毫秒");
-//        return false;
+
+///**
+// * 获取使用内存量(单位KB)
+// *
+// * @return
+// */
+//public long getUsedMemorySize() throws Exception {
+//    // 准备JMX环境
+//    if (!this.prepareJvm()) {
+//        return 0;
 //    }
-
+//    try {
+//        // 定义对象名称
+//        String objectName = "java.lang:type=Memory";
+//        if (OS.LINUX == this.os) {
+//            // 获取堆内存使用情况
+//            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+//                    .getAttribute(objectName, "HeapMemoryUsage");
+//            // 获取非堆内存使用情况
+//            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+//                    .getAttribute(objectName, "NonHeapMemoryUsage");
+//            long heapMemorySize = (Long) heapMemoryData.get("used");
+//            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
+//
+//            // 计算总内存
+//            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
+//            return size;
+//        } else {
+//            // 获取堆内存使用情况
+//            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+//                    .getAttribute(objectName, "HeapMemoryUsage");
+//            // 获取非堆内存使用情况
+//            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+//                    .getAttribute(objectName, "NonHeapMemoryUsage");
+//            long heapMemorySize = (Long) heapMemoryData.get("used");
+//            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
+//
+//            // 计算总内存
+//            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
+//            return size;
+//        }
+//    } catch (Exception e) {
+//        this.releaseJvm();
+//        throw e;
+//    }
+//}
 //
 
-    ///**
-    // * 获取使用内存量(单位KB)
-    // *
-    // * @return
-    // */
-    //public long getUsedMemorySize() throws Exception {
-    //    // 准备JMX环境
-    //    if (!this.prepareJvm()) {
-    //        return 0;
-    //    }
-    //    try {
-    //        // 定义对象名称
-    //        String objectName = "java.lang:type=Memory";
-    //        if (OS.LINUX == this.os) {
-    //            // 获取堆内存使用情况
-    //            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-    //                    .getAttribute(objectName, "HeapMemoryUsage");
-    //            // 获取非堆内存使用情况
-    //            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-    //                    .getAttribute(objectName, "NonHeapMemoryUsage");
-    //            long heapMemorySize = (Long) heapMemoryData.get("used");
-    //            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
-    //
-    //            // 计算总内存
-    //            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
-    //            return size;
-    //        } else {
-    //            // 获取堆内存使用情况
-    //            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-    //                    .getAttribute(objectName, "HeapMemoryUsage");
-    //            // 获取非堆内存使用情况
-    //            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-    //                    .getAttribute(objectName, "NonHeapMemoryUsage");
-    //            long heapMemorySize = (Long) heapMemoryData.get("used");
-    //            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
-    //
-    //            // 计算总内存
-    //            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
-    //            return size;
-    //        }
-    //    } catch (Exception e) {
-    //        this.releaseJvm();
-    //        throw e;
-    //    }
-    //}
-//
- 
 //
 //    /**
 //     * 获取运行时间(带格式(天时分秒))
@@ -966,20 +935,7 @@ public class BcmpHostAgentService {
 //        return true;
 //    }
 //
-//    /**
-//     * 判断内容中是否包含指定的关键字
-//     *
-//     * @param content
-//     * @param key
-//     * @return
-//     */
-//    private boolean containsKey(String content, String key) {
-//        if (content == null) {
-//            return false;
-//        }
-//        int index = content.indexOf(key);
-//        return (index != -1);
-//    }
+
 //
 //    /**
 //     * 获取编码个性

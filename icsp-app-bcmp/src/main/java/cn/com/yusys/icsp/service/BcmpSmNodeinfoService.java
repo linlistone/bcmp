@@ -2,6 +2,7 @@ package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.base.base.BaseService;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
+import cn.com.yusys.icsp.common.util.DateUtil;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmNodeinfoMapper;
 import cn.com.yusys.icsp.common.exception.ICSPException;
@@ -33,6 +34,7 @@ public class BcmpSmNodeinfoService extends BaseService {
 	 */
 	public int create(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
 		bcmpSmNodeinfo.setNodeId(createUUId());
+		bcmpSmNodeinfo.setLastChgDt(DateUtil.getFormatDateTime());
 		return bcmpSmNodeinfoMapper.insert(bcmpSmNodeinfo);
 	}
 
@@ -103,6 +105,7 @@ public class BcmpSmNodeinfoService extends BaseService {
 	 * @算法描述:
 	 */
 	public int update(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+		bcmpSmNodeinfo.setLastChgDt(DateUtil.getFormatDateTime());
 		return bcmpSmNodeinfoMapper.updateByPrimaryKey(bcmpSmNodeinfo);
 	}
 

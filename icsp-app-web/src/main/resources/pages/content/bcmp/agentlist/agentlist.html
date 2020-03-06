@@ -14,23 +14,23 @@
     <yu-button icon="yx-loop2" @click="rebootFn" type="info">重启</yu-button>
     <yu-button icon="yx-stop2" @click="shutdownFn" type="danger">停止</yu-button>
   </div>
-  <yu-xtable ref="refTable" :data-url="dataUrl"  reserve-selection selection-type="checkbox" row-key="hostInfo.hostIp">
-    <yu-xtable-column label="主机IP" prop="hostInfo.hostIp"></yu-xtable-column>
-    <yu-xtable-column label="主机类型" prop="hostInfo.hostType" data-code="HOST_TYPE"></yu-xtable-column>
-    <yu-xtable-column label="操作系统" prop="agentInfo.osName"></yu-xtable-column>
-    <yu-xtable-column label="RMI-PORT" prop="agentInfo.rmiPort" width="110"></yu-xtable-column>
-    <yu-xtable-column label="RMI状态" prop="agentInfo.rmiStatus" width="110">
+  <yu-xtable ref="refTable" :data-url="dataUrl"  reserve-selection selection-type="checkbox" row-key="bcmpSmHostinfo.hostIp">
+    <yu-xtable-column label="主机IP" prop="bcmpSmHostinfo.hostIp"></yu-xtable-column>
+    <yu-xtable-column label="主机类型" prop="bcmpSmHostinfo.hostType" data-code="HOST_TYPE"></yu-xtable-column>
+    <yu-xtable-column label="操作系统" prop="agentRegistryInfo.osName"></yu-xtable-column>
+    <yu-xtable-column label="RMI-PORT" prop="agentRegistryInfo.rmiPort" width="110"></yu-xtable-column>
+    <yu-xtable-column label="RMI状态" prop="agentRegistryInfo.rmiStatus" width="110">
       <template slot-scope="scope">
-        <yu-tag :type="scope.row.agentInfo.rmiStatus==='UP'?'success':'danger'">{{scope.row.agentInfo.rmiStatus}}</yu-tag>
+        <yu-tag :type="scope.row.agentRegistryInfo.rmiStatus==='UP'?'success':'danger'">{{scope.row.agentRegistryInfo.rmiStatus}}</yu-tag>
       </template>
     </yu-xtable-column>
-    <yu-xtable-column label="HTTP-PORT" prop="agentInfo.socketPort" width="110"></yu-xtable-column>
-    <yu-xtable-column label="HTTP状态" prop="agentInfo.status" width="110">
+    <yu-xtable-column label="HTTP-PORT" prop="agentRegistryInfo.socketPort" width="110"></yu-xtable-column>
+    <yu-xtable-column label="HTTP状态" prop="agentRegistryInfo.status" width="110">
       <template slot-scope="scope">
-        <yu-tag :type="scope.row.agentInfo.status==='UP'?'success':'danger'">{{scope.row.agentInfo.rmiStatus}}</yu-tag>
+        <yu-tag :type="scope.row.agentRegistryInfo.status==='UP'?'success':'danger'">{{scope.row.agentRegistryInfo.rmiStatus}}</yu-tag>
       </template>
     </yu-xtable-column>
     </yu-xtable-column>
-    <yu-xtable-column label="注册时间" prop="agentInfo.registryTime" width="140"></yu-xtable-column>
+    <yu-xtable-column label="注册时间" prop="agentRegistryInfo.registryTime" width="140"></yu-xtable-column>
   </yu-xtable>
 </div>

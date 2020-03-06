@@ -5,7 +5,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
   yufp.lookup.reg('FOX_NODETYPE');
   // 数据源
   var vmData = {
-    appTypeDic: yufp.lookup.find('FOX_NODETYPE', true),
+    nodeTypeDic: yufp.lookup.find('HOST_TYPE', true),
+    nodeTypeMap: yufp.lookup.find('HOST_TYPE', false),
     showUploadSuccessMsgTag: false,
     queryNodeInfoInterval: {},
     serverstatuschecked: false,
@@ -34,10 +35,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     },
     serverstatus: [],
     fileList: [],
-    fileList1: [{ name: 'I:\\nanhai_local.jks', size: '1' }],
     checkList: [],
     checked: false,
-    fileUploadVisible: false,
     // 节点信息
     nodeInfos: [],
     deployDialogVisiable: false,
@@ -45,8 +44,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     deployFormData: {
       version: '',
       needRestart: '',
-      //websocket连接端口编号
-      webSocketClientCode : '',
+      webSocketClientCode: ''
     },
     versionList: [],
     options: [{
@@ -67,13 +65,12 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     unDeployFormData: {
       version: ''
     },
-    undeploy_versionList: [],
     // 回退步骤位置
     backstep: 0,
     backDetailPageVisible: false,
     // 图片上传调用的路径
     nodeKey: [],
-    IMG_UPLOAD_URL: '',
+    IMG_UPLOAD_URL: ''
 
   };
   // page加载完成后调用ready方法
@@ -356,8 +353,9 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             callback: (code, message, data) => {
               for (var i = 0; i < data.data.length; i++) {
                 let rowdata = {};
+                rowdata.nodeId = data.data[i].nodeId; // 节点id
                 rowdata.nodename = data.data[i].nodeName; // 节点名称
-                rowdata.nodetype = data.data[i].nodeType; // 节点类型
+                rowdata.nodetype = this.nodeTypeMap[data.data[i].nodeType]; // 节点类型
                 rowdata.starttime = ''; // 启动时间
                 rowdata.serverstatus = false; // 节点状态
                 rowdata.isLink = data.data[i].isLink; // 连接数量
@@ -365,7 +363,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
                 rowdata.index = i + 1; // 节点索引
                 rowdata.checked = false; // 节点索引
                 rowdata.disabled = true;// 节点可用
-                rowdata.applyPath = data.data[i].applyPath; //部署路径
+                rowdata.applyPath = data.data[i].applyPath; // 部署路径
                 this.nodeInfos.push(rowdata);
               }
             }
@@ -392,7 +390,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             yufp.logger.info('Connection open ...' + wsUrl);
           };
           me.socketClient.onmessage = function (message) {
-            yufp.logger.info('Connection onmessage ...' + message.data);
+            yufp.logger.info('Connection onmessage=' + message.data);
+            me.onWebSocketMessage(message.data);
           };
           me.socketClient.onclose = function (message) {
             yufp.logger.info('Connection onclose ...');
@@ -404,12 +403,38 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             clearInterval(me.queryNodeInfoInterval);
           };
           let queryNodeInfoFn = function () {
-            var nodeInfos = vmData.nodeInfos;
-            for (var i = 0; i < vmData.nodeInfos.length; i++) {
-              nodeInfos[i].disabled = !nodeInfos[i].disabled;
-            }
+            me.queryNodeInfoStatus();
           };
+          this.queryNodeInfoStatus();
           this.queryNodeInfoInterval = setInterval(queryNodeInfoFn, 1000 * 5);
+        },
+        onWebSocketMessage: function (message) {
+          let nodeInfo = JSON.parse(message);
+          var wsType = nodeInfo.wsType;
+          var wsData = nodeInfo.wsData;
+          var nodeId = nodeInfo.nodeId;
+          if (wsType == 'nodestatus') {
+            for (var i = 0; i < vmData.nodeInfos.length; i++) {
+              var vnode = vmData.nodeInfos[i];
+              if (nodeId == vnode.nodeId) {
+                vmData.nodeInfos[i].disabled = wsData != 'true';
+              }
+            }
+          }
+        },
+        // 查询应用节点状态
+        queryNodeInfoStatus: function () {
+          yufp.service.request({
+            method: 'get',
+            name: backend.bcmpService + '/agent/nodeInfoStatus',
+            callback: function (code, message, response) {
+              yufp.logger.debug('nodeInfoStatus code' + code + ' message' + message);
+            }
+          });
+          // var nodeInfos = vmData.nodeInfos;
+          // for (var i = 0; i < vmData.nodeInfos.length; i++) {
+          //   nodeInfos[i].disabled = !nodeInfos[i].disabled;
+          // }
         },
         // 关闭 WebSocket
         closeSocket: function () {
@@ -477,7 +502,6 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         },
         // 文件上传之前参数校验
         beforeUpload: function () {
-          var me = this;
           if (this.upload.data.name == '' || this.upload.data.version == '') {
             this.$message('请确认版本号已填写和服务名已有!');
             return false;
@@ -541,8 +565,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       },
       // 界面加载成功
       mounted: function () {
-        //初始化websocket连接端口编号
-        this.deployFormData.webSocketClientCode = this.uuid()
+        // 初始化websocket连接端口编号
+        this.deployFormData.webSocketClientCode = this.uuid();
         // 初始化服务节点
         this.initApplist();
         // 创建websocket连接
@@ -604,81 +628,6 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         // 01-节点成功
         if (taskStatus == '01') {
           vmData.step = '4';
-        }
-      }
-    }, true);
-
-    // 版本回退监听
-    yufp.eventproxy.unbind('unDelopy');
-    yufp.eventproxy.bind('unDelopy', function (content) {
-      // 节点位置
-      var action = content.action;
-      // 节点状态
-      var taskStatus = content.taskStatus;
-      // 消息
-      var detail = content.detail;
-      addElementLi('backMsgPan', detail);
-      // 准备阶段
-      if (action == 'prepare') {
-        // 完成准备阶段
-      } else if (action == 'finishPrepare') {
-        // 01-节点成功
-        if (taskStatus == '01') {
-          vmData.backstep = '1';
-        }
-        // 停止服务器
-      } else if (action == 'shutdown') {
-        // 停止服务器
-      } else if (action == 'finishShutdown') {
-        // 01-节点成功
-        if (taskStatus == '01') {
-          vmData.backstep = '2';
-        }
-        // 回退
-      } else if (action == 'rollback') {
-        // 回退成功
-      } else if (action == 'finishRollback') {
-        // 01-节点成功
-        if (taskStatus == '01') {
-          vmData.backstep = '3';
-        }
-        // 开始启动
-      } else if (action == 'startup') {
-        // 开始启动
-      } else if (action == 'finishStartup') {
-        // 01-节点成功
-        if (taskStatus == '01') {
-          vmData.backstep = '4';
-        }
-        // 部署完成
-      } else if (action == 'check') {
-        // 校验完成
-      } else if (action == 'finishCheck') {
-        // 部署完成
-      } else if (action == 'finish') {
-        // 01-节点成功
-        if (taskStatus == '01') {
-          vmData.backstep = '5';
-        }
-      }
-    }, true);
-
-    // 节点状态监听
-    yufp.eventproxy.unbind('nodestatus');
-    yufp.eventproxy.bind('nodestatus', function (content) {
-      // IP
-      var hostip = content.hostip;
-      // 节点名称
-      var nodeName = content.nodeName;
-      // 节点状态 01-启动
-      var status = content.status;
-      if (status == '01') {
-        var nodeInfos = vmData.nodeInfos;
-        for (var i = 0; i < vmData.nodeInfos.length; i++) {
-          var ip = nodeInfos[i].HOSTIP;
-          if (hostip == ip) {
-            nodeInfos[i].disabled = true;
-          }
         }
       }
     }, true);

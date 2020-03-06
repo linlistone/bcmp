@@ -24,7 +24,6 @@
                             <li class="font_black">服务名称：{{datasource.nodename}}</li>
                             <li class="font_black">服务类型：{{datasource.nodetype}}</li>
                             <li class="font_black">服务状态：{{datasource.serverstatus?"已启动":"未启动"}}</li>
-                            <li class="font_black">启动时间：{{datasource.starttime}}</li>
                         </ul>
                     </div>
                 </a>
@@ -124,11 +123,13 @@
         var color = '';
         if (this.disabled) {
           // this.checkedVal = false;
+          this.datasource.serverstatus = false;
           color = '#CCCFD5';
           this.elcardCalss = 'server-cluster-el-card-down';
         } else {
           color = '#409EFF';
           this.elcardCalss = 'server-cluster-el-card-up';
+          this.datasource.serverstatus = true;
         }
         // 头信息
         var canvas = this.$refs.flag;

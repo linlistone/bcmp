@@ -12,6 +12,7 @@ define(function (require, exports) {
       saveBtnShow: true,
       viewType: 'DETAIL',
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
+      hostTypeMap: {},
       // 表单数据
       formdata: {},
       dataUrl: backend.bcmpService + '/bcmpSmNodeinfo/index',
@@ -68,7 +69,7 @@ define(function (require, exports) {
         }]
       }
     };
-    yufp.lookup.reg('FOX_NODETYPE,YESNO', false);
+    yufp.lookup.reg('HOST_TYPE,YESNO', false);
     // 创建vue model
     const vm = new Vue({
       el: cite.el,
@@ -78,6 +79,12 @@ define(function (require, exports) {
       computed: {},
       // 方法
       methods: {
+        hostSelectFn: function () {
+          let formdata = this.$refs.refForm.formdata;
+          if (formdata.hostIp != undefined && formdata.hostIp != '') {
+            this.formdata.nodeType = this.hostTypeMap[formdata.hostIp];
+          }
+        },
         // 新增按钮事件
         addFn: function (data) {
           var _this = this;
@@ -242,6 +249,7 @@ define(function (require, exports) {
         },
         // 加载主机配置
         getHostList: function () {
+          let _this = this;
           var querModel = {
             page: 1,
             size: 999
@@ -259,6 +267,7 @@ define(function (require, exports) {
                     key: data[i].hostIp,
                     value: data[i].hostIp
                   };
+                  _this.hostTypeMap[data[i].hostIp] = data[i].hostType;
                   list.push(item);
                 }
                 yufp.lookup.storageDataCodePut('HOSTLIST', list);
