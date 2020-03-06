@@ -1,70 +1,46 @@
-package cn.com.yusys.icsp.bcmp.node;
+package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
-import cn.com.yusys.icsp.bcmp.constant.ConnectionState;
 import cn.com.yusys.icsp.bcmp.constant.OS;
 import cn.com.yusys.icsp.bcmp.constant.Protocol;
 import cn.com.yusys.icsp.bcmp.jmx.JmxAccessor;
-import cn.com.yusys.icsp.bcmp.node.filesystem.ServerFileSystemAccessor;
-import cn.com.yusys.icsp.bcmp.shell.*;
+import cn.com.yusys.icsp.bcmp.node.PartitionState;
+import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
+import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.util.StringUtil;
+import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
+import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.openmbean.CompositeData;
-import java.util.*;
+import java.util.List;
 
 /**
- * 节点
- *
- * @author 江成
+ * @description: 服务器主机，服务器节点，Agent代理Service
+ * @author: Mr_Jiang
+ * @create: 2020-03-05 14:54
  */
-public class Node {
-
-
-    /**
-     * 日志
-     */
-    private static Logger logger = LoggerFactory.getLogger(Node.class);
-
-    /**
-     * 超时为10秒
-     */
+@Service
+@Transactional
+public class BcmpHostAgentService {
+    //日志记录
+    private static Logger logger = LoggerFactory.getLogger(BcmpHostAgentService.class);
+    //设值超时时间
     private int timeout = 10000;
-
-    /**
-     * 节点所在服务器的语言
-     */
+    //节点所在服务器语言
     private String lang;
-
-    /**
-     * 提示符
-     */
+    //提示符
     private String prompt;
-
-    /**
-     * 获取系统类型
-     */
-    private OS os;
-
-    /**
-     * 节点信息
-     */
-    private NodeInfo nodeInfo;
-
-    /**
-     * JVM访问器
-     */
+    //JVM访问器
     private JmxAccessor jvmAccessor;
-
-    /**
-     * 环境是否已经准备完成
-     */
+    //环境是否已经准备完成
     private boolean isPrepareEnvironment = false;
-    /**
-     * JVM是否已经准备完成
-     */
+    //JVM环境是否已经准备完成
     private boolean isPrepareJvm = false;
     /**
      * 上一次CPU时间
@@ -95,57 +71,441 @@ public class Node {
      */
     private long dayUnit = hourUnit * 24;
 
-    /**
-     * 构造函数
-     *
-     * @param nodeInfo
-     */
-    public Node(NodeInfo nodeInfo) {
-        this.nodeInfo = nodeInfo;
 
+
+    /*
+     *  @Description : 准备JVM环境
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 17:44
+     */
+    public synchronized boolean prepareJvm(String hostIp,String jvmPort) {
+        if (isPrepareJvm) {
+            return true;
+        }
+        // 定义JVM连接器
+        jvmAccessor = new JmxAccessor();
+        boolean connected = jvmAccessor.connect(hostIp,jvmPort);
+        if (connected) {
+            this.isPrepareJvm = true;
+        }
+        return connected;
+    }
+
+    /*
+     *  @Description : 释放JVM环境
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 20:44
+     */
+    public synchronized void releaseJvm() {
+        if (this.jvmAccessor != null) {
+            this.jvmAccessor.disconnect();
+            this.jvmAccessor = null;
+        }
+        this.isPrepareJvm = false;
+    }
+    
+    /*
+     *  @Description : 获取CPU使用率
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 17:43
+     */
+    public float getCpuUsage(HostAgentBean hostAgentBean) throws Exception {
+        //获取hostAgentBean中的主机信息
+        BcmpSmHostinfo bcmpSmHostinfo = hostAgentBean.getBcmpSmHostinfo();
+        //获取hostAgentBean中的节点信息
+        BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
+        //获取hostAgentBean中的agent注册信息
+        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        // 获取当前时间
+        long s = System.currentTimeMillis();
+        logger.info("开始获取cup使用率");
+        // cpu使用率
+        float cpusage = -1;
         try {
-            this.os = OS.LINUX;
-            // prepareEnvironment();
+            // 获取解压命令
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getCpuUsage.sh",bcmpSmNodeinfo.getJvmPort());
+            if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
+                HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
+                // 执行命令
+                String res = BcmpTools.goShell(hostDescriptor, script);
+                String[] items = StringUtil.split(res, "\n");
+                for (int i = 0; i < items.length; i++) {
+                    try {
+                        float f = Float.parseFloat(items[i]);
+                        cpusage = f;
+                        break;
+                    } catch (Exception e) {
+                    }
+                }
+                if (cpusage == -1) {
+                    logger.error("获取cpu使用率失败，返回结果为 :" + res);
+                }
+                return cpusage;
+            }
+            logger.info("完成获取cpu使用率，耗时:" + (System.currentTimeMillis() - s) + "毫秒");
+            return cpusage;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort()+ "]";
+            logger.error(msg, e);
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取内存总数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 17:42
+     */
+    public long getTotalMemorySize(HostAgentBean hostAgentBean) throws Exception {
+        //获取hostAgentBean中的节点信息
+        BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
+        //获取hostAgentBean中的agent注册信息
+        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        // 准备JMX环境,若连接失败则返回内存数为0
+        //if (!this.prepareJvm(bcmpSmNodeinfo.getHostIp(),bcmpSmNodeinfo.getJvmPort())) {
+        //    return 0;
+        //}
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Memory";
+            String heapMemoryKey = "max";
+            if (!"linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
+                heapMemoryKey = "committed";
+            }
+            // 获取堆内存使用情况
+            CompositeData heapMemoryData = (CompositeData) jvmAccessor.getAttribute(objectName, "HeapMemoryUsage");
+            // 获取非堆内存使用情况
+            CompositeData nonHeapMemoryData = (CompositeData) jvmAccessor.getAttribute(objectName, "NonHeapMemoryUsage");
+
+            long heapMemorySize = (Long) heapMemoryData.get(heapMemoryKey);
+            long nonHeapMemorySize = (Long) nonHeapMemoryData.get(heapMemoryKey);
+            // 计算总内存
+            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
+            return size;
+        } catch (Exception e) {
+            //this.releaseJvm();
+            String msg = "获取总内存量(单位KB)，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取系统运行时间
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 17:57
+     */
+    public long getRunningTime(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Runtime";
+            // 获取JVM运行时间情况
+            long time = (Long) jvmAccessor.getAttribute(objectName, "Uptime");
+            return time;
+        } catch (Exception e) {
+            String msg = "获取系统运行总时间，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取峰值线程数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 20:34
+     */
+    public int getPeakThreadCount(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Threading";
+            // 获取峰值线程数
+            int count = (Integer) jvmAccessor.getAttribute(objectName,"PeakThreadCount");
+            return count;
+        } catch (Exception e) {
+            String msg = "获取峰值线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取守护线程数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 20:37
+     */
+    public long getDaemonThreadCount(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Threading";
+            // 获取守护线程数
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "DaemonThreadCount");
+            return count;
+        } catch (Exception e) {
+            String msg = "获取守护线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取当前活动线程数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 20:40
+     */
+    public int getThreadCount(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Threading";
+            // 获取当前活动线程数
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "ThreadCount");
+            return count;
+        } catch (Exception e) {
+            String msg = "获取当前活动线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取已经启动过的线程数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 20:42
+     */
+    public long getTotalStartedThreadCount(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Threading";
+            // 获取已经启动的线程数
+            long count = (Long) jvmAccessor.getAttribute(objectName, "TotalStartedThreadCount");
+            return count;
+        } catch (Exception e) {
+            String msg = "获取已经启动过的线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取JVM输入参数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 21:10
+     */
+    public String[] getJvmInputArguments(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return null;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=Runtime";
+            // 获取JVM输入参数
+            String[] args = (String[]) jvmAccessor.getAttribute(objectName, "InputArguments");
+            return args;
+        } catch (Exception e) {
+            String msg = "获取JVM输入参数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
+        }
+    }
+    /*
+     *  @Description : 获取当前加载的类数量
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 21:11
+     */
+    public int getLoadedClassCount(BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+        //判断JVM环境是否已经准备完成
+        if (!isPrepareJvm) {
+            return 0;
+        }
+        try {
+            // 定义对象名称
+            String objectName = "java.lang:type=ClassLoading";
+            // 获取当前加载的类数量
+            int count = (Integer) jvmAccessor.getAttribute(objectName,"LoadedClassCount");
+            return count;
+        } catch (Exception e) {
+            String msg = "获取当前加载的类数量，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            //this.releaseJvm();
+            throw e;
         }
     }
 
-    /**
-     * 获取节点名称
-     *
-     * @return
+    /*
+     *  @Description : 获取主机的分区使用情况
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/5 21:15
      */
-    public String getName() {
-        return this.nodeInfo.getName();
+    public String getPartitionState(HostAgentBean hostAgentBean) throws Exception {
+        //获取hostAgentBean中的主机信息
+        BcmpSmHostinfo bcmpSmHostinfo = hostAgentBean.getBcmpSmHostinfo();
+        //获取hostAgentBean中的节点信息
+        BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
+        //获取hostAgentBean中的agent注册信息
+        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        // 获取当前时间
+        long s = System.currentTimeMillis();
+        logger.info("开始获取主机硬盘使用情况");
+        try {
+            // 获取解压命令
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getDiskState.sh",bcmpSmNodeinfo.getJvmPort());
+            if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
+                HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
+                // 执行命令
+                String res = BcmpTools.goShell(hostDescriptor, script);
+                System.out.println("获取分区情况:"+res);
+                //String[] items = StringUtil.split(res, "\n");
+                //for (int i = 0; i < items.length; i++) {
+                //    try {
+                //        float f = Float.parseFloat(items[i]);
+                //        cpusage = f;
+                //        break;
+                //    } catch (Exception e) {
+                //    }
+                //}
+                //if (cpusage == -1) {
+                //    logger.error("获取cpu使用率失败，返回结果为 :" + res);
+                //}
+                return res;
+            }
+            //String command = script+" exit\n";
+            // 定义网络参数
+            //NetArgs netArgs = new NetArgs();
+            //netArgs.ip = nodeInfo.getHost();
+            //netArgs.port = nodeInfo.getPort();
+            //netArgs.userName = nodeInfo.getUserName();
+            //netArgs.password = nodeInfo.getPassword();
+            //netArgs.timeout = this.timeout;
+            //// 获取连接器
+            //IConnector connector = ConnectorFactory.getConnector(protocol,
+            //        netArgs);
+            //
+            //List<PartitionState> list = new ArrayList<PartitionState>();
+            //try {
+            //    // 获取编码格式
+            //    String encoding = this.getEncoding(this.lang);
+            //    // 连接服务器
+            //    connector.connect();
+            //    // 执行命令
+            //    String res = ShellExcutor.execute(command, encoding, connector,
+            //            this.timeout * 3);
+            //    // 提取结果
+            //    res = ResultExtractor.extract(res, this.prompt, "exit");
+            //    String[] lines = res.split("\n");
+            //
+            //    for (int i = 0; i < lines.length; i++) {
+            //        String line = lines[i];
+            //        if (line.indexOf("%") == -1) {
+            //            continue;
+            //        }
+            //        String[] items = line.split("[\t+|\\s]+");
+            //        String lastItem = items[items.length - 1];
+            //        if (lastItem.charAt(0) != '/') {
+            //            continue;
+            //        }
+            //
+            //        PartitionState state = new PartitionState();
+            //
+            //        if (OS.LINUX == os) {
+            //            state.setFileSystem(items[0]);
+            //            state.setMountedPoint(lastItem);
+            //            double num = Double.parseDouble(items[1]);
+            //            state.setTotalSpace((int) num);
+            //            num = Double.parseDouble(items[2]);
+            //            state.setUsedSpace((int) num);
+            //            String str = items[4].trim();
+            //            // 去掉%
+            //            str = str.substring(0, str.length() - 1);
+            //            double ratio = Double.parseDouble(str) / 100;
+            //            state.setUsedRatio(ratio);
+            //
+            //        } else {
+            //            state.setFileSystem(items[0]);
+            //            state.setMountedPoint(lastItem);
+            //            double total = Double.parseDouble(items[1]);
+            //            state.setTotalSpace((int) total);
+            //            double free = Double.parseDouble(items[2]);
+            //            state.setUsedSpace((int) (total - free + 0.5));
+            //            String str = items[5].trim();
+            //            // 去掉%
+            //            str = str.substring(0, str.length() - 1);
+            //            double ratio = Double.parseDouble(str) / 100;
+            //            state.setUsedRatio(ratio);
+            //        }
+            //        list.add(state);
+            //        System.err.println("fileSystemn:" + state.getFileSystem()
+            //                + " ,mountedPoint:" + state.getMountedPoint()
+            //                + " ,total:" + state.getTotalSpace() + " ,used:"
+            //                + state.getUsedSpace() + " ,比率"
+            //                + (state.getUsedRatio() * 100) + "%");
+            //        System.err.println("--> " + lines[i]);
+            //    }
+            //
+            //} finally {
+            //    connector.disconnect();
+            //}
+            logger.info("完成获取主机硬盘使用情况，耗时:" + (System.currentTimeMillis() - s) + "毫秒");
+            //return list.toArray(new PartitionState[0]);
+            return null;
+        } catch (Exception e) {
+            String msg = "获取主机硬盘使用情况，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            logger.error(msg, e);
+            throw e;
+        }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    /**
-     * 获取描述信息
-     *
-     * @return
-     */
-    public String getDescription() {
-        return this.nodeInfo.getDescription();
-    }
-
-    /**
-     * 获取节点地址
-     *
-     * @return
-     */
-    public String getHost() {
-        return nodeInfo.getHost();
-    }
-
-    /**
-     * 获取节点端口
-     *
-     * @return
-     */
-    public int getPort() {
-        return nodeInfo.getAppPort();
-    }
 
 //    /**
 //     * 启动节点
@@ -318,187 +678,55 @@ public class Node {
 //        return false;
 //    }
 
-
-    /**
-     * 获取CPU使用率
-     *
-     * @return
-     */
-    public float getCpuUsage() throws Exception {
-        // 获取当前时间
-        long s = System.currentTimeMillis();
-        logger.info("开始获取cup使用率");
-        // cpu使用率
-        float cpusage = -1;
-        try {
-            // 获取解压命令
-            String osName = this.os.getName();
-            String script = ShellScriptManager.getScript(osName,
-                    "getCpuUsage.sh",
-                    String.valueOf(this.nodeInfo.getJvmPort()));
-            if (this.os.getName().equals("linux")) {
-                HostDescriptor hostDescriptor = new HostDescriptor("192.168.58.111", "", "", "1099");
-                // 执行命令
-                String res = BcmpTools.goShell(hostDescriptor, script);
-                String[] items = StringUtil.split(res, "\n");
-                for (int i = 0; i < items.length; i++) {
-                    try {
-                        float f = Float.parseFloat(items[i]);
-                        cpusage = f;
-                        break;
-                    } catch (Exception e) {
-                    }
-                }
-                if (cpusage == -1) {
-                    logger.error("获取cpu使用率失败，返回结果为 :" + res);
-                }
-                return cpusage;
-            }
-            logger.info("完成获取cpu使用率，耗时:" + (System.currentTimeMillis() - s)
-                    + "毫秒");
-            return cpusage;
-        } catch (Exception e) {
-            String msg = "获取cpu使用率，错误服务器[host:" + this.nodeInfo.getHost()
-                    + " ,port:" + this.nodeInfo.getPort() + "]";
-            logger.error(msg, e);
-            throw e;
-        }
-    }
-
-    /**
-     * 获取总内存量(单位KB)
-     *
-     * @return
-     */
-    public long getTotalMemorySize() throws Exception {
-        // 准备JMX环境
-        if (!this.prepareJvm()) {
-            return 0;
-        }
-        try {
-            // 定义对象名称
-            String objectName = "java.lang:type=Memory";
-            String heapMemoryKey = "max";
-            if (OS.LINUX != this.os) {
-                heapMemoryKey = "committed";
-            }
-            // 获取堆内存使用情况
-            CompositeData heapMemoryData = (CompositeData) jvmAccessor
-                    .getAttribute(objectName, "HeapMemoryUsage");
-            // 获取非堆内存使用情况
-            CompositeData nonHeapMemoryData = (CompositeData) jvmAccessor
-                    .getAttribute(objectName, "NonHeapMemoryUsage");
-            long heapMemorySize = (Long) heapMemoryData.get(heapMemoryKey);
-            long nonHeapMemorySize = (Long) nonHeapMemoryData.get(heapMemoryKey);
-            // 计算总内存
-            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
-            return size;
-        } catch (Exception e) {
-            this.releaseJvm();
-            String msg = "获取总内存量(单位KB)，错误服务器[host:" + this.nodeInfo.getHost()
-                    + " ,port:" + this.nodeInfo.getPort() + "]";
-            throw e;
-        }
-    }
-
-
-    /**
-     * 准备JVM环境
-     *
-     * @return
-     */
-    private synchronized boolean prepareJvm() {
-        if (isPrepareJvm) {
-            return true;
-        }
-        // 定义JVM连接器
-        jvmAccessor = new JmxAccessor();
-        boolean connected = jvmAccessor.connect(nodeInfo.getHost(),
-                nodeInfo.getJvmPort());
-        if (connected) {
-            this.isPrepareJvm = true;
-        } else {
-            jvmAccessor.disconnect();
-        }
-        return connected;
-    }
-    /**
-     * 释放JVM环境
-     */
-    private synchronized void releaseJvm() {
-        if (this.jvmAccessor != null) {
-            this.jvmAccessor.disconnect();
-            this.jvmAccessor = null;
-        }
-        this.isPrepareJvm = false;
-    }
 //
 
-    /**
-     * 获取使用内存量(单位KB)
-     *
-     * @return
-     */
-    public long getUsedMemorySize() throws Exception {
-        // 准备JMX环境
-        if (!this.prepareJvm()) {
-            return 0;
-        }
-        try {
-            // 定义对象名称
-            String objectName = "java.lang:type=Memory";
-            if (OS.LINUX == this.os) {
-                // 获取堆内存使用情况
-                javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-                        .getAttribute(objectName, "HeapMemoryUsage");
-                // 获取非堆内存使用情况
-                javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-                        .getAttribute(objectName, "NonHeapMemoryUsage");
-                long heapMemorySize = (Long) heapMemoryData.get("used");
-                long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
-
-                // 计算总内存
-                long size = (heapMemorySize + nonHeapMemorySize) / 1024;
-                return size;
-            } else {
-                // 获取堆内存使用情况
-                javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-                        .getAttribute(objectName, "HeapMemoryUsage");
-                // 获取非堆内存使用情况
-                javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
-                        .getAttribute(objectName, "NonHeapMemoryUsage");
-                long heapMemorySize = (Long) heapMemoryData.get("used");
-                long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
-
-                // 计算总内存
-                long size = (heapMemorySize + nonHeapMemorySize) / 1024;
-                return size;
-            }
-        } catch (Exception e) {
-            this.releaseJvm();
-            throw e;
-        }
-    }
+    ///**
+    // * 获取使用内存量(单位KB)
+    // *
+    // * @return
+    // */
+    //public long getUsedMemorySize() throws Exception {
+    //    // 准备JMX环境
+    //    if (!this.prepareJvm()) {
+    //        return 0;
+    //    }
+    //    try {
+    //        // 定义对象名称
+    //        String objectName = "java.lang:type=Memory";
+    //        if (OS.LINUX == this.os) {
+    //            // 获取堆内存使用情况
+    //            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+    //                    .getAttribute(objectName, "HeapMemoryUsage");
+    //            // 获取非堆内存使用情况
+    //            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+    //                    .getAttribute(objectName, "NonHeapMemoryUsage");
+    //            long heapMemorySize = (Long) heapMemoryData.get("used");
+    //            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
+    //
+    //            // 计算总内存
+    //            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
+    //            return size;
+    //        } else {
+    //            // 获取堆内存使用情况
+    //            javax.management.openmbean.CompositeData heapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+    //                    .getAttribute(objectName, "HeapMemoryUsage");
+    //            // 获取非堆内存使用情况
+    //            javax.management.openmbean.CompositeData nonHeapMemoryData = (javax.management.openmbean.CompositeData) jvmAccessor
+    //                    .getAttribute(objectName, "NonHeapMemoryUsage");
+    //            long heapMemorySize = (Long) heapMemoryData.get("used");
+    //            long nonHeapMemorySize = (Long) nonHeapMemoryData.get("used");
+    //
+    //            // 计算总内存
+    //            long size = (heapMemorySize + nonHeapMemorySize) / 1024;
+    //            return size;
+    //        }
+    //    } catch (Exception e) {
+    //        this.releaseJvm();
+    //        throw e;
+    //    }
+    //}
 //
-//    /**
-//     * 获取运行时间
-//     *
-//     * @return(毫秒)
-//     */
-//    public long getRunningTime() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Runtime";
-//            // 获取JVM运行时间情况
-//            long time = (Long) jvmAccessor.getAttribute(objectName, "Uptime");
-//            return time;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+ 
 //
 //    /**
 //     * 获取运行时间(带格式(天时分秒))
@@ -539,48 +767,9 @@ public class Node {
 //        return sb.toString();
 //    }
 //
-//    /**
-//     * 获取JVM输入参数
-//     *
-//     * @return
-//     */
-//    public String[] getJvmInputArguments() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Runtime";
-//            // 获取JVM输入参数
-//            String[] args = (String[]) jvmAccessor.getAttribute(objectName,
-//                    "InputArguments");
-//            return args;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
-//    /**
-//     * 获取当前加载的类数量
-//     *
-//     * @return
-//     * @throws Exception
-//     */
-//    public int getLoadedClassCount() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=ClassLoading";
-//            // 获取当前加载的类数量
-//            int count = (Integer) jvmAccessor.getAttribute(objectName,
-//                    "LoadedClassCount");
-//            return count;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
 //    /**
 //     * 获取已经加载的类数量
@@ -626,93 +815,13 @@ public class Node {
 //        }
 //    }
 //
-//    /**
-//     * 获取当前活动线程数
-//     *
-//     * @return
-//     * @throws Exception
-//     */
-//    public int getThreadCount() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Threading";
-//            // 获取当前活动线程数
-//            int count = (Integer) jvmAccessor.getAttribute(objectName,
-//                    "ThreadCount");
-//            return count;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
-//    /**
-//     * 获取峰值线程数
-//     *
-//     * @return
-//     * @throws Exception
-//     */
-//    public int getPeakThreadCount() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Threading";
-//            // 获取峰值线程数
-//            int count = (Integer) jvmAccessor.getAttribute(objectName,
-//                    "PeakThreadCount");
-//            return count;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
-//    /**
-//     * 获取守护线程数
-//     *
-//     * @return
-//     * @throws Exception
-//     */
-//    public long getDaemonThreadCount() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Threading";
-//            // 获取守护线程数
-//            int count = (Integer) jvmAccessor.getAttribute(objectName,
-//                    "DaemonThreadCount");
-//            return count;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
-//    /**
-//     * 获取已经启动过的线程数
-//     *
-//     * @return
-//     * @throws Exception
-//     */
-//    public long getTotalStartedThreadCount() throws Exception {
-//        // 准备JMX环境
-//        this.prepareJvm();
-//        try {
-//            // 定义对象名称
-//            String objectName = "java.lang:type=Threading";
-//            // 获取已经启动的线程数
-//            long count = (Long) jvmAccessor.getAttribute(objectName,
-//                    "TotalStartedThreadCount");
-//            return count;
-//        } catch (Exception e) {
-//            this.releaseJvm();
-//            throw e;
-//        }
-//    }
+
 //
 //
 //    /**
@@ -842,115 +951,7 @@ public class Node {
 //    }
 //
 //
-//    /**
-//     * 获取主机的分区使用情况
-//     *
-//     * @return
-//     */
-//    public PartitionState[] getPartitionState() throws Exception {
-//        // 准备JMX环境
-//        if (!this.prepareEnvironment()) {
-//            throw new Exception("准备环境失败");
-//        }
-//
-//        // 获取当前时间
-//        long s = System.currentTimeMillis();
-//        logger.info("开始获取主机硬盘使用情况");
-//        try {
-//            // 获取协议
-//            Protocol protocol = nodeInfo.getProtocol();
-//            // 获取解压命令
-//            String script = ShellScriptManager.getScript(this.os.getName(),
-//                    "getDiskState.sh");
-//            String command = script;
-//            command += "exit\n";
-//
-//            // 定义网络参数
-//            NetArgs netArgs = new NetArgs();
-//            netArgs.ip = nodeInfo.getHost();
-//            netArgs.port = nodeInfo.getPort();
-//            netArgs.userName = nodeInfo.getUserName();
-//            netArgs.password = nodeInfo.getPassword();
-//            netArgs.timeout = this.timeout;
-//            // 获取连接器
-//            IConnector connector = ConnectorFactory.getConnector(protocol,
-//                    netArgs);
-//
-//            List<PartitionState> list = new ArrayList<PartitionState>();
-//            try {
-//                // 获取编码格式
-//                String encoding = this.getEncoding(this.lang);
-//                // 连接服务器
-//                connector.connect();
-//                // 执行命令
-//                String res = ShellExcutor.execute(command, encoding, connector,
-//                        this.timeout * 3);
-//                // 提取结果
-//                res = ResultExtractor.extract(res, this.prompt, "exit");
-//                String[] lines = res.split("\n");
-//
-//                for (int i = 0; i < lines.length; i++) {
-//                    String line = lines[i];
-//                    if (line.indexOf("%") == -1) {
-//                        continue;
-//                    }
-//                    String[] items = line.split("[\t+|\\s]+");
-//                    String lastItem = items[items.length - 1];
-//                    if (lastItem.charAt(0) != '/') {
-//                        continue;
-//                    }
-//
-//                    PartitionState state = new PartitionState();
-//
-//                    if (OS.LINUX == os) {
-//                        state.setFileSystem(items[0]);
-//                        state.setMountedPoint(lastItem);
-//                        double num = Double.parseDouble(items[1]);
-//                        state.setTotalSpace((int) num);
-//                        num = Double.parseDouble(items[2]);
-//                        state.setUsedSpace((int) num);
-//                        String str = items[4].trim();
-//                        // 去掉%
-//                        str = str.substring(0, str.length() - 1);
-//                        double ratio = Double.parseDouble(str) / 100;
-//                        state.setUsedRatio(ratio);
-//
-//                    } else {
-//                        state.setFileSystem(items[0]);
-//                        state.setMountedPoint(lastItem);
-//                        double total = Double.parseDouble(items[1]);
-//                        state.setTotalSpace((int) total);
-//                        double free = Double.parseDouble(items[2]);
-//                        state.setUsedSpace((int) (total - free + 0.5));
-//                        String str = items[5].trim();
-//                        // 去掉%
-//                        str = str.substring(0, str.length() - 1);
-//                        double ratio = Double.parseDouble(str) / 100;
-//                        state.setUsedRatio(ratio);
-//                    }
-//                    list.add(state);
-//                    System.err.println("fileSystemn:" + state.getFileSystem()
-//                            + " ,mountedPoint:" + state.getMountedPoint()
-//                            + " ,total:" + state.getTotalSpace() + " ,used:"
-//                            + state.getUsedSpace() + " ,比率"
-//                            + (state.getUsedRatio() * 100) + "%");
-//                    System.err.println("--> " + lines[i]);
-//                }
-//
-//            } finally {
-//                connector.disconnect();
-//            }
-//            logger.info("完成获取主机硬盘使用情况，耗时:" + (System.currentTimeMillis() - s)
-//                    + "毫秒");
-//            return list.toArray(new PartitionState[0]);
-//
-//        } catch (Exception e) {
-//            String msg = "获取主机硬盘使用情况，错误服务器[host:" + this.nodeInfo.getHost()
-//                    + " ,port:" + this.nodeInfo.getPort() + "]";
-//            logger.error(msg, e);
-//            throw e;
-//        }
-//    }
+//    
 //
 //    /**
 //     * 是否资源

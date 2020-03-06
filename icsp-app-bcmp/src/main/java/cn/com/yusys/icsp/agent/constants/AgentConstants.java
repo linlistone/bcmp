@@ -12,7 +12,7 @@ public class AgentConstants
     public static final String APPLICATION_MXBEAN_NAME = "Agent:name=ApplicationManagement";
     public static final String AGENT_MXBEAN_NAME = "Agent:name=AgentManagement";
     public static final String HTMLADAPTER_MXBEAN_NAME = "Agent:name=htmladapter";
-    public static final int DEFAULT_RMI_PORT = 1099;
+    public static final String DEFAULT_RMI_PORT = "1099";
     public static final int DEFAULT_NETTY_PORT = 8085;
     public static final int DEFAULT_HTML_PORT = 8082;
     public static final String RMI_PORT_STATUS_KEY = "rmiStatus";

@@ -4,8 +4,8 @@ public class AgentRegistryInfo {
 
     private String hostname;
     private String hostAddress;
-    private int rmiPort;
-    private int socketPort;
+    private String rmiPort;
+    private String socketPort;
     private String registryTime;
     private String version;
     private String status;
@@ -32,19 +32,19 @@ public class AgentRegistryInfo {
         this.status = status;
     }
 
-    public int getRmiPort() {
+    public String getRmiPort() {
         return this.rmiPort;
     }
 
-    public void setRmiPort(final int rmiPort) {
+    public void setRmiPort(final String rmiPort) {
         this.rmiPort = rmiPort;
     }
 
-    public int getSocketPort() {
+    public String getSocketPort() {
         return this.socketPort;
     }
 
-    public void setSocketPort(final int socketPort) {
+    public void setSocketPort(final String socketPort) {
         this.socketPort = socketPort;
     }
 

@@ -1,13 +1,13 @@
 package cn.com.yusys.icsp.rest.web;
 
 import cn.com.yusys.icsp.agent.AgentClient;
+import cn.com.yusys.icsp.agent.constants.AgentConstants;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.VersionInfo;
 import cn.com.yusys.icsp.bcmp.bean.DeployBean;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
-import cn.com.yusys.icsp.bean.HostAgnetBean;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
@@ -16,7 +16,6 @@ import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
 import cn.com.yusys.icsp.service.NodeMonitorService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +74,8 @@ public class BcmpSmAgentListResource {
     }
 
     @GetMapping(value = "/getNodeDetailInfo")
-    public ResultDto<Map<String, Object>> getNodeDetailInfo(String hostip, String name) {
-        Map<String, Object> data = nodeMonitorService.getNodeDetailInfo(hostip, name);
+    public ResultDto<Map<String,Object>> getNodeDetailInfo(String hostip,String name ) {
+        Map<String,Object> data=  nodeMonitorService.getNodeDetailInfo(hostip,name);
         return ResultDto.success(data);
     }
 
@@ -154,6 +153,7 @@ public class BcmpSmAgentListResource {
     }
 
 
+
 //    /**
 //     *
 //     * @方法名称: shutdownAgentBatch
@@ -201,7 +201,7 @@ public class BcmpSmAgentListResource {
             //查询当前节点详细信息
             BcmpSmNodeinfo bcmpSmNodeinfo = bcmpSmNodeinfoService.showByHostMessage(nodeInfo.getString("ip"), nodeInfo.getString("nodename"));
 
-            HostDescriptor hostDescriptor = new HostDescriptor(nodeInfo.getString("ip"), "", "", agentPort);
+            HostDescriptor hostDescriptor = new HostDescriptor(nodeInfo.getString("ip"), "", "", AgentConstants.DEFAULT_RMI_PORT);
             //初始化AgentClient
             AgentClient agentClient = new AgentClient(hostDescriptor);
 
