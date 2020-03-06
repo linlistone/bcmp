@@ -120,8 +120,7 @@ public class AgentClient implements BcmpOptions {
         upload.setFileName(fileName);
         upload.setFileDir(path);
         try {
-            SocketClient.uploadFile(this.hostDescriptor.getIp(),
-                    (int) Integer.valueOf(this.hostDescriptor.getSocketPort()), upload, true);
+            SocketClient.uploadFile(this.hostDescriptor.getIp(), (int) Integer.valueOf(this.hostDescriptor.getSocketPort()), upload, true);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new AgentException(e.getMessage());

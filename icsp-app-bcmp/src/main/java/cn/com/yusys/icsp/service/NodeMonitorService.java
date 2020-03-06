@@ -147,7 +147,7 @@ public class NodeMonitorService {
             //从数据库获取节点信息,并赋值给服务器信息中的节点信息Bean
             BcmpSmNodeinfo bcmpSmNodeinfo = getBcmpSmNodeinfo(hostIP,nodeName);
             //从Agent注册列表获取Agent信息,并赋值给服务器信息中的Agent注册信息Bean
-            AgentRegistryInfo agentRegistryInfo = getAgentRegistryInfo(hostIP);
+            AgentRegistryInfo agentRegistryInfo = bcmpSmAgentListService.getAgentHostMapInstance().get(hostIP);
             //有参构造函数初始化服务器信息
             HostAgentBean hostAgentBean = new HostAgentBean(bcmpSmHostinfo,bcmpSmNodeinfo,agentRegistryInfo);
             /**---------------------------------通过Agent代理方式获取--------------------------------**/
@@ -227,16 +227,6 @@ public class NodeMonitorService {
         }
         return hostList.get(0);
     }
-
-    /*
-     *  @Description : 向代理服务器节点注册列表获取当前主机的代理信息
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/5 15:40
-     */
-    private AgentRegistryInfo getAgentRegistryInfo(String hostIp) {
-        return bcmpSmAgentListService.getAgentHostMapInstance().get(hostIp);
-    }
-
 
     /**
      * 获取多个节点的启动状态
