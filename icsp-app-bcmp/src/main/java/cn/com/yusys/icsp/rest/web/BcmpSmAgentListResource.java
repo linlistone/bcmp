@@ -8,6 +8,7 @@ import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.VersionInfo;
 import cn.com.yusys.icsp.bcmp.bean.DeployBean;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
+import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
@@ -16,12 +17,12 @@ import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
 import cn.com.yusys.icsp.service.NodeMonitorService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.util.*;
 
@@ -68,8 +69,8 @@ public class BcmpSmAgentListResource {
      * @算法描述:
      */
     @GetMapping(value = "/index")
-    public ResultDto<List<HostAgnetBean>> index(QueryModel model) throws Exception {
-        PageInfo<HostAgnetBean> pageInfo = bcmpSmAgentListService.index(model);
+    public ResultDto<List<HostAgentBean>> index(QueryModel model) throws Exception {
+        PageInfo<HostAgentBean> pageInfo = bcmpSmAgentListService.index(model);
         return ResultDto.success(pageInfo);
     }
 
