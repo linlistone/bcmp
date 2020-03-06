@@ -39,7 +39,7 @@ public class JmxAccessor {
      * @param jndiPath
      * @return
      */
-    private JMXConnector getMBeanServerConnection(String host, int port,
+    private JMXConnector getMBeanServerConnection(String host, String port,
                                                   String jndiPath) {
         // 修改path
         if (!jndiPath.startsWith("/")) {
@@ -63,7 +63,7 @@ public class JmxAccessor {
      * @param port
      * @return
      */
-    public boolean connect(String host, int port) {
+    public boolean connect(String host, String port) {
         this.jmxConnector = this
                 .getMBeanServerConnection(host, port, "/jmxrmi");
         if (this.jmxConnector != null) {
@@ -184,7 +184,7 @@ public class JmxAccessor {
         // 定义JMX Accessor
         JmxAccessor jmxAccessor = new JmxAccessor();
         // jmxAccessor.connect("158.222.65.82", 6699);
-        jmxAccessor.connect("127.0.0.1", 11189);
+        jmxAccessor.connect("127.0.0.1", "11189");
         // jmxAccessor.connect("158.222.2.83", 6688);
 
         // // 定义对象名称

@@ -1,11 +1,12 @@
 package cn.com.yusys.icsp.rest.web;
 
 import cn.com.yusys.icsp.agent.AgentClient;
+import cn.com.yusys.icsp.agent.constants.AgentConstants;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
-import cn.com.yusys.icsp.bean.HostAgnetBean;
+import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -63,8 +65,8 @@ public class BcmpSmAgentListResource {
      * @算法描述:
      */
     @GetMapping(value = "/index")
-    public ResultDto<List<HostAgnetBean>> index(QueryModel model) throws Exception {
-        PageInfo<HostAgnetBean> pageInfo = bcmpSmAgentListService.index(model);
+    public ResultDto<List<HostAgentBean>> index(QueryModel model) throws Exception {
+        PageInfo<HostAgentBean> pageInfo = bcmpSmAgentListService.index(model);
         return ResultDto.success(pageInfo);
     }
 
@@ -148,7 +150,7 @@ public class BcmpSmAgentListResource {
             //查询当前节点详细信息
             BcmpSmNodeinfo bcmpSmNodeinfo= bcmpSmNodeinfoService.showByHostMessage(nodeInfo.getString("ip"),nodeInfo.getString("nodename"));
 
-            HostDescriptor hostDescriptor = new HostDescriptor(nodeInfo.getString("ip"), "", "", agentPort);
+            HostDescriptor hostDescriptor = new HostDescriptor(nodeInfo.getString("ip"), "", "", AgentConstants.DEFAULT_RMI_PORT);
             //初始化AgentClient
             AgentClient agentClient = new AgentClient(hostDescriptor);
 
