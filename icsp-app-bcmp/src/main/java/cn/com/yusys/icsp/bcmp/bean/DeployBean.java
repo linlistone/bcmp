@@ -1,18 +1,22 @@
 package cn.com.yusys.icsp.bcmp.bean;
 
+import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
+
+import java.util.List;
+
 public class DeployBean {
-    private String ids;
+    private List<BcmpSmNodeinfo> nodes;
     private String userId;
     private String version;
     private String needRestart;
     private String nodeType;
 
-    public String getIds() {
-        return ids;
+    public List<BcmpSmNodeinfo> getNodes() {
+        return nodes;
     }
 
-    public void setIds(String ids) {
-        this.ids = ids;
+    public void setNodes(List<BcmpSmNodeinfo> nodes) {
+        this.nodes = nodes;
     }
 
     public String getUserId() {
@@ -50,7 +54,7 @@ public class DeployBean {
     @Override
     public String toString() {
         return "DeployBean{" +
-                "ids='" + ids + '\'' +
+                "nodes=" + nodes +
                 ", userId='" + userId + '\'' +
                 ", version='" + version + '\'' +
                 ", needRestart='" + needRestart + '\'' +

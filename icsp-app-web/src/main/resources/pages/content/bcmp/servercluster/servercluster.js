@@ -44,7 +44,9 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     dialogFormVisible: false,
     deployFormData: {
       version: '',
-      needRestart: ''
+      needRestart: '',
+      //websocket连接端口编号
+      webSocketClientCode : '',
     },
     versionList: [],
     options: [{
@@ -71,7 +73,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     backDetailPageVisible: false,
     // 图片上传调用的路径
     nodeKey: [],
-    IMG_UPLOAD_URL: ''
+    IMG_UPLOAD_URL: '',
+
   };
   // page加载完成后调用ready方法
   exports.ready = function (hashCode, data, cite) {
@@ -161,28 +164,39 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         },
         // 版本部署
         deploy: function () {
-          var ids = '';
-          var nodeType = '';
+          var nodes = [];
+          // var nodeType = '';
           for (var i = 0; i < vmData.nodeInfos.length; i++) {
             // 被选中状态才加入
             if (vmData.nodeInfos[i].checked && !vmData.nodeInfos[i].disabled) {
-              ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
-              nodeType = vmData.nodeInfos[i].nodetype;
+              nodes.push(vmData.nodeInfos[i]);
+              // nodeType = vmData.nodeInfos[i].nodetype;
             }
           }
-          if (ids.indexOf(';') > 0) {
-            ids = ids.substr(0, ids.length - 1);
-          }
+          //
+          //
+          // var nodeType = '';
+          // for (var i = 0; i < vmData.nodeInfos.length; i++) {
+          //   // 被选中状态才加入
+          //   if (vmData.nodeInfos[i].checked && !vmData.nodeInfos[i].disabled) {
+          //     ids += vmData.nodeInfos[i].ip + '_' + vmData.nodeInfos[i].nodename + ';';
+          //     nodeType = vmData.nodeInfos[i].nodetype;
+          //   }
+          // }
+          // if (ids.indexOf(';') > 0) {
+          //   ids = ids.substr(0, ids.length - 1);
+          // }
           // 查询部署的版本
           var reqData = {
-            ids: ids,
+            nodes: nodes,
             needRestart: vmData.deployFormData.needRestart,
             userId: yufp.session.userId,
             version: vmData.deployFormData.version,
-            nodeType: nodeType
+            webSocketClientCode: vmData.deployFormData.webSocketClientCode
           };
           // 开始版本部署
           yufp.service.request({
+            method: 'POST',
             data: reqData,
             name: backend.bcmpService + '/agent/startDeploy',
             callback: function (code, message, data) {
@@ -346,11 +360,12 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
                 rowdata.nodetype = data.data[i].nodeType; // 节点类型
                 rowdata.starttime = ''; // 启动时间
                 rowdata.serverstatus = false; // 节点状态
-                rowdata.conncount = data.data[i].isLink; // 连接数量
+                rowdata.isLink = data.data[i].isLink; // 连接数量
                 rowdata.ip = data.data[i].hostIp;// ip
                 rowdata.index = i + 1; // 节点索引
                 rowdata.checked = false; // 节点索引
                 rowdata.disabled = true;// 节点可用
+                rowdata.applyPath = data.data[i].applyPath; //部署路径
                 this.nodeInfos.push(rowdata);
               }
             }
@@ -371,8 +386,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         // 建立 WebSocket
         connectSocket: function () {
           var me = this;
-          let clilentId = this.uuid();
-          let wsUrl = yufp.settings.url + '/websocket/' + clilentId;
+          let wsUrl = yufp.settings.url + '/websocket/' + this.deployFormData.webSocketClientCode;
           me.socketClient = new WebSocket('ws://' + wsUrl);
           me.socketClient.onopen = function (message) {
             yufp.logger.info('Connection open ...' + wsUrl);
@@ -527,6 +541,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       },
       // 界面加载成功
       mounted: function () {
+        //初始化websocket连接端口编号
+        this.deployFormData.webSocketClientCode = this.uuid()
         // 初始化服务节点
         this.initApplist();
         // 创建websocket连接

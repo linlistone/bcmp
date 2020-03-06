@@ -1,5 +1,7 @@
 package cn.com.yusys.icsp.bcmp;
 
+import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+
 public class HostDescriptor {
 	private String ip;
 	private int port;
@@ -20,6 +22,14 @@ public class HostDescriptor {
 		this.userName = userName;
 		this.password = password;
 		this.rmiPort = rmiPort;
+	}
+
+	public HostDescriptor(AgentRegistryInfo agentRegistryInfo) {
+		this.ip = agentRegistryInfo.getHostAddress();
+		this.rmiPort = agentRegistryInfo.getRmiPort();
+		this.osName = agentRegistryInfo.getOsName();
+		this.socketPort = agentRegistryInfo.getSocketPort();
+		this.hostName = agentRegistryInfo.getOsName();
 	}
 
 	public String getOsName() {

@@ -1,6 +1,7 @@
 package cn.com.yusys.icsp.rest.web;
 
 import cn.com.yusys.icsp.agent.AgentClient;
+import cn.com.yusys.icsp.agent.common.exception.AgentException;
 import cn.com.yusys.icsp.agent.constants.AgentConstants;
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
@@ -14,6 +15,7 @@ import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import cn.com.yusys.icsp.service.BcmpSmAgentListService;
 import cn.com.yusys.icsp.service.BcmpSmNodeinfoService;
+import cn.com.yusys.icsp.service.BcmpWebSocketService;
 import cn.com.yusys.icsp.service.NodeMonitorService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -38,13 +40,17 @@ import java.util.*;
 public class BcmpSmAgentListResource {
 
     private Logger logger = LoggerFactory.getLogger(BcmpSmAgentListResource.class);
-
+    //注入Agent服务列表
     @Autowired
     private BcmpSmAgentListService bcmpSmAgentListService;
     @Autowired
     private BcmpSmNodeinfoService bcmpSmNodeinfoService;
     @Autowired
     private NodeMonitorService nodeMonitorService;
+    //注入websocket消息服务
+    @Autowired
+    private BcmpWebSocketService bcmpWebSocketService;
+
 
 
     //agent 端口
@@ -108,24 +114,93 @@ public class BcmpSmAgentListResource {
     }
 
     @PostMapping({"/startDeploy"})
-    public ResultDto<Integer> startDeploy(@RequestBody DeployBean deployBean) {
+    public ResultDto<Integer> startDeploy(@RequestBody JSONObject deployBean) {
         logger.info("startDeploy:{}", deployBean.toString());
-        String[] hostip = null;
-        String[] nodeName = null;
-        String[] arrId = deployBean.getIds().split(",");
-        hostip = new String[arrId.length];
-        nodeName = new String[arrId.length];
-        for (int i = 0; i < nodeName.length; i++) {
-            String id = arrId[i].replaceFirst("_", ",");
-            hostip[i] = id.split(",")[0];
-            nodeName[i] = id.split(",")[1];
-        }
-        boolean needre = "true".equals(deployBean.getNeedRestart()) ? true : false;
-        try {
+        //部署节点信息
+        JSONArray deployNodes = deployBean.getJSONArray("nodes");
+        /**--------------------获取传入信息--------------------*/
+        //获取连接的websocket客户端编号
+        String webSocketClientCode =  deployBean.getString("webSocketClientCode");
+        //获取执行当前操作的用户编号
+        String operatorUser =  deployBean.getString("userId");
+        //获取连接的websocket客户端编号
+        String version =  deployBean.getString("version");
+        //获取是否需要重启
+        String needRestart =  deployBean.getString("needRestart");
+        //遍历部署节点信息
+        for (int i = 0; i < deployNodes.size() ; i++) {
+            //获取每个节点信息
+            JSONObject deployNode = deployNodes.getJSONObject(i);
+            //创建当前节点线程
+            new Thread(() -> {
+                String nodeMessageHeader = deployNode.getString("ip")+"_"+deployNode.getString("nodename")+"_"+deployNode.getString("nodetype")+": ";
+                try {
+                    /*
+                     *  步骤1: 开始上传文件
+                     *  步骤2: 正在上传文件
+                     *  步骤3: 文件上传结束,开始解压文件
+                     *  步骤4: 正在解压文件
+                     *  步骤5: 文件解压完成。[若不需要重启则操作结束,否则执行[步骤6]]
+                     *  步骤6: 重启应用服务器
+                     */
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"正在准备环境...");
+                    //创建Agent信息
+                    AgentRegistryInfo agentRegistryInfo = bcmpSmAgentListService.getAgentHostMapInstance().get(deployNode.getString("ip"));
+                    HostDescriptor hostDescriptor = new HostDescriptor(agentRegistryInfo);
+                    AgentClient agentClient = new AgentClient(hostDescriptor);
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"准备环境完成...");
 
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+                    //休眠3秒
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"正在开始上传文件...");
+                    File versionPackage = new File("deploy"+ File.separator +deployNode.getString("nodetype") + File.separator + version);
+                    agentClient.upload(versionPackage,version,deployNode.getString("applyPath")+"/workspace/versions/",false);
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"文件上传成功...");
+
+
+                    Thread.sleep(3000);
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"开始解压文件...");
+                    String remoteVersionPath = deployNode.getString("applyPath")+"/workspace/versions/";
+                    String remoteVersionUnzipPath = deployNode.getString("applyPath")+"/workspace/";
+                    String[] unzipProcessMessages = agentClient.goCmd("unzip -o "+remoteVersionPath+version+" -d "+remoteVersionUnzipPath).split("\n");
+                    for (String unzipProcessMessage : unzipProcessMessages) {
+                        bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+unzipProcessMessage);
+                    }
+
+                    bcmpWebSocketService.AppointSending(webSocketClientCode,nodeMessageHeader+"解压文件完成...");
+                } catch (AgentException agentException) {
+                    //String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort()+ "]";
+                    //logger.error(msg, agentException);
+                    agentException.printStackTrace();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                //return;
+            }).start();
+
+
         }
+
+
+
+
+
+
+        //String[] hostip = null;
+        //String[] nodeName = null;
+        //String[] arrId = deployBean.getIds().split(",");
+        //hostip = new String[arrId.length];
+        //nodeName = new String[arrId.length];
+        //for (int i = 0; i < nodeName.length; i++) {
+        //    String id = arrId[i].replaceFirst("_", ",");
+        //    hostip[i] = id.split(",")[0];
+        //    nodeName[i] = id.split(",")[1];
+        //}
+        //boolean needre = "true".equals(deployBean.getNeedRestart()) ? true : false;
+        //try {
+        //
+        //} catch (Exception e) {
+        //    logger.error(e.getMessage(), e);
+        //}
         return ResultDto.success(0);
     }
 
@@ -194,7 +269,6 @@ public class BcmpSmAgentListResource {
         if (checkedNodeList == null || checkedNodeList.isEmpty()) {
             return ResultDto.error("选中列表为空");
         }
-
         //遍历选中节点状态
         for (int i = 0, len = checkedNodeList.size(); i < len; i++) {
             //获取当前节点信息
