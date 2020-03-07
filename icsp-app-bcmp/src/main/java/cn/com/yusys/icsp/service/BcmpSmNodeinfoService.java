@@ -55,23 +55,20 @@ public class BcmpSmNodeinfoService extends BaseService {
 		BcmpSmNodeinfo bcmpSmNodeinfo = pageInfo.getList().get(0);
 		return  bcmpSmNodeinfo;
 	}
-	/**
-	 * @throws Exception
-	 * @方法名称: show
-	 * @方法描述: 查询信息 by NodeId
-	 * @参数与返回说明:
-	 * @算法描述: 无
+	/*
+	 *  @Description : 通过主机IP和节点名称获取节点详细信息
+	 *  @Author : Mr_Jiang
+	 *  @Date : 2020/3/7 17:06
 	 */
 	public BcmpSmNodeinfo showByHostMessage(String hostIp,String nodeName) throws Exception {
 		QueryModel model = new QueryModel();
 		model.addCondition("hostIp", hostIp);
 		model.addCondition("nodeName", nodeName);
-		PageInfo<BcmpSmNodeinfo> pageInfo = index(model);
-		if (pageInfo == null || pageInfo.getTotal()==0) {
+		List<BcmpSmNodeinfo> nodeList = bcmpSmNodeinfoMapper.selectByModel(model);
+		if (nodeList == null || nodeList.size()==0) {
 			throw new ICSPException("主机IP[" + hostIp+"],节点名称["+nodeName+"]的数据不存在");
 		}
-		BcmpSmNodeinfo bcmpSmNodeinfo = pageInfo.getList().get(0);
-		return  bcmpSmNodeinfo;
+		return  nodeList.get(0);
 	}
 
 	/**

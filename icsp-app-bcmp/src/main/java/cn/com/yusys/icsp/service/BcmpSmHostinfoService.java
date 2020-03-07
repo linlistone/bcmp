@@ -6,9 +6,6 @@ import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmHostinfoMapper;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import cn.com.yusys.icsp.rest.web.BcmpWebSocketResource;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
  * 主机信息配置
- *
  * @author linli
  * @email linli@yusys.com.cn
  * @date 2020-03-01 16:35:25
@@ -25,11 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BcmpSmHostinfoService extends BaseService {
 
-	private static ConcurrentHashMap<String, BcmpWebSocketResource> webSocketSet = new ConcurrentHashMap<>();
-
-
 	@Autowired
 	private BcmpSmHostinfoMapper bcmpSmHostinfoMapper;
+
 	/**
 	 * @throws Exception
 	 * @方法名称: show
@@ -58,6 +52,21 @@ public class BcmpSmHostinfoService extends BaseService {
 		}
 		BcmpSmHostinfo bcmpSmHostinfo = pageInfo.getList().get(0);
 		return  bcmpSmHostinfo;
+	}
+
+	/*
+	 *  @Description : 根据主机IP地址获取主机的详细信息
+	 *  @Author : Mr_Jiang
+	 *  @Date : 2020/3/7 17:10
+	 */
+	public BcmpSmHostinfo showByHostIp(String hostIp) throws Exception {
+		QueryModel model = new QueryModel();
+		model.addCondition("hostIp", hostIp);
+		List<BcmpSmHostinfo>  hostList= bcmpSmHostinfoMapper.selectByModel(model);
+		if (hostList == null || hostList.size()==0) {
+			throw new ICSPException("主机IP[" + hostIp+"]的数据不存在");
+		}
+		return  hostList.get(0);
 	}
 
 	/**

@@ -694,7 +694,7 @@ define(function (require, exports) {
       // 获取当前节点信息
       yufp.service.request({
         data: reqData,
-        name: backend.bcmpService + '/agent/getNodeDetailInfo',
+        name: backend.bcmpService + '/cluster/getNodeDetailInfo',
         callback: function (code, message, data) {
           data = data.data;
           yufp.logger.debug(data);

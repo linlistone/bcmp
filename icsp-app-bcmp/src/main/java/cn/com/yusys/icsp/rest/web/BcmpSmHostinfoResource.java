@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 /**
  * 主机信息配置
- *
  * @author linli
  * @email linli@yusys.com.cn
  * @date 2020-03-01 16:35:25
@@ -19,11 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/bcmpSmHostinfo")
 public class BcmpSmHostinfoResource extends BaseResouce {
-
-
 	@Autowired
 	private BcmpSmHostinfoService bcmpSmHostinfoService;
-
 	/**
 	 * @方法名称: create
 	 * @方法描述: 新增主机信息配置
@@ -35,7 +31,6 @@ public class BcmpSmHostinfoResource extends BaseResouce {
 		int result = bcmpSmHostinfoService.create(bcmpSmHostinfo);
 		return ResultDto.success( result);
 	}
-
 	/**
 	 * @方法名称:show
 	 * @方法描述:主机信息配置信息查询
@@ -59,7 +54,6 @@ public class BcmpSmHostinfoResource extends BaseResouce {
 		PageInfo<BcmpSmHostinfo> pageInfo = bcmpSmHostinfoService.index(model);
 		return ResultDto.success( pageInfo);
 	}
-
 	/**
 	 * @方法名称: update
 	 * @方法描述: 修改主机信息配置
@@ -71,7 +65,6 @@ public class BcmpSmHostinfoResource extends BaseResouce {
 		int result =  bcmpSmHostinfoService.update(bcmpSmHostinfo);
 		return ResultDto.success( result);
 	}
-
 	/**
 	 * @方法名称: delete
 	 * @方法描述: 删除主机信息配置
