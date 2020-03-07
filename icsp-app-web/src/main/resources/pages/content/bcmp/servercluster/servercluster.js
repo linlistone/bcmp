@@ -28,7 +28,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         trigger: 'blur'
       },
       fileList: [],
-      action: '/api/agent/uploadfile',
+      action: '/api/cluster/uploadfile',
       headers: {
         'Authorization': 'Basic ' + yufp.service.getToken()
       }
@@ -44,7 +44,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     deployFormData: {
       version: '',
       needRestart: '',
-      webSocketClientCode: ''
+      //websocket连接端口编号
+      webSocketClientCode : '',
     },
     versionList: [],
     options: [{
@@ -144,7 +145,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           yufp.service.request({
             method: 'get',
             data: reqData,
-            name: backend.bcmpService + '/agent/listVersion',
+            name: backend.bcmpService + '/cluster/listVersion',
             callback: function (code, message, data) {
               if (code == 0) {
                 vmData.versionList = data.data;
@@ -195,7 +196,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           yufp.service.request({
             method: 'POST',
             data: reqData,
-            name: backend.bcmpService + '/agent/startDeploy',
+            name: backend.bcmpService + '/cluster/startDeploy',
             callback: function (code, message, data) {
               // 登录成功
               if (code == 0) {
@@ -213,29 +214,26 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
 
         // 开启服务器
         startServer: function () {
-          // var nodeList = [];
-          // for (var i = 0; i < vmData.nodeInfos.length; i++) {
-          //   // 被选中状态才加入
-          //   if (vmData.nodeInfos[i].checked) {
-          //     var obj = {};
-          //     obj.hostip = vmData.nodeInfos[i].ip;
-          //     obj.nodeName = vmData.nodeInfos[i].nodename;
-          //     nodeList.push(obj);
-          //   }
-          // }
           var nodeList = [];
-          var obj = {
-            nodename: 'fox_server',
-            nodetype: '01',
-            starttime: '',
-            serverstatus: false,
-            conncount: undefined,
-            ip: '192.168.58.111',
-            index: 15,
-            checked: true,
-            disabled: false
-          };
-          nodeList.push(obj);
+          for (var i = 0; i < vmData.nodeInfos.length; i++) {
+            // 被选中状态才加入
+            if (vmData.nodeInfos[i].checked) {
+              nodeList.push(vmData.nodeInfos[i]);
+            }
+          }
+          // var nodeList = [];
+          // var obj = {
+          //   nodename: 'fox_server',
+          //   nodetype: '01',
+          //   starttime: '',
+          //   serverstatus: false,
+          //   conncount: undefined,
+          //   ip: '192.168.58.111',
+          //   index: 15,
+          //   checked: true,
+          //   disabled: false
+          // };
+          // nodeList.push(obj);
           if (nodeList.length == 0) {
             this.$message({
               message: '至少选中一台服务器进行操作',
@@ -250,7 +248,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
           yufp.service.request({
             method: 'POST',
             data: reqData,
-            name: backend.bcmpService + '/agent/startAppBatch',
+            name: backend.bcmpService + '/cluster/startAppBatch',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({
@@ -274,9 +272,43 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         },
         // 停止服务器
         stopServer: function () {
+          var nodeList = [];
+          for (var i = 0; i < vmData.nodeInfos.length; i++) {
+            // 被选中状态才加入
+            if (vmData.nodeInfos[i].checked) {
+              if (vmData.nodeInfos[i].checked) {
+                nodeList.push(vmData.nodeInfos[i]);
+              }
+            }
+          }
+          // var nodeList = [];
+          // var obj = {
+          //   nodename: 'fox_server',
+          //   nodetype: '01',
+          //   starttime: '',
+          //   serverstatus: false,
+          //   conncount: undefined,
+          //   ip: '192.168.58.111',
+          //   index: 15,
+          //   checked: true,
+          //   disabled: false
+          // };
+          // nodeList.push(obj);
+          if (nodeList.length == 0) {
+            this.$message({
+              message: '至少选中一台服务器进行操作',
+              type: 'warning'
+            });
+            return;
+          }
+          var reqData = {
+            userId: yufp.session.user.TELLER_ID,
+            checkedNodeList: nodeList
+          };
           yufp.service.request({
             method: 'POST',
-            name: 'node/websocket/getNodesStat',
+            data: reqData,
+            name: backend.bcmpService + '/cluster/shutdownAppBatch',
             callback: function (code, message, response) {
               if (code === 0) {
                 console.log('socket 消息发送成功!');
@@ -417,7 +449,13 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             for (var i = 0; i < vmData.nodeInfos.length; i++) {
               var vnode = vmData.nodeInfos[i];
               if (nodeId == vnode.nodeId) {
-                vmData.nodeInfos[i].disabled = wsData != 'true';
+                if(wsData=='open'){
+                  vmData.nodeInfos[i].serverstatus = true;
+                  vmData.nodeInfos[i].disabled = false;
+                }else{
+                  vmData.nodeInfos[i].serverstatus = false;
+                  vmData.nodeInfos[i].disabled = true;
+                }
               }
             }
           }
@@ -426,7 +464,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         queryNodeInfoStatus: function () {
           yufp.service.request({
             method: 'get',
-            name: backend.bcmpService + '/agent/nodeInfoStatus',
+            name: backend.bcmpService +'/cluster/getNodesState',
             callback: function (code, message, response) {
               yufp.logger.debug('nodeInfoStatus code' + code + ' message' + message);
             }
