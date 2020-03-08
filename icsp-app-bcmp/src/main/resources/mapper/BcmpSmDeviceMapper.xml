@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmDevice" id="BaseResultMap">
+        <result column="device_id"  property="deviceId" jdbcType="VARCHAR" />
+        <result column="device_number"  property="deviceNumber" jdbcType="VARCHAR" />
+        <result column="buy_date"  property="buyDate" jdbcType="VARCHAR" />
+        <result column="device_org"  property="deviceOrg" jdbcType="VARCHAR" />
+        <result column="device_type"  property="deviceType" jdbcType="VARCHAR" />
+        <result column="device_status"  property="deviceStatus" jdbcType="VARCHAR" />
+        <result column="device_comment"  property="deviceComment" jdbcType="VARCHAR" />
+        <result column="creator_user"  property="creatorUser" jdbcType="VARCHAR" />
+        <result column="creator_date"  property="creatorDate" jdbcType="VARCHAR" />
+        <result column="last_chg_user"  property="lastChgUser" jdbcType="VARCHAR" />
+        <result column="lash_chg_date"  property="lashChgDate" jdbcType="VARCHAR" />
+        <result column="last_rec_user"  property="lastRecUser" jdbcType="VARCHAR" />
+        <result column="last_rec_date"  property="lastRecDate" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		device_id,
+		device_number,
+		buy_date,
+		device_org,
+		device_type,
+		device_status,
+		device_comment,
+		creator_user,
+		creator_date,
+		last_chg_user,
+		lash_chg_date,
+		last_rec_user,
+		last_rec_date
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_device
+		<where>
+			<if test="condition.deviceId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceId)">
+						AND device_id like #{condition.deviceId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_id = #{condition.deviceId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceNumber != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceNumber)">
+						AND device_number like #{condition.deviceNumber,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_number = #{condition.deviceNumber,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.buyDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.buyDate)">
+						AND buy_date like #{condition.buyDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND buy_date = #{condition.buyDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceOrg != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceOrg)">
+						AND device_org like #{condition.deviceOrg,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_org = #{condition.deviceOrg,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceType)">
+						AND device_type like #{condition.deviceType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_type = #{condition.deviceType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceStatus != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceStatus)">
+						AND device_status like #{condition.deviceStatus,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_status = #{condition.deviceStatus,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceComment != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceComment)">
+						AND device_comment like #{condition.deviceComment,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_comment = #{condition.deviceComment,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.creatorUser != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.creatorUser)">
+						AND creator_user like #{condition.creatorUser,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND creator_user = #{condition.creatorUser,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.creatorDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.creatorDate)">
+						AND creator_date like #{condition.creatorDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND creator_date = #{condition.creatorDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastChgUser != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastChgUser)">
+						AND last_chg_user like #{condition.lastChgUser,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND last_chg_user = #{condition.lastChgUser,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lashChgDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lashChgDate)">
+						AND lash_chg_date like #{condition.lashChgDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND lash_chg_date = #{condition.lashChgDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastRecUser != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastRecUser)">
+						AND last_rec_user like #{condition.lastRecUser,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND last_rec_user = #{condition.lastRecUser,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.lastRecDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.lastRecDate)">
+						AND last_rec_date like #{condition.lastRecDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND last_rec_date = #{condition.lastRecDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmDevice">
+		insert into bcmp_sm_device
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deviceId != null">device_id ,</if>
+			<if test="deviceNumber != null">device_number ,</if>
+			<if test="buyDate != null">buy_date ,</if>
+			<if test="deviceOrg != null">device_org ,</if>
+			<if test="deviceType != null">device_type ,</if>
+			<if test="deviceStatus != null">device_status ,</if>
+			<if test="deviceComment != null">device_comment ,</if>
+			<if test="creatorUser != null">creator_user ,</if>
+			<if test="creatorDate != null">creator_date ,</if>
+			<if test="lastChgUser != null">last_chg_user ,</if>
+			<if test="lashChgDate != null">lash_chg_date ,</if>
+			<if test="lastRecUser != null">last_rec_user ,</if>
+			<if test="lastRecDate != null">last_rec_date </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+			<if test="deviceNumber != null">#{deviceNumber,jdbcType=VARCHAR},</if>
+			<if test="buyDate != null">#{buyDate,jdbcType=VARCHAR},</if>
+			<if test="deviceOrg != null">#{deviceOrg,jdbcType=VARCHAR},</if>
+			<if test="deviceType != null">#{deviceType,jdbcType=VARCHAR},</if>
+			<if test="deviceStatus != null">#{deviceStatus,jdbcType=VARCHAR},</if>
+			<if test="deviceComment != null">#{deviceComment,jdbcType=VARCHAR},</if>
+			<if test="creatorUser != null">#{creatorUser,jdbcType=VARCHAR},</if>
+			<if test="creatorDate != null">#{creatorDate,jdbcType=VARCHAR},</if>
+			<if test="lastChgUser != null">#{lastChgUser,jdbcType=VARCHAR},</if>
+			<if test="lashChgDate != null">#{lashChgDate,jdbcType=VARCHAR},</if>
+			<if test="lastRecUser != null">#{lastRecUser,jdbcType=VARCHAR},</if>
+			<if test="lastRecDate != null">#{lastRecDate,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDevice">
+		update bcmp_sm_device
+		<set>
+			<if test="deviceId != null">device_id = #{deviceId,jdbcType=VARCHAR},</if>
+			<if test="deviceNumber != null">device_number = #{deviceNumber,jdbcType=VARCHAR},</if>
+			<if test="buyDate != null">buy_date = #{buyDate,jdbcType=VARCHAR},</if>
+			<if test="deviceOrg != null">device_org = #{deviceOrg,jdbcType=VARCHAR},</if>
+			<if test="deviceType != null">device_type = #{deviceType,jdbcType=VARCHAR},</if>
+			<if test="deviceStatus != null">device_status = #{deviceStatus,jdbcType=VARCHAR},</if>
+			<if test="deviceComment != null">device_comment = #{deviceComment,jdbcType=VARCHAR},</if>
+			<if test="creatorUser != null">creator_user = #{creatorUser,jdbcType=VARCHAR},</if>
+			<if test="creatorDate != null">creator_date = #{creatorDate,jdbcType=VARCHAR},</if>
+			<if test="lastChgUser != null">last_chg_user = #{lastChgUser,jdbcType=VARCHAR},</if>
+			<if test="lashChgDate != null">lash_chg_date = #{lashChgDate,jdbcType=VARCHAR},</if>
+			<if test="lastRecUser != null">last_rec_user = #{lastRecUser,jdbcType=VARCHAR},</if>
+			<if test="lastRecDate != null">last_rec_date = #{lastRecDate,jdbcType=VARCHAR}</if>
+		</set>
+		where device_id = #{deviceId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_device where  device_id = #{deviceId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_device where device_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="deviceId">#{deviceId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

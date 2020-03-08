@@ -79,11 +79,9 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       methods: {
         // 初始化服务节点
         initApplist: function () {
-          let reqData = { page: 1, size: 9999 };
           this.nodeInfos.splice(0, this.nodeInfos.length);// 清空数组
           yufp.service.request({
-            data: reqData,
-            name: backend.bcmpService + '/bcmpSmNodeinfo/index',
+            name: backend.bcmpService + '/bcmpSmNodeinfo/all',
             callback: (code, message, data) => {
               for (var i = 0; i < data.data.length; i++) {
                 let rowdata = {};
@@ -130,7 +128,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
             me.queryNodeInfoStatus();
           };
           this.queryNodeInfoStatus();
-          this.queryNodeInfoInterval = setInterval(queryNodeInfoFn, 1000 * 60);
+          this.queryNodeInfoInterval = setInterval(queryNodeInfoFn, 1000 * 10);
         },
         // 节点点击事件
         viewNodeInfo: function (item, index) {

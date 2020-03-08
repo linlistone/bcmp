@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmDeployMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmDeploy" id="BaseResultMap">
+        <result column="deploy_id"  property="deployId" jdbcType="VARCHAR" />
+        <result column="version_id"  property="versionId" jdbcType="VARCHAR" />
+        <result column="node_id"  property="nodeId" jdbcType="VARCHAR" />
+        <result column="deploy_user"  property="deployUser" jdbcType="VARCHAR" />
+        <result column="deploy_date"  property="deployDate" jdbcType="VARCHAR" />
+        <result column="deploy_step"  property="deployStep" jdbcType="VARCHAR" />
+        <result column="deploy_step_status"  property="deployStepStatus" jdbcType="VARCHAR" />
+        <result column="deploy_remark"  property="deployRemark" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		deploy_id,
+		version_id,
+		node_id,
+		deploy_user,
+		deploy_date,
+		deploy_step,
+		deploy_step_status,
+		deploy_remark
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_deploy
+		<where>
+			<if test="condition.deployId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployId)">
+						AND deploy_id like #{condition.deployId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_id = #{condition.deployId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionId)">
+						AND version_id like #{condition.versionId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_id = #{condition.versionId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.nodeId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.nodeId)">
+						AND node_id like #{condition.nodeId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND node_id = #{condition.nodeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deployUser != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployUser)">
+						AND deploy_user like #{condition.deployUser,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_user = #{condition.deployUser,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deployDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployDate)">
+						AND deploy_date like #{condition.deployDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_date = #{condition.deployDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deployStep != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployStep)">
+						AND deploy_step like #{condition.deployStep,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_step = #{condition.deployStep,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deployStepStatus != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployStepStatus)">
+						AND deploy_step_status like #{condition.deployStepStatus,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_step_status = #{condition.deployStepStatus,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deployRemark != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployRemark)">
+						AND deploy_remark like #{condition.deployRemark,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_remark = #{condition.deployRemark,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeploy">
+		insert into bcmp_sm_deploy
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deployId != null">deploy_id ,</if>
+			<if test="versionId != null">version_id ,</if>
+			<if test="nodeId != null">node_id ,</if>
+			<if test="deployUser != null">deploy_user ,</if>
+			<if test="deployDate != null">deploy_date ,</if>
+			<if test="deployStep != null">deploy_step ,</if>
+			<if test="deployStepStatus != null">deploy_step_status ,</if>
+			<if test="deployRemark != null">deploy_remark </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deployId != null">#{deployId,jdbcType=VARCHAR},</if>
+			<if test="versionId != null">#{versionId,jdbcType=VARCHAR},</if>
+			<if test="nodeId != null">#{nodeId,jdbcType=VARCHAR},</if>
+			<if test="deployUser != null">#{deployUser,jdbcType=VARCHAR},</if>
+			<if test="deployDate != null">#{deployDate,jdbcType=VARCHAR},</if>
+			<if test="deployStep != null">#{deployStep,jdbcType=VARCHAR},</if>
+			<if test="deployStepStatus != null">#{deployStepStatus,jdbcType=VARCHAR},</if>
+			<if test="deployRemark != null">#{deployRemark,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeploy">
+		update bcmp_sm_deploy
+		<set>
+			<if test="deployId != null">deploy_id = #{deployId,jdbcType=VARCHAR},</if>
+			<if test="versionId != null">version_id = #{versionId,jdbcType=VARCHAR},</if>
+			<if test="nodeId != null">node_id = #{nodeId,jdbcType=VARCHAR},</if>
+			<if test="deployUser != null">deploy_user = #{deployUser,jdbcType=VARCHAR},</if>
+			<if test="deployDate != null">deploy_date = #{deployDate,jdbcType=VARCHAR},</if>
+			<if test="deployStep != null">deploy_step = #{deployStep,jdbcType=VARCHAR},</if>
+			<if test="deployStepStatus != null">deploy_step_status = #{deployStepStatus,jdbcType=VARCHAR},</if>
+			<if test="deployRemark != null">deploy_remark = #{deployRemark,jdbcType=VARCHAR}</if>
+		</set>
+		where deploy_id = #{deployId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_deploy where  deploy_id = #{deployId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_deploy where deploy_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="deployId">#{deployId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

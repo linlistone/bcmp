@@ -1,6 +1,6 @@
 package cn.com.yusys.icsp.bean;
 
-import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmAgent;
 import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 
@@ -15,12 +15,12 @@ public class HostAgentBean {
     //节点信息
     private BcmpSmNodeinfo bcmpSmNodeinfo;
     //Agent代理信息
-    private AgentRegistryInfo agentRegistryInfo;
+    private BcmpSmAgent agentRegistryInfo;
 
     public HostAgentBean() {
     }
 
-    public HostAgentBean(BcmpSmHostinfo bcmpSmHostinfo, BcmpSmNodeinfo bcmpSmNodeinfo, AgentRegistryInfo agentRegistryInfo) {
+    public HostAgentBean(BcmpSmHostinfo bcmpSmHostinfo, BcmpSmNodeinfo bcmpSmNodeinfo, BcmpSmAgent agentRegistryInfo) {
         this.bcmpSmHostinfo = bcmpSmHostinfo;
         this.bcmpSmNodeinfo = bcmpSmNodeinfo;
         this.agentRegistryInfo = agentRegistryInfo;
@@ -30,7 +30,7 @@ public class HostAgentBean {
         return bcmpSmNodeinfo;
     }
 
-    public void setBcmpSmNodeinfo(final BcmpSmNodeinfo bcmpSmNodeinfo) {
+    public void setBcmpSmNodeinfo(BcmpSmNodeinfo bcmpSmNodeinfo) {
         this.bcmpSmNodeinfo = bcmpSmNodeinfo;
     }
 
@@ -38,28 +38,26 @@ public class HostAgentBean {
         return bcmpSmHostinfo;
     }
 
-    public void setBcmpSmHostinfo(final BcmpSmHostinfo bcmpSmHostinfo) {
+    public void setBcmpSmHostinfo(BcmpSmHostinfo bcmpSmHostinfo) {
         this.bcmpSmHostinfo = bcmpSmHostinfo;
     }
 
-    public AgentRegistryInfo getAgentRegistryInfo() {
+    public BcmpSmAgent getAgentRegistryInfo() {
         return agentRegistryInfo;
     }
 
-    public void setAgentRegistryInfo(final AgentRegistryInfo agentRegistryInfo) {
+    public void setAgentRegistryInfo(BcmpSmAgent agentRegistryInfo) {
         this.agentRegistryInfo = agentRegistryInfo;
     }
-
 
     @Override
     public String toString() {
         return "HostAgentBean{" +
-                "bcmpSmNodeinfo=" + bcmpSmNodeinfo +
-                ", bcmpSmHostinfo=" + bcmpSmHostinfo +
-                ", agentRegistryInfo=" + agentRegistryInfo +
+                "bcmpSmNodeinfo=" + bcmpSmNodeinfo.toString() +
+                ", bcmpSmHostinfo=" + bcmpSmHostinfo.toString() +
+                ", agentRegistryInfo=" + agentRegistryInfo.toString() +
                 '}';
     }
-
 
 
 }

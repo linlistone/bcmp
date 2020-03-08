@@ -41,13 +41,28 @@ public abstract class BaseService {
     }
 
     protected List<Map<String,Object>> changerList(List<Map<String,Object>> oldList){
-        List<Map<String, Object>> newist = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();
         for (Map<String, Object> map : oldList) {
             Map<String, Object> swMap = mapUnderscoreToCamelCase(map);
-            newist.add(swMap);
+            newList.add(swMap);
         }
-        return newist;
+        return newList;
     }
+    /**
+     * 判断内容中是否包含指定的关键字
+     *
+     * @param content
+     * @param key
+     * @return
+     */
+    protected boolean containsKey(String content, String key) {
+        if (content == null) {
+            return false;
+        }
+        int index = content.indexOf(key);
+        return (index != -1);
+    }
+
 
     /**
      * 下划线 转 驼峰
@@ -73,6 +88,7 @@ public abstract class BaseService {
         }
         return sb.toString();
     }
+
 
 
 }

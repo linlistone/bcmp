@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmAgentMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmAgent" id="BaseResultMap">
+        <result column="agent_id"  property="agentId" jdbcType="VARCHAR" />
+        <result column="host_name"  property="hostName" jdbcType="VARCHAR" />
+        <result column="host_address"  property="hostAddress" jdbcType="VARCHAR" />
+        <result column="os_name"  property="osName" jdbcType="VARCHAR" />
+        <result column="rmi_port"  property="rmiPort" jdbcType="VARCHAR" />
+        <result column="socket_port"  property="socketPort" jdbcType="VARCHAR" />
+        <result column="registry_time"  property="registryTime" jdbcType="VARCHAR" />
+        <result column="version"  property="version" jdbcType="VARCHAR" />
+        <result column="status"  property="status" jdbcType="VARCHAR" />
+        <result column="socket_status"  property="socketStatus" jdbcType="VARCHAR" />
+        <result column="app_workspace"  property="appWorkspace" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		agent_id,
+		host_name,
+		host_address,
+		os_name,
+		rmi_port,
+		socket_port,
+		registry_time,
+		version,
+		status,
+		socket_status,
+		app_workspace
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_agent
+		<where>
+			<if test="condition.agentId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.agentId)">
+						AND agent_id like #{condition.agentId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND agent_id = #{condition.agentId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.hostName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostName)">
+						AND host_name like #{condition.hostName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND host_name = #{condition.hostName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.hostAddress != null and condition.hostAddress != '' ">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.hostAddress)">
+						AND host_address like #{condition.hostAddress,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND host_address = #{condition.hostAddress,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.osName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.osName)">
+						AND os_name like #{condition.osName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND os_name = #{condition.osName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.rmiPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.rmiPort)">
+						AND rmi_port like #{condition.rmiPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND rmi_port = #{condition.rmiPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.socketPort != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.socketPort)">
+						AND socket_port like #{condition.socketPort,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND socket_port = #{condition.socketPort,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.registryTime != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.registryTime)">
+						AND registry_time like #{condition.registryTime,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND registry_time = #{condition.registryTime,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.version != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.version)">
+						AND version like #{condition.version,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version = #{condition.version,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.status != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.status)">
+						AND status like #{condition.status,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND status = #{condition.status,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.socketStatus != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.socketStatus)">
+						AND socket_status like #{condition.socketStatus,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND socket_status = #{condition.socketStatus,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appWorkspace != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appWorkspace)">
+						AND app_workspace like #{condition.appWorkspace,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_workspace = #{condition.appWorkspace,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmAgent">
+		insert into bcmp_sm_agent
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="agentId != null">agent_id ,</if>
+			<if test="hostName != null">host_name ,</if>
+			<if test="hostAddress != null">host_address ,</if>
+			<if test="osName != null">os_name ,</if>
+			<if test="rmiPort != null">rmi_port ,</if>
+			<if test="socketPort != null">socket_port ,</if>
+			<if test="registryTime != null">registry_time ,</if>
+			<if test="version != null">version ,</if>
+			<if test="status != null">status ,</if>
+			<if test="socketStatus != null">socket_status ,</if>
+			<if test="appWorkspace != null">app_workspace </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="agentId != null">#{agentId,jdbcType=VARCHAR},</if>
+			<if test="hostName != null">#{hostName,jdbcType=VARCHAR},</if>
+			<if test="hostAddress != null">#{hostAddress,jdbcType=VARCHAR},</if>
+			<if test="osName != null">#{osName,jdbcType=VARCHAR},</if>
+			<if test="rmiPort != null">#{rmiPort,jdbcType=VARCHAR},</if>
+			<if test="socketPort != null">#{socketPort,jdbcType=VARCHAR},</if>
+			<if test="registryTime != null">#{registryTime,jdbcType=VARCHAR},</if>
+			<if test="version != null">#{version,jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status,jdbcType=VARCHAR},</if>
+			<if test="socketStatus != null">#{socketStatus,jdbcType=VARCHAR},</if>
+			<if test="appWorkspace != null">#{appWorkspace,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmAgent">
+		update bcmp_sm_agent
+		<set>
+			<if test="agentId != null">agent_id = #{agentId,jdbcType=VARCHAR},</if>
+			<if test="hostName != null">host_name = #{hostName,jdbcType=VARCHAR},</if>
+			<if test="hostAddress != null">host_address = #{hostAddress,jdbcType=VARCHAR},</if>
+			<if test="osName != null">os_name = #{osName,jdbcType=VARCHAR},</if>
+			<if test="rmiPort != null">rmi_port = #{rmiPort,jdbcType=VARCHAR},</if>
+			<if test="socketPort != null">socket_port = #{socketPort,jdbcType=VARCHAR},</if>
+			<if test="registryTime != null">registry_time = #{registryTime,jdbcType=VARCHAR},</if>
+			<if test="version != null">version = #{version,jdbcType=VARCHAR},</if>
+			<if test="status != null">status = #{status,jdbcType=VARCHAR},</if>
+			<if test="socketStatus != null">socket_status = #{socketStatus,jdbcType=VARCHAR},</if>
+			<if test="appWorkspace != null">app_workspace = #{appWorkspace,jdbcType=VARCHAR}</if>
+		</set>
+		where agent_id = #{agentId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_agent where  agent_id = #{agentId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_agent where agent_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="agentId">#{agentId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

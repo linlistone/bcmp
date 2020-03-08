@@ -1,15 +1,14 @@
 package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.agent.AgentClient;
-import cn.com.yusys.icsp.agent.common.exception.AgentException;
+import cn.com.yusys.icsp.base.base.BaseService;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
-import cn.com.yusys.icsp.bcmp.VersionInfo;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
-import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmAgent;
 import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import com.alibaba.fastjson.JSON;
@@ -21,14 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @description: bcmp服务器集群信息Service
@@ -37,11 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 @Transactional
-public class BcmpSmServerClusterService {
+public class BcmpSmServerClusterService extends BaseService {
     //初始化日志信息
     private Logger logger = LoggerFactory.getLogger(BcmpSmServerClusterService.class);
-    //代理服务器节点注册列表
-    private static ConcurrentHashMap<String, AgentRegistryInfo> agentHostMap = new ConcurrentHashMap<>();
     //注入websocket消息服务
     @Autowired
     private BcmpWebSocketService bcmpWebSocketService;
@@ -54,58 +46,10 @@ public class BcmpSmServerClusterService {
     //注入服务器节点机器信息服务
     @Autowired
     private BcmpSmNodeMonitorService bcmpSmNodeMonitorService;
+    //代理服务器信息
+    @Autowired
+    private BcmpSmAgentService bcmpSmAgentService;
 
-    /*
-     *  @Description : 向外提供代理服务器节点注册列表
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/5 14:52
-     */
-    public ConcurrentHashMap<String, AgentRegistryInfo> getAgentHostMapInstance() {
-        return agentHostMap;
-    }
-
-    /*
-     *  @Description : agent信息注册
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/7 15:42
-     */
-    public int registry(AgentRegistryInfo agentRegistryInfo) throws Exception {
-        logger.info("registry:" + agentRegistryInfo.toString());
-        agentHostMap.put(agentRegistryInfo.getHostAddress(), agentRegistryInfo);
-        return 0;
-    }
-
-    /*
-     *  @Description : 服务器集群信息上传版本文件到服务器
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/7 15:58
-     */
-    public int uploadFile(MultipartFile file, VersionInfo versionInfo) {
-        String serviceName = versionInfo.getName().toLowerCase();
-        String originalFilename = file.getOriginalFilename();
-        String outFileName = versionInfo.getVersion() + "_" + originalFilename;
-        this.logger.info("上传服务:{}对应资源包", (Object) serviceName);
-        try (InputStream inputStream = file.getInputStream()) {
-            File outFile = new File("deploy" + File.separator + serviceName + File.separator + outFileName);
-            if (!outFile.exists()) {
-                File fileDir = outFile.getParentFile();
-                if (!fileDir.exists() || !fileDir.isDirectory()) {
-                    fileDir.mkdirs();
-                }
-            }
-            this.logger.info("上传文件到本地:{}", (Object) outFile.getAbsolutePath());
-            OutputStream os = new FileOutputStream(outFile);
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
-        } catch (Exception e) {
-            this.logger.error(e.getMessage());
-            throw new ICSPException(e.getMessage(), e);
-        }
-        return 0;
-    }
 
     /*
      *  @Description : 获取服务器上版本文件的文件列表
@@ -145,7 +89,7 @@ public class BcmpSmServerClusterService {
             //从数据库获取节点信息,并赋值给服务器信息中的节点信息Bean
             BcmpSmNodeinfo bcmpSmNodeinfo = bcmpSmNodeinfoService.showByHostMessage(hostIp, nodeName);
             //从Agent注册列表获取Agent信息,并赋值给服务器信息中的Agent注册信息Bean
-            AgentRegistryInfo agentRegistryInfo = agentHostMap.get(hostIp);
+            BcmpSmAgent agentRegistryInfo = bcmpSmAgentService.getBcmpSmAgent(hostIp);
             //有参构造函数初始化服务器信息
             HostAgentBean hostAgentBean = new HostAgentBean(bcmpSmHostinfo, bcmpSmNodeinfo, agentRegistryInfo);
             /**---------------------------------通过Agent代理方式获取--------------------------------**/
@@ -233,7 +177,7 @@ public class BcmpSmServerClusterService {
              */
             bcmpWebSocketService.AppointSending(webSocketClientCode, nodeMessageHeader + "正在准备环境...");
             //创建Agent信息
-            AgentRegistryInfo agentRegistryInfo = agentHostMap.get(deployNode.getString("ip"));
+            BcmpSmAgent agentRegistryInfo = bcmpSmAgentService.getBcmpSmAgent(deployNode.getString("ip"));
             HostDescriptor hostDescriptor = new HostDescriptor(agentRegistryInfo);
             AgentClient agentClient = new AgentClient(hostDescriptor);
             bcmpWebSocketService.AppointSending(webSocketClientCode, nodeMessageHeader + "准备环境完成...");
@@ -307,7 +251,7 @@ public class BcmpSmServerClusterService {
                 //获取节点详细信息
                 BcmpSmNodeinfo bcmpSmNodeinfo = bcmpSmNodeinfos.get(i);
                 //获取当前服务器agent注册信息
-                AgentRegistryInfo agentRegistryInfo = agentHostMap.get(bcmpSmNodeinfo.getHostIp());
+                BcmpSmAgent agentRegistryInfo = bcmpSmAgentService.getBcmpSmAgent(bcmpSmNodeinfo.getHostIp());
                 response = JSON.parseObject(JSON.toJSONString(bcmpSmNodeinfo));
                 //代理不存在
                 if (agentRegistryInfo != null) {
@@ -343,7 +287,7 @@ public class BcmpSmServerClusterService {
             //查询当前节点详细信息
             BcmpSmNodeinfo bcmpSmNodeinfo = bcmpSmNodeinfoService.show(nodeInfo.getString("nodeId"));
             //从agent注册列表中获取服务器agent注册信息
-            AgentRegistryInfo agentRegistryInfo = agentHostMap.get(nodeInfo.getString("ip"));
+            BcmpSmAgent agentRegistryInfo = bcmpSmAgentService.getBcmpSmAgent(nodeInfo.getString("ip"));
             boolean isStarted = checkServerState(agentRegistryInfo, bcmpSmNodeinfo);
             //输出当前服务器是否启动
             logger.info("服务器[{}-->{}]", new Object[]{nodeInfo.getString("ip"), isStarted});
@@ -378,7 +322,7 @@ public class BcmpSmServerClusterService {
      * @return
      * @throws Exception
      */
-    private boolean checkServerState(AgentRegistryInfo agentRegistryInfo, BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
+    private boolean checkServerState(BcmpSmAgent agentRegistryInfo, BcmpSmNodeinfo bcmpSmNodeinfo) throws Exception {
         HostDescriptor hostDescriptor = new HostDescriptor(agentRegistryInfo);
         //获取查询当前服务器状态脚本
         String checkStateCmd = ShellScriptManager.getScript(hostDescriptor.getOsName(), "checkServerState.sh", bcmpSmNodeinfo.getHttpPort());
@@ -388,18 +332,5 @@ public class BcmpSmServerClusterService {
         return this.containsKey(execScriptResult, "open");
     }
 
-    /**
-     * 判断内容中是否包含指定的关键字
-     *
-     * @param content
-     * @param key
-     * @return
-     */
-    private boolean containsKey(String content, String key) {
-        if (content == null) {
-            return false;
-        }
-        int index = content.indexOf(key);
-        return (index != -1);
-    }
+
 }

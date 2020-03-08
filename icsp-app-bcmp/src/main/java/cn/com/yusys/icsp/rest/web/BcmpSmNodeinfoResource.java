@@ -30,6 +30,20 @@ public class BcmpSmNodeinfoResource extends BaseResouce {
     private BcmpSmNodeinfoService bcmpSmNodeinfoService;
 
     /**
+     * @方法名称:index
+     * @方法描述:节点信息表查询
+     * @参数与返回说明:
+     * @算法描述:
+     */
+    @GetMapping(value = "/all")
+    public ResultDto<List<BcmpSmNodeinfo>> all(QueryModel model)
+            throws Exception {
+        List<BcmpSmNodeinfo> pageInfo = bcmpSmNodeinfoService.selectAll(model);
+        return ResultDto.success(pageInfo);
+    }
+
+
+    /**
      * @方法名称: create
      * @方法描述: 新增节点信息表
      * @参数与返回说明:

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmVersionMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmVersion" id="BaseResultMap">
+        <result column="version_id"  property="versionId" jdbcType="VARCHAR" />
+        <result column="version_num"  property="versionNum" jdbcType="VARCHAR" />
+        <result column="version_type"  property="versionType" jdbcType="VARCHAR" />
+        <result column="version_path"  property="versionPath" jdbcType="VARCHAR" />
+        <result column="version_upload_date"  property="versionUploadDate" jdbcType="VARCHAR" />
+        <result column="version_upload_use"  property="versionUploadUse" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		version_id,
+		version_num,
+		version_type,
+		version_path,
+		version_upload_date,
+		version_upload_use
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_version
+		<where>
+			<if test="condition.versionId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionId)">
+						AND version_id like #{condition.versionId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_id = #{condition.versionId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionNum != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionNum)">
+						AND version_num like #{condition.versionNum,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_num = #{condition.versionNum,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionType != null and condition.versionType !='' ">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionType)">
+						AND version_type like #{condition.versionType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_type = #{condition.versionType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionPath != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionPath)">
+						AND version_path like #{condition.versionPath,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_path = #{condition.versionPath,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionUploadDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionUploadDate)">
+						AND version_upload_date like #{condition.versionUploadDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_upload_date = #{condition.versionUploadDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionUploadUse != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionUploadUse)">
+						AND version_upload_use like #{condition.versionUploadUse,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND version_upload_use = #{condition.versionUploadUse,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmVersion">
+		insert into bcmp_sm_version
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="versionId != null">version_id ,</if>
+			<if test="versionNum != null">version_num ,</if>
+			<if test="versionType != null">version_type ,</if>
+			<if test="versionPath != null">version_path ,</if>
+			<if test="versionUploadDate != null">version_upload_date ,</if>
+			<if test="versionUploadUse != null">version_upload_use </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="versionId != null">#{versionId,jdbcType=VARCHAR},</if>
+			<if test="versionNum != null">#{versionNum,jdbcType=VARCHAR},</if>
+			<if test="versionType != null">#{versionType,jdbcType=VARCHAR},</if>
+			<if test="versionPath != null">#{versionPath,jdbcType=VARCHAR},</if>
+			<if test="versionUploadDate != null">#{versionUploadDate,jdbcType=VARCHAR},</if>
+			<if test="versionUploadUse != null">#{versionUploadUse,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmVersion">
+		update bcmp_sm_version
+		<set>
+			<if test="versionId != null">version_id = #{versionId,jdbcType=VARCHAR},</if>
+			<if test="versionNum != null">version_num = #{versionNum,jdbcType=VARCHAR},</if>
+			<if test="versionType != null">version_type = #{versionType,jdbcType=VARCHAR},</if>
+			<if test="versionPath != null">version_path = #{versionPath,jdbcType=VARCHAR},</if>
+			<if test="versionUploadDate != null">version_upload_date = #{versionUploadDate,jdbcType=VARCHAR},</if>
+			<if test="versionUploadUse != null">version_upload_use = #{versionUploadUse,jdbcType=VARCHAR}</if>
+		</set>
+		where version_id = #{versionId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_version where  version_id = #{versionId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_version where version_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="versionId">#{versionId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

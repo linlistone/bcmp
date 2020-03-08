@@ -6,7 +6,7 @@ import cn.com.yusys.icsp.bcmp.jmx.JmxAccessor;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.util.StringUtil;
-import cn.com.yusys.icsp.domain.AgentRegistryInfo;
+import cn.com.yusys.icsp.domain.BcmpSmAgent;
 import cn.com.yusys.icsp.domain.BcmpSmHostinfo;
 import cn.com.yusys.icsp.domain.BcmpSmNodeinfo;
 import org.slf4j.Logger;
@@ -30,23 +30,25 @@ public class BcmpSmNodeMonitorService {
     private JmxAccessor jvmAccessor;
     //JVM环境是否已经准备完成
     private boolean isPrepareJvm = false;
+
     /*
      *  @Description : 准备JVM环境
      *  @Author : Mr_Jiang
      *  @Date : 2020/3/5 17:44
      */
-    public synchronized boolean prepareJvm(String hostIp,String jvmPort) {
+    public synchronized boolean prepareJvm(String hostIp, String jvmPort) {
         if (isPrepareJvm) {
             return true;
         }
         // 定义JVM连接器
         jvmAccessor = new JmxAccessor();
-        boolean connected = jvmAccessor.connect(hostIp,jvmPort);
+        boolean connected = jvmAccessor.connect(hostIp, jvmPort);
         if (connected) {
             this.isPrepareJvm = true;
         }
         return connected;
     }
+
     /*
      *  @Description : 释放JVM环境
      *  @Author : Mr_Jiang
@@ -71,7 +73,7 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
         // 获取当前时间
         long s = System.currentTimeMillis();
         logger.info("开始获取cup使用率");
@@ -79,7 +81,7 @@ public class BcmpSmNodeMonitorService {
         float cpusage = -1;
         try {
             // 获取解压命令
-            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getCpuUsage.sh",bcmpSmNodeinfo.getJvmPort());
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getCpuUsage.sh", bcmpSmNodeinfo.getJvmPort());
             if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
                 HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
                 // 执行命令
@@ -101,11 +103,12 @@ public class BcmpSmNodeMonitorService {
             logger.info("完成获取cpu使用率，耗时:" + (System.currentTimeMillis() - s) + "毫秒");
             return cpusage;
         } catch (Exception e) {
-            String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort()+ "]";
+            String msg = "获取cpu使用率，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             throw e;
         }
     }
+
     /*
      *  @Description : 获取内存总数
      *  @Author : Mr_Jiang
@@ -115,7 +118,7 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
         // 判断JMX环境是否准备成功,若连接失败则返回内存数为0
         if (!isPrepareJvm) {
             return 0;
@@ -144,6 +147,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取系统运行时间
      *  @Author : Mr_Jiang
@@ -167,6 +171,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取峰值线程数
      *  @Author : Mr_Jiang
@@ -181,15 +186,16 @@ public class BcmpSmNodeMonitorService {
             // 定义对象名称
             String objectName = "java.lang:type=Threading";
             // 获取峰值线程数
-            int count = (Integer) jvmAccessor.getAttribute(objectName,"PeakThreadCount");
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "PeakThreadCount");
             return count;
         } catch (Exception e) {
-            String msg = "获取峰值线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            String msg = "获取峰值线程数，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             //this.releaseJvm();
             throw e;
         }
     }
+
     /*
      *  @Description : 获取守护线程数
      *  @Author : Mr_Jiang
@@ -213,6 +219,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取当前活动线程数
      *  @Author : Mr_Jiang
@@ -236,6 +243,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取已经启动过的线程数
      *  @Author : Mr_Jiang
@@ -259,6 +267,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取JVM输入参数
      *  @Author : Mr_Jiang
@@ -282,6 +291,7 @@ public class BcmpSmNodeMonitorService {
             throw e;
         }
     }
+
     /*
      *  @Description : 获取当前加载的类数量
      *  @Author : Mr_Jiang
@@ -296,15 +306,16 @@ public class BcmpSmNodeMonitorService {
             // 定义对象名称
             String objectName = "java.lang:type=ClassLoading";
             // 获取当前加载的类数量
-            int count = (Integer) jvmAccessor.getAttribute(objectName,"LoadedClassCount");
+            int count = (Integer) jvmAccessor.getAttribute(objectName, "LoadedClassCount");
             return count;
         } catch (Exception e) {
-            String msg = "获取当前加载的类数量，错误服务器[host:" + bcmpSmNodeinfo.getHostIp()+ " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
+            String msg = "获取当前加载的类数量，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);
             //this.releaseJvm();
             throw e;
         }
     }
+
     /*
      *  @Description : 获取主机的分区使用情况
      *  @Author : Mr_Jiang
@@ -316,18 +327,18 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        AgentRegistryInfo agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
         // 获取当前时间
         long s = System.currentTimeMillis();
         logger.info("开始获取主机硬盘使用情况");
         try {
             // 获取解压命令
-            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(),"getDiskState.sh",bcmpSmNodeinfo.getJvmPort());
+            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getDiskState.sh", bcmpSmNodeinfo.getJvmPort());
             if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
                 HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
                 // 执行命令
                 String response = BcmpTools.goShell(hostDescriptor, script);
-                System.out.println("获取分区情况:"+response);
+                System.out.println("获取分区情况:" + response);
                 //String[] items = StringUtil.split(res, "\n");
                 //for (int i = 0; i < items.length; i++) {
                 //    try {

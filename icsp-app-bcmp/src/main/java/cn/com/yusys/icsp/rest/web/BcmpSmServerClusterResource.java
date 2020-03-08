@@ -1,19 +1,14 @@
 package cn.com.yusys.icsp.rest.web;
 
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
-import cn.com.yusys.icsp.bcmp.VersionInfo;
-import cn.com.yusys.icsp.domain.AgentRegistryInfo;
 import cn.com.yusys.icsp.service.BcmpSmServerClusterService;
-import cn.com.yusys.icsp.util.CusAccessObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -24,37 +19,13 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/cluster")
+@EnableAsync
 public class BcmpSmServerClusterResource {
     //初始化日志信息
-    private Logger logger = LoggerFactory.getLogger(BcmpSmAgentListResource.class);
+    private Logger logger = LoggerFactory.getLogger(BcmpSmServerClusterResource.class);
     //注入服务器集群信息Service
     @Autowired
     private BcmpSmServerClusterService bcmpSmServerClusterService;
-
-    /**
-     * @方法名称: create
-     * @方法描述: 代理服务器注册
-     * @参数与返回说明:
-     * @算法描述:
-     */
-    @PostMapping(value = "/registry")
-    public ResultDto<Integer> create(HttpServletRequest request, @RequestBody AgentRegistryInfo agentRegistryInfo) throws Exception {
-        String agentIp = CusAccessObjectUtil.getIpAddress(request);
-        agentRegistryInfo.setHostAddress(agentIp);
-        int result = bcmpSmServerClusterService.registry(agentRegistryInfo);
-        return ResultDto.success(result);
-    }
-
-    /*
-     *  @Description : 服务器集群信息上传版本文件到服务器
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/7 15:51
-     */
-    @PostMapping({"/uploadfile"})
-    public ResultDto<Integer> uploadFile(final MultipartFile file, final VersionInfo versionInfo) {
-        logger.info("服务[{}],上传文件[{}]->版本号{}", new Object[]{versionInfo.getName(), file.getOriginalFilename(), versionInfo.getVersion()});
-        return ResultDto.success(this.bcmpSmServerClusterService.uploadFile(file, versionInfo));
-    }
 
     /*
      *  @Description : 获取服务器上版本文件的文件列表
