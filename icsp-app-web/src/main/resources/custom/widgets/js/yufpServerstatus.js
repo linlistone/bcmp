@@ -9,7 +9,7 @@
         <div slot="header" class="clearfix" ref="card_head">
             <el-row :gutter="10">
                 <el-col :span="4">
-                    <el-checkbox v-model="checkedVal" :disabled="disabled" @change="change(checkedVal)"></el-checkbox>
+                    <el-checkbox v-model="checkedVal"  @change="change(checkedVal)"></el-checkbox>
                 </el-col>
                 <el-col :span="15">
                     <li class="title_font" style="margin-top:2px">{{datasource.ip}}</li>
