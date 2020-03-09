@@ -44,7 +44,7 @@ public class BcmpSmServerClusterResource {
      *  @Date : 2020/3/7 16:08
      */
     @PostMapping({"/startDeploy"})
-    public ResultDto<Integer> startDeploy(@RequestBody JSONObject deployBean) {
+    public ResultDto<Integer> startDeploy(@RequestBody JSONObject deployBean) throws Exception {
         int result = bcmpSmServerClusterService.startDeploy(deployBean);
         return ResultDto.success(result);
     }
@@ -90,6 +90,17 @@ public class BcmpSmServerClusterResource {
     @GetMapping(value = "/getNodesState")
     public ResultDto<String> getNodesState() throws Exception {
         bcmpSmServerClusterService.getNodesState();
+        return ResultDto.success("请求成功");
+    }
+
+    /*
+     *  @Description : 获取服务器应用版本号
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/9 16:24
+     */
+    @GetMapping(value = "/getServiceVersion")
+    public ResultDto<String> getServiceVersion() throws Exception {
+        bcmpSmServerClusterService.getServiceVersion();
         return ResultDto.success("请求成功");
     }
 

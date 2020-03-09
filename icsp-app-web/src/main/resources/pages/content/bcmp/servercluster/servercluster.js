@@ -40,8 +40,6 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     deployFormData: {
       version: '',
       needRestart: '',
-      // websocket连接端口编号
-      webSocketClientCode: ''
     },
     versionList: [],
     options: [{
@@ -106,7 +104,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
         // 建立 WebSocket
         connectSocket: function () {
           var me = this;
-          let wsUrl = yufp.settings.url + '/websocket/' + this.deployFormData.webSocketClientCode;
+          let wsUrl = yufp.settings.url + '/websocket/' + this.uuid();
           me.socketClient = new WebSocket('ws://' + wsUrl);
           me.socketClient.onopen = function (message) {
             yufp.logger.info('Connection open ...' + wsUrl);
@@ -374,8 +372,6 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
       },
       // 界面加载成功
       mounted: function () {
-        // 初始化websocket连接端口编号
-        this.deployFormData.webSocketClientCode = this.uuid();
         // 初始化服务节点
         this.initApplist();
       },
