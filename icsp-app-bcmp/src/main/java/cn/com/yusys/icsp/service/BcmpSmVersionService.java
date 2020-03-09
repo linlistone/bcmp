@@ -129,6 +129,19 @@ public class BcmpSmVersionService extends BaseService {
     }
 
     /**
+     * @方法名称: index
+     * @方法描述: 查询所有
+     * @参数与返回说明:
+     * @算法描述: 无
+     */
+    public List<BcmpSmVersion> all(QueryModel model) throws Exception {
+        if (model.getSort() == null || "".equals(model.getSort()))
+            model.setSort("versionNum desc");
+        List<BcmpSmVersion> list = bcmpSmVersionMapper.selectByModel(model);
+        return list;
+    }
+
+    /**
      * @方法名称: update
      * @方法描述: 根据数据库主建更新
      * @参数与返回说明:

@@ -17,11 +17,16 @@
                 </el-col>
             </el-row>
             <!--表格区域-->
-            <yu-xtable ref="refNodeTable" :data-url="nodeDataUrl" reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
+            <yu-xtable ref="refNodeTable" :data-url="nodeDataUrl" @loaded="onLoadedFn" reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
                 <yu-xtable-column prop="hostIp" label="节点主机"></yu-xtable-column>
                 <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
                 <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
-                <yu-xtable-column prop="nodeName" label="当前版本号"></yu-xtable-column>
+                <yu-xtable-column prop="version" label="当前版本号">
+                    <template slot-scope="scope">
+                        <yu-tag :type="scope.row.version==='UNKNOWN'? 'danger':'success'">{{scope.row.version}}</yu-tag>
+                    </template>
+                </yu-xtable-column>
+<!--                <yu-xtable-column prop="version" label="当前版本号"></yu-xtable-column>-->
             </yu-xtable>
         </el-col>
         <!--右侧业务功能管理-->

@@ -15,15 +15,15 @@ public class HostAgentBean {
     //节点信息
     private BcmpSmNodeinfo bcmpSmNodeinfo;
     //Agent代理信息
-    private BcmpSmAgent agentRegistryInfo;
+    private BcmpSmAgent bcmpSmAgent;
 
     public HostAgentBean() {
     }
 
-    public HostAgentBean(BcmpSmHostinfo bcmpSmHostinfo, BcmpSmNodeinfo bcmpSmNodeinfo, BcmpSmAgent agentRegistryInfo) {
+    public HostAgentBean(BcmpSmHostinfo bcmpSmHostinfo, BcmpSmNodeinfo bcmpSmNodeinfo, BcmpSmAgent bcmpSmAgent) {
         this.bcmpSmHostinfo = bcmpSmHostinfo;
         this.bcmpSmNodeinfo = bcmpSmNodeinfo;
-        this.agentRegistryInfo = agentRegistryInfo;
+        this.bcmpSmAgent = bcmpSmAgent;
     }
 
     public BcmpSmNodeinfo getBcmpSmNodeinfo() {
@@ -42,12 +42,12 @@ public class HostAgentBean {
         this.bcmpSmHostinfo = bcmpSmHostinfo;
     }
 
-    public BcmpSmAgent getAgentRegistryInfo() {
-        return agentRegistryInfo;
+    public BcmpSmAgent getBcmpSmAgent() {
+        return bcmpSmAgent;
     }
 
-    public void setAgentRegistryInfo(BcmpSmAgent agentRegistryInfo) {
-        this.agentRegistryInfo = agentRegistryInfo;
+    public void setBcmpSmAgent(final BcmpSmAgent bcmpSmAgent) {
+        this.bcmpSmAgent = bcmpSmAgent;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class HostAgentBean {
         return "HostAgentBean{" +
                 "bcmpSmNodeinfo=" + bcmpSmNodeinfo.toString() +
                 ", bcmpSmHostinfo=" + bcmpSmHostinfo.toString() +
-                ", agentRegistryInfo=" + agentRegistryInfo.toString() +
+                ", bcmpSmAgent=" + bcmpSmAgent.toString() +
                 '}';
     }
 

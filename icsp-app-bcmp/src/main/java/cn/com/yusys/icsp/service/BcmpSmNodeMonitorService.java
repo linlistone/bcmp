@@ -73,7 +73,7 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent bcmpSmAgent = hostAgentBean.getBcmpSmAgent();
         // 获取当前时间
         long s = System.currentTimeMillis();
         logger.info("开始获取cup使用率");
@@ -81,9 +81,9 @@ public class BcmpSmNodeMonitorService {
         float cpusage = -1;
         try {
             // 获取解压命令
-            String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getCpuUsage.sh", bcmpSmNodeinfo.getJvmPort());
-            if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
-                HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
+            String script = ShellScriptManager.getScript(bcmpSmAgent.getOsName(), "getCpuUsage.sh", bcmpSmNodeinfo.getJvmPort());
+            if ("linux".equalsIgnoreCase(bcmpSmAgent.getOsName())) {
+                HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), bcmpSmAgent.getRmiPort());
                 // 执行命令
                 String res = BcmpTools.goShell(hostDescriptor, script);
                 String[] items = StringUtil.split(res, "\n");
@@ -118,7 +118,7 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent agentRegistryInfo = hostAgentBean.getBcmpSmAgent();
         // 判断JMX环境是否准备成功,若连接失败则返回内存数为0
         if (!isPrepareJvm) {
             return 0;
@@ -327,7 +327,7 @@ public class BcmpSmNodeMonitorService {
         //获取hostAgentBean中的节点信息
         BcmpSmNodeinfo bcmpSmNodeinfo = hostAgentBean.getBcmpSmNodeinfo();
         //获取hostAgentBean中的agent注册信息
-        BcmpSmAgent agentRegistryInfo = hostAgentBean.getAgentRegistryInfo();
+        BcmpSmAgent agentRegistryInfo = hostAgentBean.getBcmpSmAgent();
         // 获取当前时间
         long s = System.currentTimeMillis();
         logger.info("开始获取主机硬盘使用情况");

@@ -291,10 +291,93 @@ define(function (require, exports) {
           _this.$nextTick(function () {
             _this.$refs['refForm'].resetFields();
           });
-        }
+        },
+        // 获取节点应用版本
+        getServerVersion : function(){
+          yufp.service.request({
+            name: backend.bcmpService + '/cluster/getServiceVersion',
+            callback: function (code, message, response) {
+              if (code === 0) {
+
+              } else {
+
+              }
+            }
+          });
+        },
+        //初始化webSocket
+        // 建立 WebSocket
+        connectSocket: function () {
+          var me = this;
+          let wsUrl = yufp.settings.url + '/websocket/' + this.uuid();
+          me.socketClient = new WebSocket('ws://' + wsUrl);
+          me.socketClient.onopen = function (message) {
+            yufp.logger.info('Connection open ...' + wsUrl);
+          };
+          me.socketClient.onmessage = function (message) {
+            yufp.logger.info('Connection onmessage=' + message.data);
+            // me.$nextTick(function () {
+              me.onWebSocketMessage(message.data)
+            // });
+          };
+          me.socketClient.onclose = function (message) {
+            yufp.logger.info('Connection onclose ...');
+            // clearInterval(me.queryNodeInfoInterval);
+          };
+          me.socketClient.onerror = function (message) {
+            me.$message({ message: '建立连接失败，请刷新请求', type: 'warning' });
+            yufp.logger.info('Connection error ...');
+            // clearInterval(me.queryNodeInfoInterval);
+          };
+          // this.getServerVersion();
+        },
+        // 接收websocket返回信息
+        onWebSocketMessage: function (message) {
+          let nodeInfo = JSON.parse(message);
+          let wsType = nodeInfo.wsType;
+          let wsData = nodeInfo.wsData;
+          let nodeId = nodeInfo.nodeId;
+          if (wsType == 'servicevsesion') {
+            yufp.logger.info('nodeId[' + nodeId + '] servicevsesion[' + wsData + ']');
+            let nodes = this.$refs.refNodeTable.tabledata;
+            for (let i = 0; i < nodes.length; i++) {
+              if (nodeId == nodes[i].nodeId) {
+                this.$set(nodes[i], 'version', wsData)
+              }
+            }
+          }
+        },
+        uuid: function () {
+          var s = [];
+          var hexDigits = '0123456789abcdef';
+          for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+          }
+          s[14] = '4'; // bits 12-15 of the time_hi_and_version field to 0010
+          s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+          s[8] = s[13] = s[18] = s[23] = '-';
+          var uuid = s.join('');
+          return uuid;
+        },
+        // 数据更新，查询代理状态
+        onLoadedFn: function (data, total) {
+          // let me = this ;
+          for (let i = 0; i < data.length; i++) {
+            data[i].version = 'UNKNOWN';
+          }
+          // me.$nextTick(()=>{
+            this.getServerVersion();
+          // })
+
+        },
       },
       // 加载后处理
       mounted: function () {
+        let me = this
+        //创建webSocket
+        me.$nextTick(function () {
+          me.connectSocket()
+        })
       }
     });
   };

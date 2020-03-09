@@ -163,6 +163,17 @@
 		where deploy_id = #{deployId,jdbcType=VARCHAR}
 	</update>
 
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateStepByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeploy">
+		update bcmp_sm_deploy
+		<set>
+			<if test="deployStep != null">deploy_step = #{deployStep,jdbcType=VARCHAR},</if>
+			<if test="deployStepStatus != null">deploy_step_status = #{deployStepStatus,jdbcType=VARCHAR},</if>
+			<if test="deployRemark != null">deploy_remark = #{deployRemark,jdbcType=VARCHAR}</if>
+		</set>
+		where deploy_id = #{deployId,jdbcType=VARCHAR}
+	</update>
+
 	<!-- 根据主键删除 -->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from bcmp_sm_deploy where  deploy_id = #{deployId,jdbcType=VARCHAR}

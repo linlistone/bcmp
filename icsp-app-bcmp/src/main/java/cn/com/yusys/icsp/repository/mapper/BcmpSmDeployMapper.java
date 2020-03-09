@@ -41,6 +41,14 @@ public interface BcmpSmDeployMapper {
 	int updateByPrimaryKey(BcmpSmDeploy record);
 
 	/**
+	 * @方法名称: updateByPrimaryKey
+	 * @方法描述: 根据主键更新
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	int updateStepByPrimaryKey(BcmpSmDeploy record);
+
+	/**
 	 * @方法名称: deleteByPrimaryKey
 	 * @方法描述: 根据主键删除
 	 * @参数与返回说明: modId - 主键
