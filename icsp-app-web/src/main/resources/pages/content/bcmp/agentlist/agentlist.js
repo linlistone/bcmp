@@ -14,7 +14,7 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/agent/index',
+      dataUrl: backend.bcmpService + '/agent/index',
       buttonName: '', // 弹出框提交按钮名称
       dialogVisible: false // 弹出框层是否可见
     };
@@ -28,7 +28,41 @@ define(function (require, exports) {
       // 方法
       methods: {
         shutdownFn: function () {
-
+          let _this = this;
+          let selectAgents = _this.$refs.refTable.selections;
+          if (selectAgents.length == 0) {
+            vm.$message({
+              message: '请选择代理服务器!',
+              type: 'warning'
+            });
+            return false;
+          }
+          let reqData = {
+            agentList: selectAgents
+          };
+          _this.$confirm('确认停止代理服务?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(function () {
+            yufp.service.request({
+              method: 'POST',
+              name: backend.bcmpService + '/agent/shutdown',
+              data: reqData,
+              callback: function (code, message, response) {
+                if (code == '0' && response.code == '0') {
+                  vm.$message({
+                    message: '停止命令发送成功!'
+                  });
+                } else {
+                  vm.$message({
+                    message: '停止命令发送失败!'
+                  });
+                }
+                _this.$refs['refTable'].remoteData();
+              }
+            });
+          });
         },
         // 数据更新，查询代理状态
         onLoadedFn: function (data, total) {
@@ -38,11 +72,14 @@ define(function (require, exports) {
             };
             yufp.service.request({
               method: 'get',
-              name: backend.adminService + '/agent/status',
+              name: backend.bcmpService + '/agent/status',
               data: reqData,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
-                  console.log(response);
+                  var jsonObj = JSON.parse(response.data);
+                  // "socketStatus":"UP","rmiStatus":"UP"
+                  data[i].status = jsonObj.rmiStatus;
+                  data[i].socketStatus = jsonObj.socketStatus;
                 } else {
                   data[i].status = 'DOWN';
                   data[i].socketStatus = 'DOWN';
@@ -87,7 +124,7 @@ define(function (require, exports) {
             var agentId = viewData.agentId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/agent/delete/' + agentId,
+              name: backend.bcmpService + '/agent/delete/' + agentId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -138,7 +175,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/agent/create',
+            name: backend.bcmpService + '/agent/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -179,7 +216,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/agent/update',
+            name: backend.bcmpService + '/agent/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({

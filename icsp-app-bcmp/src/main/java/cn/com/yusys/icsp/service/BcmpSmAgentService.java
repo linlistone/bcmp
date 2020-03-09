@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -131,7 +132,7 @@ public class BcmpSmAgentService extends BaseService {
             logger.info("记录获取代理服务器是否启动状态结果:{}", new Object[]{result});
         } catch (Throwable e) {
             logger.error("查询代理服务状态异常", e);
-            throw new ICSPException("查询代理服务状态异常",500);
+            throw new ICSPException("查询代理服务状态异常", 500);
         }
         return result;
     }
@@ -143,20 +144,15 @@ public class BcmpSmAgentService extends BaseService {
      * @参数与返回说明:
      * @算法描述: 无
      */
-    public String agentShutdown(String hostAddress) throws Exception {
-        String result = "";
+    @Async
+    public void agentShutdown(BcmpSmAgent bcmpSmAgent) throws Exception {
         try {
-            BcmpSmAgent bcmpSmAgent = this.getBcmpSmAgent(hostAddress);
-            if (bcmpSmAgent == null)
-                return result;
             HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmAgent);
-            result = BcmpTools.agentShutdown(hostDescriptor);
+            String result = BcmpTools.agentShutdown(hostDescriptor);
             logger.info("停止代理服务器是否启动状态结果:{}", new Object[]{result});
         } catch (Throwable e) {
-            logger.error("停止代理服务状态异常", e);
-            throw new ICSPException("停止代理服务状态异常",500);
+            logger.error("停止代理服务状态异常 "+bcmpSmAgent.getHostAddress(), e);
         }
-        return result;
     }
 
 

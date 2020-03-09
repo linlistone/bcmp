@@ -19,12 +19,11 @@
         <yu-xtable-column prop="hostIp" label="节点主机IP" ></yu-xtable-column>
         <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
         <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
-        <yu-xtable-column prop="islink" label="是否软连接" data-code="YESNO"></yu-xtable-column>
         <yu-xtable-column prop="applyPort" label="应用端口"></yu-xtable-column>
         <yu-xtable-column prop="httpPort" label="HTTP端口"></yu-xtable-column>
         <yu-xtable-column prop="jvmPort" label="JVM端口"></yu-xtable-column>
-        <yu-xtable-column prop="lastChgUsr" label="最后修改用户"></yu-xtable-column>
-        <yu-xtable-column prop="lastChgDt" label="最后修改时间"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgUsr" label="最后修改用户" width="120"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgDt" label="最后修改时间" width="150"></yu-xtable-column>
         <yu-xtable-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
                 <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
@@ -41,8 +40,6 @@
                 <yu-xform-item label="节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE"  :rules="rules['nodeType']" :disabled="true"> </yu-xform-item>
                 <yu-xform-item label="应用路径" ctype="input" name="applyPath"  :colspan="24" :rules="rules['applyPath']" > </yu-xform-item>
                 <yu-xform-item label="节点名称" ctype="input" name="nodeName" :rules="rules['nodeName']" > </yu-xform-item>
-                <yu-xform-item label="是否软连接" ctype="select" name="islink" data-code="YESNO"> </yu-xform-item>
-                <yu-xform-item label="连接目录" ctype="input" name="linkDirectory"  :colspan="24" :disabled="formdata.islink!='Y'" :rules="rules['linkDirectory']"   > </yu-xform-item>
                 <yu-xform-item label="更新目录" ctype="input" name="updateDirectory"  :colspan="24"  :rules="rules['updateDirectory']"> </yu-xform-item>
                 <yu-xform-item label="应用端口" ctype="input" name="applyPort" :rules="rules['applyPort']"> </yu-xform-item>
                 <yu-xform-item label="HTTP端口" ctype="input" name="httpPort" :rules="rules['httpPort']"> </yu-xform-item>

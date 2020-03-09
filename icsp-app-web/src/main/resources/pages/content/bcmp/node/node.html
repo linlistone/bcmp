@@ -40,7 +40,7 @@
             </canvas>
         </el-tab-pane>
         <!-- <el-tab-pane label="文件浏览">文件浏览</el-tab-pane> -->
-        <el-tab-pane label="日志监控" height="430" >
+        <el-tab-pane label="日志监控" height="430">
             <!-- <el-button icon="yx-bin" @click="getLogFiles('','-2')">获取文件目录</el-button> -->
             <el-card class="box-card" v-for="item in resultLogFiles" :key="item.name">
                 <el-row :gutter="20">
@@ -58,7 +58,7 @@
                 </el-row>
             </el-card>
         </el-tab-pane>
-        <el-tab-pane label="客户端浏览" height="430" >客户端浏览</el-tab-pane>
+        <!-- <el-tab-pane label="客户端浏览" height="430" >客户端浏览</el-tab-pane> -->
         <el-tab-pane label="数据库连接池">
             <el-table :data="dbpoolinfo" height="430" border style="width: 100%">
                 <el-table-column prop="name" label="数据池名称" width="180">
@@ -87,7 +87,7 @@
                 </el-table-column>
             </el-table>
         </el-tab-pane>
-        <el-tab-pane label="线程监控" height="430" >
+        <el-tab-pane label="线程监控" height="430">
             <canvas class="canvas_monitor_bg" id="canvas_thread" width="750" height="430">
                 <p>Your browserdoes not support the canvas element!</p>
             </canvas>
@@ -121,8 +121,10 @@
             </el-row>
             <hr>
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
-                <el-col :span="5">
-                    <div>JVM参数:{{JvmInputArguments}}</div>
+                <el-col :span="20">
+                    <div>JVM参数:</div>
+                    <yu-input type="textarea" width="100%" :disabled="true" :autosize="{ minRows: 3, maxRows: 5}" v-model="JvmInputArguments">
+                    </yu-input>
                 </el-col>
             </el-row>
         </el-tab-pane>

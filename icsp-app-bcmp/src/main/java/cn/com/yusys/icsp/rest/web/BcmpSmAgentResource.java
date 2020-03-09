@@ -10,6 +10,8 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.BcmpSmAgent;
 import cn.com.yusys.icsp.service.BcmpSmAgentService;
 import cn.com.yusys.icsp.util.CusAccessObjectUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.pagehelper.PageInfo;
@@ -60,26 +62,21 @@ public class BcmpSmAgentResource extends BaseResouce {
     }
 
     /**
-     * @方法名称: rebootAgentBatch
-     * @方法描述: 批量重启
+     * @方法名称: shutdown
+     * @方法描述: 批量停止
      * @参数与返回说明: ips 代理服务IP
      * @算法描述:
      */
-    @PostMapping("/shutdown/{hostAddresses}")
-    public ResultDto<Map<String, String>> shutdown(@PathVariable("hostAddresses") String hostAddresses) throws Exception {
-        int n = 0;
-        Map<String, String> result = new HashMap<>();
-        if (hostAddresses != null && !"".equals(hostAddresses)) {
-            String[] ipStr = hostAddresses.toString().split(",");
-            int nodeletes = 0;
-            String delete = "";
-            for (int i = 0; i < ipStr.length; i++)
-                if (!"".equals(ipStr[i])) {
-                    String res = bcmpSmAgentService.agentShutdown(ipStr[i]);
-                    result.put(ipStr[i], res);
-                }
+    @PostMapping(value = "/shutdown")
+    public ResultDto<Integer> shutdown(@RequestBody Map<String, Object> data) throws Exception {
+        List<Map<String, Object>> agentList = (List<Map<String, Object>>) data.get("agentList");
+        if (agentList != null && !agentList.isEmpty()) {
+            for (Map<String, Object> map : agentList) {
+                BcmpSmAgent bcmpSmAgent = JSONObject.parseObject(JSON.toJSONString(map), BcmpSmAgent.class);
+                bcmpSmAgentService.agentShutdown(bcmpSmAgent);
+            }
         }
-        return ResultDto.success(result);
+        return ResultDto.success(0);
     }
 
     /**
