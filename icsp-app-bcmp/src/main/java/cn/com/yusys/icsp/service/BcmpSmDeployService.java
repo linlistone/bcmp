@@ -78,6 +78,17 @@ public class BcmpSmDeployService extends BaseService {
 		return bcmpSmDeployMapper.updateByPrimaryKey(bcmpSmDeploy);
 	}
 
+
+	/**
+	 * @方法名称: update
+	 * @方法描述: 根据数据库主建更新,部署节点状态
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	public int updateStep(BcmpSmDeploy bcmpSmDeploy) throws Exception {
+		return bcmpSmDeployMapper.updateStepByPrimaryKey(bcmpSmDeploy);
+	}
+
 	/**
 	 * @方法名称: delete
 	 * @方法描述: 根据主键删除
