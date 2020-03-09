@@ -2,55 +2,54 @@
 <div>
     <!--查询区域-->
     <yu-xform related-table-name="refTable" form-type="search">
-    	<!--
         <yu-xform-group :column="4">
+            <yu-xform-item label="设备序列号" ctype="input" name="deviceNumber"></yu-xform-item>
+            <yu-xform-item label="设备状态" ctype="select" name="deviceStatus" data-code="DEVICE_STS"></yu-xform-item>
         </yu-xform-group>
-        -->
     </yu-xform>
     <!--按钮区域-->
     <div class="fox-toolBar">
         <el-button-group>
-            <el-button icon="plus" @click="addFn">添加</el-button>
+            <el-button icon="plus" @click="addFn">设备入库</el-button>
+            <el-button icon="yx-unlocked" @click="unlockFn">设备启用</el-button>
+            <el-button icon="yx-lock" @click="lockFn">设备停用</el-button>
+            <el-button icon="close" @click="closeFn">设备注销</el-button>
         </el-button-group>
     </div>
     <!--表格区域-->
-    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
-                <yu-xtable-column prop="deviceNumber" label="设备序列号"></yu-xtable-column>
-        <yu-xtable-column prop="buyDate" label="购买日期"></yu-xtable-column>
-        <yu-xtable-column prop="deviceOrg" label="购买机构"></yu-xtable-column>
-        <yu-xtable-column prop="deviceType" label="设备类型"></yu-xtable-column>
-        <yu-xtable-column prop="deviceStatus" label="设备状态"></yu-xtable-column>
-        <yu-xtable-column prop="deviceComment" label="设备备注"></yu-xtable-column>
-        <yu-xtable-column prop="creatorUser" label="创建人"></yu-xtable-column>
-        <yu-xtable-column prop="creatorDate" label="创建人日期"></yu-xtable-column>
+    <yu-xtable ref="refTable" :data-url="dataUrl" selection-type="checkbox" row-key="deviceId" style="width: 100%">
+        <yu-xtable-column prop="deviceNumber" label="设备序列号"></yu-xtable-column>
+        <yu-xtable-column prop="buyDate" label="入库日期"></yu-xtable-column>
+        <yu-xtable-column prop="deviceOrg" label="入库机构"></yu-xtable-column>
+        <yu-xtable-column prop="deviceStatus" label="设备状态" data-code="DEVICE_STS"></yu-xtable-column>
         <yu-xtable-column prop="lastChgUser" label="修改人"></yu-xtable-column>
         <yu-xtable-column prop="lashChgDate" label="修改人日期"></yu-xtable-column>
-        <yu-xtable-column prop="lastRecUser" label="最后领用人"></yu-xtable-column>
-        <yu-xtable-column prop="lastRecDate" label="最后领用日期"></yu-xtable-column>
-        <yu-xtable-column fixed="right" label="操作" width="120">
+        <yu-xtable-column fixed="right" label="操作" width="240">
             <template slot-scope="scope">
                 <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
                 <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                <yu-button @click="linkFn(scope.row)" icon="yx-download2" size="mini"></yu-button>
+                <yu-button @click="linkListFn(scope.row)" icon="yx-users" size="mini"></yu-button>
+                <yu-button @click="locationListFn(scope.row)" icon="yx-location2" size="mini"></yu-button>
                 <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
             </template>
         </yu-xtable-column>
     </yu-xtable>
     <!-- 弹出框 数据信息维护页面 -->
-    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item label="设备序列号" ctype="input" name="deviceNumber" ></yu-xform-item>
-                <yu-xform-item label="购买日期" ctype="input" name="buyDate" ></yu-xform-item>
-                <yu-xform-item label="购买机构" ctype="input" name="deviceOrg" ></yu-xform-item>
-                <yu-xform-item label="设备类型" ctype="input" name="deviceType" ></yu-xform-item>
-                <yu-xform-item label="设备状态" ctype="input" name="deviceStatus" ></yu-xform-item>
-                <yu-xform-item label="设备备注" ctype="input" name="deviceComment" ></yu-xform-item>
-                <yu-xform-item label="创建人" ctype="input" name="creatorUser" ></yu-xform-item>
-                <yu-xform-item label="创建人日期" ctype="input" name="creatorDate" ></yu-xform-item>
-                <yu-xform-item label="修改人" ctype="input" name="lastChgUser" ></yu-xform-item>
-                <yu-xform-item label="修改人日期" ctype="input" name="lashChgDate" ></yu-xform-item>
-                <yu-xform-item label="最后领用人" ctype="input" name="lastRecUser" ></yu-xform-item>
-                <yu-xform-item label="最后领用日期" ctype="input" name="lastRecDate" ></yu-xform-item>
+                <yu-xform-item label="设备序列号" ctype="input" :disabled="viewType!='ADD'" name="deviceNumber" :rules="rules['deviceNumber']"></yu-xform-item>
+                <yu-xform-item label="入库日期" ctype="datepicker" name="buyDate" rules="required"></yu-xform-item>
+                <yu-xform-item label="入库机构" ctype="input" name="deviceOrg" :rules="rules['deviceOrg']"></yu-xform-item>
+                <yu-xform-item label="设备状态" ctype="select" data-code="DEVICE_STS" name="deviceStatus" rules="required" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="设备备注" ctype="input" name="deviceComment" :rules="rules['deviceComment']" :colspan="24"></yu-xform-item>
+                <yu-xform-item label="领用人" ctype="input" name="lastRecUser" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="领用日期" ctype="input" name="lastRecDate" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="创建人" ctype="input" name="creatorUser" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="创建日期" ctype="input" name="creatorDate" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="修改人" ctype="input" name="lastChgUser" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="修改日期" ctype="input" name="lashChgDate" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
             </yu-xform-group>
             <div class="yu-grpButton">
                 <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
@@ -59,4 +58,65 @@
             </div>
         </yu-xform>
     </yu-xdialog>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog title="设备领用" :visible.sync="linkDialogVisible" width="800px">
+        <yu-xform ref="reflinkForm" label-width="120px" v-model="linkformdata">
+            <yu-xform-group>
+                <yu-xform-item label="设备序列号" ctype="input" name="deviceNumber" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="入库日期" ctype="datepicker" name="buyDate" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="入库机构" ctype="input" name="deviceOrg" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="设备状态" ctype="select" data-code="DEVICE_STS" name="deviceStatus" :disabled="true" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="设备备注" ctype="input" name="deviceComment" :colspan="24" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="领用人" ctype="input" name="lastRecUser" rules="rules['lastRecUser']"></yu-xform-item>
+                <yu-xform-item label="领用日期" ctype="datepicker" name="lastRecDate" rules="required"></yu-xform-item>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button icon="check" type="primary" @click="linkSubmitFn">确定</yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="{linkDialogVisible=false}">取消</yu-button>
+            </div>
+        </yu-xform>
+        <h3>领用记录</h3>
+        <!--表格区域-->
+        <yu-xtable ref="refLinkTable" :data-url="linkDataUrl" :base-params="linkBaseParams" reserve-selection row-key="id" style="width: 100%">
+            <yu-xtable-column prop="deviceId" label="设备ID"></yu-xtable-column>
+            <yu-xtable-column prop="userId" label="领用人"></yu-xtable-column>
+            <yu-xtable-column prop="linkDate" label="领用日期"></yu-xtable-column>
+            <yu-xtable-column prop="opuserId" label="操作人"></yu-xtable-column>
+        </yu-xtable>
+    </yu-xdialog>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog title="领用历史" :visible.sync="linkListDialogVisible" width="800px">
+        <!--表格区域-->
+        <yu-xtable ref="refLinkTable" :data-url="linkDataUrl" :base-params="linkBaseParams" reserve-selection row-key="id" style="width: 100%">
+            <yu-xtable-column prop="deviceId" label="设备ID"></yu-xtable-column>
+            <yu-xtable-column prop="userId" label="领用人"></yu-xtable-column>
+            <yu-xtable-column prop="linkDate" label="领用日期"></yu-xtable-column>
+            <yu-xtable-column prop="opuserId" label="操作人"></yu-xtable-column>
+        </yu-xtable>
+        <div class="yu-grpButton">
+            <yu-button icon="yx-undo2" type="primary" @click="{linkListDialogVisible=false}">取消</yu-button>
+        </div>
+    </yu-xdialog>
+
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog title="定位历史" :visible.sync="locationDialogVisible" width="1000px">
+        <!--查询区域-->
+        <yu-xform related-table-name="reflocationTable" form-type="search">
+            <yu-xform-group :column="2">
+                <yu-xform-item label="查询日期" ctype="datepicker" name="locationDate"></yu-xform-item>
+            </yu-xform-group>
+        </yu-xform>
+        <!--表格区域-->
+        <yu-xtable ref="reflocationTable" :data-url="locationDataUrl" :base-params="linkBaseParams" reserve-selection row-key="id"
+            style="width: 100%">
+            <yu-xtable-column prop="locationDate" label="日期" width="160px"></yu-xtable-column>
+            <yu-xtable-column prop="userId" label="用户" width="100px"></yu-xtable-column>
+            <yu-xtable-column prop="locationCode" label="位置代码"></yu-xtable-column>
+            <yu-xtable-column prop="localtionName" label="位置名称"></yu-xtable-column>
+        </yu-xtable>
+        <div class="yu-grpButton">
+            <yu-button icon="yx-undo2" type="primary" @click="{locationDialogVisible=false}">取消</yu-button>
+        </div>
+    </yu-xdialog>
+
 </div>

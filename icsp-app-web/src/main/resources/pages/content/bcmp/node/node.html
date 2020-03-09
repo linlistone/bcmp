@@ -3,21 +3,21 @@
     <div class="nodeinfo" style="margin-left:0px;margin-top:5px;background-color: white">
         <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white;">
             <el-col :span="5">
-                <div>主机ip地址:{{ip}}</div>
+                <div>主机ip地址：{{ip}}</div>
             </el-col>
             <el-col :span="5">
-                <div>节点名称:{{nodename}}</div>
+                <div>节点名称：{{nodename}}</div>
             </el-col>
             <el-col :span="5">
-                <div>客户端连接数量:{{conncount}}</div>
+                <div>客户端连接数量：{{conncount}}</div>
             </el-col>
         </el-row>
         <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
             <el-col :span="5">
-                <div>运行时间:{{RUNNINGTIME}}</div>
+                <div>运行时间：{{RUNNINGTIME}}</div>
             </el-col>
             <el-col :span="5">
-                <div>服务器状态:{{serverstatus}}</div>
+                <div>服务器状态：{{serverstatus}}</div>
             </el-col>
         </el-row>
         <el-row style="margin-top: 15px;margin-bottom: 15px;margin-left:0px;">
@@ -58,32 +58,17 @@
                 </el-row>
             </el-card>
         </el-tab-pane>
-        <!-- <el-tab-pane label="客户端浏览" height="430" >客户端浏览</el-tab-pane> -->
-        <el-tab-pane label="数据库连接池">
-            <el-table :data="dbpoolinfo" height="430" border style="width: 100%">
-                <el-table-column prop="name" label="数据池名称" width="180">
-                </el-table-column>
-                <el-table-column prop="dbSourceType" label="数据池类型" width="180">
-                </el-table-column>
-                <el-table-column prop="dbType" label="数据库类型">
-                </el-table-column>
-                <el-table-column prop="dbSourceConnectionNum" label="当前连接数">
-                </el-table-column>
-                <el-table-column prop="dbSourceMaxConnectionNum" label="最大连接数">
-                </el-table-column>
-            </el-table>
-        </el-tab-pane>
         <el-tab-pane label="磁盘信息监控">
             <el-table :data="filedev" height="430" border style="width: 100%">
                 <el-table-column prop="fileSystem" label="文件系统" width="180">
                 </el-table-column>
                 <el-table-column prop="mountedPoint" label="挂载点" width="180">
                 </el-table-column>
-                <el-table-column prop="totalSpace" label="总空间(M)">
+                <el-table-column prop="totalSpace" align="right" label="总空间(M)">
                 </el-table-column>
-                <el-table-column prop="usedSpace" label="已使用空间(M)">
+                <el-table-column prop="usedSpace" align="right" label="已使用空间(M)">
                 </el-table-column>
-                <el-table-column prop="usedRatio" label="使用比例">
+                <el-table-column prop="usedRatio" align="right" :formatter="formatDate" label="使用比例">
                 </el-table-column>
             </el-table>
         </el-tab-pane>
@@ -95,35 +80,35 @@
         <el-tab-pane label="JVM信息监控">
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
                 <el-col :span="5">
-                    <div>活动线程:{{activedthread}}</div>
+                    <div>活动线程：{{activedthread}}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>峰值:{{THREADCOUNT}}</div>
+                    <div>峰值：{{THREADCOUNT}}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>守护线程:{{DAEMONTHREADCOUNT}}</div>
+                    <div>守护线程：{{DAEMONTHREADCOUNT}}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>已启动的线程数:{{STARTEDTHREDCOUNT}}</div>
+                    <div>已启动的线程数：{{STARTEDTHREDCOUNT}}</div>
                 </el-col>
             </el-row>
             <hr>
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
                 <el-col :span="5">
-                    <div>当前类已装入数:{{classloadnumber}}</div>
+                    <div>当前类已装入数：{{classloadnumber}}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>已装入类的总数:{{LoadedClassCount}}</div>
+                    <div>已装入类的总数：{{LoadedClassCount}}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>已卸载类总数:{{uninstalledclassescount}}</div>
+                    <div>已卸载类总数：{{uninstalledclassescount}}</div>
                 </el-col>
             </el-row>
             <hr>
             <el-row :gutter="15" style="margin-top: 15px;margin-left:15px;background-color: white">
                 <el-col :span="20">
-                    <div>JVM参数:</div>
-                    <yu-input type="textarea" width="100%" :disabled="true" :autosize="{ minRows: 3, maxRows: 5}" v-model="JvmInputArguments">
+                    <div>JVM参数：</div>
+                    <yu-input type="textarea" width="100%" :disabled="true" :autosize="{ minRows: 5, maxRows: 10}" v-model="JvmInputArguments">
                     </yu-input>
                 </el-col>
             </el-row>

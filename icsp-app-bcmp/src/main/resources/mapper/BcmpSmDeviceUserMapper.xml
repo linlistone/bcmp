@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceUserMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmDeviceUser" id="BaseResultMap">
+        <result column="link_id"  property="linkId" jdbcType="VARCHAR" />
+        <result column="device_id"  property="deviceId" jdbcType="VARCHAR" />
+        <result column="user_id"  property="userId" jdbcType="VARCHAR" />
+        <result column="link_date"  property="linkDate" jdbcType="VARCHAR" />
+        <result column="opuser_id"  property="opuserId" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		link_id,
+		device_id,
+		user_id,
+		link_date,
+		opuser_id
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_device_user
+		<where>
+			<if test="condition.linkId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.linkId)">
+						AND link_id like #{condition.linkId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND link_id = #{condition.linkId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceId)">
+						AND device_id like #{condition.deviceId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_id = #{condition.deviceId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userId)">
+						AND user_id like #{condition.userId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND user_id = #{condition.userId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.linkDate != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.linkDate)">
+						AND link_date like #{condition.linkDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND link_date = #{condition.linkDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.opuserId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.opuserId)">
+						AND opuser_id like #{condition.opuserId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND opuser_id = #{condition.opuserId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceUser">
+		insert into bcmp_sm_device_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="linkId != null">link_id ,</if>
+			<if test="deviceId != null">device_id ,</if>
+			<if test="userId != null">user_id ,</if>
+			<if test="linkDate != null">link_date ,</if>
+			<if test="opuserId != null">opuser_id </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="linkId != null">#{linkId,jdbcType=VARCHAR},</if>
+			<if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+			<if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+			<if test="linkDate != null">#{linkDate,jdbcType=VARCHAR},</if>
+			<if test="opuserId != null">#{opuserId,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceUser">
+		update bcmp_sm_device_user
+		<set>
+			<if test="linkId != null">link_id = #{linkId,jdbcType=VARCHAR},</if>
+			<if test="deviceId != null">device_id = #{deviceId,jdbcType=VARCHAR},</if>
+			<if test="userId != null">user_id = #{userId,jdbcType=VARCHAR},</if>
+			<if test="linkDate != null">link_date = #{linkDate,jdbcType=VARCHAR},</if>
+			<if test="opuserId != null">opuser_id = #{opuserId,jdbcType=VARCHAR}</if>
+		</set>
+		where link_id = #{linkId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_device_user where  link_id = #{linkId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_device_user where link_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="linkId">#{linkId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

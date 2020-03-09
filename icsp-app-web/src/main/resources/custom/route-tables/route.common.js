@@ -37,8 +37,8 @@ define(function (require) {
     },
 
     dashboard: {
-      html: 'pages/common/dashboard/dashboard.html',
-      js: 'pages/common/dashboard/dashboard.js'
+      html: 'pages/content/bcmp/servercluster/servercluster.html',
+      js: 'pages/content/bcmp/servercluster/servercluster.js'
     },
 
     cmnodeinfo: {

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceLocationMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmDeviceLocation" id="BaseResultMap">
+        <result column="location_id"  property="locationId" jdbcType="VARCHAR" />
+        <result column="device_id"  property="deviceId" jdbcType="VARCHAR" />
+        <result column="location_code"  property="locationCode" jdbcType="VARCHAR" />
+        <result column="localtion_name"  property="localtionName" jdbcType="VARCHAR" />
+        <result column="user_id"  property="userId" jdbcType="VARCHAR" />
+        <result column="location_date"  property="locationDate" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		location_id,
+		device_id,
+		location_code,
+		localtion_name,
+		user_id,
+		location_date
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_device_location
+		<where>
+			<if test="condition.locationId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.locationId)">
+						AND location_id like #{condition.locationId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND location_id = #{condition.locationId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.deviceId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceId)">
+						AND device_id like #{condition.deviceId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_id = #{condition.deviceId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.locationCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.locationCode)">
+						AND location_code like #{condition.locationCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND location_code = #{condition.locationCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.localtionName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.localtionName)">
+						AND localtion_name like #{condition.localtionName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND localtion_name = #{condition.localtionName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.userId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.userId)">
+						AND user_id like #{condition.userId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND user_id = #{condition.userId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.locationDate != null and condition.locationDate !=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.locationDate)">
+						AND location_date like #{condition.locationDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND  substr(location_date,1,10) =  #{condition.locationDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceLocation">
+		insert into bcmp_sm_device_location
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="locationId != null">location_id ,</if>
+			<if test="deviceId != null">device_id ,</if>
+			<if test="locationCode != null">location_code ,</if>
+			<if test="localtionName != null">localtion_name ,</if>
+			<if test="userId != null">user_id ,</if>
+			<if test="locationDate != null">location_date </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="locationId != null">#{locationId,jdbcType=VARCHAR},</if>
+			<if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+			<if test="locationCode != null">#{locationCode,jdbcType=VARCHAR},</if>
+			<if test="localtionName != null">#{localtionName,jdbcType=VARCHAR},</if>
+			<if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+			<if test="locationDate != null">#{locationDate,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceLocation">
+		update bcmp_sm_device_location
+		<set>
+			<if test="locationId != null">location_id = #{locationId,jdbcType=VARCHAR},</if>
+			<if test="deviceId != null">device_id = #{deviceId,jdbcType=VARCHAR},</if>
+			<if test="locationCode != null">location_code = #{locationCode,jdbcType=VARCHAR},</if>
+			<if test="localtionName != null">localtion_name = #{localtionName,jdbcType=VARCHAR},</if>
+			<if test="userId != null">user_id = #{userId,jdbcType=VARCHAR},</if>
+			<if test="locationDate != null">location_date = #{locationDate,jdbcType=VARCHAR}</if>
+		</set>
+		where location_id = #{locationId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_device_location where  location_id = #{locationId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_device_location where location_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="locationId">#{locationId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

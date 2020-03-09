@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceLogMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmDeviceLog" id="BaseResultMap">
+        <result column="device_log_id"  property="deviceLogId" jdbcType="VARCHAR" />
+        <result column="log_name"  property="logName" jdbcType="VARCHAR" />
+        <result column="upload_user_id"  property="uploadUserId" jdbcType="VARCHAR" />
+        <result column="upload_date"  property="uploadDate" jdbcType="VARCHAR" />
+        <result column="log_path"  property="logPath" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		device_log_id,
+		log_name,
+		upload_user_id,
+		upload_date,
+		log_path
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_device_log
+		<where>
+			<if test="condition.deviceLogId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceLogId)">
+						AND device_log_id like #{condition.deviceLogId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND device_log_id = #{condition.deviceLogId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.logName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.logName)">
+						AND log_name like #{condition.logName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND log_name = #{condition.logName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.uploadUserId != null and condition.uploadUserId!=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.uploadUserId)">
+						AND upload_user_id like #{condition.uploadUserId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND upload_user_id = #{condition.uploadUserId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.uploadDate != null and condition.uploadDate!=''">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.uploadDate)">
+						AND upload_date like #{condition.uploadDate,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND substr(upload_date,1,10)   = #{condition.uploadDate,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.logPath != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.logPath)">
+						AND log_path like #{condition.logPath,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND log_path = #{condition.logPath,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceLog">
+		insert into bcmp_sm_device_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deviceLogId != null">device_log_id ,</if>
+			<if test="logName != null">log_name ,</if>
+			<if test="uploadUserId != null">upload_user_id ,</if>
+			<if test="uploadDate != null">upload_date ,</if>
+			<if test="logPath != null">log_path </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deviceLogId != null">#{deviceLogId,jdbcType=VARCHAR},</if>
+			<if test="logName != null">#{logName,jdbcType=VARCHAR},</if>
+			<if test="uploadUserId != null">#{uploadUserId,jdbcType=VARCHAR},</if>
+			<if test="uploadDate != null">#{uploadDate,jdbcType=VARCHAR},</if>
+			<if test="logPath != null">#{logPath,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeviceLog">
+		update bcmp_sm_device_log
+		<set>
+			<if test="deviceLogId != null">device_log_id = #{deviceLogId,jdbcType=VARCHAR},</if>
+			<if test="logName != null">log_name = #{logName,jdbcType=VARCHAR},</if>
+			<if test="uploadUserId != null">upload_user_id = #{uploadUserId,jdbcType=VARCHAR},</if>
+			<if test="uploadDate != null">upload_date = #{uploadDate,jdbcType=VARCHAR},</if>
+			<if test="logPath != null">log_path = #{logPath,jdbcType=VARCHAR}</if>
+		</set>
+		where device_log_id = #{deviceLogId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_device_log where  device_log_id = #{deviceLogId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_device_log where device_log_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="deviceLogId">#{deviceLogId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

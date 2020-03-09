@@ -50,7 +50,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.deviceNumber != null">
+			<if test="condition.deviceNumber != null and condition.deviceNumber !=''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceNumber)">
@@ -61,7 +61,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.buyDate != null">
+			<if test="condition.buyDate != null ">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.buyDate)">
@@ -72,7 +72,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.deviceOrg != null">
+			<if test="condition.deviceOrg != null  and condition.deviceOrg !=''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceOrg)">
@@ -94,7 +94,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.deviceStatus != null">
+			<if test="condition.deviceStatus != null and condition.deviceStatus !=''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deviceStatus)">

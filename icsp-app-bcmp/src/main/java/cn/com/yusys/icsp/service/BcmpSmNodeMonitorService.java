@@ -3,6 +3,7 @@ package cn.com.yusys.icsp.service;
 import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.jmx.JmxAccessor;
+import cn.com.yusys.icsp.bcmp.node.PartitionState;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgentBean;
 import cn.com.yusys.icsp.common.util.StringUtil;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.openmbean.CompositeData;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  *  @Description : 服务器节点内存,CPU,运行时间,磁盘分区获取服务
@@ -321,7 +324,7 @@ public class BcmpSmNodeMonitorService {
      *  @Author : Mr_Jiang
      *  @Date : 2020/3/5 21:15
      */
-    public String getPartitionState(HostAgentBean hostAgentBean) throws Exception {
+    public List<PartitionState> getPartitionState(HostAgentBean hostAgentBean) throws Exception {
         //获取hostAgentBean中的主机信息
         BcmpSmHostinfo bcmpSmHostinfo = hostAgentBean.getBcmpSmHostinfo();
         //获取hostAgentBean中的节点信息
@@ -334,104 +337,52 @@ public class BcmpSmNodeMonitorService {
         try {
             // 获取解压命令
             String script = ShellScriptManager.getScript(agentRegistryInfo.getOsName(), "getDiskState.sh", bcmpSmNodeinfo.getJvmPort());
-            if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
-                HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
-                // 执行命令
-                String response = BcmpTools.goShell(hostDescriptor, script);
-                System.out.println("获取分区情况:" + response);
-                //String[] items = StringUtil.split(res, "\n");
-                //for (int i = 0; i < items.length; i++) {
-                //    try {
-                //        float f = Float.parseFloat(items[i]);
-                //        cpusage = f;
-                //        break;
-                //    } catch (Exception e) {
-                //    }
-                //}
-                //if (cpusage == -1) {
-                //    logger.error("获取cpu使用率失败，返回结果为 :" + res);
-                //}
-                return response;
+            HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmHostinfo.getHostIp(), bcmpSmHostinfo.getLoginUsername(), bcmpSmHostinfo.getLoginPassword(), agentRegistryInfo.getRmiPort());
+            // 执行命令
+            String response = BcmpTools.goShell(hostDescriptor, script);
+            System.out.println("获取分区情况:" + response);
+            String[] lines = response.split("\n");
+            List<PartitionState> list = new ArrayList<>();
+            for (int i = 0; i < lines.length; i++) {
+                String line = lines[i];
+                if (line.indexOf("%") == -1) {
+                    continue;
+                }
+                String[] items = line.split("[\t+|\\s]+");
+                String lastItem = items[items.length - 1];
+                if (lastItem.charAt(0) != '/') {
+                    continue;
+                }
+                PartitionState state = new PartitionState();
+                if ("linux".equalsIgnoreCase(agentRegistryInfo.getOsName())) {
+                    state.setFileSystem(items[0]);
+                    state.setMountedPoint(lastItem);
+                    double num = Double.parseDouble(items[1]);
+                    state.setTotalSpace((int) num);
+                    num = Double.parseDouble(items[2]);
+                    state.setUsedSpace((int) num);
+                    String str = items[4].trim();
+                    // 去掉%
+                    str = str.substring(0, str.length() - 1);
+                    double ratio = Double.parseDouble(str) / 100;
+                    state.setUsedRatio(ratio);
+                } else {
+                    state.setFileSystem(items[0]);
+                    state.setMountedPoint(lastItem);
+                    double total = Double.parseDouble(items[1]);
+                    state.setTotalSpace((int) total);
+                    double free = Double.parseDouble(items[2]);
+                    state.setUsedSpace((int) (total - free + 0.5));
+                    String str = items[5].trim();
+                    // 去掉%
+                    str = str.substring(0, str.length() - 1);
+                    double ratio = Double.parseDouble(str) / 100;
+                    state.setUsedRatio(ratio);
+                }
+                list.add(state);
             }
-            //String command = script+" exit\n";
-            // 定义网络参数
-            //NetArgs netArgs = new NetArgs();
-            //netArgs.ip = nodeInfo.getHost();
-            //netArgs.port = nodeInfo.getPort();
-            //netArgs.userName = nodeInfo.getUserName();
-            //netArgs.password = nodeInfo.getPassword();
-            //netArgs.timeout = this.timeout;
-            //// 获取连接器
-            //IConnector connector = ConnectorFactory.getConnector(protocol,
-            //        netArgs);
-            //
-            //List<PartitionState> list = new ArrayList<PartitionState>();
-            //try {
-            //    // 获取编码格式
-            //    String encoding = this.getEncoding(this.lang);
-            //    // 连接服务器
-            //    connector.connect();
-            //    // 执行命令
-            //    String res = ShellExcutor.execute(command, encoding, connector,
-            //            this.timeout * 3);
-            //    // 提取结果
-            //    res = ResultExtractor.extract(res, this.prompt, "exit");
-            //    String[] lines = res.split("\n");
-            //
-            //    for (int i = 0; i < lines.length; i++) {
-            //        String line = lines[i];
-            //        if (line.indexOf("%") == -1) {
-            //            continue;
-            //        }
-            //        String[] items = line.split("[\t+|\\s]+");
-            //        String lastItem = items[items.length - 1];
-            //        if (lastItem.charAt(0) != '/') {
-            //            continue;
-            //        }
-            //
-            //        PartitionState state = new PartitionState();
-            //
-            //        if (OS.LINUX == os) {
-            //            state.setFileSystem(items[0]);
-            //            state.setMountedPoint(lastItem);
-            //            double num = Double.parseDouble(items[1]);
-            //            state.setTotalSpace((int) num);
-            //            num = Double.parseDouble(items[2]);
-            //            state.setUsedSpace((int) num);
-            //            String str = items[4].trim();
-            //            // 去掉%
-            //            str = str.substring(0, str.length() - 1);
-            //            double ratio = Double.parseDouble(str) / 100;
-            //            state.setUsedRatio(ratio);
-            //
-            //        } else {
-            //            state.setFileSystem(items[0]);
-            //            state.setMountedPoint(lastItem);
-            //            double total = Double.parseDouble(items[1]);
-            //            state.setTotalSpace((int) total);
-            //            double free = Double.parseDouble(items[2]);
-            //            state.setUsedSpace((int) (total - free + 0.5));
-            //            String str = items[5].trim();
-            //            // 去掉%
-            //            str = str.substring(0, str.length() - 1);
-            //            double ratio = Double.parseDouble(str) / 100;
-            //            state.setUsedRatio(ratio);
-            //        }
-            //        list.add(state);
-            //        System.err.println("fileSystemn:" + state.getFileSystem()
-            //                + " ,mountedPoint:" + state.getMountedPoint()
-            //                + " ,total:" + state.getTotalSpace() + " ,used:"
-            //                + state.getUsedSpace() + " ,比率"
-            //                + (state.getUsedRatio() * 100) + "%");
-            //        System.err.println("--> " + lines[i]);
-            //    }
-            //
-            //} finally {
-            //    connector.disconnect();
-            //}
             logger.info("完成获取主机硬盘使用情况，耗时:" + (System.currentTimeMillis() - s) + "毫秒");
-            //return list.toArray(new PartitionState[0]);
-            return null;
+            return list;
         } catch (Exception e) {
             String msg = "获取主机硬盘使用情况，错误服务器[host:" + bcmpSmNodeinfo.getHostIp() + " ,port:" + bcmpSmNodeinfo.getHttpPort() + "]";
             logger.error(msg, e);

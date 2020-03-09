@@ -25,6 +25,12 @@ define(function (require, exports) {
       { key: 'FOX_PC', value: 'PC服务器' },
       { key: 'FOX_PAD', value: 'PAD服务器' }
     ],
+    DEVICE_STS: [// 设备状态
+      { key: '0', value: '未启用' },
+      { key: '1', value: '启用' },
+      { key: '2', value: '停用' },
+      { key: '3', value: '注销' }
+    ],
     TRANS_TREATY: [// 传输协议
       { key: '01', value: 'FTP' },
       { key: '02', value: 'SFTP' },

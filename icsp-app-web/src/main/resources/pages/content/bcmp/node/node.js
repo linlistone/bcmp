@@ -77,6 +77,11 @@ define(function (require, exports) {
       el: cite.el,
       data: vmData,
       methods: {
+        formatDate (row, column, cellValue) {
+          // 格式化是针对表格内容即使data数据
+          var newDate = row.usedRatio == '' ? '-' : row.usedRatio * 100 + '%';
+          return newDate;
+        },
         downloadLog: function (name) {
 
         },
@@ -584,7 +589,7 @@ define(function (require, exports) {
               vmData.RUNNINGTIME = h + '小时' + m + '分钟';
             }
             vmData.TOTALMEMORY = data.TOTALMEMORY; // 总的内存
-            // 文件系统
+            // 磁盘文件系统
             vmData.filedev = data.PartitionState;
             // 数据库连接池
             vmData.dbpoolinfo = data.connpool;
@@ -596,7 +601,7 @@ define(function (require, exports) {
           }
         }
       });
-    }, 10000);
+    }, 1000 * 10);
   };
   // 消息处理
   exports.onmessage = function (type, message) {
