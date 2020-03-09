@@ -11,6 +11,7 @@ import cn.com.yusys.icsp.repository.mapper.BcmpSmAgentMapper;
 import cn.com.yusys.icsp.common.exception.ICSPException;
 
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -104,35 +105,58 @@ public class BcmpSmAgentService extends BaseService {
         // 查询代理服务状态
         for (BcmpSmAgent bcmpSmAgent : list) {
             //代理服务器不多，可以这么搞搞，代码多了，要考虑用websocket反向通知，要不然卡
-            bcmpSmAgent.setStatus(checkServerState(bcmpSmAgent, bcmpSmAgent.getRmiPort()) ? "UP" : "DOWN");
-            bcmpSmAgent.setSocketStatus(checkServerState(bcmpSmAgent, bcmpSmAgent.getSocketPort()) ? "UP" : "DOWN");
+            bcmpSmAgent.setStatus("unknown");
+            bcmpSmAgent.setSocketStatus("unknown");
         }
         PageHelper.clearPage();
         return new PageInfo<>(list);
     }
 
+
     /**
      * 校验应用节点启动状态
      *
-     * @param agentRegistryInfo 代理对象
-     * @param port              端口
+     * @param hostAddress 代理地址
      * @return
      * @throws Exception
      */
-    private boolean checkServerState(BcmpSmAgent agentRegistryInfo, String port) throws Exception {
-        String execScriptResult = "";
+    public String queryAgentStatus(String hostAddress) throws Exception {
+        String result = "";
         try {
-            HostDescriptor hostDescriptor = new HostDescriptor(agentRegistryInfo);
-            //获取查询当前服务器状态脚本
-            String checkStateCmd = ShellScriptManager.getScript(hostDescriptor.getOsName(), "checkServerState.sh", port);
-            logger.info("记录获取服务器是否启动状态脚本信息:[{}-->{}]", new Object[]{agentRegistryInfo.getHostAddress(), checkStateCmd});
-            execScriptResult = BcmpTools.goCmd(hostDescriptor, checkStateCmd).replaceAll("\r|\n", "");
-            logger.info("记录获取服务器是否启动状态脚本执行结果:{}", new Object[]{execScriptResult});
+            BcmpSmAgent bcmpSmAgent = this.getBcmpSmAgent(hostAddress);
+            if (bcmpSmAgent == null)
+                return result;
+            HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmAgent);
+            result = BcmpTools.getAgentStatus(hostDescriptor);
+            logger.info("记录获取代理服务器是否启动状态结果:{}", new Object[]{result});
         } catch (Throwable e) {
             logger.error("查询代理服务状态异常", e);
-            return false;
+            throw new ICSPException("查询代理服务状态异常",500);
         }
-        return this.containsKey(execScriptResult, "open");
+        return result;
+    }
+
+
+    /**
+     * @方法名称: agentShutdown
+     * @方法描述: 关闭代理服务
+     * @参数与返回说明:
+     * @算法描述: 无
+     */
+    public String agentShutdown(String hostAddress) throws Exception {
+        String result = "";
+        try {
+            BcmpSmAgent bcmpSmAgent = this.getBcmpSmAgent(hostAddress);
+            if (bcmpSmAgent == null)
+                return result;
+            HostDescriptor hostDescriptor = new HostDescriptor(bcmpSmAgent);
+            result = BcmpTools.agentShutdown(hostDescriptor);
+            logger.info("停止代理服务器是否启动状态结果:{}", new Object[]{result});
+        } catch (Throwable e) {
+            logger.error("停止代理服务状态异常", e);
+            throw new ICSPException("停止代理服务状态异常",500);
+        }
+        return result;
     }
 
 
@@ -167,33 +191,5 @@ public class BcmpSmAgentService extends BaseService {
     }
 
 
-    /**
-     * @方法名称: retbootAgent
-     * @方法描述: 重启代理服务
-     * @参数与返回说明:
-     * @算法描述: 无
-     */
-    public int retbootAgent(String hostIp) throws Exception {
-//        BcmpSmAgent agentRegistryInfo = bcmpSmServerClusterService.getAgentHostMapInstance().get(hostIp);
-//        if (agentRegistryInfo == null) {
-//            throw new ICSPException("代理服务器不存在" + hostIp, 900);
-//        }
-//        HostDescriptor hostDescriptor = new HostDescriptor(agentRegistryInfo);
-//        String cmd = ShellScriptManager.getScript(hostDescriptor.getOsName(), "rebootAgent.sh");
-//        String ret = BcmpTools.goCmd(hostDescriptor, cmd);
-//        logger.debug(ret);
-        return 0;
-    }
-
-    /**
-     * @方法名称: shutdownAgent
-     * @方法描述: 关闭代理服务
-     * @参数与返回说明:
-     * @算法描述: 无
-     */
-    public int shutdownAgent(String ip) throws Exception {
-
-        return 0;
-    }
 }
 

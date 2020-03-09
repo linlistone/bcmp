@@ -9,90 +9,106 @@ import java.util.List;
 public class BcmpTools {
 
 
-    public static BcmpOptions getBcmpOptions(final HostDescriptor hostDescriptor) throws Exception {
+    public static BcmpOptions getBcmpOptions(HostDescriptor hostDescriptor) throws Exception {
         return BcmpOptionsFactory.getBcmpOptions(hostDescriptor);
     }
 
-    public static String goCmd(final HostDescriptor hostDescriptor, final String cmd) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static String goCmd(HostDescriptor hostDescriptor, String cmd) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             return bcmpoptions.goCmd(cmd);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void goCmd(final HostDescriptor hostDescriptor, final String cmd, final ReadFunction readFunction) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void goCmd(HostDescriptor hostDescriptor, String cmd, ReadFunction readFunction) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.goCmd(readFunction, cmd);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void goShell(final HostDescriptor hostDescriptor, final ReadFunction readFunction, final String... cmd) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void goShell(HostDescriptor hostDescriptor, ReadFunction readFunction, String... cmd) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.goShell(readFunction, cmd);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static String goShell(final HostDescriptor hostDescriptor, final String... cmd) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static String goShell(HostDescriptor hostDescriptor, String... cmd) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             return bcmpoptions.goShell(cmd);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void upload(final HostDescriptor hostDescriptor, final File local, final String target, final boolean cover) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void upload(HostDescriptor hostDescriptor, File local, String target, boolean cover) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.upload(local, local.getName(), target, cover);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void upload(final HostDescriptor hostDescriptor, final InputStream stream, final String fileName, final String target, final boolean cover) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void upload(HostDescriptor hostDescriptor, InputStream stream, String fileName, String target, boolean cover) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.upload(stream, fileName, target, cover);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void remove(final HostDescriptor hostDescriptor, final String target, final String fileName) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void remove(HostDescriptor hostDescriptor, String target, String fileName) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.rm(target, fileName);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void rm(final HostDescriptor hostDescriptor, final String parent, final String... fileNames) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void rm(HostDescriptor hostDescriptor, String parent, String... fileNames) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.rm(parent, fileNames);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-    public static void download(final HostDescriptor hostDescriptor, final String srcPath, final String fileName, final ReadFunction readFunction) throws BcmpException {
-        try (final BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+    public static void download(HostDescriptor hostDescriptor, String srcPath, String fileName, ReadFunction readFunction) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
             bcmpoptions.download(fileName, srcPath, readFunction);
         } catch (Exception e) {
             throw new BcmpException("关闭会话异常!" + e.getMessage());
         }
     }
 
-//    public static void transfer(final HostDescriptor srcHost, final String srcPath, final String srcName, final HostDescriptor targetHost, final String targetPath) throws BcmpException {
+    public static String getAgentStatus(HostDescriptor hostDescriptor) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+            return bcmpoptions.getAgentStatus();
+        } catch (Exception e) {
+            throw new BcmpException("获取代理状态异常!" + e.getMessage());
+        }
+    }
+
+    public static String agentShutdown(HostDescriptor hostDescriptor) throws BcmpException {
+        try (BcmpOptions bcmpoptions = getBcmpOptions(hostDescriptor)) {
+            return bcmpoptions.agentShutdown();
+        } catch (Exception e) {
+            throw new BcmpException("停止代理服务异常!" + e.getMessage());
+        }
+    }
+
+//    public static void transfer( HostDescriptor srcHost,  String srcPath,  String srcName,  HostDescriptor targetHost,  String targetPath) throws BcmpException {
 //        download(srcHost, srcPath, srcName, is -> {
 //            upload(targetHost, is, srcName, targetPath, true);
 //            return true;
 //        });
 //    }
 
-    public static List<String> ls(final HostDescriptor host, final String repoPath, final String key) throws BcmpException {
+    public static List<String> ls(HostDescriptor host, String repoPath, String key) throws BcmpException {
 
         throw new IllegalStateException("An error occurred while decompiling this method.");
     }

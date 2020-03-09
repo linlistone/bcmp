@@ -1,0 +1,62 @@
+<!-- 管理 -->
+<div>
+    <!--查询区域-->
+    <yu-xform related-table-name="refTable" form-type="search">
+    	<!--
+        <yu-xform-group :column="4">
+        </yu-xform-group>
+        -->
+    </yu-xform>
+    <!--按钮区域-->
+    <div class="fox-toolBar">
+        <el-button-group>
+            <el-button icon="plus" @click="addFn">添加</el-button>
+        </el-button-group>
+    </div>
+    <!--表格区域-->
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
+                <yu-xtable-column prop="deviceNumber" label="设备序列号"></yu-xtable-column>
+        <yu-xtable-column prop="buyDate" label="购买日期"></yu-xtable-column>
+        <yu-xtable-column prop="deviceOrg" label="购买机构"></yu-xtable-column>
+        <yu-xtable-column prop="deviceType" label="设备类型"></yu-xtable-column>
+        <yu-xtable-column prop="deviceStatus" label="设备状态"></yu-xtable-column>
+        <yu-xtable-column prop="deviceComment" label="设备备注"></yu-xtable-column>
+        <yu-xtable-column prop="creatorUser" label="创建人"></yu-xtable-column>
+        <yu-xtable-column prop="creatorDate" label="创建人日期"></yu-xtable-column>
+        <yu-xtable-column prop="lastChgUser" label="修改人"></yu-xtable-column>
+        <yu-xtable-column prop="lashChgDate" label="修改人日期"></yu-xtable-column>
+        <yu-xtable-column prop="lastRecUser" label="最后领用人"></yu-xtable-column>
+        <yu-xtable-column prop="lastRecDate" label="最后领用日期"></yu-xtable-column>
+        <yu-xtable-column fixed="right" label="操作" width="120">
+            <template slot-scope="scope">
+                <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+                <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button>
+            </template>
+        </yu-xtable-column>
+    </yu-xtable>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
+            <yu-xform-group>
+                <yu-xform-item label="设备序列号" ctype="input" name="deviceNumber" ></yu-xform-item>
+                <yu-xform-item label="购买日期" ctype="input" name="buyDate" ></yu-xform-item>
+                <yu-xform-item label="购买机构" ctype="input" name="deviceOrg" ></yu-xform-item>
+                <yu-xform-item label="设备类型" ctype="input" name="deviceType" ></yu-xform-item>
+                <yu-xform-item label="设备状态" ctype="input" name="deviceStatus" ></yu-xform-item>
+                <yu-xform-item label="设备备注" ctype="input" name="deviceComment" ></yu-xform-item>
+                <yu-xform-item label="创建人" ctype="input" name="creatorUser" ></yu-xform-item>
+                <yu-xform-item label="创建人日期" ctype="input" name="creatorDate" ></yu-xform-item>
+                <yu-xform-item label="修改人" ctype="input" name="lastChgUser" ></yu-xform-item>
+                <yu-xform-item label="修改人日期" ctype="input" name="lashChgDate" ></yu-xform-item>
+                <yu-xform-item label="最后领用人" ctype="input" name="lastRecUser" ></yu-xform-item>
+                <yu-xform-item label="最后领用日期" ctype="input" name="lastRecDate" ></yu-xform-item>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
+</div>

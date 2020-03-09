@@ -38,6 +38,8 @@ public class BcmpSmNodeinfoResource extends BaseResouce {
     @GetMapping(value = "/all")
     public ResultDto<List<BcmpSmNodeinfo>> all(QueryModel model)
             throws Exception {
+        if (model.getSort() == null || "".equals(model.getSort()))
+            model.setSort("hostIp asc");
         List<BcmpSmNodeinfo> pageInfo = bcmpSmNodeinfoService.selectAll(model);
         return ResultDto.success(pageInfo);
     }

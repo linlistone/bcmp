@@ -44,7 +44,7 @@ public class BcmpSmVersionService extends BaseService {
      *  @Date : 2020/3/7 15:58
      */
     public int uploadFile(MultipartFile file, BcmpSmVersion versionInfo) {
-        if(versionInfo.getVersionNum()==null||"".equals(versionInfo.getVersionNum() )){
+        if (versionInfo.getVersionNum() == null || "".equals(versionInfo.getVersionNum())) {
             return -1;
         }
         String serviceName = versionInfo.getVersionType().toLowerCase();
@@ -53,7 +53,7 @@ public class BcmpSmVersionService extends BaseService {
         this.logger.info("上传服务:{}对应资源包", (Object) serviceName);
         OutputStream os = null;
         try (InputStream inputStream = file.getInputStream()) {
-            String path="deploy" + File.separator + serviceName + File.separator + outFileName;
+            String path = "deploy" + File.separator + serviceName + File.separator + outFileName;
             File outFile = new File(path);
             versionInfo.setVersionPath(path);
             if (!outFile.exists()) {
@@ -121,6 +121,8 @@ public class BcmpSmVersionService extends BaseService {
      */
     public PageInfo<BcmpSmVersion> index(QueryModel model) throws Exception {
         PageHelper.startPage(model.getPage(), model.getSize());
+        if (model.getSort() == null || "".equals(model.getSort()))
+            model.setSort("versionNum desc");
         List<BcmpSmVersion> list = bcmpSmVersionMapper.selectByModel(model);
         PageHelper.clearPage();
         return new PageInfo<>(list);

@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AgentMXBeanFactory {
-    private static final Logger logger = LoggerFactory.getLogger(AgentMXBeanFactory.class);
+    private static  Logger logger = LoggerFactory.getLogger(AgentMXBeanFactory.class);
     ;
     static boolean isShortConnect = true;
     private static Map<String, JMXConnector> jmxConnectors = null;
@@ -39,7 +39,7 @@ public class AgentMXBeanFactory {
         return instance;
     }
 
-    public JMXConnector builder(final String ip, final String rmiPort) throws Exception {
+    public JMXConnector builder( String ip,  String rmiPort) throws Exception {
         //String url = "service:jmx:rmi:///jndi/rmi://" + ip + ":" + rmiPort + "/jmxrmi";
         StringBuffer sb = new StringBuffer();
         sb.append("service:jmx:rmi://");
@@ -57,8 +57,8 @@ public class AgentMXBeanFactory {
             return this.builder(url);
         }
         if (!jmxConnectors.containsKey(url)) {
-            final JMXConnector jmxConnector = this.builder(url);
-            final JMXConnector oldJMXConnector = jmxConnectors.put(url, jmxConnector);
+             JMXConnector jmxConnector = this.builder(url);
+             JMXConnector oldJMXConnector = jmxConnectors.put(url, jmxConnector);
             if (Objects.nonNull(oldJMXConnector)) {
                 oldJMXConnector.close();
             }
@@ -66,33 +66,33 @@ public class AgentMXBeanFactory {
         return jmxConnectors.get(url);
     }
 
-    private JMXConnector builder(final String url) throws Exception {
-        final JMXServiceURL jmxServiceURL = new JMXServiceURL(url);
+    private JMXConnector builder( String url) throws Exception {
+         JMXServiceURL jmxServiceURL = new JMXServiceURL(url);
         return JMXConnectorFactory.connect(jmxServiceURL);
     }
 
-    public AgentManagementMXBean agentMXBean(final String ip, final String rmiPort) throws Exception {
-        final JMXConnector jmxConnector = this.builder(ip, rmiPort);
-        final MBeanServerConnection mbsc = jmxConnector.getMBeanServerConnection();
-        final ObjectName mBeanName = new ObjectName("Agent:name=AgentManagement");
-        final AgentManagementMXBean proxy = JMX.newMXBeanProxy(mbsc, mBeanName, AgentManagementMXBean.class, false);
+    public AgentManagementMXBean agentMXBean( String ip,  String rmiPort) throws Exception {
+         JMXConnector jmxConnector = this.builder(ip, rmiPort);
+         MBeanServerConnection mbsc = jmxConnector.getMBeanServerConnection();
+         ObjectName mBeanName = new ObjectName("Agent:name=AgentManagement");
+         AgentManagementMXBean proxy = JMX.newMXBeanProxy(mbsc, mBeanName, AgentManagementMXBean.class, false);
         this.cacheMBeanConnector(proxy.toString(), jmxConnector);
         return proxy;
     }
 
-    public ApplicationManagementMXBean applicationMXBean(final String ip, final String rmiPort) throws Exception {
-        final JMXConnector jmxConnector = this.builder(ip, rmiPort);
-        final MBeanServerConnection mbsc = jmxConnector.getMBeanServerConnection();
-        final ObjectName mBeanName = new ObjectName("Agent:name=ApplicationManagement");
-        final ApplicationManagementMXBean proxy = JMX.newMXBeanProxy(mbsc, mBeanName, ApplicationManagementMXBean.class,
+    public ApplicationManagementMXBean applicationMXBean( String ip,  String rmiPort) throws Exception {
+         JMXConnector jmxConnector = this.builder(ip, rmiPort);
+         MBeanServerConnection mbsc = jmxConnector.getMBeanServerConnection();
+         ObjectName mBeanName = new ObjectName("Agent:name=ApplicationManagement");
+         ApplicationManagementMXBean proxy = JMX.newMXBeanProxy(mbsc, mBeanName, ApplicationManagementMXBean.class,
                 false);
         this.cacheMBeanConnector(proxy.toString(), jmxConnector);
         return proxy;
     }
 
-    private void cacheMBeanConnector(final String mBeanName, final JMXConnector jmxConnector) {
+    private void cacheMBeanConnector( String mBeanName,  JMXConnector jmxConnector) {
         if (isShortConnect) {
-            final JMXConnector oldJMXConnector = mBeanConnects.put(mBeanName, jmxConnector);
+             JMXConnector oldJMXConnector = mBeanConnects.put(mBeanName, jmxConnector);
             if (Objects.nonNull(oldJMXConnector) && oldJMXConnector.hashCode() != jmxConnector.hashCode()) {
                 try {
                     oldJMXConnector.close();
@@ -103,11 +103,11 @@ public class AgentMXBeanFactory {
         }
     }
 
-    public void closeJMXConnector(final Object mBean) {
+    public void closeJMXConnector( Object mBean) {
         if (Objects.isNull(mBean)) {
             return;
         }
-        final String key = mBean.toString();
+         String key = mBean.toString();
         if (isShortConnect && mBeanConnects.containsKey(key)) {
             try {
                 mBeanConnects.get(key).close();
