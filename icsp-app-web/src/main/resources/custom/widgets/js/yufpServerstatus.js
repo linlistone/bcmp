@@ -24,7 +24,6 @@
                             <li class="font_black">服务名称：{{datasource.nodename}}</li>
                             <li class="font_black">服务类型：{{datasource.nodetype}}</li>
                             <li class="font_black">服务状态：{{datasource.serverstatus?"已启动":"未启动"}}</li>
-                            <li class="font_black">当前版本：</li>
                         </ul>
                     </div>
                 </a>

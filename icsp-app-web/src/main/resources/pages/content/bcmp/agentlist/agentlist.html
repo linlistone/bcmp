@@ -1,61 +1,61 @@
 <!-- 管理 -->
 <div>
-  <!--查询区域-->
-  <yu-xform related-table-name="refTable" form-type="search">
-    <yu-xform-group :column="4">
-        <yu-xform-item placeholder="主机地址" ctype="input" name="hostAddress"> </yu-xform-item>
-    </yu-xform-group>
-  </yu-xform>
-  <!--按钮区域-->
-  <div class="fox-toolBar">
-        <yu-button icon="yx-loop2" @click="rebootFn" type="info">重启</yu-button>
+    <!--查询区域-->
+    <yu-xform related-table-name="refTable" form-type="search">
+        <yu-xform-group :column="4">
+            <yu-xform-item placeholder="主机地址" ctype="input" name="hostAddress"> </yu-xform-item>
+        </yu-xform-group>
+    </yu-xform>
+    <!--按钮区域-->
+    <div class="fox-toolBar">
         <yu-button icon="yx-stop2" @click="shutdownFn" type="danger">停止</yu-button>
-  </div>
-  <!--表格区域-->
-  <yu-xtable ref="refTable" :data-url="dataUrl"  reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
-      <yu-xtable-column prop="hostAddress" label="主机IP"></yu-xtable-column>
-      <yu-xtable-column prop="osName" label="系统类型"></yu-xtable-column>
-      <yu-xtable-column prop="rmiPort" label="RMI端口"></yu-xtable-column>
-      <yu-xtable-column prop="socketPort" label="HTTP端口"></yu-xtable-column>
-      <yu-xtable-column prop="version" label="当前版本"></yu-xtable-column>
-      <yu-xtable-column prop="status" label="RMI状态">
-        <template slot-scope="scope">
-            <yu-tag :type="scope.row.status==='UP'?'success':'danger'">{{scope.row.status}}</yu-tag>
-          </template>
-      </yu-xtable-column>
-      <yu-xtable-column prop="socketStatus" label="HTTP状态">
-        <template slot-scope="scope">
-            <yu-tag :type="scope.row.socketStatus==='UP'?'success':'danger'">{{scope.row.socketStatus}}</yu-tag>
-          </template>
-      </yu-xtable-column>
-      <yu-xtable-column prop="registryTime" label="注册时间" width="160"></yu-xtable-column>
-      <yu-xtable-column fixed="right" label="操作" width="120">
-          <template slot-scope="scope">
-              <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
-              <!-- <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
+    </div>
+    <!--表格区域-->
+    <yu-xtable ref="refTable" :data-url="dataUrl" @loaded="onLoadedFn" reserve-selection selection-type="checkbox" row-key="id"
+        style="width: 100%">
+        <yu-xtable-column prop="hostAddress" label="主机IP"></yu-xtable-column>
+        <yu-xtable-column prop="osName" label="系统类型"></yu-xtable-column>
+        <yu-xtable-column prop="rmiPort" label="RMI端口"></yu-xtable-column>
+        <yu-xtable-column prop="socketPort" label="HTTP端口"></yu-xtable-column>
+        <yu-xtable-column prop="version" label="当前版本"></yu-xtable-column>
+        <yu-xtable-column prop="status" label="RMI状态">
+            <template slot-scope="scope">
+                <yu-tag :type="scope.row.status==='UP'?'success':'danger'">{{scope.row.status}}</yu-tag>
+            </template>
+        </yu-xtable-column>
+        <yu-xtable-column prop="socketStatus" label="HTTP状态">
+            <template slot-scope="scope">
+                <yu-tag :type="scope.row.socketStatus==='UP'?'success':'danger'">{{scope.row.socketStatus}}</yu-tag>
+            </template>
+        </yu-xtable-column>
+        <yu-xtable-column prop="registryTime" label="注册时间" width="160"></yu-xtable-column>
+        <yu-xtable-column fixed="right" label="操作" width="120">
+            <template slot-scope="scope">
+                <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
+                <!-- <yu-button @click="modifyFn(scope.row)" icon="edit" size="mini"></yu-button>
               <yu-button @click="deleteFn(scope.row)" icon="delete" size="mini"></yu-button> -->
-          </template>
-      </yu-xtable-column>
-  </yu-xtable>
-  <!-- 弹出框 数据信息维护页面 -->
-  <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
-      <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
-          <yu-xform-group>
-              <yu-xform-item label="主机地址" ctype="input" name="hostAddress" ></yu-xform-item>
-              <yu-xform-item label="系统类型" ctype="input" name="osName" ></yu-xform-item>
-              <yu-xform-item label="RMI端口" ctype="input" name="rmiPort" ></yu-xform-item>
-              <yu-xform-item label="RMI状态" ctype="input" name="status" ></yu-xform-item>
-              <yu-xform-item label="HTTP端口" ctype="input" name="socketPort" ></yu-xform-item>
-              <yu-xform-item label="HTTP状态" ctype="input" name="socketStatus" ></yu-xform-item>
-              <yu-xform-item label="应用位置" ctype="input" name="appWorkspace"  :colspan="24" ></yu-xform-item>
-              <yu-xform-item label="当前版本" ctype="input" name="version" ></yu-xform-item>
-              <yu-xform-item label="注册时间" ctype="input" name="registryTime" ></yu-xform-item>
-          </yu-xform-group>
-          <div class="yu-grpButton">
-              <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
-              </yu-button>
-              <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
-          </div>
-      </yu-xform>
-  </yu-xdialog>
+            </template>
+        </yu-xtable-column>
+    </yu-xtable>
+    <!-- 弹出框 数据信息维护页面 -->
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
+        <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
+            <yu-xform-group>
+                <yu-xform-item label="主机地址" ctype="input" name="hostAddress"></yu-xform-item>
+                <yu-xform-item label="系统类型" ctype="input" name="osName"></yu-xform-item>
+                <yu-xform-item label="RMI端口" ctype="input" name="rmiPort"></yu-xform-item>
+                <yu-xform-item label="RMI状态" ctype="input" name="status"></yu-xform-item>
+                <yu-xform-item label="HTTP端口" ctype="input" name="socketPort"></yu-xform-item>
+                <yu-xform-item label="HTTP状态" ctype="input" name="socketStatus"></yu-xform-item>
+                <yu-xform-item label="应用位置" ctype="input" name="appWorkspace" :colspan="24"></yu-xform-item>
+                <yu-xform-item label="当前版本" ctype="input" name="version"></yu-xform-item>
+                <yu-xform-item label="注册时间" ctype="input" name="registryTime"></yu-xform-item>
+            </yu-xform-group>
+            <div class="yu-grpButton">
+                <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
+                </yu-button>
+                <yu-button icon="yx-undo2" type="primary" @click="cancelFn">取消</yu-button>
+            </div>
+        </yu-xform>
+    </yu-xdialog>
 </div>

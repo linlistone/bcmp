@@ -27,11 +27,29 @@ define(function (require, exports) {
       computed: {},
       // 方法
       methods: {
-        rebootFn: function () {
-
-        },
         shutdownFn: function () {
 
+        },
+        // 数据更新，查询代理状态
+        onLoadedFn: function (data, total) {
+          for (let i = 0; i < data.length; i++) {
+            let reqData = {
+              hostAddress: data[i].hostAddress
+            };
+            yufp.service.request({
+              method: 'get',
+              name: backend.adminService + '/agent/status',
+              data: reqData,
+              callback: function (code, message, response) {
+                if (code == '0' && response.code == '0') {
+                  console.log(response);
+                } else {
+                  data[i].status = 'DOWN';
+                  data[i].socketStatus = 'DOWN';
+                }
+              }
+            });
+          }
         },
         // 新增按钮事件
         addFn: function (data) {
