@@ -5,12 +5,19 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.BcmpSmDeviceLog;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceLogMapper;
 import cn.com.yusys.icsp.common.exception.ICSPException;
+
+import java.io.*;
 import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 设备日志上传表
  *
@@ -99,6 +106,52 @@ public class BcmpSmDeviceLogService extends BaseService {
 	 */
 	public int deleteByIds(String ids) throws Exception {
 		return bcmpSmDeviceLogMapper.deleteByIds(ids);
+	}
+
+	/*
+	 *  @Description : 设备终端日志下载
+	 *  @Author : Mr_Jiang
+	 *  @Date : 2020/3/10 10:21
+	 */
+	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//获取请求参数deviceLogId
+		String deviceLogId = request.getParameter("deviceLogId");
+		//从数据库获取当前日志编号详细信息
+		BcmpSmDeviceLog bcmpSmDeviceLog =  show(deviceLogId);
+		//获取文件
+		File deviceLog = new File(bcmpSmDeviceLog.getLogPath()+File.separator+bcmpSmDeviceLog.getLogName());
+		if(!deviceLog.exists()){
+			throw new ICSPException("该日志文件["+bcmpSmDeviceLog.getLogName()+"]不存在!");
+		}
+		//将文件转化为字节数组
+		byte[] data =readFile(new FileInputStream(deviceLog),new ByteArrayOutputStream());
+		response.reset();
+		response.setHeader("Content-Disposition", "attachment; filename=\""+bcmpSmDeviceLog.getLogName()+"\"");
+		response.addHeader("Content-Length", "" + data.length);
+		response.setContentType("application/octet-stream; charset=UTF-8");
+		IOUtils.write(data, response.getOutputStream());
+	}
+	/*
+	 *  @Description : 读取文件
+	 *  @Author : Mr_Jiang
+	 *  @Date : 2020/3/10 11:59
+	 */
+	private byte[] readFile(FileInputStream inputStream,ByteArrayOutputStream byteArrayOutputStream) throws IOException {
+		byte[] bytes = new byte[1024];
+		int line;
+		try{
+			while ((line = inputStream.read(bytes)) != -1){
+				byteArrayOutputStream.write(bytes, 0, line);
+			}
+			return byteArrayOutputStream.toByteArray();
+		}finally {
+			if(inputStream!=null){
+				inputStream.close();
+			}
+			if (byteArrayOutputStream != null) {
+				byteArrayOutputStream.close();
+			}
+		}
 	}
 }
 

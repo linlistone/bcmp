@@ -19,8 +19,8 @@
   function LocalSession () {
     var _settings = {
       settings: {
-        logoutUrl: backend.uaaService + '/user/logout', // 注销URL
-        userUrl: backend.appOcaService + '/user/info', // 会话URL
+        logoutUrl: microServiceHost.uaaService + '/api/logout', // 注销URL
+        userUrl: microServiceHost.appOcaService + '/api/session/info', // 会话URL
         userJsonRoot: '', // 用户返回数据节点,如：'data.user'
         userStoreKey: 'YUFP-SESSION-USER', // 会话存储前缀
         userMapping: { // 用户后端数据模型映射
@@ -37,7 +37,7 @@
           upDpt: 'upDpt' // 上级部门Object
         },
 
-        menuUrl: backend.appOcaService + '/user/menuandcontr', // 菜单远程URL
+        menuUrl: backend.bcmpService + '/user/menuandcontr', // 菜单远程URL
         menuRootPid: '0', // 菜单根节点父级Id
         menuJsonRoot: 'menus', // 菜单返回数据节点,如：'data.menus'
         menuStoreOgKey: 'YUFP-SESSION-MENUS-OG',
@@ -52,7 +52,7 @@
           mType: 'menuType' // 菜单类型
         },
 
-        ctrlUrl: backend.appOcaService + '/user/menuandcontr', // 控制点远程URL
+        ctrlUrl: backend.bcmpService + '/user/menuandcontr', // 控制点远程URL
         ctrlJsonRoot: 'ctrls', // 控制点返回数据节点,如：'data.ctrls'，控制点数据，查询需按菜单ID、功能ID排序返回
         ctrlStoreOgKey: 'YUFP-SESSION-STRLS-OG',
         ctrlStoreKey: 'YUFP-SESSION-STRLS',
@@ -147,12 +147,12 @@
     }
 
     yufp.service.request({
-      url: _this.settings.userUrl,
+      path: _this.settings.userUrl,
       method: 'get',
       callback: function (code, message, response) {
-        var data = getObjectKey(response.data, _this.settings.userJsonRoot);
-        if (code == '0' && data) {
-          processFn.call(_this, data);
+        // var data = getObjectKey(response.data, _this.settings.userJsonRoot);
+        if (code == '0' && response) {
+          processFn.call(_this, response);
         }
         _this.loadMenus(callback);
         // _this.loadCtrls(); //由于控制点数据和菜单一起加载则无需要单独加载
@@ -168,7 +168,7 @@
     var settings = this.settings;
     if (already) {
       yufp.service.request({
-        url: settings.logoutUrl,
+        path : settings.logoutUrl,
         method: 'POST',
         callback: function (code, message, response) {
           /* if (code != 0 || (response && response.code != 0)) {
@@ -377,8 +377,8 @@
       ctrlObj[lastId] = lastObj;
     }
     _this.ctrls = ctrlObj;
-    storagePut(_this.settings.ctrlStoreOgKey, _this.orginalCtrls);
-    storagePut(_this.settings.ctrlStoreKey, _this.ctrls);
+    // storagePut(_this.settings.ctrlStoreOgKey, _this.orginalCtrls);
+    // storagePut(_this.settings.ctrlStoreKey, _this.ctrls);
   };
 
   /**
