@@ -332,7 +332,7 @@ public class BcmpSmServerClusterService extends BaseService {
                     response.put("wsData", checkServerState);
                 } else {
                     response.put("wsType", WebSocketProtocol.nodestatus.toString());
-                    response.put("wsData", "UNKNOW");
+                    response.put("wsData", "UNKNOWN");
                 }
                 //通过websocket发送信息
                 bcmpWebSocketService.GroupSending(response.toJSONString());
@@ -370,12 +370,12 @@ public class BcmpSmServerClusterService extends BaseService {
                     response.put("wsData", appVersion);
                 } else {
                     response.put("wsType", WebSocketProtocol.servicevsesion.toString());
-                    response.put("wsData", "UNKNOW");
+                    response.put("wsData", "UNKNOWN");
                 }
             }
         } catch (Exception e) {
             response.put("wsType", WebSocketProtocol.servicevsesion.toString());
-            response.put("wsData", "UNKNOW");
+            response.put("wsData", "UNKNOWN");
             logger.error("获取服务器应用节点版本号失败!", e);
         }finally {
             //通过websocket发送信息
