@@ -5,9 +5,6 @@ import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.FreemarkerUtil;
 import cn.com.yusys.icsp.domain.ColumnEntity;
 import cn.com.yusys.icsp.domain.TableEntity;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -17,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,7 +57,7 @@ public class GenUtils {
                                      Map<String, String> table, List<Map<String, String>> columns,
                                      ZipOutputStream zip) throws Exception {
         // 配置信息
-        Configuration config = getConfig();
+        Properties config = getConfig();
         boolean hasBigDecimal = false;
         // 表信息
         TableEntity tableEntity = new TableEntity();
@@ -67,7 +65,7 @@ public class GenUtils {
         tableEntity.setComments(table.get("tableComment" ));
         // 表名转换成Java类名
         String className = tableToJava(tableEntity.getTableName(),
-                config.getString("tablePrefix" ));
+                config.getProperty("tablePrefix" ));
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
 
@@ -84,7 +82,7 @@ public class GenUtils {
             columnEntity.setAttrName(attrName);
             columnEntity.setAttrname(StringUtils.uncapitalize(attrName));
             // 列的数据类型，转换成Java类型
-            String attrType = config.getString(columnEntity.getDataType(),
+            String attrType = config.getProperty(columnEntity.getDataType(),
                     "unknowType" );
             columnEntity.setAttrType(attrType);
             if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
@@ -102,7 +100,7 @@ public class GenUtils {
         if (tableEntity.getPk() == null) {
             tableEntity.setPk(tableEntity.getColumns().get(0));
         }
-        String mainPath = config.getString("mainPath" );
+        String mainPath = config.getProperty("mainPath" );
         mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
         // 封装模板数据
         Map<String, Object> map = new HashMap<>();
@@ -130,7 +128,7 @@ public class GenUtils {
                 // 添加到zip
                 String fileName = getFileName(template,
                         tableEntity.getClassName(),
-                        config.getString("package" ),
+                        config.getProperty("package" ),
                         moduleName);
                 if (fileName == null)
                     continue;
@@ -171,11 +169,13 @@ public class GenUtils {
     /**
      * 获取配置信息
      */
-    public static Configuration getConfig() {
+    public static Properties getConfig() {
         try {
             Resource resource = new ClassPathResource("generator.properties" );
-            return new PropertiesConfiguration(((ClassPathResource) resource).getPath());
-        } catch (ConfigurationException e) {
+            Properties properties=new Properties();
+            properties.load(new FileInputStream(resource.getFile().getAbsolutePath()));
+            return properties;
+        } catch (Exception e) {
             throw new ICSPException("获取配置文件失败，", e);
         }
     }
