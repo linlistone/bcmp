@@ -98,12 +98,6 @@ public class BcmpSmDeviceLogResource extends BaseResouce {
 	@RequestMapping("/download")
 	@ResponseBody
 	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String deviceLogId = request.getParameter("deviceLogId");
-		byte[] data = (deviceLogId+"log").getBytes();
-		response.reset();
-		response.setHeader("Content-Disposition", "attachment; filename=\""+deviceLogId+"_log.zip\"");
-		response.addHeader("Content-Length", "" + data.length);
-		response.setContentType("application/octet-stream; charset=UTF-8");
-		IOUtils.write(data, response.getOutputStream());
+		bcmpSmDeviceLogService.download(request,response);
 	}
 }

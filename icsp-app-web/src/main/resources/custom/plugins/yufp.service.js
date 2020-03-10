@@ -59,7 +59,15 @@
     _options.data = event.data.data;
     _options.headers = yufp.extend({}, event.data.headers || {}, _options.headers);
     if (_options.needToken) {
-      _options.headers[_this.tokenId] = 'Bearer ' + _this.getToken();
+      var sessionStroageToken = _this.getToken();
+      var tokentype = yufp.type(sessionStroageToken);
+      var token;
+      if (tokentype == 'object') {
+        token = sessionStroageToken.access_token;
+      }else {
+        token = sessionStroageToken;
+      }
+      _options.headers[_this.tokenId] = 'Bearer ' + token;
     }
     _options.type = options.method;
     _options.async = options.async;
@@ -120,24 +128,41 @@
          */
   Service.prototype.getUrl = function (param) {
     param.url = param.url ? param.url : param.name;
-    if (!param.url) {
+    if (param.url){
+      if (yufp.settings.url) {
+        param.url = param.url.charAt(0) == '/' ? param.url : '/' + param.url;
+        var url = yufp.settings.ssl ? 'https://' : 'http://';
+        url += yufp.settings.url;
+        url += this.basePath ? this.basePath : '';
+        if (param.url && (param.url.indexOf('http://') > -1 || param.url.indexOf('https://') > -1)) {
+          // param.url 为http或https 情况时需要将前面拼接的/去掉
+          url = param.url.substr(1);
+        } else {
+          url += param.url;
+        }
+      } else {
+        url = param.url;
+      }
+      return url;
+    }else if(param.path){
+      if (microServiceHost.microGatewayHost) {
+        param.path = param.path.charAt(0) == '/' ? param.path : '/' + param.path;
+        var url = microServiceHost.microSSL ? 'https://' : 'http://';
+        url += microServiceHost.microGatewayHost;
+        url += this.basePath ? this.basePath : '';
+        if (param.path && (param.path.indexOf('http://') > -1 || param.path.indexOf('https://') > -1)) {
+          // param.url 为http或https 情况时需要将前面拼接的/去掉
+          url = param.path.substr(1);
+        } else {
+          url += param.path;
+        }
+      } else {
+        url = param.path;
+      }
+      return url;
+    }else{
       throw new Error('未设置请求URL');
     }
-    if (yufp.settings.url) {
-      param.url = param.url.charAt(0) == '/' ? param.url : '/' + param.url;
-      var url = yufp.settings.ssl ? 'https://' : 'http://';
-      url += yufp.settings.url;
-      url += this.basePath ? this.basePath : '';
-      if (param.url && (param.url.indexOf('http://') > -1 || param.url.indexOf('https://') > -1)) {
-        // param.url 为http或https 情况时需要将前面拼接的/去掉
-        url = param.url.substr(1);
-      } else {
-        url += param.url;
-      }
-    } else {
-      url = param.url;
-    }
-    return url;
   };
 
   Service.prototype.getToken = function () {
