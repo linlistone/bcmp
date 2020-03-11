@@ -55,7 +55,7 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
    /**
 	 * 部署结果备注
 	 */
-	private unknowType deployRemark;
+	private String deployRemark;
 	
 	/**
 	 * 部署ID
