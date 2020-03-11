@@ -1,6 +1,7 @@
 package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.base.base.BaseService;
+import cn.com.yusys.icsp.bcmp.constant.OS;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.common.util.DateUtil;
 import cn.com.yusys.icsp.domain.BcmpSmVersion;
@@ -53,7 +54,7 @@ public class BcmpSmVersionService extends BaseService {
         this.logger.info("上传服务:{}对应资源包", (Object) serviceName);
         OutputStream os = null;
         try (InputStream inputStream = file.getInputStream()) {
-            String path = "deploy" + File.separator + serviceName + File.separator + outFileName;
+            String path = "deploy" + OS.LINUXSEPARATOR.getName() + serviceName + OS.LINUXSEPARATOR.getName() + outFileName;
             File outFile = new File(path);
             versionInfo.setVersionPath(path);
             if (!outFile.exists()) {

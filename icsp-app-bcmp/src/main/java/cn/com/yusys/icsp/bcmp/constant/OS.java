@@ -17,6 +17,10 @@ public enum OS {
 	 * LINUX
 	 */
 	LINUX("linux"),
+	/**
+	 * LINUX
+	 */
+	LINUXSEPARATOR("/"),
 	
 	/**
 	 * UN KNOWN

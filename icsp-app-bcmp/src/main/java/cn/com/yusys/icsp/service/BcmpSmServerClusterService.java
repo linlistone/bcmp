@@ -6,6 +6,7 @@ import cn.com.yusys.icsp.bcmp.BcmpTools;
 import cn.com.yusys.icsp.bcmp.HostDescriptor;
 import cn.com.yusys.icsp.bcmp.constant.DBOperateType;
 import cn.com.yusys.icsp.bcmp.constant.DeployStep;
+import cn.com.yusys.icsp.bcmp.constant.OS;
 import cn.com.yusys.icsp.bcmp.constant.WebSocketProtocol;
 import cn.com.yusys.icsp.bcmp.shell.ShellScriptManager;
 import cn.com.yusys.icsp.bean.HostAgentBean;
@@ -65,7 +66,7 @@ public class BcmpSmServerClusterService extends BaseService {
      *  @Date : 2020/3/7 16:05
      */
     public List<String> listVersion(String type, String nodeType) {
-        File outFile = new File(type.toLowerCase() + File.separator + nodeType.toLowerCase());
+        File outFile = new File(type.toLowerCase() + OS.LINUXSEPARATOR.getName() + nodeType.toLowerCase());
         logger.info("listVersion:{}", outFile.getAbsolutePath());
         File files[] = outFile.listFiles();
         List<String> list = new ArrayList<>();
@@ -152,19 +153,21 @@ public class BcmpSmServerClusterService extends BaseService {
         logger.info("准备部署的服务器列表及其文件:{}", deployBean.toString());
         //部署节点信息
         JSONArray deployNodes = deployBean.getJSONArray("nodes");
+        //应用节点信息
+        JSONObject appMod = deployBean.getJSONObject("appmod");
+        //获取版本信息
+        JSONObject version = deployBean.getJSONObject("version");
         /**--------------------获取传入信息--------------------*/
         //获取执行当前操作的用户编号
         String operatorUser = deployBean.getString("userId");
         //获取是否需要重启
         String needRestart = deployBean.getString("needRestart");
-        //获取版本信息
-        JSONObject version = deployBean.getJSONObject("version");
         //遍历部署节点信息
         for (int i = 0; i < deployNodes.size(); i++) {
             //获取每个节点信息
             JSONObject deployNode = deployNodes.getJSONObject(i);
             //创建当前节点线程
-            this.deploy(deployNode, version, needRestart, operatorUser);
+            this.deploy(deployNode, appMod , version, needRestart, operatorUser);
         }
         return 0;
     }
@@ -175,10 +178,10 @@ public class BcmpSmServerClusterService extends BaseService {
      *  @Date : 2020/3/9 15:23
      */
     @Async
-    public void deploy(JSONObject deployNode, JSONObject versionInfo, String needRestart, String operatorUser) throws Exception {
-        String nodeMessageHeader = deployNode.getString("hostIp") + "_" + deployNode.getString("nodeName") + "_" + deployNode.getString("nodeType") + ": ";
+    public void deploy(JSONObject deployNode, JSONObject appMod, JSONObject versionInfo, String needRestart, String operatorUser) throws Exception {
+        String nodeMessageHeader = deployNode.getString("hostIp") + "_" + deployNode.getString("nodeName") + "_" + deployNode.getString("nodeType") + "_"+appMod.getString("appModName")+": ";
         String deployUUId = createUUId();
-        BcmpSmDeploy bcmpSmDeploy = new BcmpSmDeploy(deployUUId, versionInfo.getString("versionId"), deployNode.getString("nodeId"), operatorUser, DateUtil.getFormatDateTime());
+        BcmpSmDeploy bcmpSmDeploy = new BcmpSmDeploy(deployUUId, versionInfo.getString("versionId"), deployNode.getString("nodeId"),appMod.getString("appModId") , operatorUser, DateUtil.getFormatDateTime());
         try {
             /*
              *  步骤1: 正在准备环境
@@ -204,14 +207,21 @@ public class BcmpSmServerClusterService extends BaseService {
             //步骤3: 开始上传文件
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.开始上传文件, null, null);
             File versionPackage = new File(versionInfo.getString("versionPath"));
-            agentClient.upload(versionPackage, versionPackage.getName(), deployNode.getString("applyPath") + "/workspace/versions/", false);
+            agentClient.upload(versionPackage, versionPackage.getName(), deployNode.getString("applyPath") + OS.LINUXSEPARATOR.getName() +"workspace"+OS.LINUXSEPARATOR.getName()+"versions", false);
             //步骤4: 文件上传成功
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.文件上传成功, null, null);
             //步骤5: 开始解压文件
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.开始解压文件, null, null);
-            String remoteVersionPath = deployNode.getString("applyPath") + "/workspace/versions/";
-            String remoteVersionUnzipPath = deployNode.getString("applyPath") + "/workspace/";
-            String[] unzipProcessMessages = agentClient.goCmd("unzip -o " + remoteVersionPath + versionPackage.getName() + " -d " + remoteVersionUnzipPath).split("\n");
+            String remoteVersionPath = deployNode.getString("applyPath") + OS.LINUXSEPARATOR.getName()+"workspace"+OS.LINUXSEPARATOR.getName()+"versions";
+            String remoteVersionUnzipPath ;
+            if("M".equalsIgnoreCase(appMod.getString("appModType"))){
+                remoteVersionUnzipPath = deployNode.getString("updateDirectory");
+            }else if ("C".equalsIgnoreCase(appMod.getString("appModType"))){
+                remoteVersionUnzipPath = deployNode.getString("updateDirectory")+OS.LINUXSEPARATOR.getName()+appMod.getString("appModDeployPath");
+            }else{
+                remoteVersionUnzipPath = deployNode.getString("updateDirPath");
+            }
+            String[] unzipProcessMessages = agentClient.goCmd("unzip -o " + remoteVersionPath + OS.LINUXSEPARATOR.getName() + versionPackage.getName() + " -d " + remoteVersionUnzipPath).split("\n");
             for (String unzipProcessMessage : unzipProcessMessages) {
                 logger.info(nodeMessageHeader + unzipProcessMessage);
             }
@@ -233,15 +243,13 @@ public class BcmpSmServerClusterService extends BaseService {
             }
             //步骤9: 开始写入版本
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.开始写入版本, null, null);
-
-
             //步骤10: 版本写入完成
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.版本写入完成, null, null);
             //步骤11: 文件部署结束
             updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UPDATE, nodeMessageHeader, DeployStep.文件部署结束, null, null);
         } catch (Exception e) {
             e.printStackTrace();
-            updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UNKNOWN, null, null, "文件部署到服务器异常并中止:" + e.getMessage(), e);
+            updateDeployStepStatus(bcmpSmDeploy, DBOperateType.UNKNOWN, null, null,  e.getMessage(), e);
         }
     }
 
@@ -251,12 +259,17 @@ public class BcmpSmServerClusterService extends BaseService {
      *  @Date : 2020/3/9 14:18
      */
     private void updateDeployStepStatus(BcmpSmDeploy bcmpSmDeploy, DBOperateType type, String header, DeployStep deployStep, String remark, Exception exception) throws Exception {
+
         //判断当前是否为异常状态,若为异常,则不更新节点步骤及步骤状态
         if (!type.equals(DBOperateType.UNKNOWN)) {
             bcmpSmDeploy.setDeployStep(deployStep.getStep());
             bcmpSmDeploy.setDeployStepStatus(deployStep.toString());
+            if (DeployStep.文件部署结束.getStep().equals(deployStep.getStep())){
+                bcmpSmDeploy.setDeployResult("文件部署到服务器成功!");
+            }
             logger.info(header + deployStep);
         } else {
+            bcmpSmDeploy.setDeployResult("文件部署到服务器异常并中止!");
             bcmpSmDeploy.setDeployRemark(remark);
             logger.error(remark, exception);
         }

@@ -59,14 +59,22 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
     private String deployRemark;
 
     /*
+     *  @Description : 无参构造函数
+     *  @Author : Mr_Jiang
+     *  @Date : 2020/3/9 13:19
+     */
+    public BcmpSmDeploy() {
+    }
+    /*
      *  @Description : 有参构造函数初始化数据
      *  @Author : Mr_Jiang
      *  @Date : 2020/3/9 13:19
      */
-    public BcmpSmDeploy(String deployId, String versionId, String nodeId, String deployUser, String deployDate) {
+    public BcmpSmDeploy(String deployId, String versionId, String nodeId,String appModId ,String deployUser, String deployDate) {
         this.deployId = deployId;
         this.versionId = versionId;
         this.nodeId = nodeId;
+        this.appModId = appModId;
         this.deployUser = deployUser;
         this.deployDate = deployDate;
     }
