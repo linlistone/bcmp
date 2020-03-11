@@ -172,12 +172,21 @@ define(function (require, exports) {
           }
           // 选中版本
           let verSelect = this.$refs.refVersionTable.selections[0];
+          let appmod;
+          for (var n = 0; n < _this.appModList.length; n++) {
+            if (_this.appModList[n].appModId == _this.versionQuery.appModId) {
+              appmod = _this.appModList[n];
+              break;
+            }
+          }
+
           // 查询部署的版本
           var reqData = {
-            nodes: nodes,
-            version: verSelect,
+            userId: yufp.session.userId,
             needRestart: this.deployFormData.needRestart,
-            userId: yufp.session.userId
+            appmod: appmod,
+            version: verSelect,
+            nodes: nodes
           };
           // 开始版本部署
           yufp.service.request({
