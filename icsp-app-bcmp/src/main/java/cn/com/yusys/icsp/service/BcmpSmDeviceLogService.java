@@ -1,6 +1,7 @@
 package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.base.base.BaseService;
+import cn.com.yusys.icsp.bcmp.constant.OS;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
 import cn.com.yusys.icsp.domain.BcmpSmDeviceLog;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmDeviceLogMapper;
@@ -119,7 +120,7 @@ public class BcmpSmDeviceLogService extends BaseService {
 		//从数据库获取当前日志编号详细信息
 		BcmpSmDeviceLog bcmpSmDeviceLog =  show(deviceLogId);
 		//获取文件
-		File deviceLog = new File(bcmpSmDeviceLog.getLogPath()+File.separator+bcmpSmDeviceLog.getLogName());
+		File deviceLog = new File(bcmpSmDeviceLog.getLogPath()+ OS.LINUXSEPARATOR.getName()+bcmpSmDeviceLog.getLogName());
 		if(!deviceLog.exists()){
 			throw new ICSPException("该日志文件["+bcmpSmDeviceLog.getLogName()+"]不存在!");
 		}

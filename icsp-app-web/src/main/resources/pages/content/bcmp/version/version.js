@@ -8,7 +8,7 @@ define(function (require, exports) {
   exports.ready = function (code, data, cite) {
     // vue data
     let vmData = {
-      versionTypeDic: yufp.lookup.find('VERSION_TYPE', true),
+      nodeTypeDic: yufp.lookup.find('HOST_TYPE', true),
       upload: {
         visible: false,
         data: {
@@ -31,59 +31,9 @@ define(function (require, exports) {
       viewTitle: yufp.lookup.find('CRUD_TYPE', false),
       // 表单数据
       formdata: {},
-      dataUrl: backend.adminService + '/bcmpSmAppMod/index',
+      dataUrl: backend.adminService + '/bcmpSmVersion/index',
       buttonName: '', // 弹出框提交按钮名称
-      dialogVisible: false, // 弹出框层是否可见
-      rules: {
-        appModCode: [{
-          required: true,
-          message: '必填项',
-          trigger: 'blur'
-        }, {
-          max: 20,
-          message: '最大长度不超过20个字符',
-          trigger: 'blur'
-        }, {
-          validator: yufp.validator.speChar,
-          message: '输入信息包含特殊字符',
-          trigger: 'blur'
-        }],
-        appModName: [{
-          required: true,
-          message: '必填项',
-          trigger: 'blur'
-        }, {
-          max: 30,
-          message: '最大长度不超过30个字符',
-          trigger: 'blur'
-        }, {
-          validator: yufp.validator.speChar,
-          message: '输入信息包含特殊字符',
-          trigger: 'blur'
-        }],
-        appModDesc: [{
-          max: 50,
-          message: '最大长度不超过50个字符',
-          trigger: 'blur'
-        }, {
-          validator: yufp.validator.speChar,
-          message: '输入信息包含特殊字符',
-          trigger: 'blur'
-        }],
-        appModDeployPath: [{
-          required: true,
-          message: '必填项',
-          trigger: 'blur'
-        }, {
-          max: 50,
-          message: '最大长度不超过50个字符',
-          trigger: 'blur'
-        }, {
-          validator: yufp.validator.speChar,
-          message: '输入信息包含特殊字符',
-          trigger: 'blur'
-        }]
-      }
+      dialogVisible: false // 弹出框层是否可见
     };
     // 创建vue model
     const vm = new Vue({
@@ -102,17 +52,10 @@ define(function (require, exports) {
       methods: {
         // 展示文件上传面板
         showUpload: function () {
-          let selected = this.$refs.refTable.selections;
-          if (selected.length < 1) {
-            this.$message('请选择应用模块！');
-          } else {
-            var _this = this;
-            _this.upload.data.appModId = selected[0].appModId;
-            _this.upload.data.appModCode = selected[0].appModCode;
-            _this.upload.data.versionType = 'APP';
-            _this.upload.data.versionNum = _this.formatTime('yyyyMMdd.hhmmss', new Date());
-            this.upload.visible = true;
-          }
+          var me = this;
+          this.upload.visible = true;
+          // this.upload.data.name = 'fox-update-package';
+          this.upload.data.versionNum = me.formatTime('yyyyMMdd.hhmmss', new Date());
         },
         closeUpload: function () {
           this.upload.visible = false;
@@ -143,9 +86,9 @@ define(function (require, exports) {
         fileChange: function (file, fileList) {
           var fileName = file.name;
           var suffix = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
-          if (suffix != 'jar' && suffix != 'war' && suffix != 'zip') {
+          if (suffix != 'jar' && suffix != 'war') {
             fileList.pop();
-            this.$message('请选择jar,war或zip文件！');
+            this.$message('请选择jar或war文件！');
           } else {
             if (fileList.length > 1) {
               fileList.pop();
@@ -208,7 +151,6 @@ define(function (require, exports) {
           var _this = this;
           _this.switchStatus('ADD', true);
           _this.formdata.joinDt = new Date();
-          _this.formdata.appModLastChgUser = yufp.session.userId;
         },
         // 修改数据按钮
         modifyFn: function (viewData) {
@@ -217,7 +159,6 @@ define(function (require, exports) {
           _this.$nextTick(function () {
             _this.$refs.refForm.resetFields();
             yufp.clone(viewData, _this.formdata);
-            _this.formdata.appModLastChgUser = yufp.session.userId;
           });
         },
         // 查看数据明细
@@ -232,16 +173,16 @@ define(function (require, exports) {
         // 批量删除
         deleteFn: function (viewData) {
           var _this = this;
-          this.$confirm('确定要删除【' + viewData.appModCode + '】吗?', '提示', {
+          this.$confirm('确定要删除【' + viewData.versionId + '】吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(function () {
             // 调用删除提交服务
-            var appModId = viewData.appModId;
+            var versionId = viewData.versionId;
             yufp.service.request({
               method: 'POST',
-              name: backend.adminService + '/bcmpSmAppMod/delete/' + appModId,
+              name: backend.adminService + '/bcmpSmVersion/delete/' + versionId,
               callback: function (code, message, response) {
                 if (code == '0' && response.code == '0') {
                   vm.$message({
@@ -292,7 +233,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/bcmpSmAppMod/create',
+            name: backend.adminService + '/bcmpSmVersion/create',
             callback: function (code, message, response) {
               if (code === 0) {
                 if (response.data.code == 2) {
@@ -333,7 +274,7 @@ define(function (require, exports) {
           yufp.service.request({
             method: 'POST',
             data: model,
-            name: backend.adminService + '/bcmpSmAppMod/update',
+            name: backend.adminService + '/bcmpSmVersion/update',
             callback: function (code, message, response) {
               if (code === 0) {
                 vm.$message({
