@@ -143,9 +143,9 @@ define(function (require, exports) {
         fileChange: function (file, fileList) {
           var fileName = file.name;
           var suffix = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
-          if (suffix != 'jar' && suffix != 'war') {
+          if (suffix != 'jar' && suffix != 'war' && suffix != 'zip') {
             fileList.pop();
-            this.$message('请选择jar或war文件！');
+            this.$message('请选择jar,war或zip文件！');
           } else {
             if (fileList.length > 1) {
               fileList.pop();
