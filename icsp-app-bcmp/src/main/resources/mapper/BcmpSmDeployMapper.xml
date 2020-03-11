@@ -12,7 +12,7 @@
         <result column="deploy_step"  property="deployStep" jdbcType="VARCHAR" />
         <result column="deploy_step_status"  property="deployStepStatus" jdbcType="VARCHAR" />
         <result column="deploy_result"  property="deployResult" jdbcType="VARCHAR" />
-        <result column="deploy_remark"  property="deployRemark" jdbcType="TEXT" />
+        <result column="deploy_remark"  property="deployRemark" jdbcType="VARCHAR" />
     </resultMap>
 
 	<sql id="Base_Column_List">
