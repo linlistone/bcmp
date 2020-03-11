@@ -9,7 +9,7 @@ import cn.com.yusys.icsp.base.base.BaseDomain;
  * 
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-03-08 20:36:34
+ * @date 2020-03-11 10:31:34
  */
 //TableName("bcmp_sm_deploy")
 public class BcmpSmDeploy extends BaseDomain implements Serializable {
@@ -29,6 +29,10 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
 	 */
 	private String nodeId;
    /**
+	 * 应用模块ID
+	 */
+	private String appModId;
+   /**
 	 * 部署用户
 	 */
 	private String deployUser;
@@ -45,29 +49,14 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
 	 */
 	private String deployStepStatus;
    /**
+	 * 部署结果
+	 */
+	private String deployResult;
+   /**
 	 * 部署结果备注
 	 */
-	private String deployRemark;
-	/*
-	 *  @Description : 无参构造函数
-	 *  @Author : Mr_Jiang
-	 *  @Date : 2020/3/9 13:19
-	 */
-	public BcmpSmDeploy() {
-	}
-	/*
-	 *  @Description : 有参构造函数初始化数据
-	 *  @Author : Mr_Jiang
-	 *  @Date : 2020/3/9 13:19
-	 */
-	public BcmpSmDeploy(String deployId, String versionId, String nodeId, String deployUser, String deployDate) {
-		this.deployId = deployId;
-		this.versionId = versionId;
-		this.nodeId = nodeId;
-		this.deployUser = deployUser;
-		this.deployDate = deployDate;
-	}
-
+	private unknowType deployRemark;
+	
 	/**
 	 * 部署ID
 	 * @param deployId
@@ -112,6 +101,21 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
 	 */
 	public String getNodeId() {
 		return this.nodeId;
+	}
+	/**
+	 * 应用模块ID
+	 * @param appModId
+	 */
+	public void setAppModId(String appModId) {
+		this.appModId = appModId;
+	}
+
+	/**
+	 * 应用模块ID
+	 * @return appModId
+	 */
+	public String getAppModId() {
+		return this.appModId;
 	}
 	/**
 	 * 部署用户
@@ -174,6 +178,21 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
 		return this.deployStepStatus;
 	}
 	/**
+	 * 部署结果
+	 * @param deployResult
+	 */
+	public void setDeployResult(String deployResult) {
+		this.deployResult = deployResult;
+	}
+
+	/**
+	 * 部署结果
+	 * @return deployResult
+	 */
+	public String getDeployResult() {
+		return this.deployResult;
+	}
+	/**
 	 * 部署结果备注
 	 * @param deployRemark
 	 */
@@ -194,10 +213,12 @@ public class BcmpSmDeploy extends BaseDomain implements Serializable {
 		strBuf.append("deployId=").append(deployId).append(",");
 		strBuf.append("versionId=").append(versionId).append(",");
 		strBuf.append("nodeId=").append(nodeId).append(",");
+		strBuf.append("appModId=").append(appModId).append(",");
 		strBuf.append("deployUser=").append(deployUser).append(",");
 		strBuf.append("deployDate=").append(deployDate).append(",");
 		strBuf.append("deployStep=").append(deployStep).append(",");
 		strBuf.append("deployStepStatus=").append(deployStepStatus).append(",");
+		strBuf.append("deployResult=").append(deployResult).append(",");
 		strBuf.append("deployRemark=").append(deployRemark);
 		strBuf.append("]");
 		return strBuf.toString();

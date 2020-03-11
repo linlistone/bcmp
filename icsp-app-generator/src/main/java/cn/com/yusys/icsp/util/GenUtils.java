@@ -35,16 +35,16 @@ public class GenUtils {
 
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
-        templates.add("Domain.java.vm" );
-        templates.add("Mapper.java.vm" );
-        templates.add("Mapper.xml.vm" );
-        templates.add("Service.java.vm" );
+        templates.add("Domain.java.vm");
+        templates.add("Mapper.java.vm");
+        templates.add("Mapper.xml.vm");
+        templates.add("Service.java.vm");
 //		templates.add("ServiceImpl.java.vm");
-        templates.add("Resource.java.vm" );
+        templates.add("Resource.java.vm");
 //		templates.add("menu.sql.vm");
-        templates.add("index.html.vm" );
-        templates.add("index.js.vm" );
-        templates.add("Service.xml.vm" );
+        templates.add("index.html.vm");
+        templates.add("index.js.vm");
+        templates.add("Service.xml.vm");
         return templates;
     }
 
@@ -61,11 +61,11 @@ public class GenUtils {
         boolean hasBigDecimal = false;
         // 表信息
         TableEntity tableEntity = new TableEntity();
-        tableEntity.setTableName(table.get("tableName" ));
-        tableEntity.setComments(table.get("tableComment" ));
+        tableEntity.setTableName(table.get("tableName"));
+        tableEntity.setComments(table.get("tableComment"));
         // 表名转换成Java类名
         String className = tableToJava(tableEntity.getTableName(),
-                config.getProperty("tablePrefix" ));
+                config.getProperty("tablePrefix"));
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
 
@@ -73,23 +73,23 @@ public class GenUtils {
         List<ColumnEntity> columsList = new ArrayList<>();
         for (Map<String, String> column : columns) {
             ColumnEntity columnEntity = new ColumnEntity();
-            columnEntity.setColumnName(column.get("columnName" ));
-            columnEntity.setDataType(column.get("dataType" ).toUpperCase());
-            columnEntity.setComments(column.get("columnComment" ));
-            columnEntity.setExtra(column.get("extra" ));
+            columnEntity.setColumnName(column.get("columnName"));
+            columnEntity.setDataType(column.get("dataType").toUpperCase());
+            columnEntity.setComments(column.get("columnComment"));
+            columnEntity.setExtra(column.get("extra"));
             // 列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
             columnEntity.setAttrname(StringUtils.uncapitalize(attrName));
             // 列的数据类型，转换成Java类型
             String attrType = config.getProperty(columnEntity.getDataType(),
-                    "unknowType" );
+                    "unknowType");
             columnEntity.setAttrType(attrType);
-            if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
+            if (!hasBigDecimal && attrType.equals("BigDecimal")) {
                 hasBigDecimal = true;
             }
             // 是否主键
-            if ("PRI".equalsIgnoreCase(column.get("columnKey" ))
+            if ("PRI".equalsIgnoreCase(column.get("columnKey"))
                     && tableEntity.getPk() == null) {
                 tableEntity.setPk(columnEntity);
             }
@@ -100,7 +100,7 @@ public class GenUtils {
         if (tableEntity.getPk() == null) {
             tableEntity.setPk(tableEntity.getColumns().get(0));
         }
-        String mainPath = config.getProperty("mainPath" );
+        String mainPath = config.getProperty("mainPath");
         mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
         // 封装模板数据
         Map<String, Object> map = new HashMap<>();
@@ -113,10 +113,10 @@ public class GenUtils {
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
-        map.put("package", config.getProperty("package" ));
+        map.put("package", config.getProperty("package"));
         map.put("moduleName", moduleName);
-        map.put("author", config.getProperty("author" ));
-        map.put("email", config.getProperty("email" ));
+        map.put("author", config.getProperty("author"));
+        map.put("email", config.getProperty("email"));
         map.put("datetime", formatDate());
         map.put("QueryModel", QueryModel.class.getName());
         // 获取模板列表
@@ -128,12 +128,12 @@ public class GenUtils {
                 // 添加到zip
                 String fileName = getFileName(template,
                         tableEntity.getClassName(),
-                        config.getProperty("package" ),
+                        config.getProperty("package"),
                         moduleName);
                 if (fileName == null)
                     continue;
                 zip.putNextEntry(new ZipEntry(fileName));
-                IOUtils.write(content, zip, "UTF-8" );
+                IOUtils.write(content, zip, "UTF-8");
                 zip.closeEntry();
             } catch (IOException e) {
                 throw new Exception("渲染模板失败，表名：" + tableEntity.getTableName(),
@@ -143,7 +143,7 @@ public class GenUtils {
     }
 
     public static String formatDate() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss" );
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(new Date());
     }
 
@@ -152,7 +152,7 @@ public class GenUtils {
      */
     public static String columnToJava(String columnName) {
         return WordUtils.capitalizeFully(columnName, new char[]{'_'})
-                .replace("_", "" );
+                .replace("_", "");
     }
 
     /**
@@ -160,7 +160,7 @@ public class GenUtils {
      */
     public static String tableToJava(String tableName, String tablePrefix) {
         if (StringUtils.isNotBlank(tablePrefix)) {
-            tableName = tableName.replaceFirst(tablePrefix, "" );
+            tableName = tableName.replaceFirst(tablePrefix, "");
         }
         return columnToJava(tableName);
     }
@@ -171,8 +171,8 @@ public class GenUtils {
      */
     public static Properties getConfig() {
         try {
-            Resource resource = new ClassPathResource("generator.properties" );
-            Properties properties=new Properties();
+            Resource resource = new ClassPathResource("generator.properties");
+            Properties properties = new Properties();
             properties.load(new FileInputStream(resource.getFile().getAbsolutePath()));
             return properties;
         } catch (Exception e) {
@@ -190,15 +190,15 @@ public class GenUtils {
             packagePath += packageName.replace(".", File.separator)
                     + File.separator + moduleName + File.separator;
         }
-        if (template.contains("Domain.java.vm" )) {
+        if (template.contains("Domain.java.vm")) {
             return packagePath + "domain" + File.separator + className
                     + ".java";
         }
-        if (template.contains("Mapper.java.vm" )) {
+        if (template.contains("Mapper.java.vm")) {
             return packagePath + "repository" + File.separator + "mapper" + File.separator + className
                     + "Mapper.java";
         }
-        if (template.contains("Service.java.vm" )) {
+        if (template.contains("Service.java.vm")) {
             return packagePath + "service" + File.separator + className
                     + "Service.java";
         }
@@ -206,33 +206,34 @@ public class GenUtils {
         // return packagePath + "service" + File.separator + "impl"
         // + File.separator + className + "ServiceImpl.java";
         // }
-        if (template.contains("Resource.java.vm" )) {
+        if (template.contains("Resource.java.vm")) {
             return packagePath + "rest" + File.separator + "web" + File.separator + className
                     + "Resource.java";
         }
-        if (template.contains("Mapper.xml.vm" )) {
+        if (template.contains("Mapper.xml.vm")) {
             return "main" + File.separator + "resources" + File.separator
                     + "mapper" + File.separator + moduleName + File.separator
                     + className + "Mapper.xml";
         }
-        if (template.contains("Service.xml.vm" )) {
+        if (template.contains("Service.xml.vm")) {
             return "main" + File.separator + "java" + File.separator
                     + "service" + File.separator + "adminsm-service.xml";
         }
-        if (template.contains("menu.sql.vm" )) {
+        if (template.contains("menu.sql.vm")) {
             return className.toLowerCase() + "_menu.sql";
         }
-        if (template.contains("index.html.vm" )) {
+        String fileName = className.toLowerCase().substring(moduleName.length() + 1);
+        if (template.contains("index.html.vm")) {
             return "main" + File.separator + "resources" + File.separator
                     + "src" + File.separator + "views" + File.separator
-                    + "modules" + File.separator + moduleName + File.separator
-                    + className.toLowerCase() + ".html";
+                    + "modules" + File.separator + fileName + File.separator
+                    + fileName + ".html";
         }
-        if (template.contains("index.js.vm" )) {
+        if (template.contains("index.js.vm")) {
             return "main" + File.separator + "resources" + File.separator
                     + "src" + File.separator + "views" + File.separator
-                    + "modules" + File.separator + moduleName + File.separator
-                    + className.toLowerCase() + ".js";
+                    + "modules" + File.separator + fileName + File.separator
+                    + fileName + ".js";
         }
         return null;
     }

@@ -9,7 +9,7 @@ import cn.com.yusys.icsp.base.base.BaseDomain;
  * 
  * @author linli
  * @email linli@yusys.com.cn
- * @date 2020-03-08 20:36:21
+ * @date 2020-03-11 10:31:46
  */
 //TableName("bcmp_sm_version")
 public class BcmpSmVersion extends BaseDomain implements Serializable {
@@ -24,6 +24,10 @@ public class BcmpSmVersion extends BaseDomain implements Serializable {
 	 * 版本号
 	 */
 	private String versionNum;
+   /**
+	 * 应用模块ID
+	 */
+	private String appModId;
    /**
 	 * 版本类型
 	 */
@@ -70,6 +74,21 @@ public class BcmpSmVersion extends BaseDomain implements Serializable {
 	 */
 	public String getVersionNum() {
 		return this.versionNum;
+	}
+	/**
+	 * 应用模块ID
+	 * @param appModId
+	 */
+	public void setAppModId(String appModId) {
+		this.appModId = appModId;
+	}
+
+	/**
+	 * 应用模块ID
+	 * @return appModId
+	 */
+	public String getAppModId() {
+		return this.appModId;
 	}
 	/**
 	 * 版本类型
@@ -136,6 +155,7 @@ public class BcmpSmVersion extends BaseDomain implements Serializable {
 		strBuf.append("BcmpSmVersion[");
 		strBuf.append("versionId=").append(versionId).append(",");
 		strBuf.append("versionNum=").append(versionNum).append(",");
+		strBuf.append("appModId=").append(appModId).append(",");
 		strBuf.append("versionType=").append(versionType).append(",");
 		strBuf.append("versionPath=").append(versionPath).append(",");
 		strBuf.append("versionUploadDate=").append(versionUploadDate).append(",");

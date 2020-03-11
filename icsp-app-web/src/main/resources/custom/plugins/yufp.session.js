@@ -19,8 +19,8 @@
   function LocalSession () {
     var _settings = {
       settings: {
-        logoutUrl: microServiceHost.uaaService + '/api/logout', // 注销URL
-        userUrl: microServiceHost.appOcaService + '/api/session/info', // 会话URL
+        logoutUrl: msbackend.uaaService + '/api/logout', // 注销URL
+        userUrl: msbackend.appOcaService + '/api/session/info', // 会话URL
         userJsonRoot: '', // 用户返回数据节点,如：'data.user'
         userStoreKey: 'YUFP-SESSION-USER', // 会话存储前缀
         userMapping: { // 用户后端数据模型映射
@@ -168,7 +168,7 @@
     var settings = this.settings;
     if (already) {
       yufp.service.request({
-        path : settings.logoutUrl,
+        path: settings.logoutUrl,
         method: 'POST',
         callback: function (code, message, response) {
           /* if (code != 0 || (response && response.code != 0)) {

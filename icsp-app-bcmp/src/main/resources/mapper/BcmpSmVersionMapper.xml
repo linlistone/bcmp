@@ -5,6 +5,7 @@
     <resultMap type="cn.com.yusys.icsp.domain.BcmpSmVersion" id="BaseResultMap">
         <result column="version_id"  property="versionId" jdbcType="VARCHAR" />
         <result column="version_num"  property="versionNum" jdbcType="VARCHAR" />
+        <result column="app_mod_id"  property="appModId" jdbcType="VARCHAR" />
         <result column="version_type"  property="versionType" jdbcType="VARCHAR" />
         <result column="version_path"  property="versionPath" jdbcType="VARCHAR" />
         <result column="version_upload_date"  property="versionUploadDate" jdbcType="VARCHAR" />
@@ -14,6 +15,7 @@
 	<sql id="Base_Column_List">
 		version_id,
 		version_num,
+		app_mod_id,
 		version_type,
 		version_path,
 		version_upload_date,
@@ -47,7 +49,18 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.versionType != null and condition.versionType !='' ">
+			<if test="condition.appModId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModId)">
+						AND app_mod_id like #{condition.appModId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_id = #{condition.appModId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.versionType != null  and condition.versionType !='' ">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionType)">
@@ -102,6 +115,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="versionId != null">version_id ,</if>
 			<if test="versionNum != null">version_num ,</if>
+			<if test="appModId != null">app_mod_id ,</if>
 			<if test="versionType != null">version_type ,</if>
 			<if test="versionPath != null">version_path ,</if>
 			<if test="versionUploadDate != null">version_upload_date ,</if>
@@ -110,6 +124,7 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="versionId != null">#{versionId,jdbcType=VARCHAR},</if>
 			<if test="versionNum != null">#{versionNum,jdbcType=VARCHAR},</if>
+			<if test="appModId != null">#{appModId,jdbcType=VARCHAR},</if>
 			<if test="versionType != null">#{versionType,jdbcType=VARCHAR},</if>
 			<if test="versionPath != null">#{versionPath,jdbcType=VARCHAR},</if>
 			<if test="versionUploadDate != null">#{versionUploadDate,jdbcType=VARCHAR},</if>
@@ -123,6 +138,7 @@
 		<set>
 			<if test="versionId != null">version_id = #{versionId,jdbcType=VARCHAR},</if>
 			<if test="versionNum != null">version_num = #{versionNum,jdbcType=VARCHAR},</if>
+			<if test="appModId != null">app_mod_id = #{appModId,jdbcType=VARCHAR},</if>
 			<if test="versionType != null">version_type = #{versionType,jdbcType=VARCHAR},</if>
 			<if test="versionPath != null">version_path = #{versionPath,jdbcType=VARCHAR},</if>
 			<if test="versionUploadDate != null">version_upload_date = #{versionUploadDate,jdbcType=VARCHAR},</if>

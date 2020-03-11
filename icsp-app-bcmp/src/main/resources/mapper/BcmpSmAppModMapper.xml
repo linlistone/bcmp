@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.BcmpSmAppModMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.BcmpSmAppMod" id="BaseResultMap">
+        <result column="app_mod_id"  property="appModId" jdbcType="VARCHAR" />
+        <result column="app_mod_code"  property="appModCode" jdbcType="VARCHAR" />
+        <result column="app_mod_name"  property="appModName" jdbcType="VARCHAR" />
+        <result column="node_type"  property="nodeType" jdbcType="VARCHAR" />
+        <result column="app_mod_type"  property="appModType" jdbcType="VARCHAR" />
+        <result column="app_mod_deploy_path"  property="appModDeployPath" jdbcType="VARCHAR" />
+        <result column="app_mod_desc"  property="appModDesc" jdbcType="VARCHAR" />
+        <result column="app_mod_last_chg_user"  property="appModLastChgUser" jdbcType="VARCHAR" />
+        <result column="app_mod_last_chg_dt"  property="appModLastChgDt" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		app_mod_id,
+		app_mod_code,
+		app_mod_name,
+		node_type,
+		app_mod_type,
+		app_mod_deploy_path,
+		app_mod_desc,
+		app_mod_last_chg_user,
+		app_mod_last_chg_dt
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from bcmp_sm_app_mod
+		<where>
+			<if test="condition.appModId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModId)">
+						AND app_mod_id like #{condition.appModId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_id = #{condition.appModId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModCode != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModCode)">
+						AND app_mod_code like #{condition.appModCode,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_code = #{condition.appModCode,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModName)">
+						AND app_mod_name like #{condition.appModName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_name = #{condition.appModName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.nodeType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.nodeType)">
+						AND node_type like #{condition.nodeType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND node_type = #{condition.nodeType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModType)">
+						AND app_mod_type like #{condition.appModType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_type = #{condition.appModType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModDeployPath != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModDeployPath)">
+						AND app_mod_deploy_path like #{condition.appModDeployPath,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_deploy_path = #{condition.appModDeployPath,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModDesc != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModDesc)">
+						AND app_mod_desc like #{condition.appModDesc,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_desc = #{condition.appModDesc,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModLastChgUser != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModLastChgUser)">
+						AND app_mod_last_chg_user like #{condition.appModLastChgUser,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_last_chg_user = #{condition.appModLastChgUser,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModLastChgDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModLastChgDt)">
+						AND app_mod_last_chg_dt like #{condition.appModLastChgDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_last_chg_dt = #{condition.appModLastChgDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.BcmpSmAppMod">
+		insert into bcmp_sm_app_mod
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="appModId != null">app_mod_id ,</if>
+			<if test="appModCode != null">app_mod_code ,</if>
+			<if test="appModName != null">app_mod_name ,</if>
+			<if test="nodeType != null">node_type ,</if>
+			<if test="appModType != null">app_mod_type ,</if>
+			<if test="appModDeployPath != null">app_mod_deploy_path ,</if>
+			<if test="appModDesc != null">app_mod_desc ,</if>
+			<if test="appModLastChgUser != null">app_mod_last_chg_user ,</if>
+			<if test="appModLastChgDt != null">app_mod_last_chg_dt </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="appModId != null">#{appModId,jdbcType=VARCHAR},</if>
+			<if test="appModCode != null">#{appModCode,jdbcType=VARCHAR},</if>
+			<if test="appModName != null">#{appModName,jdbcType=VARCHAR},</if>
+			<if test="nodeType != null">#{nodeType,jdbcType=VARCHAR},</if>
+			<if test="appModType != null">#{appModType,jdbcType=VARCHAR},</if>
+			<if test="appModDeployPath != null">#{appModDeployPath,jdbcType=VARCHAR},</if>
+			<if test="appModDesc != null">#{appModDesc,jdbcType=VARCHAR},</if>
+			<if test="appModLastChgUser != null">#{appModLastChgUser,jdbcType=VARCHAR},</if>
+			<if test="appModLastChgDt != null">#{appModLastChgDt,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmAppMod">
+		update bcmp_sm_app_mod
+		<set>
+			<if test="appModId != null">app_mod_id = #{appModId,jdbcType=VARCHAR},</if>
+			<if test="appModCode != null">app_mod_code = #{appModCode,jdbcType=VARCHAR},</if>
+			<if test="appModName != null">app_mod_name = #{appModName,jdbcType=VARCHAR},</if>
+			<if test="nodeType != null">node_type = #{nodeType,jdbcType=VARCHAR},</if>
+			<if test="appModType != null">app_mod_type = #{appModType,jdbcType=VARCHAR},</if>
+			<if test="appModDeployPath != null">app_mod_deploy_path = #{appModDeployPath,jdbcType=VARCHAR},</if>
+			<if test="appModDesc != null">app_mod_desc = #{appModDesc,jdbcType=VARCHAR},</if>
+			<if test="appModLastChgUser != null">app_mod_last_chg_user = #{appModLastChgUser,jdbcType=VARCHAR},</if>
+			<if test="appModLastChgDt != null">app_mod_last_chg_dt = #{appModLastChgDt,jdbcType=VARCHAR}</if>
+		</set>
+		where app_mod_id = #{appModId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from bcmp_sm_app_mod where  app_mod_id = #{appModId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from bcmp_sm_app_mod where app_mod_id in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="appModId">#{appModId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

@@ -6,21 +6,25 @@
         <result column="deploy_id"  property="deployId" jdbcType="VARCHAR" />
         <result column="version_id"  property="versionId" jdbcType="VARCHAR" />
         <result column="node_id"  property="nodeId" jdbcType="VARCHAR" />
+        <result column="app_mod_id"  property="appModId" jdbcType="VARCHAR" />
         <result column="deploy_user"  property="deployUser" jdbcType="VARCHAR" />
         <result column="deploy_date"  property="deployDate" jdbcType="VARCHAR" />
         <result column="deploy_step"  property="deployStep" jdbcType="VARCHAR" />
         <result column="deploy_step_status"  property="deployStepStatus" jdbcType="VARCHAR" />
-        <result column="deploy_remark"  property="deployRemark" jdbcType="VARCHAR" />
+        <result column="deploy_result"  property="deployResult" jdbcType="VARCHAR" />
+        <result column="deploy_remark"  property="deployRemark" jdbcType="TEXT" />
     </resultMap>
 
 	<sql id="Base_Column_List">
 		deploy_id,
 		version_id,
 		node_id,
+		app_mod_id,
 		deploy_user,
 		deploy_date,
 		deploy_step,
 		deploy_step_status,
+		deploy_result,
 		deploy_remark
 	</sql>
 	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
@@ -59,6 +63,17 @@
 					</when>
 					<otherwise>
 						AND node_id = #{condition.nodeId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.appModId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.appModId)">
+						AND app_mod_id like #{condition.appModId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND app_mod_id = #{condition.appModId,jdbcType=VARCHAR}
 					</otherwise>
 				</choose>
 			</if>
@@ -106,14 +121,25 @@
 					</otherwise>
 				</choose>
 			</if>
+			<if test="condition.deployResult != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployResult)">
+						AND deploy_result like #{condition.deployResult,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND deploy_result = #{condition.deployResult,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
 			<if test="condition.deployRemark != null">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.deployRemark)">
-						AND deploy_remark like #{condition.deployRemark,jdbcType=VARCHAR}
+						AND deploy_remark like #{condition.deployRemark,jdbcType=TEXT}
 					</when>
 					<otherwise>
-						AND deploy_remark = #{condition.deployRemark,jdbcType=VARCHAR}
+						AND deploy_remark = #{condition.deployRemark,jdbcType=TEXT}
 					</otherwise>
 				</choose>
 			</if>
@@ -129,21 +155,25 @@
 			<if test="deployId != null">deploy_id ,</if>
 			<if test="versionId != null">version_id ,</if>
 			<if test="nodeId != null">node_id ,</if>
+			<if test="appModId != null">app_mod_id ,</if>
 			<if test="deployUser != null">deploy_user ,</if>
 			<if test="deployDate != null">deploy_date ,</if>
 			<if test="deployStep != null">deploy_step ,</if>
 			<if test="deployStepStatus != null">deploy_step_status ,</if>
+			<if test="deployResult != null">deploy_result ,</if>
 			<if test="deployRemark != null">deploy_remark </if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="deployId != null">#{deployId,jdbcType=VARCHAR},</if>
 			<if test="versionId != null">#{versionId,jdbcType=VARCHAR},</if>
 			<if test="nodeId != null">#{nodeId,jdbcType=VARCHAR},</if>
+			<if test="appModId != null">#{appModId,jdbcType=VARCHAR},</if>
 			<if test="deployUser != null">#{deployUser,jdbcType=VARCHAR},</if>
 			<if test="deployDate != null">#{deployDate,jdbcType=VARCHAR},</if>
 			<if test="deployStep != null">#{deployStep,jdbcType=VARCHAR},</if>
 			<if test="deployStepStatus != null">#{deployStepStatus,jdbcType=VARCHAR},</if>
-			<if test="deployRemark != null">#{deployRemark,jdbcType=VARCHAR}</if>
+			<if test="deployResult != null">#{deployResult,jdbcType=VARCHAR},</if>
+			<if test="deployRemark != null">#{deployRemark,jdbcType=TEXT}</if>
 		</trim>
 	</insert>
 
@@ -154,22 +184,13 @@
 			<if test="deployId != null">deploy_id = #{deployId,jdbcType=VARCHAR},</if>
 			<if test="versionId != null">version_id = #{versionId,jdbcType=VARCHAR},</if>
 			<if test="nodeId != null">node_id = #{nodeId,jdbcType=VARCHAR},</if>
+			<if test="appModId != null">app_mod_id = #{appModId,jdbcType=VARCHAR},</if>
 			<if test="deployUser != null">deploy_user = #{deployUser,jdbcType=VARCHAR},</if>
 			<if test="deployDate != null">deploy_date = #{deployDate,jdbcType=VARCHAR},</if>
 			<if test="deployStep != null">deploy_step = #{deployStep,jdbcType=VARCHAR},</if>
 			<if test="deployStepStatus != null">deploy_step_status = #{deployStepStatus,jdbcType=VARCHAR},</if>
-			<if test="deployRemark != null">deploy_remark = #{deployRemark,jdbcType=VARCHAR}</if>
-		</set>
-		where deploy_id = #{deployId,jdbcType=VARCHAR}
-	</update>
-
-	<!-- 根据主键更新-只更新非空字段 -->
-	<update id="updateStepByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.BcmpSmDeploy">
-		update bcmp_sm_deploy
-		<set>
-			<if test="deployStep != null">deploy_step = #{deployStep,jdbcType=VARCHAR},</if>
-			<if test="deployStepStatus != null">deploy_step_status = #{deployStepStatus,jdbcType=VARCHAR},</if>
-			<if test="deployRemark != null">deploy_remark = #{deployRemark,jdbcType=VARCHAR}</if>
+			<if test="deployResult != null">deploy_result = #{deployResult,jdbcType=VARCHAR},</if>
+			<if test="deployRemark != null">deploy_remark = #{deployRemark,jdbcType=TEXT}</if>
 		</set>
 		where deploy_id = #{deployId,jdbcType=VARCHAR}
 	</update>

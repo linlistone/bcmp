@@ -44,14 +44,14 @@ function (require, exports) {
   exports.loginFn = function (config) {
     var returnObj = {};
     try {
-      var data = paramBody2Obj(config.body);
-      if (data.username != 'admin' || data.password != 'admin') {
-        returnObj.code = '9001';
-        returnObj.message = '用户名或密码错误，请重新输入!';
-      } else {
-        returnObj.code = '0';
-        returnObj.access_token = 'Basicd2ViX2FwcDo=';
-      }
+      // var data = paramBody2Obj(config.body);
+      // if (data.username != 'admin' || data.password != 'admin') {
+      //   returnObj.code = '9001';
+      //   returnObj.message = '用户名或密码错误，请重新输入!';
+      // } else {
+      returnObj.code = '0';
+      returnObj.access_token = 'Basicd2ViX2FwcDo=';
+      // }
     } catch (e) {
       returnObj.code = '-1';
       returnObj.message = '系统错误，请联系系统管理员!';

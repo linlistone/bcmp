@@ -9,6 +9,10 @@
   var YUFP_SYS_CONFIG = {
     // url: '139.196.162.66:9100', // 请求URL
     url: '127.0.0.1:9100',
+    // 微服务网管地址
+    msUrl: '192.168.58.111:8080',
+    // 服务器是否为SSL请求
+    msSSL: false,
     // 是否启用SSL
     ssl: false,
     // web socket 通信方式
@@ -26,7 +30,7 @@
     // 调试范围
     debugScope: ['yufp.service'],
     // 模拟数据模式
-    mockModel: false,
+    mockModel: true,
     // 紧凑模式
     compactMode: false,
     // h5到打包成客户端时，标注是否启用数果可视化埋点
@@ -39,7 +43,7 @@
     charset: 'UTF-8',
     // 版本号
     version: '1.1.0',
-    //公钥
+    // 公钥
     RSAPublicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrDUHc85ADQVxXRP4M90nqttWoZctV6JJVVdPjIle5vd9G2/4kgIhNc78Jd+ENxg+n4Gj9UMwNhJmb2jnMaW3zyGB+qi/ZrMO5dEUhW8salirzRgGg/4Arz4ObPmCWlZsws3Ij/3IEsFD3vMdIZD2j8b33DAbj47PjcCcMbtHYuQIDAQAB'
   };
 
