@@ -28,6 +28,20 @@ public class BcmpSmAppModResource extends BaseResouce {
 	private BcmpSmAppModService bcmpSmAppModService;
 
 	/**
+	 * @方法名称:index
+	 * @方法描述:应用模块定义查询
+	 * @参数与返回说明:
+	 * @算法描述:
+	 */
+	@GetMapping(value = "/select")
+	public ResultDto<List<BcmpSmAppMod>> select(QueryModel model)
+			throws Exception {
+		List<BcmpSmAppMod> pageInfo = bcmpSmAppModService.all(model);
+		return ResultDto.success( pageInfo);
+	}
+
+
+	/**
 	 * @方法名称: create
 	 * @方法描述: 新增应用模块定义
 	 * @参数与返回说明:

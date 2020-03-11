@@ -2,47 +2,48 @@
 <div>
     <el-row style="margin-top: 10px;">
         <!--左侧模块管理-->
-        <el-col :span="14">
+        <el-col :span="11">
             <h2 class="yu-formTitle" style="margin-bottom: 0px;">服务节点</h2>
             <el-row :gutter="10">
-                <el-col :span="14">
-                    <el-select v-model="nodeQuery.versionType" placeholder="服务节点类型" class="versionTypeSelect">
-                        <el-option v-for="item in nodeTypeDic" :key="item.key" :label="item.value" :value="item.key">
+                <el-col :span="8">
+                    <el-select v-model="versionQuery.appModId" placeholder="服务节点类型" class="versionTypeSelect">
+                        <el-option v-for="item in appModList" :key="item.appModId" :label="item.appModCode" :value="item.appModId">
                         </el-option>
                     </el-select>
                 </el-col>
-                <el-col :span="10">
-                    <el-button icon="search" @click="queryNodeListFn" class="versionTypeSelect">查询</el-button>
-
+                <el-col :span="8">
+                    <el-button icon="search" @click="queryVersionListFn" class="versionTypeSelect">查询</el-button>
+                    <el-button icon="search" @click="stepDialogVisible = true">部署监控</el-button>
                 </el-col>
             </el-row>
             <!--表格区域-->
-            <yu-xtable ref="refNodeTable" :data-url="nodeDataUrl" @loaded="onLoadedFn" reserve-selection selection-type="checkbox" row-key="id" style="width: 100%">
-                <yu-xtable-column prop="hostIp" label="节点主机"></yu-xtable-column>
-                <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
-                <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
-                <yu-xtable-column prop="version" label="当前版本号">
-                    <template slot-scope="scope">
-                        <yu-tag :type="scope.row.version==='UNKNOWN'? 'danger':'success'">{{scope.row.version}}</yu-tag>
-                    </template>
-                </yu-xtable-column>
-<!--                <yu-xtable-column prop="version" label="当前版本号"></yu-xtable-column>-->
+            <yu-xtable ref="refVersionTable" :data-url="versionDataUrl" :default-load="false" reserve-selection row-key="versionId" @row-click="versionSelectFn"
+                style="width: 100%">
+                <yu-xtable-column prop="appModId" label="应用代码" width="140px" :formatter="formatAppModCode"></yu-xtable-column>
+                <yu-xtable-column prop="appModId" label="应用名称" :formatter="formatAppModName"></yu-xtable-column>
+                <yu-xtable-column prop="versionNum" label="版本号" width="140px"></yu-xtable-column>
+                <yu-xtable-column prop="versionType" label="版本类型" data-code="HOST_TYPE" width="100px"></yu-xtable-column>
             </yu-xtable>
         </el-col>
         <!--右侧业务功能管理-->
-        <el-col :span="10" style="padding-left:10px">
+        <el-col :span="13" style="padding-left:10px">
             <h2 class="yu-formTitle">版本列表</h2>
             <el-row :gutter="10" stype="margin-bottom:10px">
                 <el-col :span="18">
-                    <el-button type="info" icon="yx-stack" @click="openDeployFn">版本部署</el-button>
-                    <el-button icon="search" @click="stepDialogVisible = true">查看部署状态</el-button>
+                    <el-button-group>
+                        <el-button icon="yx-stack" @click="openDeployFn">版本部署</el-button>
+                        <el-button icon="yx-play3" @click="openDeployFn">启动</el-button>
+                        <el-button icon="yx-stop2" @click="openDeployFn">停止</el-button>
+                    </el-button-group>
                 </el-col>
             </el-row>
             <!--表格区域-->
-            <yu-xtable ref="refVersionTable" :data-url="versionDataUrl" reserve-selection selection-type="radio" row-key="id" style="width: 100%;margin-top: 10px;">
-                <yu-xtable-column prop="versionNum" label="版本号"></yu-xtable-column>
-                <yu-xtable-column prop="versionType" label="版本类型" data-code="HOST_TYPE" width="110px"></yu-xtable-column>
-                <yu-xtable-column prop="versionUploadDate" label="上传时间" width="140px"></yu-xtable-column>
+            <yu-xtable ref="refNodeTable" :data-url="nodeDataUrl" :default-load="false" reserve-selection selection-type="checkbox" row-key="nodeId" style="width: 100%;margin-top: 10px;">
+                <yu-xtable-column prop="hostIp" label="节点主机IP"></yu-xtable-column>
+                <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
+                <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
+                <yu-xtable-column prop="applyPort" label="状态"></yu-xtable-column>
+                <yu-xtable-column prop="httpPort" label="版本"></yu-xtable-column>
             </yu-xtable>
         </el-col>
     </el-row>

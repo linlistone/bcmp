@@ -8,11 +8,13 @@ define(function (require, exports) {
   exports.ready = function (code, data, cite) {
     // vue data
     let vmData = {
-      nodeQuery: {
-        versionType: ''
+      showUploadSuccessMsgTag: false,
+      versionQuery: {
+        appModId: ''
       },
+      appModList: [],
       nodeTypeDic: yufp.lookup.find('HOST_TYPE', true),
-      nodeDataUrl: backend.bcmpService + '/bcmpSmNodeinfo/all',
+      nodeDataUrl: backend.bcmpService + '/bcmpSmNodeinfo/index',
       versionDataUrl: backend.bcmpService + '/bcmpSmVersion/index',
       deployDialogVisiable: false,
       stepDialogVisible: false,
@@ -47,19 +49,81 @@ define(function (require, exports) {
       computed: {},
       // 方法
       methods: {
-        queryNodeListFn: function () {
-          let versionType = this.nodeQuery.versionType;
-          if (versionType != '') {
-            var condition = {
-              condition: {
-                nodeType: versionType,
-                versionType: versionType
-              }
-            };
-            this.$refs.refNodeTable.remoteData(condition);
-
-            this.$refs.refVersionTable.remoteData(condition);
+        versionSelectFn: function (row) {
+          let _this = this;
+          var appmod = null;
+          for (var i = 0; i < _this.appModList.length; i++) {
+            if (_this.appModList[i].appModId == row.appModId) {
+              appmod = _this.appModList[i];
+              break;
+            }
           }
+          // 设置查询的模块
+          var condition = {
+            condition: {
+              nodeType: appmod.nodeType
+            },
+            sort: 'hostIp asc'
+          };
+          // 查询功能数据
+          _this.$refs['refNodeTable'].remoteData(condition);
+        },
+        formatAppModCode: function (row) {
+          let _this = this;
+          for (var i = 0; i < _this.appModList.length; i++) {
+            if (_this.appModList[i].appModId == row.appModId) {
+              return _this.appModList[i].appModCode;
+            }
+          }
+          return row.appModId;
+        },
+        formatAppModName: function (row) {
+          let _this = this;
+          for (var i = 0; i < _this.appModList.length; i++) {
+            if (_this.appModList[i].appModId == row.appModId) {
+              return _this.appModList[i].appModName;
+            }
+          }
+          return row.appModId;
+        },
+        queryAppListFn: function () {
+          let _this = this;
+          let reqData = {};
+          // 开始版本部署
+          yufp.service.request({
+            method: 'get',
+            data: reqData,
+            name: backend.bcmpService + '/bcmpSmAppMod/select',
+            callback: function (code, message, data) {
+              // 登录成功
+              if (code == 0) {
+                _this.appModList = data.data;
+              } else {
+                this.$message({
+                  message: '部署失败',
+                  type: 'warning'
+                });
+              }
+            }
+          });
+        },
+        queryVersionListFn: function () {
+          if (this.versionQuery.appModId == null || this.versionQuery.appModId == '') {
+            this.$message({
+              message: '请先选择应用',
+              type: 'warning'
+            });
+            return;
+          }
+          var params = {
+            condition: JSON.stringify({
+              appModId: this.versionQuery.appModId
+            }),
+            sort: 'version_num desc'
+          };
+          this.$nextTick(function () {
+            this.$refs.refVersionTable.remoteData(params);
+          });
         },
         // 版本部署
         openDeployFn: function () {
@@ -293,7 +357,7 @@ define(function (require, exports) {
           });
         },
         // 获取节点应用版本
-        getServerVersion : function(){
+        getServerVersion: function () {
           yufp.service.request({
             name: backend.bcmpService + '/cluster/getServiceVersion',
             callback: function (code, message, response) {
@@ -305,60 +369,6 @@ define(function (require, exports) {
             }
           });
         },
-        //初始化webSocket
-        // 建立 WebSocket
-        connectSocket: function () {
-          var me = this;
-          let wsUrl = yufp.settings.url + '/websocket/' + this.uuid();
-          me.socketClient = new WebSocket('ws://' + wsUrl);
-          me.socketClient.onopen = function (message) {
-            yufp.logger.info('Connection open ...' + wsUrl);
-          };
-          me.socketClient.onmessage = function (message) {
-            yufp.logger.info('Connection onmessage=' + message.data);
-            // me.$nextTick(function () {
-              me.onWebSocketMessage(message.data)
-            // });
-          };
-          me.socketClient.onclose = function (message) {
-            yufp.logger.info('Connection onclose ...');
-            // clearInterval(me.queryNodeInfoInterval);
-          };
-          me.socketClient.onerror = function (message) {
-            me.$message({ message: '建立连接失败，请刷新请求', type: 'warning' });
-            yufp.logger.info('Connection error ...');
-            // clearInterval(me.queryNodeInfoInterval);
-          };
-          // this.getServerVersion();
-        },
-        // 接收websocket返回信息
-        onWebSocketMessage: function (message) {
-          let nodeInfo = JSON.parse(message);
-          let wsType = nodeInfo.wsType;
-          let wsData = nodeInfo.wsData;
-          let nodeId = nodeInfo.nodeId;
-          if (wsType == 'servicevsesion') {
-            yufp.logger.info('nodeId[' + nodeId + '] servicevsesion[' + wsData + ']');
-            let nodes = this.$refs.refNodeTable.tabledata;
-            for (let i = 0; i < nodes.length; i++) {
-              if (nodeId == nodes[i].nodeId) {
-                this.$set(nodes[i], 'version', wsData)
-              }
-            }
-          }
-        },
-        uuid: function () {
-          var s = [];
-          var hexDigits = '0123456789abcdef';
-          for (var i = 0; i < 36; i++) {
-            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-          }
-          s[14] = '4'; // bits 12-15 of the time_hi_and_version field to 0010
-          s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
-          s[8] = s[13] = s[18] = s[23] = '-';
-          var uuid = s.join('');
-          return uuid;
-        },
         // 数据更新，查询代理状态
         onLoadedFn: function (data, total) {
           // let me = this ;
@@ -366,18 +376,13 @@ define(function (require, exports) {
             data[i].version = 'UNKNOWN';
           }
           // me.$nextTick(()=>{
-            this.getServerVersion();
+          this.getServerVersion();
           // })
-
-        },
+        }
       },
       // 加载后处理
       mounted: function () {
-        let me = this
-        //创建webSocket
-        me.$nextTick(function () {
-          me.connectSocket()
-        })
+        this.queryAppListFn();
       }
     });
   };

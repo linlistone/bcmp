@@ -2,25 +2,26 @@
 <div>
     <!--查询区域-->
     <yu-xform related-table-name="refTable" form-type="search">
-    	<!--
         <yu-xform-group :column="4">
+            <yu-xform-item label="应用代码" ctype="input" name="appModCode"></yu-xform-item>
+            <yu-xform-item label="应用模块名称" ctype="input" name="appModName"></yu-xform-item>
+            <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE"></yu-xform-item>
         </yu-xform-group>
-        -->
     </yu-xform>
     <!--按钮区域-->
     <div class="fox-toolBar">
         <el-button-group>
             <el-button icon="plus" @click="addFn">添加</el-button>
+            <el-button icon="yx-upload" @click="showUpload">上传</el-button>
         </el-button-group>
     </div>
     <!--表格区域-->
-    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
-                <yu-xtable-column prop="appModCode" label="应用代码"></yu-xtable-column>
-        <yu-xtable-column prop="appModName" label="应用模块名称"></yu-xtable-column>
-        <yu-xtable-column prop="nodeType" label="服务节点类型"></yu-xtable-column>
-        <yu-xtable-column prop="appModType" label="应用模块类型"></yu-xtable-column>
+    <yu-xtable ref="refTable" row-number :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
+        <yu-xtable-column prop="appModCode" label="应用代码"></yu-xtable-column>
+        <yu-xtable-column prop="appModName" label="应用名称"></yu-xtable-column>
+        <yu-xtable-column prop="nodeType" label="服务节点类型" data-code="HOST_TYPE"></yu-xtable-column>
+        <yu-xtable-column prop="appModType" label="应用模块类型" data-code="APP_MOD_TYPE"></yu-xtable-column>
         <yu-xtable-column prop="appModDeployPath" label="应用部署路径"></yu-xtable-column>
-        <yu-xtable-column prop="appModDesc" label="应用模块说明"></yu-xtable-column>
         <yu-xtable-column prop="appModLastChgUser" label="最后修改人"></yu-xtable-column>
         <yu-xtable-column prop="appModLastChgDt" label="最后修改时间"></yu-xtable-column>
         <yu-xtable-column fixed="right" label="操作" width="120">
@@ -32,17 +33,17 @@
         </yu-xtable-column>
     </yu-xtable>
     <!-- 弹出框 数据信息维护页面 -->
-    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px" >
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item label="应用代码" ctype="input" name="appModCode" ></yu-xform-item>
-                <yu-xform-item label="应用模块名称" ctype="input" name="appModName" ></yu-xform-item>
-                <yu-xform-item label="服务节点类型" ctype="input" name="nodeType" ></yu-xform-item>
-                <yu-xform-item label="应用模块类型" ctype="input" name="appModType" ></yu-xform-item>
-                <yu-xform-item label="应用部署路径" ctype="input" name="appModDeployPath" ></yu-xform-item>
-                <yu-xform-item label="应用模块说明" ctype="input" name="appModDesc" ></yu-xform-item>
-                <yu-xform-item label="最后修改人" ctype="input" name="appModLastChgUser" ></yu-xform-item>
-                <yu-xform-item label="最后修改时间" ctype="input" name="appModLastChgDt" ></yu-xform-item>
+                <yu-xform-item label="应用代码" ctype="input" name="appModCode" :rules="rules['appModCode']"></yu-xform-item>
+                <yu-xform-item label="应用名称" ctype="input" name="appModName" :rules="rules['appModName']"></yu-xform-item>
+                <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE" rules="required"></yu-xform-item>
+                <yu-xform-item label="应用类型" ctype="select" name="appModType" data-code="APP_MOD_TYPE" rules="required"></yu-xform-item>
+                <yu-xform-item label="应用部署路径" ctype="input" name="appModDeployPath" colspan="24" :rules="rules['appModDeployPath']"></yu-xform-item>
+                <yu-xform-item label="应用说明" ctype="input" name="appModDesc" colspan="24" :rules="rules['appModDesc']"></yu-xform-item>
+                <yu-xform-item label="最后修改人" ctype="input" name="appModLastChgUser" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
+                <yu-xform-item label="最后修改时间" ctype="input" name="appModLastChgDt" :hidden="viewType=='ADD'" :disabled="true"></yu-xform-item>
             </yu-xform-group>
             <div class="yu-grpButton">
                 <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}
@@ -51,4 +52,32 @@
             </div>
         </yu-xform>
     </yu-xdialog>
+    <el-dialog-x title="版本文件上传" :visible.sync="upload.visible" :before-close="closeUpload">
+        <el-form label-width="120px" ref="uploadForm">
+            <el-form-item label="版本号">
+                <el-input v-model="upload.data.appModCode" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="版本号">
+                <el-input v-model="upload.data.versionNum" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="服务节点类型">
+                <el-select v-model="upload.data.versionType" placeholder="服务节点类型" :disabled="true">
+                    <el-option v-for="item in versionTypeDic" :key="item.key" :label="item.value" :value="item.key">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-upload ref="uploadList" class="upload-demo" :action="uploadAction" :headers="upload.headers" :data="upload.data" :on-success="handleAvatarSuccess"
+                    :on-error="handleAvatarErr" list-type="picture" :file-list="upload.fileList" :auto-upload="false" :on-change="fileChange"
+                    :before-upload="beforeUpload" :timeout="900000" :on-progress="onUploadProgress">
+                    <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+                </el-upload>
+                <el-tag type="success" v-show="showUploadSuccessMsgTag">文件已上传，请等待处理......</el-tag>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" align="center">
+            <el-button type="primary" @click="abortUploading">取消</el-button>
+            <el-button type="primary" @click="uploadFile">上传</el-button>
+        </div>
+    </el-dialog-x>
 </div>

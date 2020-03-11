@@ -25,6 +25,15 @@ define(function (require, exports) {
       { key: 'FOX_PC', value: 'PC服务器' },
       { key: 'FOX_PAD', value: 'PAD服务器' }
     ],
+    APP_MOD_TYPE: [// 应用节点类型
+      { key: 'M', value: '主应用' },
+      { key: 'C', value: '子应用' }
+    ],
+    VERSION_TYPE: [// 版本类型
+      { key: 'APP', value: '应用包' },
+      { key: 'APK', value: 'APK' },
+      { key: 'FOX', value: '平台包' }
+    ],
     DEVICE_STS: [// 设备状态
       { key: '0', value: '未启用' },
       { key: '1', value: '启用' },

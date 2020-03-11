@@ -2,6 +2,7 @@ package cn.com.yusys.icsp.service;
 
 import cn.com.yusys.icsp.base.base.BaseService;
 import cn.com.yusys.icsp.common.mapper.QueryModel;
+import cn.com.yusys.icsp.common.util.DateUtil;
 import cn.com.yusys.icsp.domain.BcmpSmAppMod;
 import cn.com.yusys.icsp.repository.mapper.BcmpSmAppModMapper;
 import cn.com.yusys.icsp.common.exception.ICSPException;
@@ -25,6 +26,19 @@ public class BcmpSmAppModService extends BaseService {
 
 	@Autowired
 	private BcmpSmAppModMapper bcmpSmAppModMapper;
+
+
+	/**
+	 * @方法名称: index
+	 * @方法描述: 查询所有
+	 * @参数与返回说明:
+	 * @算法描述: 无
+	 */
+	public List<BcmpSmAppMod> all(QueryModel model) throws Exception {
+		model.setSort("nodeType asc");
+		List<BcmpSmAppMod> list = bcmpSmAppModMapper.selectByModel(model);
+		return list;
+	}
 	/**
 	 * @throws Exception
 	 * @方法名称: show
@@ -34,6 +48,7 @@ public class BcmpSmAppModService extends BaseService {
 	 */
 	public int create(BcmpSmAppMod bcmpSmAppMod) throws Exception {
 		bcmpSmAppMod.setAppModId(createUUId());
+		bcmpSmAppMod.setAppModLastChgUser(DateUtil.getFormatDateTime());
 		return bcmpSmAppModMapper.insert(bcmpSmAppMod);
 	}
 
@@ -75,6 +90,7 @@ public class BcmpSmAppModService extends BaseService {
 	 * @算法描述:
 	 */
 	public int update(BcmpSmAppMod bcmpSmAppMod) throws Exception {
+		bcmpSmAppMod.setAppModLastChgUser(DateUtil.getFormatDateTime());
 		return bcmpSmAppModMapper.updateByPrimaryKey(bcmpSmAppMod);
 	}
 
