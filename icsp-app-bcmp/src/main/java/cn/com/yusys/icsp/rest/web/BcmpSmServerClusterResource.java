@@ -2,6 +2,7 @@ package cn.com.yusys.icsp.rest.web;
 
 import cn.com.yusys.icsp.base.web.rest.dto.ResultDto;
 import cn.com.yusys.icsp.service.BcmpSmServerClusterService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +45,28 @@ public class BcmpSmServerClusterResource {
      *  @Date : 2020/3/7 16:08
      */
     @PostMapping({"/startDeploy"})
-    public ResultDto<Integer> startDeploy(@RequestBody JSONObject deployBean) throws Exception {
-        int result = bcmpSmServerClusterService.startDeploy(deployBean);
-        return ResultDto.success(result);
+    public ResultDto<String> startDeploy(@RequestBody JSONObject deployBean) throws Exception {
+        logger.info("准备部署的服务器列表及其文件:{}", deployBean.toString());
+        //部署节点信息
+        JSONArray deployNodes = deployBean.getJSONArray("nodes");
+        //应用节点信息
+        JSONObject appMod = deployBean.getJSONObject("appmod");
+        //获取版本信息
+        JSONObject version = deployBean.getJSONObject("version");
+        /**--------------------获取传入信息--------------------*/
+        //获取执行当前操作的用户编号
+        String operatorUser = deployBean.getString("userId");
+        //获取是否需要重启
+        String needRestart = deployBean.getString("needRestart");
+        //遍历部署节点信息
+        for (int i = 0; i < deployNodes.size(); i++) {
+            //获取每个节点信息
+            JSONObject deployNode = deployNodes.getJSONObject(i);
+            //创建当前节点线程
+            bcmpSmServerClusterService.deploy(deployNode, appMod , version, needRestart, operatorUser);
+        }
+        //bcmpSmServerClusterService.startDeploy(deployBean);
+        return ResultDto.success("部署命令发送成功");
     }
 
     /*

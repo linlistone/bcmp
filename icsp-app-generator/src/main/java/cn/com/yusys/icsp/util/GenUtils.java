@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -171,9 +172,10 @@ public class GenUtils {
      */
     public static Properties getConfig() {
         try {
+            //File file = ResourceUtils.getFile("generator.properties");
             Resource resource = new ClassPathResource("generator.properties");
             Properties properties = new Properties();
-            properties.load(new FileInputStream(resource.getFile().getAbsolutePath()));
+            properties.load(resource.getInputStream());
             return properties;
         } catch (Exception e) {
             throw new ICSPException("获取配置文件失败，", e);

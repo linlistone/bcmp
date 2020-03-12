@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,33 +145,32 @@ public class BcmpSmServerClusterService extends BaseService {
         return response;
     }
 
-    /*
-     *  @Description :
-     *  @Author : Mr_Jiang
-     *  @Date : 2020/3/7 16:07
-     */
-    public int startDeploy(JSONObject deployBean) throws Exception {
-        logger.info("准备部署的服务器列表及其文件:{}", deployBean.toString());
-        //部署节点信息
-        JSONArray deployNodes = deployBean.getJSONArray("nodes");
-        //应用节点信息
-        JSONObject appMod = deployBean.getJSONObject("appmod");
-        //获取版本信息
-        JSONObject version = deployBean.getJSONObject("version");
-        /**--------------------获取传入信息--------------------*/
-        //获取执行当前操作的用户编号
-        String operatorUser = deployBean.getString("userId");
-        //获取是否需要重启
-        String needRestart = deployBean.getString("needRestart");
-        //遍历部署节点信息
-        for (int i = 0; i < deployNodes.size(); i++) {
-            //获取每个节点信息
-            JSONObject deployNode = deployNodes.getJSONObject(i);
-            //创建当前节点线程
-            this.deploy(deployNode, appMod , version, needRestart, operatorUser);
-        }
-        return 0;
-    }
+    ///*
+    // *  @Description :
+    // *  @Author : Mr_Jiang
+    // *  @Date : 2020/3/7 16:07
+    // */
+    //public void startDeploy(JSONObject deployBean) throws Exception {
+    //    logger.info("准备部署的服务器列表及其文件:{}", deployBean.toString());
+    //    //部署节点信息
+    //    JSONArray deployNodes = deployBean.getJSONArray("nodes");
+    //    //应用节点信息
+    //    JSONObject appMod = deployBean.getJSONObject("appmod");
+    //    //获取版本信息
+    //    JSONObject version = deployBean.getJSONObject("version");
+    //    /**--------------------获取传入信息--------------------*/
+    //    //获取执行当前操作的用户编号
+    //    String operatorUser = deployBean.getString("userId");
+    //    //获取是否需要重启
+    //    String needRestart = deployBean.getString("needRestart");
+    //    //遍历部署节点信息
+    //    for (int i = 0; i < deployNodes.size(); i++) {
+    //        //获取每个节点信息
+    //        JSONObject deployNode = deployNodes.getJSONObject(i);
+    //        //创建当前节点线程
+    //        this.deploy(deployNode, appMod , version, needRestart, operatorUser);
+    //    }
+    //}
 
     /*
      *  @Description : 文件部署
