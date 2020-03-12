@@ -79,6 +79,8 @@ public class BcmpSmNodeinfoService extends BaseService {
 	 */
 	public PageInfo<BcmpSmNodeinfo> index(QueryModel model) throws Exception {
 		PageHelper.startPage(model.getPage(), model.getSize());
+		if(model.getSort()==null||"".equals(model.getSort()))
+			model.setSort("lastChgDt asc");
 		List<BcmpSmNodeinfo> list = bcmpSmNodeinfoMapper.selectByModel(model);
 		PageHelper.clearPage();
 		return new PageInfo<>(list);

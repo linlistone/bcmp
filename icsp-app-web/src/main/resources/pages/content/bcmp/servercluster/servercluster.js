@@ -5,8 +5,8 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
   yufp.lookup.reg('FOX_NODETYPE');
   // 数据源
   var vmData = {
-    nodeTypeDic: yufp.lookup.find('HOST_TYPE', true),
-    nodeTypeMap: yufp.lookup.find('HOST_TYPE', false),
+    nodeTypeDic: yufp.lookup.find('NODE_TYPE', true),
+    nodeTypeMap: yufp.lookup.find('NODE_TYPE', false),
     showUploadSuccessMsgTag: false,
     queryNodeInfoInterval: {},
     serverstatuschecked: false,
@@ -39,7 +39,7 @@ define(['./custom/widgets/js/yufpServerstatus.js'], function (require, exports) 
     dialogFormVisible: false,
     deployFormData: {
       version: '',
-      needRestart: '',
+      needRestart: ''
     },
     versionList: [],
     options: [{

@@ -295,7 +295,7 @@ public class BcmpSmServerClusterService extends BaseService {
             throw new ICSPException("选中的待启动服务器列表为空!", 900);
         }
         for (int i = 0; i < checkedNodeList.size(); i++) {
-            startUpOrshutdown("shutdown", checkedNodeList.getJSONObject(i).getString("nodeId"));
+            startUpOrshutdown("startup", checkedNodeList.getJSONObject(i).getString("nodeId"));
         }
     }
 

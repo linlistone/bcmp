@@ -38,7 +38,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="condition.versionNum != null">
+			<if test="condition.versionNum != null and condition.versionNum!=''">
 				<choose>
 					<when
 						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.versionNum)">

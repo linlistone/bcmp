@@ -21,18 +21,20 @@ define(function (require, exports) {
     AUTHOBJ_TYPE: [
       { key: 'R', value: '角色' }
     ],
-    HOST_TYPE: [// 数据状态
+    NODE_TYPE: [// 数据状态
       { key: 'FOX_PC', value: 'PC服务器' },
-      { key: 'FOX_PAD', value: 'PAD服务器' }
+      { key: 'FOX_PAD', value: 'PAD服务器' },
+      { key: 'BSP', value: 'BSP服务器' }
     ],
     APP_MOD_TYPE: [// 应用节点类型
       { key: 'M', value: '主应用' },
       { key: 'C', value: '子应用' }
     ],
     VERSION_TYPE: [// 版本类型
-      { key: 'APP', value: '应用包' },
-      { key: 'APK', value: 'APK' },
-      { key: 'FOX', value: '平台包' }
+      { key: 'APP', value: '服务应用包' },
+      { key: 'APK', value: 'APK安装包' },
+      { key: 'FOX', value: '平台升级包' },
+      { key: 'BSP', value: 'BSP升级包' }
     ],
     DEVICE_STS: [// 设备状态
       { key: '0', value: '未启用' },

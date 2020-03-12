@@ -15,9 +15,8 @@
         </el-button-group>
     </div>
     <!--表格区域-->
-    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%"  class="loading-target" >
+    <yu-xtable ref="refTable" :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%" class="loading-target">
         <yu-xtable-column prop="hostIp" label="主机IP"></yu-xtable-column>
-        <yu-xtable-column prop="hostType" label="主机类型" data-code="HOST_TYPE"></yu-xtable-column>
         <yu-xtable-column prop="loginWay" label="登录方式" data-code="LOGIN_TREATY"></yu-xtable-column>
         <yu-xtable-column prop="fileTransportWay" label="文件传输方式" data-code="TRANS_TREATY"></yu-xtable-column>
         <yu-xtable-column prop="lastChgUsr" label="最后修改用户"></yu-xtable-column>
@@ -34,8 +33,7 @@
     <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="800px">
         <yu-xform ref="refForm" label-width="120px" v-model="formdata" :disabled="formDisabled">
             <yu-xform-group>
-                <yu-xform-item label="主机IP" ctype="input" name="hostIp"> </yu-xform-item>
-                <yu-xform-item label="主机类型 " ctype="select" name="hostType" data-code="HOST_TYPE"> </yu-xform-item>
+                <yu-xform-item label="主机IP" ctype="input" name="hostIp" colspan="24"> </yu-xform-item>
                 <yu-xform-item label="登录方式" ctype="select" name="loginWay" data-code="LOGIN_TREATY"> </yu-xform-item>
                 <yu-xform-item label="登录端口" ctype="input" name="loginPort"> </yu-xform-item>
                 <yu-xform-item label="用户名" ctype="input" name="loginUsername"> </yu-xform-item>
@@ -44,8 +42,8 @@
                 <yu-xform-item label="文件传输端口" ctype="input" name="fileTransportPort"> </yu-xform-item>
                 <yu-xform-item label="用户名" ctype="input" name="fileTransportUsername"> </yu-xform-item>
                 <yu-xform-item label="密码" ctype="input" name="fileTransportPassword"> </yu-xform-item>
-                <yu-xform-item label="最后修改用户" ctype="input" name="lastChgUsr"  :hidden="!formDisabled" :disabled="formDisabled" > </yu-xform-item>
-                <yu-xform-item label="最后修改时间" ctype="input" name="lastChgDt"  :hidden="!formDisabled" :disabled="formDisabled" > </yu-xform-item>
+                <yu-xform-item label="最后修改用户" ctype="input" name="lastChgUsr" :hidden="!formDisabled" :disabled="formDisabled"> </yu-xform-item>
+                <yu-xform-item label="最后修改时间" ctype="input" name="lastChgDt" :hidden="!formDisabled" :disabled="formDisabled"> </yu-xform-item>
             </yu-xform-group>
             <div class="yu-grpButton">
                 <yu-button v-show="saveBtnShow" icon="check" type="primary" @click="submitFn">{{viewTitle[viewType]}}

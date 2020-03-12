@@ -56,20 +56,44 @@ define(function (require, exports) {
           required: true,
           message: '必填项',
           trigger: 'blur'
+        }, {
+          max: 5,
+          message: '最大长度不超过5个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.number,
+          message: '输入信息必需为数字',
+          trigger: 'blur'
         }],
         httpPort: [{ // HTTP端口
           required: true,
           message: '必填项',
+          trigger: 'blur'
+        }, {
+          max: 5,
+          message: '最大长度不超过5个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.number,
+          message: '输入信息必需为数字',
           trigger: 'blur'
         }],
         jvmPort: [{ // JVM端口
           required: true,
           message: '必填项',
           trigger: 'blur'
+        }, {
+          max: 5,
+          message: '最大长度不超过5个字符',
+          trigger: 'blur'
+        }, {
+          validator: yufp.validator.number,
+          message: '输入信息必需为数字',
+          trigger: 'blur'
         }]
       }
     };
-    yufp.lookup.reg('HOST_TYPE,YESNO', false);
+    yufp.lookup.reg('NODE_TYPE,YESNO', false);
     // 创建vue model
     const vm = new Vue({
       el: cite.el,
@@ -79,12 +103,6 @@ define(function (require, exports) {
       computed: {},
       // 方法
       methods: {
-        hostSelectFn: function () {
-          let formdata = this.$refs.refForm.formdata;
-          if (formdata.hostIp != undefined && formdata.hostIp != '') {
-            this.formdata.nodeType = this.hostTypeMap[formdata.hostIp];
-          }
-        },
         // 新增按钮事件
         addFn: function (data) {
           var _this = this;

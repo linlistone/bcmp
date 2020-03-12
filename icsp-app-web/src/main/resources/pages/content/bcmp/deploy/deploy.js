@@ -13,7 +13,7 @@ define(function (require, exports) {
         appModId: ''
       },
       appModList: [],
-      nodeTypeDic: yufp.lookup.find('HOST_TYPE', true),
+      nodeTypeDic: yufp.lookup.find('NODE_TYPE', true),
       nodeDataUrl: backend.bcmpService + '/bcmpSmNodeinfo/index',
       versionDataUrl: backend.bcmpService + '/bcmpSmVersion/index',
       deployDialogVisiable: false,

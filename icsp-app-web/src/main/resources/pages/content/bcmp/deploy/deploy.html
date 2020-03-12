@@ -22,7 +22,7 @@
                 <yu-xtable-column prop="appModId" label="应用代码" width="140px" :formatter="formatAppModCode"></yu-xtable-column>
                 <yu-xtable-column prop="appModId" label="应用名称" :formatter="formatAppModName"></yu-xtable-column>
                 <yu-xtable-column prop="versionNum" label="版本号" width="140px"></yu-xtable-column>
-                <yu-xtable-column prop="versionType" label="版本类型" data-code="HOST_TYPE" width="100px"></yu-xtable-column>
+                <yu-xtable-column prop="versionType" label="版本类型" data-code="NODE_TYPE" width="100px"></yu-xtable-column>
             </yu-xtable>
         </el-col>
         <!--右侧业务功能管理-->
@@ -40,7 +40,7 @@
             <!--表格区域-->
             <yu-xtable ref="refNodeTable" :data-url="nodeDataUrl" :default-load="false" reserve-selection selection-type="checkbox" row-key="nodeId" style="width: 100%;margin-top: 10px;">
                 <yu-xtable-column prop="hostIp" label="节点主机IP"></yu-xtable-column>
-                <yu-xtable-column prop="nodeType" label="节点类型" data-code="HOST_TYPE"></yu-xtable-column>
+                <yu-xtable-column prop="nodeType" label="节点类型" data-code="NODE_TYPE"></yu-xtable-column>
                 <yu-xtable-column prop="nodeName" label="节点名称"></yu-xtable-column>
                 <yu-xtable-column prop="applyPort" label="状态"></yu-xtable-column>
                 <yu-xtable-column prop="httpPort" label="版本"></yu-xtable-column>

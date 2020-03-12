@@ -5,7 +5,7 @@
         <yu-xform-group :column="4">
             <yu-xform-item label="应用代码" ctype="input" name="appModCode"></yu-xform-item>
             <yu-xform-item label="应用模块名称" ctype="input" name="appModName"></yu-xform-item>
-            <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE"></yu-xform-item>
+            <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="NODE_TYPE"></yu-xform-item>
         </yu-xform-group>
     </yu-xform>
     <!--按钮区域-->
@@ -17,13 +17,13 @@
     </div>
     <!--表格区域-->
     <yu-xtable ref="refTable" row-number :data-url="dataUrl" reserve-selection row-key="id" style="width: 100%">
-        <yu-xtable-column prop="appModCode" label="应用代码"></yu-xtable-column>
-        <yu-xtable-column prop="appModName" label="应用名称"></yu-xtable-column>
-        <yu-xtable-column prop="nodeType" label="服务节点类型" data-code="HOST_TYPE"></yu-xtable-column>
-        <yu-xtable-column prop="appModType" label="应用模块类型" data-code="APP_MOD_TYPE"></yu-xtable-column>
+        <yu-xtable-column prop="appModCode" label="应用代码" width="120"></yu-xtable-column>
+        <yu-xtable-column prop="appModName" label="应用名称"  width="140"></yu-xtable-column>
+        <yu-xtable-column prop="nodeType" label="节点类型" data-code="NODE_TYPE"  width="120"></yu-xtable-column>
+        <yu-xtable-column prop="appModType" label="模块类型" data-code="APP_MOD_TYPE"  width="100"></yu-xtable-column>
         <yu-xtable-column prop="appModDeployPath" label="应用部署路径"></yu-xtable-column>
-        <yu-xtable-column prop="appModLastChgUser" label="最后修改人"></yu-xtable-column>
-        <yu-xtable-column prop="appModLastChgDt" label="最后修改时间"></yu-xtable-column>
+        <yu-xtable-column prop="appModLastChgUser" label="最后修改人" width="100"></yu-xtable-column>
+        <yu-xtable-column prop="appModLastChgDt" label="最后修改时间" width="150"></yu-xtable-column>
         <yu-xtable-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
                 <yu-button @click="infoFn(scope.row)" icon="information" size="mini"></yu-button>
@@ -38,7 +38,7 @@
             <yu-xform-group>
                 <yu-xform-item label="应用代码" ctype="input" name="appModCode" :rules="rules['appModCode']"></yu-xform-item>
                 <yu-xform-item label="应用名称" ctype="input" name="appModName" :rules="rules['appModName']"></yu-xform-item>
-                <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="HOST_TYPE" rules="required"></yu-xform-item>
+                <yu-xform-item label="服务节点类型" ctype="select" name="nodeType" data-code="NODE_TYPE" rules="required"></yu-xform-item>
                 <yu-xform-item label="应用类型" ctype="select" name="appModType" data-code="APP_MOD_TYPE" rules="required"></yu-xform-item>
                 <yu-xform-item label="应用部署路径" ctype="input" name="appModDeployPath" colspan="24" :rules="rules['appModDeployPath']"></yu-xform-item>
                 <yu-xform-item label="应用说明" ctype="input" name="appModDesc" colspan="24" :rules="rules['appModDesc']"></yu-xform-item>

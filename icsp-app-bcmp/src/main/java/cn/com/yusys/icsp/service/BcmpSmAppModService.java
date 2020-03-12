@@ -48,7 +48,7 @@ public class BcmpSmAppModService extends BaseService {
 	 */
 	public int create(BcmpSmAppMod bcmpSmAppMod) throws Exception {
 		bcmpSmAppMod.setAppModId(createUUId());
-		bcmpSmAppMod.setAppModLastChgUser(DateUtil.getFormatDateTime());
+		bcmpSmAppMod.setAppModLastChgDt(DateUtil.getFormatDateTime());
 		return bcmpSmAppModMapper.insert(bcmpSmAppMod);
 	}
 
@@ -90,7 +90,7 @@ public class BcmpSmAppModService extends BaseService {
 	 * @算法描述:
 	 */
 	public int update(BcmpSmAppMod bcmpSmAppMod) throws Exception {
-		bcmpSmAppMod.setAppModLastChgUser(DateUtil.getFormatDateTime());
+		bcmpSmAppMod.setAppModLastChgDt(DateUtil.getFormatDateTime());
 		return bcmpSmAppModMapper.updateByPrimaryKey(bcmpSmAppMod);
 	}
 
