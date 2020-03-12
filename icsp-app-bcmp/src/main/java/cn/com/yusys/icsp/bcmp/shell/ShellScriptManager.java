@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,10 +44,11 @@ public class ShellScriptManager {
         // 输入流
         BufferedReader reader = null;
         try {
+            //File file = ResourceUtils.getFile(dir + name);
             Resource scripts = new ClassPathResource(dir + name);
-            File file = scripts.getFile();
-            logger.debug("======>" + file.getAbsolutePath());
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getAbsolutePath()), ENCODING));
+            //File file = scripts.getFile();
+            //logger.debug("======>" + file.getAbsolutePath());
+            reader = new BufferedReader(new InputStreamReader(scripts.getInputStream(), ENCODING));
             // 读取内容
             String line = null;
             while ((line = reader.readLine()) != null) {
