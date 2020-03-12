@@ -1,0 +1,42 @@
+
+/*最终将删除 end*/
+.hostMonitor{  text-align: center;  font-size: 14px;  width: 120px;  height: 162px;  margin-top: 10px;  border:1px solid #B0E2FF;  background-color: #B0E2FF;   line-height:20px; color:#528B8B;}
+.cpuMonitor{  text-align: center;  font-size: 14px;  width: 150px;  height: 70px;  margin-top: 10px;  margin-left: 20px;  border:1px solid #B0E2FF;  background-color: #B0E2FF;   line-height:20px; color:#528B8B;}
+.memeryMonitor{  text-align: center;  font-size: 14px;  width: 150px;  height: 85px;  margin-top: 5px;  margin-left: 20px;  border:1px solid #B0E2FF;  background-color: #B0E2FF;   line-height:20px; color:#528B8B;}
+/*最终将删除 end*/
+
+.yusp-monitorBar{display: block;min-height: 36px;overflow: hidden;margin: 5px 0;}
+.yusp-monitorBar>div,.yusp-monitorBar>div>label,.yusp-monitorBar>div>div{float: left;}
+.yusp-monitorBar>div{margin-right: 10px;padding: 5px 0;}
+.yusp-monitorBar>div>label{line-height: 36px;padding-left: 10px;}
+.yusp-monitorBar .el-radio-button__inner{padding: 10px 10px;}
+.yusp-monitorBar .el-switch{float: left; margin: 6px 10px;}
+.yusp-monitorCard{margin: 10px 5px;border: none;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);}
+.yusp-monitorCard .el-card__header{height: 44px;border-bottom: 1px solid #e0e0e0;overflow: hidden;padding: 0 0 0 20px;}
+.yusp-monitorCard .el-card__body{margin: 0;}
+.yusp-monitorCard .el-card__header>div>h1{float: left; font-size: 16px;color: #222;line-height: 44px;}
+.yusp-monitorCardHeaderTools{float: right;}
+.yusp-monitorCardHeaderTools>i{float: left;width: 24px;height: 24px;font-size: 16px;margin: 10px 10px 10px 0;color: #ccc;text-align: center;line-height: 24px;font-style: normal;}
+.yusp-monitorCardHeaderTools>i.el-icon-yx-loop2{font-size: 15px;}
+.yusp-monitorCardHeaderTools>i:hover{color: #20a0ff;}
+.yusp-monitorCardHeaderTools>span{float: left;line-height: 44px;font-size: 14px;color: #444;padding-right: 10px;}
+.yusp-monitorCardHeaderTools>.el-radio-group{float: left; margin-top: 12px;}
+.yusp-mbBt{float: left; height: 24px;line-height: 24px; min-width: 24px;text-align: center;margin-top: 4px;cursor: pointer;}
+.yusp-mbBt::before{font-size: 16px;color: #666;}
+.yusp-mbBt:hover,.yusp-mbBt:hover::before{color: #20a0ff;}
+
+.yusp-monitorBasicInfo{display: block;float: left;width: 250px;}
+.yusp-monitorBasicInfo>div{display: block;text-align: center;height: 120px;box-sizing: border-box;}
+.yusp-monitorBasicInfo>div>b,.yusp-monitorBasicInfo>div>span{font-size: 14px;color: #222;}
+.yusp-monitorBasicInfo>div>span{padding: 5px 20px;background-color: #eff3f6;border-radius: 30px;}
+.yusp-monitorBasicInfo>div>b{display: block; font-size: 24px;font-weight: bold;color: #20a0ff;height: 70px; line-height: 90px;overflow: hidden;}
+.yusp-monitorDate,.yusp-monitorCpu,.yusp-monitorMemory{display: block;}
+.yusp-monitorDate{border-bottom: 1px dashed #e0e0e0;}
+.yusp-monitorCpu,.yusp-monitorMemory{width: 50%;float: left;}
+.yusp-monitorCpu{border-right: 1px dashed #e0e0e0;}
+
+.yusp-monitorBasicChart{display: block;float: right;width: calc(100% - 250px);}
+.yusp-monitorTransfer{display: block;margin: 20px 0;}
+.yusp-monitorTransfer>.el-transfer-panel{width: calc((100% - 90px) / 2);box-shadow: none;}
+.yusp-monitorTransfer>.el-transfer-panel .el-transfer-panel__filter{margin-bottom: 10px;}
+.yusp-monitorTransfer>.el-transfer__buttons{width: 70px;text-align: center;}

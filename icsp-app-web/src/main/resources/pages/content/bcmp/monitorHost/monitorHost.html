@@ -1,0 +1,199 @@
+<!--
+  @created by wangyang13 2019-03-18
+  @updated by
+  @description 主机监控页面
+-->
+<div>
+  <link href="./pages/content/bcmp/monitorHost/monitorHost.css" rel="stylesheet" type="text/css">
+  <div class="yusp-monitorBar">
+    <div>
+      <label>主机：</label>
+      <div>
+        <yu-xselect v-model="hostValue" :options="hostOptions" placeholder="请选择" @change="hostChange" style="width: 160px;"></yu-xselect>
+      </div>
+    </div>
+    <div>
+      <label>时间：</label>
+      <div>
+        <yu-radio-group v-model="radio" @change="radioTimeChange" style="float: right;">
+          <yu-radio-button label="5分钟"></yu-radio-button>
+          <yu-radio-button label="15分钟"></yu-radio-button>
+          <yu-radio-button label="半小时"></yu-radio-button>
+          <yu-radio-button label="1小时"></yu-radio-button>
+          <yu-radio-button label="2小时"></yu-radio-button>
+        </yu-radio-group>
+      </div>
+    </div>
+      <div>
+        <div>
+          <yu-date-picker v-model="time" type="datetimerange" :picker-options="pickerOptions" placeholder="自定义时间范围" @change="timeChange" style="width: 320px;"></yu-date-picker>
+        </div>
+      </div>
+  </div>
+  <yu-card class="yusp-monitorCard">
+    <div slot="header">
+      <h1>基本信息（{{hostIp}}）</h1>
+      <div class="yusp-monitorCardHeaderTools">
+        <i class="el-icon-yx-notification" title="包括运行时间、CPU核数、内存总量、CPU使用率、内存使用率、磁盘使用率等基本信息"></i>
+        <i class="el-icon-yx-loop2" @click.stop="refreshBasic" title="刷新"></i>
+      </div>
+    </div>
+    <div>    
+      <div class="yusp-monitorBasicInfo">
+        <div class="yusp-monitorDate">
+          <b>{{uptime}}{{uptimeUnit}}</b>          
+          <span>系统运行时间</span>
+        </div>
+        <div class="yusp-monitorCpu">
+          <b>{{cpuCores}}</b>
+          <span>CPU核数</span>
+        </div>
+        <div class="yusp-monitorMemory">
+          <b>{{memTotal}}</b>
+          <span>内存总量</span>
+        </div>
+      </div>
+      <div class="yusp-monitorBasicChart">
+        <yu-row>
+          <yu-col :span="8">
+            <div class="yu-content" v-bind:style="{height: '270px', width: chartsWidth + 'px'}">
+              <div id="cpuBusy" style="width: 100%; height: 100%;"></div>
+            </div>
+          </yu-col>
+          <yu-col :span="8">
+            <div class="yu-content" v-bind:style="{height: '270px', width: chartsWidth + 'px'}">
+              <div id="memoryBusy" style="width: 100%; height: 100%;"></div>
+            </div>
+          </yu-col>
+          <yu-col :span="8">
+            <div class="yu-content" v-bind:style="{height: '270px', width: chartsWidth + 'px'}">
+              <div id="diskBusy" style="width: 100%; height: 100%;"></div>
+            </div>
+          </yu-col>
+        </yu-row>
+      </div>
+    </div>
+  </yu-card>
+  <yu-card class="yusp-monitorCard">
+    <div slot="header">
+      <h1>CPU信息</h1>
+      <div class="yusp-monitorCardHeaderTools">
+        <i class="el-icon-yx-notification" title="CPU各时段的使用率情况及系统负载情况"></i>
+        <i class="el-icon-yx-loop2" @click.stop="refreshCPULine" title="刷新"></i>
+      </div>
+    </div>
+    <div>
+      <yu-row :gutter="10">
+        <yu-col :span="12">
+          <div :id="cpuLine.divId1" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+        <yu-col :span="12">
+          <div :id="cpuLine.divId2" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+      </yu-row>
+    </div>
+  </yu-card>
+  <yu-card class="yusp-monitorCard">
+      <div slot="header">
+        <h1>内存信息</h1>
+        <div class="yusp-monitorCardHeaderTools">
+          <i class="el-icon-yx-notification" title="内存使用情况及SWAP内存"></i>
+          <i class="el-icon-yx-loop2" @click.stop="refreshMemory" title="刷新"></i>
+        </div>
+      </div>
+    <div>
+      <yu-row :gutter="10">
+        <yu-col :span="12">
+          <div :id="memoryLine.divId1" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+        <yu-col :span="12">
+          <div :id="memoryLine.divId2" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+      </yu-row>
+    </div>
+  </yu-card>
+  <yu-card class="yusp-monitorCard">
+      <div slot="header">
+        <h1>磁盘使用情况</h1>
+        <div class="yusp-monitorCardHeaderTools">
+          <i class="el-icon-yx-notification" title="磁盘各分区的总容量及各分区的使用情况"></i>
+          <i class="el-icon-yx-loop2" @click.stop="refreshBasic" title="刷新"></i>
+        </div>
+      </div>
+    <div style="height: 320px;">     
+          <div :id="diskLine.divId" style="width: 450px;height: 280px;float: left;"></div>
+          <div style="width: calc(100% - 500px);height: 281px;float: right;">
+          <!-- <el-table-x ref="diskInfoTable" :table-columns="tableColumns" :height="chartHeight" 
+                    :pageable="false" ></el-table-x> -->
+          <yu-xtable :height="250" ref="diskInfoTable" :data="tableData" :pageable="false" style="margin: 20px 0;">
+            <yu-xtable-column prop="type" label="文件系统">
+            </yu-xtable-column>
+            <yu-xtable-column prop="mount_point" label="分区">
+            </yu-xtable-column>
+            <yu-xtable-column prop="free" label="可用空间(MB)">
+            </yu-xtable-column>
+            <yu-xtable-column prop="used.pct" label="使用率" :formatter="formatter">
+            </yu-xtable-column>
+          </yu-xtable>
+          
+        </div>
+    </div>
+  </yu-card>
+  <yu-card class="yusp-monitorCard">
+      <div slot="header">
+        <h1>磁盘读写信息</h1>
+        <div class="yusp-monitorCardHeaderTools">
+          <i class="el-icon-yx-notification" title="磁盘读写速率、磁盘读写容量及I/O请求处理时间"></i>
+          <i class="el-icon-yx-loop2" @click.stop="refreshDiskIO" title="刷新"></i>
+        </div>
+      </div>
+    <div>
+      <yu-row :gutter="10">
+        <yu-col :span="12">
+          <div :id="diskIoLine.divId1" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+        <yu-col :span="12">
+          <div :id="diskIoLine.divId2" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+      </yu-row>
+    </div>
+  </yu-card>
+  <yu-card class="yusp-monitorCard">
+      <div slot="header">
+        <h1>网卡信息</h1>
+        <div class="yusp-monitorCardHeaderTools">
+          <i class="el-icon-yx-notification" title="网卡出入包数量、大小、网卡拒收包数量、网卡出入口错误包数量"></i>
+          <i class="el-icon-yx-loop2" @click.stop="refreshNetWork" title="刷新"></i>
+        </div>
+      </div>
+    <div>
+      <yu-row :gutter="10">
+        <yu-col :span="12">
+          <div :id="netWorkLine.divId1" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+        <yu-col :span="12">
+          <div :id="netWorkLine.divId2" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+      </yu-row>
+      <yu-row :gutter="10">
+        <yu-col :span="12">
+          <div :id="netWorkLine.divId3" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+        <yu-col :span="12">
+          <div :id="netWorkLine.divId4" :style="cpuLineStyle">
+          </div>
+        </yu-col>
+      </yu-row>
+    </div>
+  </yu-card>
+
+</div>
