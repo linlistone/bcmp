@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.yusys.icsp.repository.mapper.MemTradeIdentityInfoMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.com.yusys.icsp.domain.MemTradeIdentityInfo" id="BaseResultMap">
+        <result column="MEM_TRADE_IDENTITY_ID"  property="memTradeIdentityId" jdbcType="VARCHAR" />
+        <result column="MEM_ACCT_NUM"  property="memAcctNum" jdbcType="VARCHAR" />
+        <result column="MEM_FNAME"  property="memFname" jdbcType="VARCHAR" />
+        <result column="MEM_SNAME"  property="memSname" jdbcType="VARCHAR" />
+        <result column="MEM_FNAME_EN"  property="memFnameEn" jdbcType="VARCHAR" />
+        <result column="MEM_SNAME_EN"  property="memSnameEn" jdbcType="VARCHAR" />
+        <result column="TRADE_IDENTITY_TYPE"  property="tradeIdentityType" jdbcType="VARCHAR" />
+        <result column="CLEAR_KIND"  property="clearKind" jdbcType="VARCHAR" />
+        <result column="CCY_PAIR"  property="ccyPair" jdbcType="VARCHAR" />
+        <result column="TRADE_IDENTITY"  property="tradeIdentity" jdbcType="VARCHAR" />
+        <result column="REMARK"  property="remark" jdbcType="VARCHAR" />
+        <result column="EFFECT_DT"  property="effectDt" jdbcType="VARCHAR" />
+        <result column="WRITE_OFF_DT"  property="writeOffDt" jdbcType="VARCHAR" />
+        <result column="INPUT_OPEP_NUM"  property="inputOpepNum" jdbcType="VARCHAR" />
+        <result column="INPUT_OPER_NAME"  property="inputOperName" jdbcType="VARCHAR" />
+        <result column="INPUT_TM"  property="inputTm" jdbcType="VARCHAR" />
+        <result column="UPDATE_OPER_NUM"  property="updateOperNum" jdbcType="VARCHAR" />
+        <result column="UPDATE_OPER_NAME"  property="updateOperName" jdbcType="VARCHAR" />
+        <result column="UPDATE_TM"  property="updateTm" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		MEM_TRADE_IDENTITY_ID,
+		MEM_ACCT_NUM,
+		MEM_FNAME,
+		MEM_SNAME,
+		MEM_FNAME_EN,
+		MEM_SNAME_EN,
+		TRADE_IDENTITY_TYPE,
+		CLEAR_KIND,
+		CCY_PAIR,
+		TRADE_IDENTITY,
+		REMARK,
+		EFFECT_DT,
+		WRITE_OFF_DT,
+		INPUT_OPEP_NUM,
+		INPUT_OPER_NAME,
+		INPUT_TM,
+		UPDATE_OPER_NUM,
+		UPDATE_OPER_NAME,
+		UPDATE_TM
+	</sql>
+	<select id="selectByModel" parameterType="cn.com.yusys.icsp.common.mapper.QueryModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from mem_trade_identity_info
+		<where>
+			<if test="condition.memTradeIdentityId != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memTradeIdentityId)">
+						AND MEM_TRADE_IDENTITY_ID like #{condition.memTradeIdentityId,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_TRADE_IDENTITY_ID = #{condition.memTradeIdentityId,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.memAcctNum != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memAcctNum)">
+						AND MEM_ACCT_NUM like #{condition.memAcctNum,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_ACCT_NUM = #{condition.memAcctNum,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.memFname != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memFname)">
+						AND MEM_FNAME like #{condition.memFname,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_FNAME = #{condition.memFname,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.memSname != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memSname)">
+						AND MEM_SNAME like #{condition.memSname,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_SNAME = #{condition.memSname,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.memFnameEn != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memFnameEn)">
+						AND MEM_FNAME_EN like #{condition.memFnameEn,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_FNAME_EN = #{condition.memFnameEn,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.memSnameEn != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.memSnameEn)">
+						AND MEM_SNAME_EN like #{condition.memSnameEn,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND MEM_SNAME_EN = #{condition.memSnameEn,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.tradeIdentityType != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.tradeIdentityType)">
+						AND TRADE_IDENTITY_TYPE like #{condition.tradeIdentityType,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND TRADE_IDENTITY_TYPE = #{condition.tradeIdentityType,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.clearKind != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.clearKind)">
+						AND CLEAR_KIND like #{condition.clearKind,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CLEAR_KIND = #{condition.clearKind,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.ccyPair != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.ccyPair)">
+						AND CCY_PAIR like #{condition.ccyPair,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND CCY_PAIR = #{condition.ccyPair,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.tradeIdentity != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.tradeIdentity)">
+						AND TRADE_IDENTITY like #{condition.tradeIdentity,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND TRADE_IDENTITY = #{condition.tradeIdentity,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.remark != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.remark)">
+						AND REMARK like #{condition.remark,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND REMARK = #{condition.remark,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.effectDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.effectDt)">
+						AND EFFECT_DT like #{condition.effectDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND EFFECT_DT = #{condition.effectDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.writeOffDt != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.writeOffDt)">
+						AND WRITE_OFF_DT like #{condition.writeOffDt,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND WRITE_OFF_DT = #{condition.writeOffDt,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.inputOpepNum != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.inputOpepNum)">
+						AND INPUT_OPEP_NUM like #{condition.inputOpepNum,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INPUT_OPEP_NUM = #{condition.inputOpepNum,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.inputOperName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.inputOperName)">
+						AND INPUT_OPER_NAME like #{condition.inputOperName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INPUT_OPER_NAME = #{condition.inputOperName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.inputTm != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.inputTm)">
+						AND INPUT_TM like #{condition.inputTm,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND INPUT_TM = #{condition.inputTm,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.updateOperNum != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.updateOperNum)">
+						AND UPDATE_OPER_NUM like #{condition.updateOperNum,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UPDATE_OPER_NUM = #{condition.updateOperNum,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.updateOperName != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.updateOperName)">
+						AND UPDATE_OPER_NAME like #{condition.updateOperName,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UPDATE_OPER_NAME = #{condition.updateOperName,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="condition.updateTm != null">
+				<choose>
+					<when
+						test="@cn.com.yusys.icsp.common.util.OGNLUtil@like(condition.updateTm)">
+						AND UPDATE_TM like #{condition.updateTm,jdbcType=VARCHAR}
+					</when>
+					<otherwise>
+						AND UPDATE_TM = #{condition.updateTm,jdbcType=VARCHAR}
+					</otherwise>
+				</choose>
+			</if>
+			${dataAuth}
+		</where>
+		<if test="sort != null">order by ${sort}</if>
+	</select>
+
+	<!-- 插入-只插入非空字段 -->
+	<insert id="insert" parameterType="cn.com.yusys.icsp.domain.MemTradeIdentityInfo">
+		insert into mem_trade_identity_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="memTradeIdentityId != null">MEM_TRADE_IDENTITY_ID ,</if>
+			<if test="memAcctNum != null">MEM_ACCT_NUM ,</if>
+			<if test="memFname != null">MEM_FNAME ,</if>
+			<if test="memSname != null">MEM_SNAME ,</if>
+			<if test="memFnameEn != null">MEM_FNAME_EN ,</if>
+			<if test="memSnameEn != null">MEM_SNAME_EN ,</if>
+			<if test="tradeIdentityType != null">TRADE_IDENTITY_TYPE ,</if>
+			<if test="clearKind != null">CLEAR_KIND ,</if>
+			<if test="ccyPair != null">CCY_PAIR ,</if>
+			<if test="tradeIdentity != null">TRADE_IDENTITY ,</if>
+			<if test="remark != null">REMARK ,</if>
+			<if test="effectDt != null">EFFECT_DT ,</if>
+			<if test="writeOffDt != null">WRITE_OFF_DT ,</if>
+			<if test="inputOpepNum != null">INPUT_OPEP_NUM ,</if>
+			<if test="inputOperName != null">INPUT_OPER_NAME ,</if>
+			<if test="inputTm != null">INPUT_TM ,</if>
+			<if test="updateOperNum != null">UPDATE_OPER_NUM ,</if>
+			<if test="updateOperName != null">UPDATE_OPER_NAME ,</if>
+			<if test="updateTm != null">UPDATE_TM </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="memTradeIdentityId != null">#{memTradeIdentityId,jdbcType=VARCHAR},</if>
+			<if test="memAcctNum != null">#{memAcctNum,jdbcType=VARCHAR},</if>
+			<if test="memFname != null">#{memFname,jdbcType=VARCHAR},</if>
+			<if test="memSname != null">#{memSname,jdbcType=VARCHAR},</if>
+			<if test="memFnameEn != null">#{memFnameEn,jdbcType=VARCHAR},</if>
+			<if test="memSnameEn != null">#{memSnameEn,jdbcType=VARCHAR},</if>
+			<if test="tradeIdentityType != null">#{tradeIdentityType,jdbcType=VARCHAR},</if>
+			<if test="clearKind != null">#{clearKind,jdbcType=VARCHAR},</if>
+			<if test="ccyPair != null">#{ccyPair,jdbcType=VARCHAR},</if>
+			<if test="tradeIdentity != null">#{tradeIdentity,jdbcType=VARCHAR},</if>
+			<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+			<if test="effectDt != null">#{effectDt,jdbcType=VARCHAR},</if>
+			<if test="writeOffDt != null">#{writeOffDt,jdbcType=VARCHAR},</if>
+			<if test="inputOpepNum != null">#{inputOpepNum,jdbcType=VARCHAR},</if>
+			<if test="inputOperName != null">#{inputOperName,jdbcType=VARCHAR},</if>
+			<if test="inputTm != null">#{inputTm,jdbcType=VARCHAR},</if>
+			<if test="updateOperNum != null">#{updateOperNum,jdbcType=VARCHAR},</if>
+			<if test="updateOperName != null">#{updateOperName,jdbcType=VARCHAR},</if>
+			<if test="updateTm != null">#{updateTm,jdbcType=VARCHAR}</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新-只更新非空字段 -->
+	<update id="updateByPrimaryKey" parameterType="cn.com.yusys.icsp.domain.MemTradeIdentityInfo">
+		update mem_trade_identity_info
+		<set>
+			<if test="memTradeIdentityId != null">MEM_TRADE_IDENTITY_ID = #{memTradeIdentityId,jdbcType=VARCHAR},</if>
+			<if test="memAcctNum != null">MEM_ACCT_NUM = #{memAcctNum,jdbcType=VARCHAR},</if>
+			<if test="memFname != null">MEM_FNAME = #{memFname,jdbcType=VARCHAR},</if>
+			<if test="memSname != null">MEM_SNAME = #{memSname,jdbcType=VARCHAR},</if>
+			<if test="memFnameEn != null">MEM_FNAME_EN = #{memFnameEn,jdbcType=VARCHAR},</if>
+			<if test="memSnameEn != null">MEM_SNAME_EN = #{memSnameEn,jdbcType=VARCHAR},</if>
+			<if test="tradeIdentityType != null">TRADE_IDENTITY_TYPE = #{tradeIdentityType,jdbcType=VARCHAR},</if>
+			<if test="clearKind != null">CLEAR_KIND = #{clearKind,jdbcType=VARCHAR},</if>
+			<if test="ccyPair != null">CCY_PAIR = #{ccyPair,jdbcType=VARCHAR},</if>
+			<if test="tradeIdentity != null">TRADE_IDENTITY = #{tradeIdentity,jdbcType=VARCHAR},</if>
+			<if test="remark != null">REMARK = #{remark,jdbcType=VARCHAR},</if>
+			<if test="effectDt != null">EFFECT_DT = #{effectDt,jdbcType=VARCHAR},</if>
+			<if test="writeOffDt != null">WRITE_OFF_DT = #{writeOffDt,jdbcType=VARCHAR},</if>
+			<if test="inputOpepNum != null">INPUT_OPEP_NUM = #{inputOpepNum,jdbcType=VARCHAR},</if>
+			<if test="inputOperName != null">INPUT_OPER_NAME = #{inputOperName,jdbcType=VARCHAR},</if>
+			<if test="inputTm != null">INPUT_TM = #{inputTm,jdbcType=VARCHAR},</if>
+			<if test="updateOperNum != null">UPDATE_OPER_NUM = #{updateOperNum,jdbcType=VARCHAR},</if>
+			<if test="updateOperName != null">UPDATE_OPER_NAME = #{updateOperName,jdbcType=VARCHAR},</if>
+			<if test="updateTm != null">UPDATE_TM = #{updateTm,jdbcType=VARCHAR}</if>
+		</set>
+		where MEM_TRADE_IDENTITY_ID = #{memTradeIdentityId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from mem_trade_identity_info where  MEM_TRADE_IDENTITY_ID = #{memTradeIdentityId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 根据多个主键删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		delete from mem_trade_identity_info where MEM_TRADE_IDENTITY_ID in
+		<foreach
+			collection="@cn.com.yusys.icsp.common.util.OGNLUtil@toList('java.lang.String',ids)"
+			open="(" close=")" separator="," item="memTradeIdentityId">#{memTradeIdentityId,jdbcType=VARCHAR}</foreach>
+	</delete>
+
+
+</mapper>

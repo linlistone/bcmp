@@ -85,7 +85,7 @@ public class BcmpSmAgentResource extends BaseResouce {
      * @参数与返回说明:
      * @算法描述:
      */
-    @GetMapping(value = "/show")
+    @GetMapping(value = "/show" )
     public ResultDto<BcmpSmAgent> show(@RequestParam("agentId") String agentId) throws Exception {
         return ResultDto.success(bcmpSmAgentService.show(agentId));
     }
